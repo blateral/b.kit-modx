@@ -52,6 +52,14 @@ export const getPageData = async (query: string) => {
     };
 };
 
+export type BgMode = 'full' | 'splitted' | 'inverted' | undefined;
+
+export interface ModxSlice<S, I = any> {
+    slice_type: S;
+    primary: Record<string, unknown>;
+    items: I[];
+}
+
 export const getSettingsData = async () => {
     const settingsData = await fetch(initApi('settings')).then((res) =>
         res.json()
@@ -244,3 +252,12 @@ export type ModxSettingsData = {
         label: string;
     };
 };
+
+export function isBgModeString(toCheck?: string): toCheck is BgMode {
+    return (
+        !toCheck ||
+        toCheck === 'full' ||
+        toCheck === 'splitted' ||
+        toCheck === 'inverted'
+    );
+}
