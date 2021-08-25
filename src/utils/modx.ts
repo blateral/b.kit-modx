@@ -96,18 +96,26 @@ export type PageContent =
 
 export type ModxDocument = {
     id: string;
-    name: string;
-    alias: string;
+    pagetitle?: string;
+    seo_socialimage?: ImageProps;
+    seo_description?: string;
+    seo_keywords?: string;
+    seo_search_index?: boolean;
+    seo_trace_links?: boolean;
+    seo_content_group?: string;
+    seo_redirection?: string;
 
-    seoTitle?: string;
-    seoDescription?: string;
-    robotsTag?: string;
-    menuTitle?: string;
-    ogImage?: string;
+    nav_isinverted?: boolean;
+    nav_withtopoffset?: boolean;
+    nav_menuicon?: string;
 
-    published: boolean;
-    hideFromMenu: boolean;
-    showLogoClaim?: boolean;
+    nav_allowtopbaroverflow?: boolean;
+    publication_date?: string;
+
+    primary_link?: string;
+    primary_label?: string;
+    secondary_link?: string;
+    secondary_label?: string;
 
     menuBreadcrumbs?: { link?: string; label: string }[];
     gTag?: string;
