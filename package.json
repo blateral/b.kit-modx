@@ -29,11 +29,6 @@
         "url": "https://github.com/blateral/b.kit-modx/issues"
     },
     "homepage": "https://github.com/blateral/b.kit-modx#readme",
-    "husky": {
-        "hooks": {
-            "pre-push": "yarn check-yalc && yarn tc"
-        }
-    },
     "devDependencies": {
         "@blateral/b.kit": "1.2.2",
         "@rollup/plugin-commonjs": "^17.1.0",
