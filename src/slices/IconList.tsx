@@ -1,42 +1,31 @@
-import {
-    getText,
-    isPrismicLinkExternal,
-    isValidAction,
-    mapPrismicSelect,
-    PrismicBoolean,
-    PrismicImage,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicSelectField,
-    PrismicSlice,
-    resolveUnknownLink,
-} from 'utils/prismic';
-
 import { IconList } from '@blateral/b.kit';
 import React from 'react';
-import { AliasSelectMapperType } from 'utils/mapping';
+import {
+    isExternalLink,
+    isValidAction,
+    ModxImageProps,
+    ModxSlice,
+} from 'utils/modx';
 
 interface IconListImages {
-    image: PrismicImage;
+    image: ModxImageProps;
 }
 
 type BgMode = 'full' | 'inverted';
 
 export interface IconListSliceType
-    extends PrismicSlice<'IconList', IconListImages> {
+    extends ModxSlice<'IconList', IconListImages> {
     primary: {
-        is_active?: PrismicBoolean;
+        is_active?: boolean;
 
-        is_centered?: PrismicBoolean;
-        bg_mode?: PrismicSelectField;
-        primary_link?: PrismicLink;
-        secondary_link?: PrismicLink;
-        primary_label?: PrismicKeyText;
-        secondary_label?: PrismicKeyText;
+        isCentered?: boolean;
+        bgMode?: BgMode;
+        primary_link?: string;
+        secondary_link?: string;
+        primary_label?: string;
+        secondary_label?: string;
     };
 
-    // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -53,34 +42,27 @@ export interface IconListSliceType
 
 export const IconListSlice: React.FC<IconListSliceType> = ({
     primary: {
-        bg_mode,
-        is_centered,
+        bgMode,
+        isCentered,
         primary_link,
         primary_label,
         secondary_link,
         secondary_label,
     },
     items,
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
     primaryAction,
     secondaryAction,
 }) => {
-    // get background mode
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-
     return (
         <IconList
-            isCentered={is_centered}
+            isCentered={isCentered}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
             items={items.map((item) => {
                 return {
-                    src: item?.image?.url || '',
-                    alt: item?.image?.alt || '',
+                    src: item?.image?.small || '',
+                    alt: item?.image?.meta?.altText || '',
                 };
             })}
             primaryAction={
@@ -88,9 +70,9 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
                     ? (isInverted) =>
                           primaryAction({
                               isInverted,
-                              label: getText(primary_label),
-                              href: resolveUnknownLink(primary_link) || '',
-                              isExternal: isPrismicLinkExternal(primary_link),
+                              label: primary_label,
+                              href: primary_link || '',
+                              isExternal: isExternalLink(primary_link),
                           })
                     : undefined
             }
@@ -100,9 +82,9 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
                     ? (isInverted) =>
                           secondaryAction({
                               isInverted,
-                              label: getText(secondary_label),
-                              href: resolveUnknownLink(secondary_link) || '',
-                              isExternal: isPrismicLinkExternal(secondary_link),
+                              label: secondary_label,
+                              href: secondary_link || '',
+                              isExternal: isExternalLink(secondary_link),
                           })
                     : undefined
             }
