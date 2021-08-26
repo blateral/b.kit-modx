@@ -313,4 +313,8 @@ export const isExternalLink = (link?: string) => {
     }
 };
 
+export function isNumeric(str?: string) {
+    if (typeof str != 'string') return false; // we only process strings!
+    return /^\d+$/.test(str);
+}
 
