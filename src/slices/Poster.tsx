@@ -1,45 +1,37 @@
 import React from 'react';
-import {
-    getHtmlText,
-    getText,
-    isPrismicLinkExternal,
-    PrismicBoolean,
-    PrismicHeading,
-    PrismicImage,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicRichText,
-    PrismicSlice,
-    resolveUnknownLink,
-    getPrismicImage as getImg,
-    getImageFromUrls,
-    getHeadlineTag,
-    isValidAction,
-} from 'utils/prismic';
+
 
 import { Poster } from '@blateral/b.kit';
-import { AliasMapperType, ImageSizeSettings } from 'utils/mapping';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
+import {
+    isHeadlineTag,
+    isValidAction,
+    ModxImageProps,
+    ModxImagePropsWithFormat,
+    ModxSlice,
+} from 'utils/modx';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { HeadlineTagDefault } from 'utils/stringLexicon';
 
 interface ImageFormats {
     landscape: string;
     'landscape-wide': string;
 }
-export interface PosterSliceType extends PrismicSlice<'Poster'> {
+export interface PosterSliceType extends ModxSlice<'Poster'> {
     primary: {
-        is_active?: PrismicBoolean;
+        is_active?: boolean;
 
-        image?: PrismicImage;
-        super_title?: PrismicHeading;
-        title?: PrismicHeading;
-        text?: PrismicRichText;
-        primary_label?: PrismicKeyText;
-        secondary_label?: PrismicKeyText;
-        primary_link?: PrismicLink;
-        secondary_link?: PrismicLink;
+        image?: ModxImageProps;
+        superTitle?: string;
+        superTitleAs?: HeadlineTag;
+        title?: string;
+        titleAs?: HeadlineTag;
+        text?: string;
+        primary_label?: string;
+        secondary_label?: string;
+        primary_link?: string;
+        secondary_link?: string;
     };
     // helpers to define component elements outside of slice
-    imageFormatAlias?: AliasMapperType<ImageFormats>;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -54,68 +46,47 @@ export interface PosterSliceType extends PrismicSlice<'Poster'> {
     }) => React.ReactNode;
 }
 
-// for this component defines image sizes
-const imageSizes = {
-    main: {
-        small: { width: 1023, height: 500 },
-        medium: { width: 1023, height: 500 },
-        large: { width: 1439, height: 512 },
-        xlarge: { width: 2400, height: 854 },
-    },
-} as ImageSizeSettings<{ main: ImageProps }>;
-
 export const PosterSlice: React.FC<PosterSliceType> = ({
     primary: {
         image,
-        super_title,
+        superTitle,
+        superTitleAs,
         title,
+        titleAs,
         text,
         primary_label,
         secondary_label,
         primary_link,
         secondary_link,
     },
-    imageFormatAlias = {
-        landscape: '',
-        'landscape-wide': 'landscape-wide',
-    },
+
     primaryAction,
     secondaryAction,
 }) => {
-    // get image urls for different formats / ratios
-    const landscapeUrl = image && getImg(image, imageFormatAlias.landscape).url;
-    const landscapeWideUrl =
-        image && getImg(image, imageFormatAlias['landscape-wide']).url;
-
-    const mappedImage: ImageProps = {
-        ...getImageFromUrls(
-            {
-                small: landscapeWideUrl || '',
-                medium: landscapeWideUrl,
-                large: landscapeUrl,
-                xlarge: landscapeUrl,
-            },
-            imageSizes.main,
-            getText(image?.alt)
-        ),
-    };
-
     return (
         <Poster
-            image={mappedImage}
-            title={getText(title)}
-            titleAs={getHeadlineTag(title)}
-            superTitle={getText(super_title)}
-            superTitleAs={getHeadlineTag(super_title)}
-            text={getHtmlText(text)}
+            image={image}
+            title={title}
+            titleAs={
+                isHeadlineTag(titleAs)
+                    ? (titleAs as HeadlineTag)
+                    : HeadlineTagDefault
+            }
+            superTitle={superTitle}
+            superTitleAs={
+                isHeadlineTag(superTitleAs)
+                    ? (superTitleAs as HeadlineTag)
+                    : HeadlineTagDefault
+            }
+            text={text}
             primaryAction={
                 primaryAction && isValidAction(primary_label, primary_link)
                     ? (isInverted) =>
                           primaryAction({
                               isInverted,
-                              label: getText(primary_label),
+                              label: primary_label,
                               href: resolveUnknownLink(primary_link) || '',
-                              isExternal: isPrismicLinkExternal(primary_link),
+                              isExternal: isstringExternal(primary_link),
                           })
                     : undefined
             }
@@ -125,9 +96,9 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
                     ? (isInverted) =>
                           secondaryAction({
                               isInverted,
-                              label: getText(secondary_label),
+                              label: secondary_label,
                               href: resolveUnknownLink(secondary_link) || '',
-                              isExternal: isPrismicLinkExternal(secondary_link),
+                              isExternal: isstringExternal(secondary_link),
                           })
                     : undefined
             }

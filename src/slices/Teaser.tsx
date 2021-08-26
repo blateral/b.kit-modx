@@ -111,7 +111,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                 {...sharedProps}
                 superTitleAs={
                     isHeadlineTag(superTitleAs)
-                        ? (superTitle as HeadlineTag)
+                        ? (superTitleAs as HeadlineTag)
                         : HeadlineTagDefault
                 }
                 titleAs={
