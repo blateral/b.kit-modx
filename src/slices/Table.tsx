@@ -4,7 +4,7 @@ import { TableProps } from '@blateral/b.kit/lib/components/sections/Table';
 import { ModxSlice } from 'utils/modx';
 
 interface TableItem {
-    table_title?: string;
+    tableTitle?: string;
     table?: string;
 }
 
@@ -42,7 +42,7 @@ function createTableItems(tableItems: TableItem[]): TableProps[] {
             const { tableHeaders, sliceRows } = convertCsvToTable(item.table!);
 
             return {
-                tableTitle: item.table_title || '',
+                tableTitle: item.tableTitle || '',
                 rowTitle: tableHeaders || [],
                 row: sliceRows || [],
             };

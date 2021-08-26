@@ -75,11 +75,9 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     const sharedProps = {
         isMirrored,
         superTitle,
-        superTitleAs: isHeadlineTag(superTitleAs)
-            ? (superTitle as HeadlineTag)
-            : '',
+        superTitleAs: superTitleAs,
         title: title,
-        titleAs: isHeadlineTag(titleAs) ? (titleAs as HeadlineTag) : '',
+        titleAs: titleAs,
         intro: intro,
         text: text,
         subText,
