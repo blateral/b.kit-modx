@@ -14,7 +14,7 @@ import { HeadlineTagDefault } from 'utils/stringLexicon';
 export interface PosterSliceType extends ModxSlice<'Poster'> {
     primary: {
         is_active?: boolean;
-
+        isInverted?: boolean;
         image?: ModxImageProps;
         superTitle?: string;
         superTitleAs?: HeadlineTag;
