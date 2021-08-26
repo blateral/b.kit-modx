@@ -7,7 +7,6 @@ import { FeatureListSliceType } from '../slices/FeatureList';
 import { GallerySliceType } from '../slices/Gallery';
 import { HeaderSliceType } from '../slices/Header';
 import { IconListSliceType } from '../slices/IconList';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { MapSliceType } from '../slices/Map';
 import { PosterSliceType } from '../slices/Poster';
 import { TableSliceType } from '../slices/Table';
@@ -25,6 +24,7 @@ import { NewsOverviewSliceType } from '../slices/News/Overview';
 import { IntroSliceType } from '../slices/Intro';
 import { AccordionSliceType } from '../slices/Accordion';
 import { QuickNavSliceType } from '../slices/QuickNav';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 
 export const endpoint = 'https://cms.ueberlingen-bodensee.de/';
 export const initApi = (alias: string) => {
@@ -105,7 +105,7 @@ export type PageContent =
 export type ModxDocument = {
     id: string;
     pagetitle?: string;
-    seo_socialimage?: ImageProps;
+    seo_socialimage?: ModxImageProps;
     seo_description?: string;
     seo_keywords?: string;
     seo_search_index?: boolean;
@@ -138,7 +138,7 @@ export interface PrismicNewsPage extends ModxDocument {
     data: {
         id: string;
         pagetitle?: string;
-        seo_socialimage?: ImageProps;
+        seo_socialimage?: ModxImageProps;
         seo_description?: string;
         seo_keywords?: string;
         seo_search_index?: boolean;
@@ -152,7 +152,7 @@ export interface PrismicNewsPage extends ModxDocument {
 
         nav_allowtopbaroverflow?: boolean;
 
-        news_image?: ImageProps;
+        news_image?: ModxImageProps;
         news_heading?: string;
         news_intro?: string;
         news_footer_inverted?: boolean;
@@ -167,7 +167,7 @@ export interface PrismicNewsPage extends ModxDocument {
 
         author_label?: string;
         author_name?: string;
-        author_image?: ImageProps;
+        author_image?: ModxImageProps;
         author_has_background?: boolean;
         author_is_inverted?: boolean;
 
@@ -253,6 +253,28 @@ export type ModxSettingsData = {
     };
 };
 
+export interface ModxImageProps {
+    small: string;
+    medium?: string;
+    semilarge?: string;
+    large?: string;
+    xlarge?: string;
+    meta?: ModxImageMetaData;
+}
+
+export interface ModxImageMetaData {
+    copyright?: string;
+    altText?: string;
+}
+
+export interface ModxImagePropsWithFormat {
+    square?: Omit<ModxImageProps, 'meta'>;
+    landscape?: Omit<ModxImageProps, 'meta'>;
+    'landscape-wide'?: Omit<ModxImageProps, 'meta'>;
+    portrait?: Omit<ModxImageProps, 'meta'>;
+    meta?: Omit<ModxImageProps, 'meta'>;
+}
+
 export function isBgModeString(toCheck?: string): toCheck is BgMode {
     return (
         !toCheck ||
@@ -261,3 +283,34 @@ export function isBgModeString(toCheck?: string): toCheck is BgMode {
         toCheck === 'inverted'
     );
 }
+export function isHeadlineTag(tagString?: string): tagString is HeadlineTag {
+    switch (tagString) {
+        case 'h1':
+        case 'h2':
+        case 'h3':
+        case 'h4':
+        case 'h5':
+        case 'h6':
+        case 'span':
+        case 'div':
+            return true;
+        default:
+            return false;
+    }
+}
+
+export const isValidAction = (label?: string, link?: string) => {
+    return label && link;
+};
+
+export const isExternalLink = (link?: string) => {
+    if (!link) return false;
+
+    if (link.indexOf('http://') !== -1 || link.indexOf('https://') !== -1) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+

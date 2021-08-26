@@ -1,13 +1,12 @@
 import React from 'react';
-import { AliasSelectMapperType, ImageSizeSettings } from 'utils/mapping';
+import { AliasSelectMapperType } from 'utils/mapping';
 import { Video, VideoCarousel } from '@blateral/b.kit';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { ResponsiveObject } from './slick';
-import { isBgModeString, ModxSlice } from 'utils/modx';
+import { isBgModeString, ModxImageProps, ModxSlice } from 'utils/modx';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
 export interface VideoCardItem {
-    bg_image: ImageProps;
+    bg_image: ModxImageProps;
     embed_id: string;
 }
 export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
