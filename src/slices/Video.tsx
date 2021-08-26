@@ -1,22 +1,18 @@
 import React from 'react';
-import { AliasSelectMapperType } from 'utils/mapping';
 import { Video, VideoCarousel } from '@blateral/b.kit';
 import { ResponsiveObject } from './slick';
 import { isBgModeString, ModxImageProps, ModxSlice } from 'utils/modx';
 
-type BgMode = 'full' | 'splitted' | 'inverted';
 export interface VideoCardItem {
-    bg_image: ModxImageProps;
-    embed_id: string;
+    bgImage: ModxImageProps;
+    embedId: string;
 }
 export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
     primary: {
         is_active?: boolean;
-        bg_mode?: string;
+        bgMode?: string;
     };
 
-    // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     controlNext?: (props: {
         isInverted?: boolean;
         isActive?: boolean;
@@ -41,7 +37,7 @@ export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
 }
 
 export const VideoSlice: React.FC<VideoSliceType> = ({
-    primary: { bg_mode },
+    primary: { bgMode },
     items,
 
     controlNext,
@@ -60,11 +56,11 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
     if (items.length > 1) {
         return (
             <VideoCarousel
-                bgMode={isBgModeString(bg_mode) ? bg_mode : undefined}
+                bgMode={isBgModeString(bgMode) ? bgMode : undefined}
                 videos={items.map((item) => {
                     return {
-                        embedId: item.embed_id,
-                        bgImage: item.bg_image,
+                        embedId: item.embedId,
+                        bgImage: item.bgImage,
                         playIcon: playIcon,
                     };
                 })}
@@ -80,15 +76,15 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
         );
     } else {
         // get first video item
-        const embedId = items[0] && items[0].embed_id;
-        const bgImage = items[0] && items[0].bg_image;
+        const embedId = items[0] && items[0].embedId;
+        const bgImage = items[0] && items[0].bgImage;
 
         return (
             <Video
                 bgMode={
-                    isBgModeString(bg_mode)
-                        ? bg_mode === 'full' || bg_mode === 'inverted'
-                            ? bg_mode
+                    isBgModeString(bgMode)
+                        ? bgMode === 'full' || bgMode === 'inverted'
+                            ? bgMode
                             : undefined
                         : undefined
                 }
