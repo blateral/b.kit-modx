@@ -1,45 +1,36 @@
 import { Intro } from '@blateral/b.kit';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
-import { AliasSelectMapperType } from 'utils/mapping';
 import {
-    getHeadlineTag,
-    getHtmlText,
-    getText,
-    isPrismicLinkExternal,
+    isExternalLink,
+    isHeadlineTag,
     isValidAction,
-    mapPrismicSelect,
-    PrismicBoolean,
-    PrismicHeading,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicRichText,
-    PrismicSelectField,
-    PrismicSlice,
-    resolveUnknownLink,
-} from 'utils/prismic';
+    ModxSlice,
+} from 'utils/modx';
+import { HeadlineTagDefault } from 'utils/stringLexicon';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
 
-export interface IntroSliceType extends PrismicSlice<'Intro'> {
+export interface IntroSliceType extends ModxSlice<'Intro'> {
     primary: {
-        is_active?: PrismicBoolean;
+        is_active?: boolean;
 
-        title: PrismicHeading;
-        super_title?: PrismicHeading;
-        text?: PrismicRichText;
+        bgMode?: BgMode;
+        title?: string;
+        titleAs?: string;
+        superTitle?: string;
+        superTitleAs?: string;
+        text?: string;
 
-        is_centered?: PrismicBoolean;
-        is_stackable?: PrismicBoolean;
+        isCentered?: boolean;
+        isStackable?: boolean;
 
-        primary_link?: PrismicLink;
-        secondary_link?: PrismicLink;
-        primary_label?: PrismicKeyText;
-        secondary_label?: PrismicKeyText;
-
-        bg_mode?: PrismicSelectField;
+        primary_link?: string;
+        secondary_link?: string;
+        primary_label?: string;
+        secondary_label?: string;
     };
 
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -57,42 +48,46 @@ export interface IntroSliceType extends PrismicSlice<'Intro'> {
 export const IntroSlice: React.FC<IntroSliceType> = ({
     primary: {
         title,
-        super_title,
+        titleAs,
+        superTitle,
+        superTitleAs,
         text,
-        is_centered,
-        is_stackable,
+        isCentered,
+        isStackable,
         primary_label,
         primary_link,
         secondary_label,
         secondary_link,
-        bg_mode,
+        bgMode,
     },
-    bgModeSelectAlias = {
-        full: 'soft',
-        splitted: 'soft-splitted',
-        inverted: 'heavy',
-    },
+
     primaryAction,
     secondaryAction,
 }) => {
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-
     return (
         <Intro
             bgMode={bgMode}
-            title={getText(title)}
-            titleAs={getHeadlineTag(title)}
-            superTitle={getText(super_title)}
-            superTitleAs={getHeadlineTag(super_title)}
-            text={getHtmlText(text)}
+            title={title || ''}
+            superTitle={superTitle}
+            superTitleAs={
+                isHeadlineTag(superTitleAs)
+                    ? (superTitleAs as HeadlineTag)
+                    : HeadlineTagDefault
+            }
+            titleAs={
+                isHeadlineTag(titleAs)
+                    ? (titleAs as HeadlineTag)
+                    : HeadlineTagDefault
+            }
+            text={text}
             primaryAction={
                 primaryAction && isValidAction(primary_label, primary_link)
                     ? (isInverted: boolean) =>
                           primaryAction({
                               isInverted,
-                              label: getText(primary_label),
-                              href: resolveUnknownLink(primary_link) || '',
-                              isExternal: isPrismicLinkExternal(primary_link),
+                              label: primary_label,
+                              href: primary_link || '',
+                              isExternal: isExternalLink(primary_link),
                           })
                     : undefined
             }
@@ -102,14 +97,14 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
                     ? (isInverted: boolean) =>
                           secondaryAction({
                               isInverted,
-                              label: getText(secondary_label),
-                              href: resolveUnknownLink(secondary_link) || '',
-                              isExternal: isPrismicLinkExternal(secondary_link),
+                              label: secondary_label,
+                              href: secondary_link || '',
+                              isExternal: isExternalLink(secondary_link),
                           })
                     : undefined
             }
-            isStackable={is_stackable}
-            isCentered={is_centered}
+            isStackable={isStackable}
+            isCentered={isCentered}
         />
     );
 };
