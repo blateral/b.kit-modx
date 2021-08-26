@@ -1,7 +1,7 @@
 import { Teaser, TeaserWide } from '@blateral/b.kit';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
-import { HeadlineTagDefault } from '../utils/defaults';
+import { HeadlineTagDefault } from '../utils/stringLexicon';
 import {
     isBgModeString,
     isExternalLink,
@@ -53,7 +53,6 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
         isWide,
         bgMode,
         format,
-        isActive,
         superTitle,
         superTitleAs,
         title,
