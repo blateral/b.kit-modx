@@ -3,19 +3,14 @@ import React from 'react';
 
 import { Poster } from '@blateral/b.kit';
 import {
+    isExternalLink,
     isHeadlineTag,
     isValidAction,
     ModxImageProps,
-    ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
-
-interface ImageFormats {
-    landscape: string;
-    'landscape-wide': string;
-}
 export interface PosterSliceType extends ModxSlice<'Poster'> {
     primary: {
         is_active?: boolean;
@@ -85,8 +80,8 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
                           primaryAction({
                               isInverted,
                               label: primary_label,
-                              href: resolveUnknownLink(primary_link) || '',
-                              isExternal: isstringExternal(primary_link),
+                              href: primary_link || '',
+                              isExternal: isExternalLink(primary_link),
                           })
                     : undefined
             }
@@ -97,8 +92,8 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
                           secondaryAction({
                               isInverted,
                               label: secondary_label,
-                              href: resolveUnknownLink(secondary_link) || '',
-                              isExternal: isstringExternal(secondary_link),
+                              href: secondary_link || '',
+                              isExternal: isExternalLink(secondary_link),
                           })
                     : undefined
             }
