@@ -1,6 +1,7 @@
 import { IconList } from '@blateral/b.kit';
 import React from 'react';
 import {
+    BgMode,
     isExternalLink,
     isValidAction,
     ModxImageProps,
@@ -11,7 +12,6 @@ interface IconListImages {
     image: ModxImageProps;
 }
 
-type BgMode = 'full' | 'inverted';
 
 export interface IconListSliceType
     extends ModxSlice<'IconList', IconListImages> {
