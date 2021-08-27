@@ -14,7 +14,7 @@ import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
 export interface PosterSliceType extends ModxSlice<'Poster'> {
     primary: {
-        is_active?: boolean;
+        isActive?: boolean;
         isInverted?: boolean;
         image?: ModxImageProps;
         superTitle?: string;

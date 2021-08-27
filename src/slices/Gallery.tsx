@@ -53,7 +53,7 @@ export interface GallerySliceType
 
 
 export const GallerySlice: React.FC<GallerySliceType> = ({
-    primary: { isCarousel, bgMode, superTitle, superTitleAs, title, titleAs, text,  },
+    primary: { isCarousel, bgMode  },
     items,
   
     controlNext,

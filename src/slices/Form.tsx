@@ -1,15 +1,4 @@
-import {
-    getHtmlText,
-    getText,
-    mapPrismicSelect,
-    PrismicBoolean,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicRichText,
-    PrismicSelectField,
-    PrismicSlice,
-    resolveUnknownLink,
-} from 'utils/prismic';
+
 
 import React from 'react';
 import { Form } from '@blateral/b.kit';
@@ -18,7 +7,7 @@ import {
     FormData,
     FormFieldProps,
 } from '@blateral/b.kit/lib/components/sections/Form';
-import { AliasSelectMapperType } from 'utils/mapping';
+import { ModxSlice } from 'utils/modx';
 
 export interface MailInfo {
     targetMails?: string[];
@@ -28,20 +17,19 @@ export interface MailInfo {
 
 type BgMode = 'full' | 'inverted';
 
-export interface FormSliceType extends PrismicSlice<'Form'> {
+export interface FormSliceType extends ModxSlice<'Form'> {
     primary: {
-        is_active?: PrismicBoolean;
-        bg_mode?: PrismicSelectField;
-        submit_label?: PrismicKeyText;
-        checkbox_label?: PrismicRichText;
+        isActive?: boolean;
+        bgMode?: BgMode;
+        submitLabel?: string;
+        checkboxLabel?: string;
 
-        subject_text?: PrismicKeyText;
-        redirect_url?: PrismicLink;
-        target_mails?: PrismicKeyText;
+        subjectText?: string;
+        redirectUrl?: string;
+        targetMails?: string;
     };
 
     // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     submitAction?: (props: {
         isInverted?: boolean;
         isDisabled?: boolean;
@@ -58,17 +46,12 @@ export interface FormSliceType extends PrismicSlice<'Form'> {
 
 export const FormSlice: React.FC<FormSliceType> = ({
     primary: {
-        bg_mode,
-        submit_label,
-        checkbox_label,
-
-        subject_text,
-        redirect_url,
-        target_mails,
-    },
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
+        bgMode,
+        subjectText,
+        submitLabel,
+        checkboxLabel,
+        redirectUrl,
+        targetMails
     },
     submitAction,
     yupValidationSchema,
@@ -76,7 +59,6 @@ export const FormSlice: React.FC<FormSliceType> = ({
     onSubmit,
     fieldSettings,
 }) => {
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
 
     return (
         <Form
@@ -111,16 +93,16 @@ export const FormSlice: React.FC<FormSliceType> = ({
                 },
             }}
             checkbox={{
-                label: getHtmlText(checkbox_label),
+                label: checkboxLabel,
             }}
             submitAction={
-                submitAction && submit_label
+                submitAction && submitLabel
                     ? ({ isInverted, isDisabled, additionalProps }) =>
                           submitAction({
                               isInverted,
                               isDisabled,
                               additionalProps,
-                              label: getText(submit_label),
+                              label: (submitLabel),
                           })
                     : undefined
             }
@@ -134,12 +116,11 @@ export const FormSlice: React.FC<FormSliceType> = ({
                 onSubmit &&
                     onSubmit({
                         mail: {
-                            targetMails: target_mails
+                            targetMails: targetMails
                                 ?.replace(/\s+/g, '')
-                                ?.split(',')
-                                .map((mail) => getText(mail)),
-                            redirectUrl: resolveUnknownLink(redirect_url) || '',
-                            subjectText: getText(subject_text),
+                                ?.split(','),
+                            redirectUrl: (redirectUrl) || '',
+                            subjectText: (subjectText),
                         },
                         data,
                     });
