@@ -130,8 +130,13 @@ export type ModxDocument = {
 };
 
 export interface ModxPage extends ModxDocument {
-    type: 'page';
+    type: 'page' | "settings" | "news";
     content: PageContent;
+}
+
+export interface ModxSettingsPage extends ModxPage{
+    type: "settings";
+    data: ModxSettingsData;
 }
 
 export interface PrismicNewsPage extends ModxDocument {
@@ -244,6 +249,11 @@ export type ModxSettingsData = {
             newTab?: boolean;
         };
     };
+    socials?: Array<{
+        platform?: string,
+        link?: string;
+    }>
+    logo?: ModxImageProps
 
     webcamLink?: string;
 
@@ -251,6 +261,18 @@ export type ModxSettingsData = {
         link: string;
         label: string;
     };
+    
+    newsletter?: {
+        text?: string;
+        title?: string;
+        label?: string;
+        placeholder?: string;
+    }
+
+    footer?: {
+        isInverted?: boolean;
+        logo?:ModxImageProps;
+    }
 };
 
 export interface ModxImageProps {
