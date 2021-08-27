@@ -1,34 +1,13 @@
 import React from 'react';
-import {
-    AliasMapperType,
-    AliasSelectMapperType,
-    ImageSizeSettings,
-} from 'utils/mapping';
-import {
-    PrismicBoolean,
-    PrismicHeading,
-    PrismicImage,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicSelectField,
-    PrismicSettingsPage,
-    PrismicSlice,
-    getHeadlineTag,
-    getImageFromUrls,
-    getPrismicImage as getImg,
-    getText,
-    isPrismicLinkExternal,
-    mapPrismicSelect,
-    resolveUnknownLink,
-    isValidAction,
-    PrismicRichText,
-} from 'utils/prismic';
+
 
 import { Header } from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
+import { ModxImageProps, ModxSettingsData, ModxSlice, SizeSelect } from 'utils/modx';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 
 interface HeaderImageItem {
-    image?: PrismicImage;
+    image?: ModxImageProps;
 }
 
 type HeaderSize = 'full' | 'small';
@@ -39,33 +18,31 @@ interface ImageFormats {
 }
 
 export interface HeaderSliceType
-    extends PrismicSlice<'Header', HeaderImageItem> {
+    extends ModxSlice<'Header', HeaderImageItem> {
     primary: {
-        is_active?: PrismicBoolean;
-        video_url?: PrismicLink;
-        primary_label?: PrismicKeyText;
-        primary_link?: PrismicLink;
-        secondary_label?: PrismicKeyText;
-        secondary_link?: PrismicLink;
-        header_primary_label?: PrismicKeyText;
-        header_primary_link?: PrismicLink;
-        header_secondary_label?: PrismicKeyText;
-        header_secondary_link?: PrismicLink;
-        header_buttonstyle?: PrismicBoolean;
-        badge?: PrismicImage;
-        badge_on_mobile?: PrismicBoolean;
-        title?: PrismicHeading;
-        header_intro?: PrismicRichText;
-        is_nav_large?: PrismicBoolean;
+        is_active?: boolean;
+        videoUrl?: string;
+        primary_label?: string;
+        primary_link?: string;
+        secondary_label?: string;
+        secondary_link?: string;
+        header_primary_label?: string;
+        header_primary_link?: string;
+        header_secondary_label?: string;
+        header_secondary_link?: string;
+        headerButtonstyle?: boolean;
+        badge?: ModxImageProps;
+        badgeOnMobile?: boolean;
+        title?: string;
+        titleAs?: HeadlineTag;
+        headerIntro?: string;
+        isNavLarge?: boolean;
 
-        nav_inverted?: PrismicBoolean;
-        size?: PrismicSelectField;
-        is_inverted?: PrismicBoolean;
+        size?: SizeSelect;
+        isInverted?: boolean;
+        navInverted?: boolean;
     };
 
-    // helpers to define component elements outside of slice
-    sizeSelectAlias?: AliasSelectMapperType<HeaderSize>;
-    imageFormatAlias?: AliasMapperType<ImageFormats>;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -106,7 +83,7 @@ export interface HeaderSliceType
     }) => React.ReactNode;
 
     mapSocials?: (
-        socials?: Array<{ platform?: PrismicKeyText; link?: PrismicLink }>
+        socials?: Array<{ platform?: string; link?: string }>
     ) => Array<{
         href: string;
         icon: JSX.Element;
@@ -121,7 +98,7 @@ export interface HeaderSliceType
     customBottomGradient?: string;
     search?: (isInverted?: boolean) => React.ReactNode;
 
-    settingsPage?: PrismicSettingsPage;
+    settingsPage?: ModxSettingsData;
     pageUrl?: string;
 }
 
@@ -138,13 +115,13 @@ const imageSizes = {
 
 export const HeaderSlice: React.FC<HeaderSliceType> = ({
     primary: {
-        video_url,
+        videoUrl: video_url,
         badge,
-        badge_on_mobile,
+        badgeOnMobile: badge_on_mobile,
         title,
-        header_intro,
+        headerIntro: header_intro,
         size,
-        header_buttonstyle,
+        headerButtonstyle: header_buttonstyle,
         primary_label,
         primary_link,
         secondary_label,
@@ -153,48 +130,19 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     items,
     customBottomGradient,
     customTopGradient,
-    sizeSelectAlias = {
-        full: 'full',
-        small: 'small',
-    },
-    imageFormatAlias = {
-        portrait: 'portrait',
-        landscape: 'landscape',
-    },
+ 
     primaryAction,
     secondaryAction,
     primaryActionPointer,
     secondaryActionPointer,
 }) => {
     // map header images
-    const headerImageMap = items.map((item) => {
-        // get image format url for landscape
-        const imgUrlPortrait =
-            item.image && getImg(item.image, imageFormatAlias.portrait).url;
-
-        // get image format url for landscape
-        const imgUrlLandscape =
-            item.image && getImg(item.image, imageFormatAlias.landscape).url;
-
-        return {
-            ...getImageFromUrls(
-                {
-                    small: imgUrlPortrait || '',
-                    medium: imgUrlPortrait,
-                    semilarge: imgUrlLandscape,
-                    large: imgUrlLandscape,
-                    xlarge: imgUrlLandscape,
-                },
-                imageSizes.main,
-                getText(item?.image?.alt)
-            ),
-        };
-    });
+    const headerImageMap = items.map(toComponentImageFormat);
 
     return (
         <Header
-            size={mapPrismicSelect<HeaderSize>(sizeSelectAlias, size) || 'full'}
-            videoUrl={resolveUnknownLink(video_url) || ''}
+            size={size || 'full'}
+            videoUrl={(video_url) || ''}
             images={headerImageMap}
             titleAs={getHeadlineTag(title)}
             // title={getText(title)}
@@ -220,7 +168,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     );
 };
 
-function headerBadge(badge?: PrismicImage, showOnMobile = true) {
+function headerBadge(badge?: ModxImageProps, showOnMobile = true) {
     return badge && badge.url
         ? {
               content: (
@@ -242,7 +190,7 @@ const getPrimaryButtonOrPointer = ({
     primary_label,
     primary_link,
 }: {
-    isCta: PrismicBoolean;
+    isCta: boolean;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -255,8 +203,8 @@ const getPrimaryButtonOrPointer = ({
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    primary_label?: PrismicKeyText;
-    primary_link?: PrismicLink;
+    primary_label?: string;
+    primary_link?: string;
 }) => {
     if (isCta) {
         return primaryAction && isValidAction(primary_label, primary_link)
@@ -264,8 +212,8 @@ const getPrimaryButtonOrPointer = ({
                   primaryAction({
                       isInverted,
                       label: getText(primary_label),
-                      href: resolveUnknownLink(primary_link) || '',
-                      isExternal: isPrismicLinkExternal(primary_link),
+                      href: (primary_link) || '',
+                      isExternal: isstringExternal(primary_link),
                   })
             : undefined;
     }
@@ -277,8 +225,8 @@ const getPrimaryButtonOrPointer = ({
                   primaryActionPointer({
                       isInverted,
                       label: getText(primary_label),
-                      href: resolveUnknownLink(primary_link) || '',
-                      isExternal: isPrismicLinkExternal(primary_link),
+                      href: (primary_link) || '',
+                      isExternal: isstringExternal(primary_link),
                   })
             : undefined;
     }
@@ -293,7 +241,7 @@ const getSecondaryButtonOrPointer = ({
     secondary_label,
     secondary_link,
 }: {
-    isCta: PrismicBoolean;
+    isCta: boolean;
     secondaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -306,8 +254,8 @@ const getSecondaryButtonOrPointer = ({
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    secondary_label?: PrismicKeyText;
-    secondary_link?: PrismicLink;
+    secondary_label?: string;
+    secondary_link?: string;
 }) => {
     if (isCta) {
         return secondaryAction && isValidAction(secondary_label, secondary_link)
@@ -315,8 +263,8 @@ const getSecondaryButtonOrPointer = ({
                   secondaryAction({
                       isInverted,
                       label: getText(secondary_label),
-                      href: resolveUnknownLink(secondary_link) || '',
-                      isExternal: isPrismicLinkExternal(secondary_link),
+                      href: (secondary_link) || '',
+                      isExternal: isstringExternal(secondary_link),
                   })
             : undefined;
     }
@@ -328,41 +276,21 @@ const getSecondaryButtonOrPointer = ({
                   secondaryActionPointer({
                       isInverted,
                       label: getText(secondary_label),
-                      href: resolveUnknownLink(secondary_link) || '',
-                      isExternal: isPrismicLinkExternal(secondary_link),
+                      href: (secondary_link) || '',
+                      isExternal: isstringExternal(secondary_link),
                   })
             : undefined;
     }
 
     return undefined;
 };
-// interface MenuSliceType {
-//     settingsData?: PrismicSettingsData;
-//     pageUrl?: string;
-//     is_inverted?: boolean;
-//     nav_inverted?: boolean;
-//     nav_primaryCtaFn?: (props: {
-//         isInverted?: boolean;
-//         size?: 'desktop' | 'mobile';
-//     }) => React.ReactNode;
-//     nav_secondaryCtaFn?: (props: {
-//         isInverted?: boolean;
-//         size?: 'desktop' | 'mobile';
-//     }) => React.ReactNode;
-//     mapSocials?: (
-//         socials?: Array<{ platform?: PrismicKeyText; link?: PrismicLink }>
-//     ) => Array<{
-//         href: string;
-//         icon: JSX.Element;
-//     }>;
-//     // inject logo icon into slice
-//     injectLogo?: (props: {
-//         isInverted?: boolean;
-//         size?: 'full' | 'small';
-//     }) => React.ReactNode;
 
-//     // inject search into slice
-//     search?: (isInverted?: boolean) => React.ReactNode;
 
-//     is_nav_large?: boolean;
-// }
+const toComponentImageFormat = (item: HeaderImageItem)=>{
+
+    return {
+        ...item.image,
+        small: item.image?.small || "",
+          alt: (item?.image?.meta?.altText)
+      
+  };}

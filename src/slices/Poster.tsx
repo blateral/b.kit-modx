@@ -6,6 +6,7 @@ import {
     isExternalLink,
     isHeadlineTag,
     isValidAction,
+    mapImageToComponentData,
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
@@ -60,7 +61,7 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
 }) => {
     return (
         <Poster
-            image={image}
+            image={mapImageToComponentData(image)}
             title={title}
             titleAs={
                 isHeadlineTag(titleAs)

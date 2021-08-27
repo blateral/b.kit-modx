@@ -88,7 +88,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
                             : undefined
                         : undefined
                 }
-                bgImage={bgImage}
+                bgImage={bgImage || {}}
                 embedId={embedId}
                 playIcon={playIcon}
             />

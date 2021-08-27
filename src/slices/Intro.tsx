@@ -47,27 +47,29 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
 
 export const IntroSlice: React.FC<IntroSliceType> = ({
     primary: {
+        isCentered,
+        isStackable,
+        bgMode,
         title,
         titleAs,
         superTitle,
         superTitleAs,
         text,
-        isCentered,
-        isStackable,
         primary_label,
         primary_link,
         secondary_label,
         secondary_link,
-        bgMode,
     },
-
+    
     primaryAction,
     secondaryAction,
 }) => {
     return (
         <Intro
-            bgMode={bgMode}
-            title={title || ''}
+        bgMode={bgMode}
+        isStackable={isStackable}
+        isCentered={isCentered}
+        title={title || ''}
             superTitle={superTitle}
             superTitleAs={
                 isHeadlineTag(superTitleAs)
@@ -103,8 +105,6 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
                           })
                     : undefined
             }
-            isStackable={isStackable}
-            isCentered={isCentered}
         />
     );
 };

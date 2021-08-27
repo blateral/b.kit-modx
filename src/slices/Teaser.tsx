@@ -81,7 +81,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
         intro: intro,
         text: text,
         subText,
-        image: image ? image[format || 'square'] : undefined,
+        imageWithFormat: image ? image[format || 'square'] : undefined,
 
         primaryAction:
             primaryAction && isValidAction(primary_label, primary_link)
@@ -128,7 +128,8 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
 
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
                 image={{
-                    ...image,
+                    ...sharedProps.imageWithFormat,
+                    alt: image?.meta?.altText || "",
                     description: description,
                 }}
             />

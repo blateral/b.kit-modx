@@ -272,8 +272,14 @@ export interface ModxImagePropsWithFormat {
     landscape?: Omit<ModxImageProps, 'meta'>;
     'landscape-wide'?: Omit<ModxImageProps, 'meta'>;
     portrait?: Omit<ModxImageProps, 'meta'>;
-    meta?: Omit<ModxImageProps, 'meta'>;
+    meta?: ModxImageMetaData;
 }
+
+export interface ModxComponentDataType extends ModxImageProps {
+    small: string;
+    alt: string;
+}
+
 
 export function isBgModeString(toCheck?: string): toCheck is BgMode {
     return (
@@ -283,6 +289,19 @@ export function isBgModeString(toCheck?: string): toCheck is BgMode {
         toCheck === 'inverted'
     );
 }
+
+
+export const mapImageToComponentData = (image?: ModxImageProps): ModxComponentDataType | {small: string}=> {
+    if(!image)return {small: ""};
+    return {...image, small: image?.small || "", alt: image?.meta?.altText || ""}
+
+}
+
+export type SizeSelect = "full" |"small" | undefined;
+export function isSizeSelectString(toCheck?: string): toCheck is SizeSelect {
+    return !toCheck || toCheck==="full" || toCheck === "small"
+}
+
 export function isHeadlineTag(tagString?: string): tagString is HeadlineTag {
     switch (tagString) {
         case 'h1':
