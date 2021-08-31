@@ -5,7 +5,6 @@ import { FactListSliceType } from '../slices/FactList';
 import { FactGridSliceType } from '../slices/FactGrid';
 import { FeatureListSliceType } from '../slices/FeatureList';
 import { GallerySliceType } from '../slices/Gallery';
-import { HeaderSliceType } from '../slices/Header';
 import { IconListSliceType } from '../slices/IconList';
 import { MapSliceType } from '../slices/Map';
 import { PosterSliceType } from '../slices/Poster';
@@ -88,7 +87,6 @@ export type PageContent =
     | FactListSliceType
     | FactGridSliceType
     | IconListSliceType
-    | HeaderSliceType
     | TeaserSliceType
     | MapSliceType
     | CallToActionSliceType
