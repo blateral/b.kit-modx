@@ -1,36 +1,23 @@
-import {
-    getHtmlText,
-    getText,
-    mapPrismicSelect,
-    PrismicBoolean,
-    PrismicImage,
-    PrismicKeyText,
-    PrismicRichText,
-    PrismicSelectField,
-    PrismicSlice,
-} from 'utils/prismic';
-
 // import { FactList } from '@blateral/b.kit';
 import React from 'react';
 import { FactList } from '@blateral/b.kit';
-import { AliasSelectMapperType } from 'utils/mapping';
+import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
 
 interface FactListEntryItems {
-    label?: PrismicKeyText;
-    text?: PrismicRichText;
-    icon?: PrismicImage;
+    label?: string;
+    text?: string;
+    icon?: {
+        url?: string;
+        meta?: ModxImageMetaData;
+    };
 }
 
-type BgMode = 'full' | 'inverted';
-
 export interface FactListSliceType
-    extends PrismicSlice<'FactList', FactListEntryItems> {
+    extends ModxSlice<'FactList', FactListEntryItems> {
     primary: {
-        is_active?: PrismicBoolean;
-        bg_mode?: PrismicSelectField;
+        isActive?: boolean;
+        bgMode?: BgMode;
     };
-    // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -46,15 +33,9 @@ export interface FactListSliceType
 }
 
 export const FactListSlice: React.FC<FactListSliceType> = ({
-    primary: { bg_mode },
+    primary: { bgMode },
     items,
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
 }) => {
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-
     return (
         <FactList
             bgMode={
@@ -62,11 +43,11 @@ export const FactListSlice: React.FC<FactListSliceType> = ({
             }
             facts={items.map((item) => {
                 return {
-                    label: getText(item.label),
-                    text: getHtmlText(item.text),
+                    label: item.label,
+                    text: item.text,
                     icon: {
                         src: item?.icon?.url || '',
-                        alt: item?.icon?.alt || '',
+                        alt: item?.icon?.meta?.altText || '',
                     },
                 };
             })}
