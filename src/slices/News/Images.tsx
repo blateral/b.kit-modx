@@ -1,46 +1,28 @@
-import {
-    PrismicBoolean,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicRichText,
-    PrismicSlice,
-    isPrismicLinkExternal,
-    getPrismicImage as getImg,
-    resolveUnknownLink,
-    getText,
-    PrismicImage,
-    PrismicSelectField,
-    getImageFromUrl,
-    isValidAction,
-    mapPrismicSelect,
-} from 'utils/prismic';
-
-import { AliasSelectMapperType, ImageSizeSettings } from 'utils/mapping';
 import { NewsImages } from '@blateral/b.kit';
 import React from 'react';
+import {
+    BgMode,
+    isExternalLink,
+    isValidAction,
+    ModxImageProps,
+    ModxSlice,
+} from 'utils/modx';
 
-interface ImageFormats {
-    half: string;
-    full: string;
-}
-
-type BgMode = 'full' | 'inverted';
-
-export interface NewsImagesSliceType
-    extends PrismicSlice<'NewsImages', { image: PrismicImage }> {
+export interface NewsImagesSliceType extends ModxSlice<'NewsImages'> {
     primary: {
-        is_active?: PrismicBoolean;
-        text?: PrismicRichText;
-        bg_mode?: PrismicSelectField;
-        primary_link?: PrismicLink;
-        secondary_link?: PrismicLink;
-        primary_label?: PrismicKeyText;
-        secondary_label?: PrismicKeyText;
-        imagestyle?: PrismicSelectField;
+        isActive?: boolean;
+        text?: string;
+        bgMode?: BgMode;
+        full: Pick<ModxImageProps, 'small' | 'medium' | 'meta'>;
+        half: Array<
+            Pick<ModxImageProps, 'small' | 'medium' | 'large' | 'meta'>
+        >;
+        primary_link?: string;
+        secondary_link?: string;
+        primary_label?: string;
+        secondary_label?: string;
     };
 
-    // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -57,34 +39,19 @@ export interface NewsImagesSliceType
 
 export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
     primary: {
-        bg_mode,
+        bgMode,
+        full,
+        half,
         primary_link,
         primary_label,
         secondary_link,
         secondary_label,
     },
-    items,
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
+
     primaryAction,
     secondaryAction,
 }) => {
-    // get background mode
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-    const imageSizes = {
-        half: {
-            small: { width: 619, height: 465 },
-            medium: { width: 376, height: 282 },
-            large: { width: 452, height: 339 },
-        },
-        full: {
-            small: { width: 619, height: 305 },
-            medium: { width: 929, height: 698 },
-        },
-    } as ImageSizeSettings<ImageFormats>;
-
+    const images = full.small ? [full] : half;
     return (
         <NewsImages
             bgMode={
@@ -96,9 +63,9 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
                           primaryAction &&
                           primaryAction({
                               isInverted,
-                              label: getText(primary_label),
-                              href: resolveUnknownLink(primary_link) || '',
-                              isExternal: isPrismicLinkExternal(primary_link),
+                              label: primary_label,
+                              href: primary_link || '',
+                              isExternal: isExternalLink(primary_link),
                           })
                     : undefined
             }
@@ -108,26 +75,17 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
                     ? (isInverted) =>
                           secondaryAction({
                               isInverted,
-                              label: getText(secondary_label),
-                              href: resolveUnknownLink(secondary_link) || '',
-                              isExternal: isPrismicLinkExternal(secondary_link),
+                              label: secondary_label,
+                              href: secondary_link || '',
+                              isExternal: isExternalLink(secondary_link),
                           })
                     : undefined
             }
-            images={items?.map((item) => {
-                // get image format
-                const imageStyle = items.length > 1 ? 'half' : 'full';
-
-                // get image format url for landscape
-                const imgUrl = getImg(item.image, imageStyle).url;
-
+            images={images.map((image) => {
                 return {
-                    ...getImageFromUrl(
-                        imgUrl,
-                        imageSizes[imageStyle || 'half'],
-                        getText(item.image.alt)
-                    ),
-                    isFull: imageStyle === 'full',
+                    ...image,
+                    small: image.small || '',
+                    alt: image.meta?.altText || '',
                 };
             })}
         />
