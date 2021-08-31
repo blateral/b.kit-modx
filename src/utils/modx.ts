@@ -139,7 +139,56 @@ export interface ModxSettingsPage extends ModxPage{
     data: ModxSettingsData;
 }
 
-export interface PrismicNewsPage extends ModxDocument {
+export interface ModxNewsPage extends ModxDocument {
+    id: string;
+    pagetitle?: string;
+
+    publicationDate?: string;
+
+    seo_socialimage?: ModxImageProps;
+    seo_description?: string;
+    seo_keywords?: string;
+    seo_search_index?: boolean;
+    seo_trace_links?: boolean;
+    seo_content_group?: string;
+    seo_redirection?: string;
+
+    nav_isinverted?: boolean;
+    nav_withtopoffset?: boolean;
+    nav_menuicon?: string;
+
+    nav_allowtopbaroverflow?: boolean;
+
+    news_tags?: string;
+    news_image?: ModxImageProps;
+    news_heading?: string;
+    news_intro?: string;
+    news_footer_inverted?: boolean;
+    news_footer_background?: boolean;
+
+    publication_date?: string;
+
+    primary_link?: string;
+    primary_label?: string;
+    secondary_link?: string;
+    secondary_label?: string;
+
+    author_label?: string;
+    author_name?: string;
+    author_image?: ModxImageProps;
+    author_has_background?: boolean;
+    author_is_inverted?: boolean;
+
+    data: Array<
+        | NewsTextSliceType
+        | NewsTableSliceType
+        | NewsIntroSliceType
+        | NewsVideoSliceType
+        | NewsImagesSliceType
+    >;
+}
+
+export interface ModxNewsOverviewPage extends ModxDocument {
     data: {
         id: string;
         pagetitle?: string;
@@ -163,28 +212,13 @@ export interface PrismicNewsPage extends ModxDocument {
         news_footer_inverted?: boolean;
         news_footer_background?: boolean;
 
-        publication_date?: string;
-
         primary_link?: string;
         primary_label?: string;
         secondary_link?: string;
         secondary_label?: string;
-
-        author_label?: string;
-        author_name?: string;
-        author_image?: ModxImageProps;
-        author_has_background?: boolean;
-        author_is_inverted?: boolean;
-
-        body: Array<
-            | NewsTextSliceType
-            | NewsTableSliceType
-            | NewsIntroSliceType
-            | NewsVideoSliceType
-            | NewsImagesSliceType
-        >;
     };
 }
+
 
 export const hasGTag = (data: any): data is { gTag: string } => {
     return (
