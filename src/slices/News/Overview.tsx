@@ -80,7 +80,9 @@ function mapNewsListData(
             news.publicationDate || ''
         );
 
-        const mappedImage: ImageProps = createMappedImage(news.news_image);
+        const mappedImage: ImageProps = createMappedImage(
+            news.news_image_preview
+        );
 
         const newsData = {
             image: mappedImage,

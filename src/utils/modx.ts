@@ -161,6 +161,8 @@ export interface ModxNewsPage extends ModxDocument {
 
     news_tags?: string;
     news_image?: ModxImageProps;
+    news_image_preview?: ModxImageProps;
+
     news_heading?: string;
     news_intro?: string;
     news_footer_inverted?: boolean;
