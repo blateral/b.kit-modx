@@ -1,41 +1,24 @@
-import {
-    PrismicBoolean,
-    PrismicHeading,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicRichText,
-    PrismicSelectField,
-    PrismicSlice,
-    isPrismicLinkExternal,
-    mapPrismicSelect,
-    resolveUnknownLink,
-    getText,
-    getHtmlText,
-    getHeadlineTag,
-    isValidAction,
-} from 'utils/prismic';
-
-import { AliasSelectMapperType } from 'utils/mapping';
 import { Article } from '@blateral/b.kit';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
+import { BgMode, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
-type BgMode = 'full' | 'splitted' | 'inverted';
-
-export interface ArticleSliceType extends PrismicSlice<'Article'> {
+export interface ArticleSliceType extends ModxSlice<'Article'> {
     primary: {
-        is_active?: PrismicBoolean;
-        super_title?: PrismicHeading;
-        title?: PrismicHeading;
-        text?: PrismicRichText;
-        aside_text?: PrismicRichText;
-        bg_mode?: PrismicSelectField;
-        primary_link?: PrismicLink;
-        secondary_link?: PrismicLink;
-        primary_label?: PrismicKeyText;
-        secondary_label?: PrismicKeyText;
+        isActive?: boolean;
+        superTitle?: string;
+        superTitleAs?: HeadlineTag;
+        title?: string;
+        titleAs?: HeadlineTag;
+
+        text?: string;
+        asideText?: string;
+        bgMode?: BgMode;
+        primary_link?: string;
+        secondary_link?: string;
+        primary_label?: string;
+        secondary_label?: string;
     };
-    // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -52,43 +35,38 @@ export interface ArticleSliceType extends PrismicSlice<'Article'> {
 
 export const ArticleSlice: React.FC<ArticleSliceType> = ({
     primary: {
-        super_title,
+        superTitle,
+        superTitleAs,
         title,
+        titleAs,
         text,
-        aside_text,
-        bg_mode,
+        asideText,
+        bgMode,
         primary_link,
         primary_label,
         secondary_link,
         secondary_label,
     },
-    bgModeSelectAlias = {
-        full: 'soft',
-        splitted: 'soft-splitted',
-        inverted: 'heavy',
-    },
     primaryAction,
     secondaryAction,
 }) => {
-    const mode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-
     return (
         <Article
-            bgMode={mode}
-            title={getText(title)}
-            titleAs={getHeadlineTag(title)}
-            superTitle={getText(super_title)}
-            superTitleAs={getHeadlineTag(super_title)}
-            text={getHtmlText(text)}
-            asideText={getHtmlText(aside_text)}
+            bgMode={bgMode}
+            title={title}
+            titleAs={titleAs}
+            superTitle={superTitle}
+            superTitleAs={superTitleAs}
+            text={text}
+            asideText={asideText}
             primaryAction={
                 primaryAction && isValidAction(primary_label, primary_link)
                     ? (isInverted) =>
                           primaryAction({
                               isInverted,
-                              label: getText(primary_label),
-                              href: resolveUnknownLink(primary_link) || '',
-                              isExternal: isPrismicLinkExternal(primary_link),
+                              label: primary_label,
+                              href: primary_link || '',
+                              isExternal: isExternalLink(primary_link),
                           })
                     : undefined
             }
@@ -98,9 +76,9 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
                     ? (isInverted) =>
                           secondaryAction({
                               isInverted,
-                              label: getText(secondary_label),
-                              href: resolveUnknownLink(secondary_link) || '',
-                              isExternal: isPrismicLinkExternal(secondary_link),
+                              label: secondary_label,
+                              href: secondary_link || '',
+                              isExternal: isExternalLink(secondary_link),
                           })
                     : undefined
             }

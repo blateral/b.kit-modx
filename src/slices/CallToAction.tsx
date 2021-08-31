@@ -8,6 +8,7 @@ import {
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 
 interface AddressSliceType {
     icon?: Pick<ModxImageProps, 'small' | 'meta'>;
@@ -22,9 +23,9 @@ export interface CallToActionSliceType
     primary: {
         isActive?: boolean;
         superTitle?: string;
-        superTitleAs?: string;
+        superTitleAs?: HeadlineTag;
         title?: string;
-        titleAs?: string;
+        titleAs?: HeadlineTag;
 
         text?: string;
         bgMode?: BgMode;
