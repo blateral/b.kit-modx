@@ -1,60 +1,50 @@
-import {
-    PrismicBoolean,
-    PrismicHeading,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicRichText,
-    PrismicSlice,
-    isPrismicLinkExternal,
-    resolveUnknownLink,
-    getText,
-    getHtmlText,
-    getHeadlineTag,
-    PrismicImage,
-    isValidAction,
-    mapPrismicSelect,
-    PrismicSelectField,
-} from 'utils/prismic';
-
 import React from 'react';
 import { CallToAction } from '@blateral/b.kit';
-import { AliasSelectMapperType } from 'utils/mapping';
-
-type BgMode = 'full' | 'inverted';
+import {
+    BgMode,
+    isExternalLink,
+    isHeadlineTag,
+    isValidAction,
+    ModxImageProps,
+    ModxSlice,
+} from 'utils/modx';
 
 interface AddressSliceType {
-    decorator?: PrismicImage;
-    label?: PrismicRichText;
+    icon?: Pick<ModxImageProps, 'small' | 'meta'>;
+    label?: string;
 }
 
 export interface CallToActionSliceType
-    extends PrismicSlice<
+    extends ModxSlice<
         'CallToAction' | 'CallToActionNewsletter',
         AddressSliceType
     > {
     primary: {
-        is_active?: PrismicBoolean;
-        super_title?: PrismicHeading;
-        title?: PrismicHeading;
-        text?: PrismicRichText;
-        bg_mode?: PrismicSelectField;
+        isActive?: boolean;
+        superTitle?: string;
+        superTitleAs?: string;
+        title?: string;
+        titleAs?: string;
 
-        contact_avatar?: PrismicImage;
-        contact_name?: PrismicKeyText;
-        contact_description?: PrismicKeyText;
+        text?: string;
+        bgMode?: BgMode;
 
-        newsletter_placeholder?: PrismicKeyText;
-        newsletter_button_label?: PrismicKeyText;
+        contactAvatar?: Pick<ModxImageProps, 'small' | 'meta'>;
+        contact: { name?: string; description?: string };
 
-        primary_link?: PrismicLink;
-        secondary_link?: PrismicLink;
-        primary_label?: PrismicKeyText;
-        secondary_label?: PrismicKeyText;
+        // FIXME: NEwsletter
+        newsletter_placeholder?: string;
+        newsletter_button_label?: string;
 
-        badge?: PrismicImage;
+        primary_link?: string;
+        secondary_link?: string;
+        primary_label?: string;
+        secondary_label?: string;
+
+        badge?: string;
+        badgeAlt?: string;
     };
     // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     injectForm?: (props: {
         isInverted?: boolean;
         placeholder?: string;
@@ -76,14 +66,15 @@ export interface CallToActionSliceType
 
 export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     primary: {
-        super_title,
+        superTitle,
+        superTitleAs,
         title,
+        titleAs,
         text,
-        bg_mode,
+        bgMode,
 
-        contact_avatar,
-        contact_name,
-        contact_description,
+        contactAvatar,
+        contact,
 
         newsletter_placeholder,
         newsletter_button_label,
@@ -93,46 +84,41 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
         secondary_link,
         secondary_label,
         badge,
+        badgeAlt,
     },
     items,
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
     injectForm,
     primaryAction,
     secondaryAction,
 }) => {
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-
     return (
         <CallToAction
             bgMode={bgMode === 'inverted' ? 'inverted' : 'full'}
-            title={getText(title)}
-            titleAs={getHeadlineTag(title)}
-            superTitle={getText(super_title)}
-            superTitleAs={getHeadlineTag(super_title)}
-            text={getHtmlText(text)}
+            title={title}
+            titleAs={isHeadlineTag(titleAs) ? titleAs : 'div'}
+            superTitle={superTitle}
+            superTitleAs={isHeadlineTag(superTitleAs) ? superTitleAs : 'div'}
+            text={text}
             contact={
-                contact_name && contact_avatar?.url
+                contact && contact.name && contactAvatar?.small
                     ? {
-                          avatar: contact_avatar?.url
+                          avatar: contactAvatar.small
                               ? {
-                                    src: contact_avatar?.url,
-                                    alt: contact_avatar?.alt || '',
+                                    src: contactAvatar?.small || '',
+                                    alt: contactAvatar?.meta?.altText || '',
                                 }
                               : undefined,
-                          name: getText(contact_name),
-                          description: getText(contact_description),
+                          name: contact.name,
+                          description: contact.description,
                           addresses: items.map((item) => {
                               return {
-                                  decorator: item?.decorator?.url && (
+                                  decorator: item?.icon?.small && (
                                       <img
-                                          src={item?.decorator?.url}
-                                          alt={item?.decorator?.alt}
+                                          src={item?.icon?.small}
+                                          alt={item?.icon.meta?.altText}
                                       />
                                   ),
-                                  label: getHtmlText(item?.label),
+                                  label: item?.label || '',
                               };
                           }),
                       }
@@ -144,8 +130,8 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                           injectForm &&
                           injectForm({
                               isInverted,
-                              buttonLabel: getText(newsletter_button_label),
-                              placeholder: getText(newsletter_placeholder),
+                              buttonLabel: newsletter_button_label,
+                              placeholder: newsletter_placeholder,
                           })
                     : undefined
             }
@@ -154,9 +140,9 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                     ? (isInverted) =>
                           primaryAction({
                               isInverted,
-                              label: getText(primary_label),
-                              href: resolveUnknownLink(primary_link) || '',
-                              isExternal: isPrismicLinkExternal(primary_link),
+                              label: primary_label,
+                              href: primary_link || '',
+                              isExternal: isExternalLink(primary_link),
                           })
                     : undefined
             }
@@ -166,17 +152,17 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                     ? (isInverted) =>
                           secondaryAction({
                               isInverted,
-                              label: getText(secondary_label),
-                              href: resolveUnknownLink(secondary_link) || '',
-                              isExternal: isPrismicLinkExternal(secondary_link),
+                              label: secondary_label,
+                              href: secondary_link || '',
+                              isExternal: isExternalLink(secondary_link),
                           })
                     : undefined
             }
             badge={
-                badge?.url && (
+                badge && (
                     <img
-                        src={badge?.url}
-                        alt={badge?.alt || ''}
+                        src={badge}
+                        alt={badgeAlt || ''}
                         style={{ height: '100%', width: '100%' }}
                     />
                 )
