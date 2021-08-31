@@ -9,7 +9,7 @@ export interface VideoCardItem {
 }
 export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
     primary: {
-        is_active?: boolean;
+        isActive?: boolean;
         bgMode?: string;
     };
 

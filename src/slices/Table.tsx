@@ -10,7 +10,7 @@ interface TableItem {
 
 export interface TableSliceType extends ModxSlice<'Table', TableItem> {
     primary: {
-        is_active?: boolean;
+        isActive?: boolean;
         bgMode?: string;
 
         primary_label?: string;

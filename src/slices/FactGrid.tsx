@@ -5,7 +5,7 @@ import { BgMode, ModxImagePropsWithFormat, ModxSlice } from 'utils/modx';
 import { isSVG } from 'utils/mapping';
 interface FactGridEntryItems {
     title?: string;
-    sub_title?: string;
+    subTitle?: string;
     text?: string;
     icon?: Omit<ModxImagePropsWithFormat, 'portrait' | 'square'>;
 }
@@ -35,14 +35,14 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
                     ? columns
                     : (parseInt(columns || '3') as 3 | 4 | 6)
             }
-            facts={items?.map(({ title, sub_title, text, icon }) => {
+            facts={items?.map(({ title, subTitle, text, icon }) => {
                 const isSvgImage =
                     isSVG(icon?.landscape?.small) ||
                     isSVG(icon?.['landscape-wide']?.xlarge);
 
                 return {
                     title: title,
-                    subTitle: sub_title,
+                    subTitle: subTitle,
                     text: text,
                     image: icon && {
                         ...icon[imageFormat || 'landscape-wide'],
