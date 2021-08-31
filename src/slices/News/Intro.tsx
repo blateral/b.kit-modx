@@ -1,105 +1,70 @@
 import React from 'react';
 
-import {
-    PrismicBoolean,
-    PrismicHeading,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicRichText,
-    PrismicSlice,
-    PrismicImage,
-    getHtmlText,
-    getPrismicImage as getImg,
-    getText,
-    getImageFromUrl,
-    PrismicSelectField,
-    mapPrismicSelect,
-} from 'utils/prismic';
-
-import { AliasSelectMapperType, ImageSizeSettings } from 'utils/mapping';
 import { NewsIntro } from '@blateral/b.kit';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
+import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
-type BgMode = 'full' | 'inverted';
-
-const imageSizes = {
-    main: {
-        small: { width: 619, height: 348 },
-        medium: { width: 791, height: 445 },
-        semilarge: { width: 944, height: 531 },
-    },
-} as ImageSizeSettings<{ main: ImageProps }>;
-export interface NewsIntroSliceType extends PrismicSlice<'NewsIntro'> {
+export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
     primary: {
-        is_active?: PrismicBoolean;
-        news_heading?: PrismicHeading;
-        news_intro?: PrismicRichText;
-        news_image?: PrismicImage;
-        author_name?: PrismicKeyText;
-        author_image?: PrismicImage;
-        publication_date?: PrismicKeyText;
-        bg_mode?: PrismicSelectField;
-        primary_link?: PrismicLink;
-        secondary_link?: PrismicLink;
-        primary_label?: PrismicKeyText;
-        secondary_label?: PrismicKeyText;
+        isActive?: boolean;
+        news_heading?: string;
+        news_intro?: string;
+        news_image?: ModxImageProps;
+        author_name?: string;
+        publicationDate?: string;
+        bgMode?: BgMode;
+        primary_link?: string;
+        secondary_link?: string;
+        primary_label?: string;
+        secondary_label?: string;
     };
-
-    // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
-    tags?: string[];
+    tags?: string;
 }
 
 export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     primary: {
-        bg_mode,
+        bgMode,
         author_name,
-        publication_date,
+        publicationDate,
         news_image,
         news_intro,
         news_heading,
     },
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
+
     tags,
 }) => {
-    // get background mode
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-    const introImageUrl = news_image && getImg(news_image).url;
-    const mappedImage = introImageUrl && {
-        ...getImageFromUrl(
-            introImageUrl,
-            imageSizes.main,
-            getText(news_image?.alt)
-        ),
-    };
+    const preppedPubDate = generatePublicationDateObject(publicationDate);
+    const mappedImage = news_image
+        ? {
+              ...news_image,
+              small: news_image?.small || '',
+              alt: news_image?.meta?.altText || '',
+          }
+        : undefined;
 
-    const publicationDate = generatePublicationDateObject(publication_date);
+    const tagsArray = tags?.split(',');
     return (
         <NewsIntro
-            title={getText(news_heading)}
-            text={getHtmlText(news_intro)}
-            image={mappedImage || undefined}
+            title={news_heading}
+            text={news_intro}
+            image={mappedImage}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
-            tags={tags && tags.length > 0 ? [tags[0]] : []}
+            tags={tagsArray && tagsArray.length > 0 ? [tagsArray[0]] : []}
             onTagClick={(tag) => {
                 window.location.href = `/news?selected=${encodeURI(tag)}`;
             }}
             meta={{
                 author: author_name || '',
-                date: publicationDate,
+                date: preppedPubDate,
             }}
         />
     );
 };
-function generatePublicationDateObject(publication_date?: PrismicKeyText) {
-    if (!publication_date) return undefined;
+function generatePublicationDateObject(publicationDate?: string) {
+    if (!publicationDate) return undefined;
 
-    const parts = publication_date?.split('/').filter(Boolean);
+    const parts = publicationDate?.split('/').filter(Boolean);
     try {
         const dateParts = parts[0].split('-').filter(Boolean);
 

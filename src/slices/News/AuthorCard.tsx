@@ -1,68 +1,35 @@
-import {
-    PrismicBoolean,
-    PrismicKeyText,
-    PrismicSlice,
-    PrismicImage,
-    getPrismicImage as getImg,
-    getText,
-    getImageFromUrl,
-    PrismicSelectField,
-    mapPrismicSelect,
-} from 'utils/prismic';
-
-import { AliasSelectMapperType, ImageSizeSettings } from 'utils/mapping';
 import { NewsAuthorCard } from '@blateral/b.kit';
 import React from 'react';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
+import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
-const imageSizes = {
-    main: {
-        small: { width: 150, height: 150 },
-    },
-} as ImageSizeSettings<{ main: ImageProps }>;
-
-type BgMode = 'full' | 'inverted';
-export interface NewsAuthorCardSliceType extends PrismicSlice<'NewsAuthor'> {
+export interface NewsAuthorCardSliceType extends ModxSlice<'NewsAuthor'> {
     primary: {
-        is_active?: PrismicBoolean;
-        bg_mode?: PrismicSelectField;
-        author_name?: PrismicKeyText;
-        author_image?: PrismicImage;
-        author_label?: PrismicKeyText;
+        isActive?: boolean;
+        bgMode?: BgMode;
+        author_name?: string;
+        author_image?: Pick<ModxImageProps, 'small' | 'meta'>;
+        author_label?: string;
     };
-
-    // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
 }
 
 export const NewsAuthorCardSlice: React.FC<NewsAuthorCardSliceType> = ({
-    primary: { bg_mode, author_name, author_image, author_label },
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
+    primary: { bgMode, author_name, author_image, author_label },
 }) => {
-    // get background mode
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-    const introImageUrl = author_image && getImg(author_image).url;
     const mappedImage =
-        (introImageUrl && {
-            ...getImageFromUrl(
-                introImageUrl,
-                imageSizes.main,
-                getText(author_image?.alt)
-            ),
-        }) ||
-        undefined;
+        {
+            ...author_image,
+            small: author_image?.small || '',
+            alt: author_image?.meta?.altText || '',
+        } || undefined;
 
     return (
         <NewsAuthorCard
-            author={getText(author_name)}
+            author={author_name}
             avatar={mappedImage && { src: mappedImage.small || '' }}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
-            label={getText(author_label) || 'Geschrieben von'}
+            label={author_label || 'Geschrieben von'}
         />
     );
 };

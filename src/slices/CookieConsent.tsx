@@ -1,13 +1,4 @@
 import {
-    getHtmlText,
-    getText,
-    isRichTextEmpty,
-    PrismicImage,
-    PrismicKeyText,
-    PrismicRichText,
-} from '../utils/prismic';
-
-import {
     CookieActions,
     CookieConsent,
     CookieIcon,
@@ -15,13 +6,14 @@ import {
     CookieTitle,
 } from '@blateral/b.kit';
 import React from 'react';
+import { ModxImageProps } from 'utils/modx';
 
 export interface CookieConsentSliceType {
-    icon?: PrismicImage;
-    title?: PrismicRichText;
-    text?: PrismicRichText;
-    acceptCtaLabel?: PrismicKeyText;
-    declineCtaLabel?: PrismicKeyText;
+    icon?: ModxImageProps;
+    title?: string;
+    text?: string;
+    acceptCtaLabel?: string;
+    declineCtaLabel?: string;
 
     // helpers to define component elements outside of slice
     cookieName?: string;
@@ -63,7 +55,7 @@ export const CookieConsentSlice: React.FC<CookieConsentSliceType> = ({
 }) => {
     // FIXME: Locale key 'eng' not compatible with 'en'
     return (
-        <CookieConsent {...{ ...rest, localeKey: "de" }}>
+        <CookieConsent {...{ ...rest, localeKey: 'de' }}>
             {({
                 handleAccept,
                 handleDecline,
@@ -71,15 +63,14 @@ export const CookieConsentSlice: React.FC<CookieConsentSliceType> = ({
                 additionalDeclineProps,
             }) => (
                 <>
-                    {icon?.url && (
-                        <CookieIcon src={icon?.url} alt={icon?.alt} />
+                    {icon?.small && (
+                        <CookieIcon
+                            src={icon?.small}
+                            alt={icon?.meta?.altText || ''}
+                        />
                     )}
-                    {title && !isRichTextEmpty(title) && (
-                        <CookieTitle innerHTML={getHtmlText(title)} />
-                    )}
-                    {text && !isRichTextEmpty(text) && (
-                        <CookieText innerHTML={getHtmlText(text)} />
-                    )}
+                    {title && <CookieTitle innerHTML={title} />}
+                    {text && <CookieText innerHTML={text} />}
                     {(acceptAction || declineAction) && (
                         <CookieActions
                             primary={
@@ -88,7 +79,7 @@ export const CookieConsentSlice: React.FC<CookieConsentSliceType> = ({
                                 acceptAction({
                                     handleAccept,
                                     additionalAcceptProps,
-                                    label: getText(acceptCtaLabel),
+                                    label: acceptCtaLabel,
                                 })
                             }
                             secondary={
@@ -97,7 +88,7 @@ export const CookieConsentSlice: React.FC<CookieConsentSliceType> = ({
                                 declineAction({
                                     handleDecline,
                                     additionalDeclineProps,
-                                    label: getText(declineCtaLabel),
+                                    label: declineCtaLabel,
                                 })
                             }
                         />

@@ -1,9 +1,6 @@
 // const getApi = await Prismic.getApi(apiEndpoint, { req });
 
-import { PrismicSettingsPage } from './prismic';
-import { RichText } from 'prismic-dom';
 import { ServerResponse } from 'http';
-import { initPrismicApi } from './prismicApi';
 
 export async function generateRobotsTxt({
     req,
@@ -12,10 +9,8 @@ export async function generateRobotsTxt({
     req: any;
     res?: ServerResponse;
 }) {
-    const getApi = await initPrismicApi(req);
-
-    const settings = await getApi.getByUID('settings', 'settings');
-    if (res && !settings) {
+    //FIXME:
+    if (res) {
         res.statusCode = 500;
         res.setHeader('Content-Type', 'application/json');
         res.write({
@@ -25,18 +20,20 @@ export async function generateRobotsTxt({
         return res.end();
     }
 
-    if (res && settings) {
-        const robotsText = createRobotsText(settings);
-        res.setHeader('Content-Type', 'text/plain');
-        res.write(robotsText);
-        res.end();
-    }
+    // if (res && settings) {
+    //     const robotsText = createRobotsText(settings);
+    //     res.setHeader('Content-Type', 'text/plain');
+    //     res.write(robotsText);
+    //     res.end();
+    // }
 }
 
-function createRobotsText(settings: PrismicSettingsPage) {
+// FIXME:
+function createRobotsText(settings: any) {
     const settingsRobots = (settings as any).data.robots || '';
 
-    if (settingsRobots) return RichText.asText(settingsRobots);
+    if (settingsRobots) return settingsRobots;
 
     return settingsRobots;
 }
+createRobotsText;

@@ -1,48 +1,31 @@
 import { Accordion } from '@blateral/b.kit';
 import React from 'react';
-import { AliasSelectMapperType } from 'utils/mapping';
-import {
-    mapPrismicSelect,
-    PrismicBoolean,
-    PrismicRichText,
-    PrismicSelectField,
-    PrismicSlice,
-    getText,
-    PrismicKeyText,
-    getHtmlText,
-} from 'utils/prismic';
+import { BgMode, ModxSlice } from 'utils/modx';
 
-type BgMode = 'full' | 'inverted';
+interface AccordionItem {
+    label: string;
+    text?: string;
+    has_columns?: boolean;
+}
 
-export interface AccordionSliceType extends PrismicSlice<'Accordion'> {
+export interface AccordionSliceType
+    extends ModxSlice<'Accordion', AccordionItem> {
     primary: {
-        is_active?: PrismicBoolean;
-        bg_mode?: PrismicSelectField;
+        isActive?: boolean;
+        bgMode?: BgMode;
     };
-    items: {
-        label: PrismicKeyText;
-        text?: PrismicRichText;
-        has_columns?: PrismicBoolean;
-    }[];
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
 }
 
 export const AccordionSlice: React.FC<AccordionSliceType> = ({
-    primary: { bg_mode },
+    primary: { bgMode },
     items,
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
 }) => {
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-
     return (
         <Accordion
             items={items.map((item) => {
                 return {
-                    label: getText(item.label),
-                    text: getHtmlText(item.text),
+                    label: item.label,
+                    text: item.text,
                     hasColumns: item.has_columns,
                 };
             })}

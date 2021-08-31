@@ -1,23 +1,5 @@
 import React from 'react';
-import {
-    getHeadlineTag,
-    getHtmlText,
-    getText,
-    isPrismicLinkExternal,
-    isRichTextEmpty,
-    isValidAction,
-    mapPrismicSelect,
-    PrismicBoolean,
-    PrismicGeopoint,
-    PrismicHeading,
-    PrismicImage,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicRichText,
-    PrismicSelectField,
-    PrismicSlice,
-    resolveUnknownLink,
-} from 'utils/prismic';
+
 import {
     FlyToIcon,
     MailIcon,
@@ -25,35 +7,44 @@ import {
     PhoneIcon,
     RouteIcon,
 } from '@blateral/b.kit/lib';
-import { AliasSelectMapperType } from 'utils/mapping';
+import {
+    isExternalLink,
+    isHeadlineTag,
+    isNumeric,
+    isValidAction,
+    ModxSlice,
+} from 'utils/modx';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { HeadlineTagDefault } from 'utils/stringLexicon';
 
 interface MapLocationItems {
-    super_title?: PrismicHeading;
-    title?: PrismicRichText;
-    position?: PrismicGeopoint;
-    marker?: PrismicImage;
+    superTitle?: string;
+    superTitleAs?: string;
 
-    phone?: PrismicRichText;
-    mail?: PrismicRichText;
-    route?: PrismicRichText;
+    title?: string;
+    titleAs?: string;
+    longitude?: string;
+    latitude?: string;
+    marker?: string;
 
-    primary_link?: PrismicLink;
-    primary_label?: PrismicKeyText;
-    secondary_link?: PrismicLink;
-    secondary_label?: PrismicKeyText;
+    phone?: string;
+    mail?: string;
+    route?: string;
+
+    primary_link?: string;
+    primary_label?: string;
+    secondary_link?: string;
+    secondary_label?: string;
 }
 
-type BgMode = 'full' | 'inverted';
-
-export interface MapSliceType extends PrismicSlice<'Map', MapLocationItems> {
+export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
     primary: {
-        is_active?: PrismicBoolean;
-        bg_mode?: PrismicSelectField;
-        is_mirrored?: PrismicBoolean;
-        with_fly_to?: PrismicBoolean;
+        is_active?: boolean;
+        bgMode?: string;
+        isMirrored?: boolean;
+        withFlyTo?: boolean;
     };
     // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     center?: [number, number];
     zoom?: number;
     flyToZoom?: number;
@@ -101,12 +92,8 @@ export interface MapSliceType extends PrismicSlice<'Map', MapLocationItems> {
 }
 
 export const MapSlice: React.FC<MapSliceType> = ({
-    primary: { bg_mode, is_mirrored, with_fly_to },
+    primary: { bgMode, isMirrored, withFlyTo },
     items,
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
     iconSettings,
     center,
     zoom,
@@ -123,46 +110,47 @@ export const MapSlice: React.FC<MapSliceType> = ({
     mailIcon,
     routingIcon,
 }) => {
-    // get background mode
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-
     return (
         <Map
             bgMode={bgMode === 'inverted' ? 'inverted' : 'full'}
-            isMirrored={is_mirrored}
+            isMirrored={isMirrored}
             initialLocation={items?.length > 0 ? `location-0` : undefined}
             center={center}
             zoom={zoom}
             flyToZoom={flyToZoom || 12}
-            flyToControl={
-                with_fly_to ? flyToControl || <FlyToIcon /> : undefined
-            }
+            flyToControl={withFlyTo ? flyToControl || <FlyToIcon /> : undefined}
             allMarkersOnInit={allMarkersOnInit}
             fitBoundsPadding={fitBoundsPadding || [30, 30]}
             locations={items?.map((location, i) => {
-                const posLat = location.position?.latitude || 0;
-                const posLng = location.position?.longitude || 0;
+                const posLat =
+                    location.latitude && isNumeric(location.latitude)
+                        ? +location.latitude
+                        : 0;
+                const posLng =
+                    location.longitude && isNumeric(location.longitude)
+                        ? +location.longitude
+                        : 0;
 
                 const contactInfo: {
                     label: string;
                     icon: React.ReactNode;
                 }[] = [];
-                if (location.phone && !isRichTextEmpty(location.phone)) {
+                if (location.phone) {
                     contactInfo.push({
                         icon: phoneIcon || <PhoneIcon />,
-                        label: getHtmlText(location?.phone),
+                        label: location?.phone,
                     });
                 }
-                if (location.mail && !isRichTextEmpty(location.mail)) {
+                if (location.mail) {
                     contactInfo.push({
                         icon: mailIcon || <MailIcon />,
-                        label: getHtmlText(location?.mail),
+                        label: location?.mail,
                     });
                 }
-                if (location.route && !isRichTextEmpty(location.route)) {
+                if (location.route) {
                     contactInfo.push({
                         icon: routingIcon || <RouteIcon />,
-                        label: getHtmlText(location?.route),
+                        label: location?.route,
                     });
                 }
 
@@ -170,10 +158,13 @@ export const MapSlice: React.FC<MapSliceType> = ({
                     id: `location-${i}`,
                     position: [posLat, posLng],
                     meta: {
-                        title: getHtmlText(location.title),
+                        title: location.title,
                         titleAs: 'span',
-                        superTitle: getText(location.super_title),
-                        superTitleAs: getHeadlineTag(location.super_title),
+                        superTitle: location.superTitle,
+                        superTitleAs: isHeadlineTag(location.superTitleAs)
+                            ? (location.superTitleAs as HeadlineTag)
+                            : HeadlineTagDefault,
+
                         primaryAction:
                             primaryAction &&
                             isValidAction(
@@ -183,14 +174,9 @@ export const MapSlice: React.FC<MapSliceType> = ({
                                 ? (isInverted?: boolean) =>
                                       primaryAction({
                                           isInverted,
-                                          label: getText(
-                                              location.primary_label
-                                          ),
-                                          href:
-                                              resolveUnknownLink(
-                                                  location.primary_link
-                                              ) || '',
-                                          isExternal: isPrismicLinkExternal(
+                                          label: location.primary_label,
+                                          href: location.primary_link || '',
+                                          isExternal: isExternalLink(
                                               location.primary_link
                                           ),
                                       })
@@ -204,14 +190,9 @@ export const MapSlice: React.FC<MapSliceType> = ({
                                 ? (isInverted?: boolean) =>
                                       secondaryAction({
                                           isInverted,
-                                          label: getText(
-                                              location.secondary_label
-                                          ),
-                                          href:
-                                              resolveUnknownLink(
-                                                  location.secondary_link
-                                              ) || '',
-                                          isExternal: isPrismicLinkExternal(
+                                          label: location.secondary_label,
+                                          href: location.secondary_link || '',
+                                          isExternal: isExternalLink(
                                               location.secondary_link
                                           ),
                                       })
@@ -224,7 +205,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
                         anchor: iconSettings?.anchor || [10, 28],
                         sizeActive: iconSettings?.sizeActive || [50, 70],
                         anchorActive: iconSettings?.anchorActive || [25, 70],
-                        url: location.marker?.url || '',
+                        url: location.marker || '',
                     },
                 };
             })}

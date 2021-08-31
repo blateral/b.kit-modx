@@ -1,51 +1,30 @@
-import {
-    PrismicBoolean,
-    PrismicKeyText,
-    PrismicLink,
-    PrismicRichText,
-    PrismicSlice,
-    getText,
-    PrismicSelectField,
-    mapPrismicSelect,
-} from 'utils/prismic';
-
 import React from 'react';
 import { Table } from '@blateral/b.kit';
 import { TableProps } from '@blateral/b.kit/lib/components/sections/Table';
-import { AliasSelectMapperType } from 'utils/mapping';
+import { ModxSlice } from 'utils/modx';
 
 interface TableItem {
-    table_title?: PrismicKeyText;
-    table?: PrismicRichText;
+    tableTitle?: string;
+    table?: string;
 }
 
-type BgMode = 'full' | 'inverted';
-
-export interface TableSliceType extends PrismicSlice<'Table', TableItem> {
+export interface TableSliceType extends ModxSlice<'Table', TableItem> {
     primary: {
-        is_active?: PrismicBoolean;
-        bg_mode?: PrismicSelectField;
+        isActive?: boolean;
+        bgMode?: string;
 
-        primary_label?: PrismicKeyText;
-        secondary_label?: PrismicKeyText;
-        primary_link?: PrismicLink;
-        secondary_link?: PrismicLink;
+        primary_label?: string;
+        secondary_label?: string;
+        primary_link?: string;
+        secondary_link?: string;
     };
-    // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
 }
 
 export const TableSlice: React.FC<TableSliceType> = ({
-    primary: { bg_mode },
+    primary: { bgMode },
     items,
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
 }) => {
     const tableData = createTableItems(items);
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
-
     return (
         <Table
             bgMode={
@@ -60,12 +39,10 @@ function createTableItems(tableItems: TableItem[]): TableProps[] {
     return tableItems
         .filter((item) => item.table && item.table.length > 0)
         .map((item) => {
-            const { tableHeaders, sliceRows } = convertCsvToTable(
-                getText(item.table!)
-            );
+            const { tableHeaders, sliceRows } = convertCsvToTable(item.table!);
 
             return {
-                tableTitle: item.table_title || '',
+                tableTitle: item.tableTitle || '',
                 rowTitle: tableHeaders || [],
                 row: sliceRows || [],
             };

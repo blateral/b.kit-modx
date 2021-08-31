@@ -1,107 +1,69 @@
-import {
-    getText,
-    PrismicBoolean,
-    PrismicImage,
-    PrismicKeyText,
-    PrismicSlice,
-    getPrismicImage as getImg,
-    PrismicSelectField,
-    mapPrismicSelect,
-    getImageFromUrl,
-} from 'utils/prismic';
-
 import { ComparisonSlider } from '@blateral/b.kit';
 import React from 'react';
-import { AliasSelectMapperType, ImageSizeSettings } from 'utils/mapping';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
-
-type BgMode = 'full' | 'splitted' | 'inverted';
+import {
+    BgMode,
+    ModxImageMetaData,
+    ModxImageProps,
+    ModxSlice,
+} from 'utils/modx';
 
 export interface ComparisonSliderSliceType
-    extends PrismicSlice<'ComparisonSlider'> {
+    extends ModxSlice<'ComparisonSlider'> {
     primary: {
-        is_active?: PrismicBoolean;
+        isActive?: boolean;
 
-        bg_mode?: PrismicSelectField;
-        has_anim?: PrismicBoolean;
-        foreground_img?: PrismicImage;
-        background_img?: PrismicImage;
-        foreground_label?: PrismicKeyText;
-        background_label?: PrismicKeyText;
+        bgMode?: BgMode;
+        hasAnim?: boolean;
+        foregroundImage?: ModxImageProps & ModxImageMetaData;
+        backgroundImage?: ModxImageProps & ModxImageMetaData;
+        foregroundLabel?: string;
+        backgroundLabel?: string;
     };
     // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
     initalValue?: number;
     overlayColor?: string;
     labelColor?: string;
     dragControl?: React.ReactNode;
 }
 
-// for this component defines image sizes
-const imageSizes = {
-    main: {
-        small: { width: 640, height: 480 },
-        medium: { width: 1024, height: 576 },
-        large: { width: 1440, height: 810 },
-        xlarge: { width: 1680, height: 810 },
-    },
-} as ImageSizeSettings<{ main: string }>;
-
 export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({
     primary: {
-        bg_mode,
-        has_anim,
-        foreground_img,
-        foreground_label,
-        background_img,
-        background_label,
-    },
-    bgModeSelectAlias = {
-        full: 'soft',
-        splitted: 'soft-splitted',
-        inverted: 'heavy',
+        bgMode,
+        hasAnim,
+        foregroundImage,
+        foregroundLabel,
+        backgroundImage,
+        backgroundLabel,
     },
     initalValue,
     overlayColor,
     labelColor,
     dragControl,
 }) => {
-    // get image urls for different formats / ratios
-    const foregroundUrl = foreground_img
-        ? getImg(foreground_img, 'main').url
-        : '';
-
-    const backgroundUrl = background_img
-        ? getImg(background_img, 'main').url
-        : '';
-
     const mappedForegroundImage: ImageProps = {
-        ...getImageFromUrl(
-            foregroundUrl,
-            imageSizes.main,
-            getText(foreground_img?.alt)
-        ),
+        ...foregroundImage,
+        small: foregroundImage?.small || '',
+        alt: foregroundImage?.meta?.altText || '',
     };
     const mappedBackgroundImage: ImageProps = {
-        ...getImageFromUrl(
-            backgroundUrl,
-            imageSizes.main,
-            getText(background_img?.alt)
-        ),
+        ...backgroundImage,
+        small: backgroundImage?.small || '',
+        alt: backgroundImage?.meta?.altText || '',
     };
 
     return (
         <ComparisonSlider
-            bgMode={mapPrismicSelect(bgModeSelectAlias, bg_mode)}
+            bgMode={bgMode}
             initialValue={initalValue}
             foregroundImg={mappedForegroundImage}
             backgroundImg={mappedBackgroundImage}
-            foregroundLabel={getText(foreground_label)}
-            backgroundLabel={getText(background_label)}
+            foregroundLabel={foregroundLabel}
+            backgroundLabel={backgroundLabel}
             overlayColor={overlayColor}
             labelColor={labelColor}
             dragControl={dragControl}
-            enableControlAnim={has_anim}
+            enableControlAnim={hasAnim}
         />
     );
 };
