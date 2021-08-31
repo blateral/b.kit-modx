@@ -1,55 +1,29 @@
-import {
-    PrismicBoolean,
-    PrismicHeading,
-    PrismicRichText,
-    PrismicSlice,
-    getText,
-    PrismicSelectField,
-    mapPrismicSelect,
-} from 'utils/prismic';
-
 import { NewsTable } from '@blateral/b.kit';
 import React from 'react';
 import { TableProps } from '@blateral/b.kit/lib/components/sections/Table';
-import { AliasSelectMapperType } from 'utils/mapping';
+import { ModxSlice } from 'utils/modx';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 
-type BgMode = 'full' | 'inverted';
-
-export interface NewsTableSliceType extends PrismicSlice<'NewsTable'> {
+export interface NewsTableSliceType extends ModxSlice<'NewsTable'> {
     primary: {
-        is_active?: PrismicBoolean;
-        bg_mode?: PrismicSelectField;
-        table_title?: PrismicHeading;
-        table?: PrismicRichText;
-        as_table_header?: PrismicBoolean;
+        isActive?: boolean;
+        title?: string;
+        titleAs?: HeadlineTag;
+        table?: string;
+        as_table_header?: boolean;
     };
-
-    // helpers to define component elements outside of slice
-    bgModeSelectAlias?: AliasSelectMapperType<BgMode>;
 }
 
 export const NewsTableSlice: React.FC<NewsTableSliceType> = ({
-    primary: { bg_mode, table_title, table, as_table_header },
-    bgModeSelectAlias = {
-        full: 'soft',
-        inverted: 'heavy',
-    },
+    primary: { title, titleAs, table, as_table_header },
 }) => {
     // get background mode
-    const bgMode = mapPrismicSelect(bgModeSelectAlias, bg_mode);
 
     return (
         <NewsTable
-            bgMode={
-                bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
+            tableItems={
+                table ? [createTableItem(table, title, as_table_header)] : []
             }
-            tableItems={[
-                createTableItem(
-                    getText(table),
-                    getText(table_title),
-                    as_table_header
-                ),
-            ]}
         />
     );
 };
@@ -62,7 +36,7 @@ function createTableItem(
     if (!tableItem) return { row: [], rowTitle: [] };
 
     const { tableHeaders, sliceRows } = convertCsvToTable(
-        getText(tableItem),
+        tableItem,
         firstRowAsHeadings
     );
 
