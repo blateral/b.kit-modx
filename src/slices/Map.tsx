@@ -39,7 +39,7 @@ interface MapLocationItems {
 
 export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
     primary: {
-        is_active?: boolean;
+        isActive?: boolean;
         bgMode?: string;
         isMirrored?: boolean;
         withFlyTo?: boolean;

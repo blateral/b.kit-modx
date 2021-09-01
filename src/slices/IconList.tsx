@@ -13,10 +13,9 @@ interface IconListImages {
 }
 
 
-export interface IconListSliceType
-    extends ModxSlice<'IconList', IconListImages> {
+export interface IconListSliceType extends ModxSlice<'IconList', IconListImages> {
     primary: {
-        is_active?: boolean;
+        isActive?: boolean;
 
         isCentered?: boolean;
         bgMode?: BgMode;

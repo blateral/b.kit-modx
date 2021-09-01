@@ -5,7 +5,7 @@ import { isExternalLink, isValidAction, mapImageToComponentData, ModxImageProps,
 
 export interface NewsVideoSliceType extends ModxSlice<'NewsVideo'> {
     primary: {
-        is_active?: boolean;
+        isActive?: boolean;
         bgMode?: string;
         embedId?: string;
         image?: ModxImageProps;
