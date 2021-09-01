@@ -141,7 +141,60 @@ export interface ModxPage extends ModxDocument {
 
 export interface ModxSettingsPage extends ModxPage {
     type: 'settings';
+    menu: ModxSettingsData;
+    navTopBar: ModxNavBarData;
+    flyoutMenu: ModxFlyoutMenu;
     data: ModxSettingsData;
+
+    addressTitle: string;
+    address: string;
+
+    cookie: {
+        title?: string;
+        text?: string;
+    };
+    notification?: {
+        title?: string;
+        text?: string;
+        triggerLabel?: string;
+        action?: {
+            link: string;
+            label: string;
+            newTab?: boolean;
+        };
+    };
+    socials?: {
+        headLabel?: string;
+        facebook?: string;
+        twitter?: string;
+        instagram?: string;
+        youtube?: string;
+    };
+    logo?: {
+        desktop?: string;
+        link?: string;
+        inverted: boolean;
+        alt?: string;
+    };
+
+    webcamLink?: string;
+
+    webcam?: {
+        link: string;
+        label: string;
+    };
+
+    newsletter?: {
+        text?: string;
+        title?: string;
+        label?: string;
+        placeholder?: string;
+    };
+
+    footer?: {
+        isInverted?: boolean;
+        logo?: ModxImageProps;
+    };
 }
 
 export interface ModxNewsPage extends ModxDocument {
@@ -224,7 +277,6 @@ export interface ModxNewsOverviewPage extends ModxDocument {
     secondary_label?: string;
 }
 
-
 export const hasGTag = (data: any): data is { gTag: string } => {
     return (
         typeof data === 'object' &&
@@ -232,6 +284,19 @@ export const hasGTag = (data: any): data is { gTag: string } => {
         'gTag' in data &&
         typeof data.gTag === 'string'
     );
+};
+
+export type ModxFlyoutMenu = {
+    isInverted?: boolean;
+    isLarge?: boolean;
+    isMirrored?: boolean;
+};
+
+export type ModxNavBarData = {
+    navbarInverted?: boolean;
+    navbarOffset?: boolean;
+    hideTopBarUnderMenu?: boolean;
+    buttonStyle?: string;
 };
 
 export type ModxSettingsData = {
@@ -270,48 +335,6 @@ export type ModxSettingsData = {
         label: string;
         active?: boolean;
     }>;
-
-    addressTitle: string;
-    address: string;
-
-    cookie: {
-        title?: string;
-        text?: string;
-    };
-    notification?: {
-        title?: string;
-        text?: string;
-        triggerLabel?: string;
-        action?: {
-            link: string;
-            label: string;
-            newTab?: boolean;
-        };
-    };
-    socials?: Array<{
-        platform?: string,
-        link?: string;
-    }>
-    logo?: ModxImageProps
-
-    webcamLink?: string;
-
-    webcam?: {
-        link: string;
-        label: string;
-    };
-    
-    newsletter?: {
-        text?: string;
-        title?: string;
-        label?: string;
-        placeholder?: string;
-    }
-
-    footer?: {
-        isInverted?: boolean;
-        logo?:ModxImageProps;
-    }
 };
 
 export interface ModxImageProps {
