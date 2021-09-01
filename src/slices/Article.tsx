@@ -46,7 +46,6 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
     primaryAction,
     secondaryAction,
 }) => {
-    console.log('SUPER TITLE', superTitle);
     return (
         <Article
             bgMode={bgMode}
