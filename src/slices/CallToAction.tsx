@@ -20,31 +20,28 @@ export interface CallToActionSliceType
         'CallToAction' | 'CallToActionNewsletter',
         AddressSliceType
     > {
-    primary: {
-        isActive?: boolean;
-        superTitle?: string;
-        superTitleAs?: HeadlineTag;
-        title?: string;
-        titleAs?: HeadlineTag;
+    isActive?: boolean;
+    superTitle?: string;
+    superTitleAs?: HeadlineTag;
+    title?: string;
+    titleAs?: HeadlineTag;
 
-        text?: string;
-        bgMode?: BgMode;
+    text?: string;
+    bgMode?: BgMode;
 
-        contactAvatar?: Pick<ModxImageProps, 'small' | 'meta'>;
-        contact: { name?: string; description?: string };
+    contactAvatar?: Pick<ModxImageProps, 'small' | 'meta'>;
+    contact: { name?: string; description?: string };
 
-        // FIXME: NEwsletter
-        newsletter_placeholder?: string;
-        newsletter_button_label?: string;
+    // FIXME: NEwsletter
+    newsletter_placeholder?: string;
+    newsletter_button_label?: string;
 
-        primary_link?: string;
-        secondary_link?: string;
-        primary_label?: string;
-        secondary_label?: string;
+    primary_link?: string;
+    secondary_link?: string;
+    primary_label?: string;
+    secondary_label?: string;
 
-        badge?: string;
-        badgeAlt?: string;
-    };
+    badge?: Pick<ModxImageProps, 'small' | 'meta'>;
     // helpers to define component elements outside of slice
     injectForm?: (props: {
         isInverted?: boolean;
@@ -66,32 +63,30 @@ export interface CallToActionSliceType
 }
 
 export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
-    primary: {
-        superTitle,
-        superTitleAs,
-        title,
-        titleAs,
-        text,
-        bgMode,
+    superTitle,
+    superTitleAs,
+    title,
+    titleAs,
+    text,
+    bgMode,
 
-        contactAvatar,
-        contact,
+    contactAvatar,
+    contact,
 
-        newsletter_placeholder,
-        newsletter_button_label,
+    newsletter_placeholder,
+    newsletter_button_label,
 
-        primary_link,
-        primary_label,
-        secondary_link,
-        secondary_label,
-        badge,
-        badgeAlt,
-    },
+    primary_link,
+    primary_label,
+    secondary_link,
+    secondary_label,
+    badge,
     items,
     injectForm,
     primaryAction,
     secondaryAction,
 }) => {
+    console.log('ITEMS', items);
     return (
         <CallToAction
             bgMode={bgMode === 'inverted' ? 'inverted' : 'full'}
@@ -111,17 +106,19 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                               : undefined,
                           name: contact.name,
                           description: contact.description,
-                          addresses: items.map((item) => {
-                              return {
-                                  decorator: item?.icon?.small && (
-                                      <img
-                                          src={item?.icon?.small}
-                                          alt={item?.icon.meta?.altText}
-                                      />
-                                  ),
-                                  label: item?.label || '',
-                              };
-                          }),
+                          addresses:
+                              items &&
+                              items?.map((item) => {
+                                  return {
+                                      decorator: item?.icon?.small && (
+                                          <img
+                                              src={item?.icon?.small}
+                                              alt={item?.icon.meta?.altText}
+                                          />
+                                      ),
+                                      label: item?.label || '',
+                                  };
+                              }),
                       }
                     : undefined
             }
@@ -160,10 +157,11 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                     : undefined
             }
             badge={
-                badge && (
+                badge &&
+                badge.small && (
                     <img
-                        src={badge}
-                        alt={badgeAlt || ''}
+                        src={`${badge.small}`}
+                        alt={badge.meta?.altText || ''}
                         style={{ height: '100%', width: '100%' }}
                     />
                 )
