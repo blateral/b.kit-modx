@@ -10,16 +10,14 @@ import {
 
 export interface ComparisonSliderSliceType
     extends ModxSlice<'ComparisonSlider'> {
-    primary: {
-        isActive?: boolean;
+    isActive?: boolean;
 
-        bgMode?: BgMode;
-        hasAnim?: boolean;
-        foregroundImage?: ModxImageProps & ModxImageMetaData;
-        backgroundImage?: ModxImageProps & ModxImageMetaData;
-        foregroundLabel?: string;
-        backgroundLabel?: string;
-    };
+    bgMode?: BgMode;
+    hasAnim?: boolean;
+    foregroundImage?: ModxImageProps & ModxImageMetaData;
+    backgroundImage?: ModxImageProps & ModxImageMetaData;
+    foregroundLabel?: string;
+    backgroundLabel?: string;
     // helpers to define component elements outside of slice
     initalValue?: number;
     overlayColor?: string;
@@ -28,14 +26,12 @@ export interface ComparisonSliderSliceType
 }
 
 export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({
-    primary: {
-        bgMode,
-        hasAnim,
-        foregroundImage,
-        foregroundLabel,
-        backgroundImage,
-        backgroundLabel,
-    },
+    bgMode,
+    hasAnim,
+    foregroundImage,
+    foregroundLabel,
+    backgroundImage,
+    backgroundLabel,
     initalValue,
     overlayColor,
     labelColor,
