@@ -24,8 +24,14 @@ import { IntroSliceType } from '../slices/Intro';
 import { AccordionSliceType } from '../slices/Accordion';
 import { QuickNavSliceType } from '../slices/QuickNav';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { HeaderSliceType } from 'slices/Header';
 
-export const endpoint = 'https://cms.ueberlingen-bodensee.de/';
+if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
+    console.error(
+        'Missing env: NEXT_PUBLIC_API_ENDPOINT is not defined. Error thrown in bkit-modx -> modx.ts'
+    );
+}
+export const endpoint = process.env.NEXT_PUBLIC_API_ENDPOINT || '';
 export const initApi = (alias: string) => {
     return `${endpoint}${alias}`;
 };
@@ -129,6 +135,7 @@ export type ModxDocument = {
 
 export interface ModxPage extends ModxDocument {
     type: 'page' | 'settings' | 'news';
+    header: HeaderSliceType;
     content: Array<PageContent>;
 }
 

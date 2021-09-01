@@ -12,24 +12,22 @@ import { HeadlineTagDefault } from 'utils/stringLexicon';
 type BgMode = 'full' | 'splitted' | 'inverted';
 
 export interface IntroSliceType extends ModxSlice<'Intro'> {
-    primary: {
-        isActive?: boolean;
+    isActive?: boolean;
 
-        bgMode?: BgMode;
-        title?: string;
-        titleAs?: string;
-        superTitle?: string;
-        superTitleAs?: string;
-        text?: string;
+    bgMode?: BgMode;
+    title?: string;
+    titleAs?: string;
+    superTitle?: string;
+    superTitleAs?: string;
+    text?: string;
 
-        isCentered?: boolean;
-        isStackable?: boolean;
+    isCentered?: boolean;
+    isStackable?: boolean;
 
-        primary_link?: string;
-        secondary_link?: string;
-        primary_label?: string;
-        secondary_label?: string;
-    };
+    primary_link?: string;
+    secondary_link?: string;
+    primary_label?: string;
+    secondary_label?: string;
 
     primaryAction?: (props: {
         isInverted?: boolean;
@@ -46,30 +44,28 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
 }
 
 export const IntroSlice: React.FC<IntroSliceType> = ({
-    primary: {
-        isCentered,
-        isStackable,
-        bgMode,
-        title,
-        titleAs,
-        superTitle,
-        superTitleAs,
-        text,
-        primary_label,
-        primary_link,
-        secondary_label,
-        secondary_link,
-    },
-    
+    isCentered,
+    isStackable,
+    bgMode,
+    title,
+    titleAs,
+    superTitle,
+    superTitleAs,
+    text,
+    primary_label,
+    primary_link,
+    secondary_label,
+    secondary_link,
+
     primaryAction,
     secondaryAction,
 }) => {
     return (
         <Intro
-        bgMode={bgMode}
-        isStackable={isStackable}
-        isCentered={isCentered}
-        title={title || ''}
+            bgMode={bgMode}
+            isStackable={isStackable}
+            isCentered={isCentered}
+            title={title || ''}
             superTitle={superTitle}
             superTitleAs={
                 isHeadlineTag(superTitleAs)

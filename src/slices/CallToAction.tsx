@@ -86,7 +86,6 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     primaryAction,
     secondaryAction,
 }) => {
-    console.log('ITEMS', items);
     return (
         <CallToAction
             bgMode={bgMode === 'inverted' ? 'inverted' : 'full'}
