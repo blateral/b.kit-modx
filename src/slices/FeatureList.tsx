@@ -28,14 +28,12 @@ interface FeatureItemType {
 
 export interface FeatureListSliceType
     extends ModxSlice<'FeatureList', FeatureItemType> {
-    primary: {
-        isActive?: boolean;
-        isCarousel?: boolean;
+    isActive?: boolean;
+    isCarousel?: boolean;
 
-        isCentered?: boolean;
-        bgMode?: BgMode;
-        imageFormat: 'square' | 'portrait' | 'landscape';
-    };
+    isCentered?: boolean;
+    bgMode?: BgMode;
+    imageFormat: 'square' | 'portrait' | 'landscape';
 
     primaryAction?: (props: {
         isInverted?: boolean;
@@ -72,7 +70,10 @@ export interface FeatureListSliceType
 }
 
 export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
-    primary: { isCarousel, isCentered, bgMode, imageFormat },
+    isCarousel,
+    isCentered,
+    bgMode,
+    imageFormat,
     items,
     primaryAction,
     secondaryAction,

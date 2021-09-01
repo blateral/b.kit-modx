@@ -18,16 +18,14 @@ export interface MailInfo {
 type BgMode = 'full' | 'inverted';
 
 export interface FormSliceType extends ModxSlice<'Form'> {
-    primary: {
-        isActive?: boolean;
-        bgMode?: BgMode;
-        submitLabel?: string;
-        checkboxLabel?: string;
+    isActive?: boolean;
+    bgMode?: BgMode;
+    submitLabel?: string;
+    checkboxLabel?: string;
 
-        subjectText?: string;
-        redirectUrl?: string;
-        targetMails?: string;
-    };
+    subjectText?: string;
+    redirectUrl?: string;
+    targetMails?: string;
 
     // helpers to define component elements outside of slice
     submitAction?: (props: {
@@ -45,21 +43,18 @@ export interface FormSliceType extends ModxSlice<'Form'> {
 }
 
 export const FormSlice: React.FC<FormSliceType> = ({
-    primary: {
-        bgMode,
-        subjectText,
-        submitLabel,
-        checkboxLabel,
-        redirectUrl,
-        targetMails
-    },
+    bgMode,
+    subjectText,
+    submitLabel,
+    checkboxLabel,
+    redirectUrl,
+    targetMails,
     submitAction,
     yupValidationSchema,
     validation,
     onSubmit,
     fieldSettings,
 }) => {
-
     return (
         <Form
             bgMode={
@@ -102,7 +97,7 @@ export const FormSlice: React.FC<FormSliceType> = ({
                               isInverted,
                               isDisabled,
                               additionalProps,
-                              label: (submitLabel),
+                              label: submitLabel,
                           })
                     : undefined
             }
@@ -119,8 +114,8 @@ export const FormSlice: React.FC<FormSliceType> = ({
                             targetMails: targetMails
                                 ?.replace(/\s+/g, '')
                                 ?.split(','),
-                            redirectUrl: (redirectUrl) || '',
-                            subjectText: (subjectText),
+                            redirectUrl: redirectUrl || '',
+                            subjectText: subjectText,
                         },
                         data,
                     });
