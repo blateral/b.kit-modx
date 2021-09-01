@@ -13,7 +13,7 @@ type BgMode = 'full' | 'splitted' | 'inverted';
 
 export interface IntroSliceType extends ModxSlice<'Intro'> {
     primary: {
-        is_active?: boolean;
+        isActive?: boolean;
 
         bgMode?: BgMode;
         title?: string;

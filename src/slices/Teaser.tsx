@@ -7,32 +7,31 @@ import {
     isExternalLink,
     isHeadlineTag,
     isValidAction,
+    ModxImageProps,
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
 
 export interface TeaserSliceType extends ModxSlice<'Teaser'> {
-    primary: {
-        isActive?: boolean;
-        isMirrored?: boolean;
-        isWide?: boolean;
-        bgMode?: string;
-        format?: string;
-        superTitle?: string;
-        superTitleAs?: HeadlineTag;
-        title?: string;
-        titleAs?: HeadlineTag;
-        intro?: string;
-        text?: string;
-        subText?: string;
-        image?: ModxImagePropsWithFormat;
-        description?: string;
+    isActive?: boolean;
+    isMirrored?: boolean;
+    isWide?: boolean;
+    bgMode?: string;
+    format?: string;
+    superTitle?: string;
+    superTitleAs?: HeadlineTag;
+    title?: string;
+    titleAs?: HeadlineTag;
+    intro?: string;
+    text?: string;
+    subText?: string;
+    image?: ModxImagePropsWithFormat;
+    description?: string;
 
-        primary_link?: string;
-        secondary_link?: string;
-        primary_label?: string;
-        secondary_label?: string;
-    };
+    primary_link?: string;
+    secondary_link?: string;
+    primary_label?: string;
+    secondary_label?: string;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -48,30 +47,29 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
 }
 
 export const TeaserSlice: React.FC<TeaserSliceType> = ({
-    primary: {
-        isMirrored,
-        isWide,
-        bgMode,
-        format,
-        superTitle,
-        superTitleAs,
-        title,
-        titleAs,
-        intro,
-        text,
-        subText,
-        image,
-        description,
+    isMirrored,
+    isWide,
+    bgMode,
+    format,
+    superTitle,
+    superTitleAs,
+    title,
+    titleAs,
+    intro,
+    text,
+    subText,
+    image,
+    description,
 
-        primary_link,
-        primary_label,
-        secondary_link,
-        secondary_label,
-    },
+    primary_link,
+    primary_label,
+    secondary_link,
+    secondary_label,
 
     primaryAction,
     secondaryAction,
 }) => {
+    const theImage: ModxImageProps = image && image[format || 'square'];
     const sharedProps = {
         isMirrored,
         superTitle,
@@ -81,7 +79,6 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
         intro: intro,
         text: text,
         subText,
-        imageWithFormat: image ? image[format || 'square'] : undefined,
 
         primaryAction:
             primaryAction && isValidAction(primary_label, primary_link)
@@ -119,17 +116,11 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                         ? (titleAs as HeadlineTag)
                         : HeadlineTagDefault
                 }
-                // FIXME: Was hats mit diesem extra mapping auf sich?
-                // bgMode={
-                //     bgMode === 'full' || bgMode === 'inverted'
-                //         ? bgMode
-                //         : undefined
-                // }
-
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
                 image={{
-                    ...sharedProps.imageWithFormat,
-                    alt: image?.meta?.altText || "",
+                    ...theImage,
+                    small: theImage.small || '',
+                    alt: image?.meta?.altText || '',
                     description: description,
                 }}
             />
@@ -138,6 +129,12 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
         return (
             <Teaser
                 {...sharedProps}
+                image={{
+                    ...theImage,
+                    small: theImage.small || '',
+                    alt: image?.meta?.altText || '',
+                    description: description,
+                }}
                 superTitleAs={
                     isHeadlineTag(superTitleAs)
                         ? superTitleAs

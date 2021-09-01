@@ -4,21 +4,19 @@ import React from 'react';
 import { BgMode, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
 export interface ArticleSliceType extends ModxSlice<'Article'> {
-    primary: {
-        isActive?: boolean;
-        superTitle?: string;
-        superTitleAs?: HeadlineTag;
-        title?: string;
-        titleAs?: HeadlineTag;
+    isActive?: boolean;
+    superTitle?: string;
+    superTitleAs?: HeadlineTag;
+    title?: string;
+    titleAs?: HeadlineTag;
 
-        text?: string;
-        asideText?: string;
-        bgMode?: BgMode;
-        primary_link?: string;
-        secondary_link?: string;
-        primary_label?: string;
-        secondary_label?: string;
-    };
+    text?: string;
+    asideText?: string;
+    bgMode?: BgMode;
+    primary_link?: string;
+    secondary_link?: string;
+    primary_label?: string;
+    secondary_label?: string;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -34,19 +32,17 @@ export interface ArticleSliceType extends ModxSlice<'Article'> {
 }
 
 export const ArticleSlice: React.FC<ArticleSliceType> = ({
-    primary: {
-        superTitle,
-        superTitleAs,
-        title,
-        titleAs,
-        text,
-        asideText,
-        bgMode,
-        primary_link,
-        primary_label,
-        secondary_link,
-        secondary_label,
-    },
+    superTitle,
+    superTitleAs,
+    title,
+    titleAs,
+    text,
+    asideText,
+    bgMode,
+    primary_link,
+    primary_label,
+    secondary_link,
+    secondary_label,
     primaryAction,
     secondaryAction,
 }) => {

@@ -13,20 +13,18 @@ import {
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
 export interface PosterSliceType extends ModxSlice<'Poster'> {
-    primary: {
-        isActive?: boolean;
-        isInverted?: boolean;
-        image?: ModxImageProps;
-        superTitle?: string;
-        superTitleAs?: HeadlineTag;
-        title?: string;
-        titleAs?: HeadlineTag;
-        text?: string;
-        primary_label?: string;
-        secondary_label?: string;
-        primary_link?: string;
-        secondary_link?: string;
-    };
+    isActive?: boolean;
+    isInverted?: boolean;
+    image?: ModxImageProps;
+    superTitle?: string;
+    superTitleAs?: HeadlineTag;
+    title?: string;
+    titleAs?: HeadlineTag;
+    text?: string;
+    primary_label?: string;
+    secondary_label?: string;
+    primary_link?: string;
+    secondary_link?: string;
     // helpers to define component elements outside of slice
     primaryAction?: (props: {
         isInverted?: boolean;
@@ -43,18 +41,16 @@ export interface PosterSliceType extends ModxSlice<'Poster'> {
 }
 
 export const PosterSlice: React.FC<PosterSliceType> = ({
-    primary: {
-        image,
-        superTitle,
-        superTitleAs,
-        title,
-        titleAs,
-        text,
-        primary_label,
-        secondary_label,
-        primary_link,
-        secondary_link,
-    },
+    image,
+    superTitle,
+    superTitleAs,
+    title,
+    titleAs,
+    text,
+    primary_label,
+    secondary_label,
+    primary_link,
+    secondary_link,
 
     primaryAction,
     secondaryAction,

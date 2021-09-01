@@ -128,12 +128,12 @@ export type ModxDocument = {
 };
 
 export interface ModxPage extends ModxDocument {
-    type: 'page' | "settings" | "news";
-    content: PageContent;
+    type: 'page' | 'settings' | 'news';
+    content: Array<PageContent>;
 }
 
-export interface ModxSettingsPage extends ModxPage{
-    type: "settings";
+export interface ModxSettingsPage extends ModxPage {
+    type: 'settings';
     data: ModxSettingsData;
 }
 
@@ -179,7 +179,7 @@ export interface ModxNewsPage extends ModxDocument {
     author_has_background?: boolean;
     author_is_inverted?: boolean;
 
-    data: Array<
+    content: Array<
         | NewsTextSliceType
         | NewsTableSliceType
         | NewsIntroSliceType
@@ -189,34 +189,32 @@ export interface ModxNewsPage extends ModxDocument {
 }
 
 export interface ModxNewsOverviewPage extends ModxDocument {
-    data: {
-        id: string;
-        pagetitle?: string;
-        seo_socialimage?: ModxImageProps;
-        seo_description?: string;
-        seo_keywords?: string;
-        seo_search_index?: boolean;
-        seo_trace_links?: boolean;
-        seo_content_group?: string;
-        seo_redirection?: string;
+    id: string;
+    pagetitle?: string;
+    seo_socialimage?: ModxImageProps;
+    seo_description?: string;
+    seo_keywords?: string;
+    seo_search_index?: boolean;
+    seo_trace_links?: boolean;
+    seo_content_group?: string;
+    seo_redirection?: string;
 
-        nav_isinverted?: boolean;
-        nav_withtopoffset?: boolean;
-        nav_menuicon?: string;
+    nav_isinverted?: boolean;
+    nav_withtopoffset?: boolean;
+    nav_menuicon?: string;
 
-        nav_allowtopbaroverflow?: boolean;
+    nav_allowtopbaroverflow?: boolean;
 
-        news_image?: ModxImageProps;
-        news_heading?: string;
-        news_intro?: string;
-        news_footer_inverted?: boolean;
-        news_footer_background?: boolean;
+    news_image?: ModxImageProps;
+    news_heading?: string;
+    news_intro?: string;
+    news_footer_inverted?: boolean;
+    news_footer_background?: boolean;
 
-        primary_link?: string;
-        primary_label?: string;
-        secondary_link?: string;
-        secondary_label?: string;
-    };
+    primary_link?: string;
+    primary_label?: string;
+    secondary_link?: string;
+    secondary_label?: string;
 }
 
 

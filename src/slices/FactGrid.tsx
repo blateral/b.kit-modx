@@ -7,23 +7,24 @@ interface FactGridEntryItems {
     title?: string;
     subTitle?: string;
     text?: string;
-    icon?: Omit<ModxImagePropsWithFormat, 'portrait' | 'square'>;
+    image?: Omit<ModxImagePropsWithFormat, 'portrait' | 'square'>;
 }
 
 export interface FactGridSliceType
     extends ModxSlice<'FactGrid', FactGridEntryItems> {
-    primary: {
-        isActive?: boolean;
+    isActive?: boolean;
 
-        isCentered?: boolean;
-        bgMode?: BgMode;
-        imageFormat?: 'landscape-wide' | 'landscape';
-        columns?: 3 | 4 | 6 | string;
-    };
+    isCentered?: boolean;
+    bgMode?: BgMode;
+    imageFormat?: 'landscape-wide' | 'landscape';
+    columns?: 3 | 4 | 6 | string;
 }
 
 export const FactGridSlice: React.FC<FactGridSliceType> = ({
-    primary: { isCentered, bgMode, imageFormat, columns },
+    isCentered,
+    bgMode,
+    imageFormat,
+    columns,
     items,
 }) => {
     return (
@@ -35,19 +36,19 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
                     ? columns
                     : (parseInt(columns || '3') as 3 | 4 | 6)
             }
-            facts={items?.map(({ title, subTitle, text, icon }) => {
+            facts={items?.map(({ title, subTitle, text, image }) => {
                 const isSvgImage =
-                    isSVG(icon?.landscape?.small) ||
-                    isSVG(icon?.['landscape-wide']?.xlarge);
+                    isSVG(image?.landscape?.small) ||
+                    isSVG(image?.['landscape-wide']?.xlarge);
 
                 return {
                     title: title,
                     subTitle: subTitle,
                     text: text,
-                    image: icon && {
-                        ...icon[imageFormat || 'landscape-wide'],
+                    image: image && {
+                        ...image[imageFormat || 'landscape-wide'],
                         small:
-                            icon[imageFormat || 'landscape-wide']?.small || '',
+                            image[imageFormat || 'landscape-wide']?.small || '',
                         coverSpace: !isSvgImage,
                     },
                 };

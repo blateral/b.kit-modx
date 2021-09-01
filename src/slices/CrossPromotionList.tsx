@@ -23,13 +23,11 @@ interface CrossPromotionItems {
 
 export interface CrossPromotionListSliceType
     extends ModxSlice<'CrossPromotionList', CrossPromotionItems> {
-    primary: {
-        isActive?: boolean;
-        isCarousel?: boolean;
-        isMirrored?: boolean;
-        bgMode?: BgMode;
-        imageFormat: 'square' | 'landscape' | 'landscape-wide' | 'portrait';
-    };
+    isActive?: boolean;
+    isCarousel?: boolean;
+    isMirrored?: boolean;
+    bgMode?: BgMode;
+    imageFormat: 'square' | 'landscape' | 'landscape-wide' | 'portrait';
 
     controlNext?: (props: {
         isInverted?: boolean;
@@ -56,9 +54,7 @@ export interface CrossPromotionListSliceType
 export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = (
     props
 ) => {
-    const {
-        primary: { isCarousel },
-    } = props;
+    const { isCarousel } = props;
 
     if (isCarousel) {
         return createCPromoCarousel(props);
@@ -68,7 +64,9 @@ export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = (
 };
 
 const createCPromoList = ({
-    primary: { bgMode, imageFormat, isMirrored },
+    bgMode,
+    imageFormat,
+    isMirrored,
 
     items,
 }: CrossPromotionListSliceType) => {
@@ -125,7 +123,8 @@ const createCPromoList = ({
 };
 
 const createCPromoCarousel = ({
-    primary: { bgMode, imageFormat },
+    bgMode,
+    imageFormat,
 
     items,
     controlNext,

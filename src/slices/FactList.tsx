@@ -14,10 +14,8 @@ interface FactListEntryItems {
 
 export interface FactListSliceType
     extends ModxSlice<'FactList', FactListEntryItems> {
-    primary: {
-        isActive?: boolean;
-        bgMode?: BgMode;
-    };
+    isActive?: boolean;
+    bgMode?: BgMode;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -33,7 +31,7 @@ export interface FactListSliceType
 }
 
 export const FactListSlice: React.FC<FactListSliceType> = ({
-    primary: { bgMode },
+    bgMode,
     items,
 }) => {
     return (
@@ -41,7 +39,7 @@ export const FactListSlice: React.FC<FactListSliceType> = ({
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
-            facts={items.map((item) => {
+            facts={items?.map((item) => {
                 return {
                     label: item.label,
                     text: item.text,

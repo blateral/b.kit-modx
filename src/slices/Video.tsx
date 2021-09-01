@@ -8,10 +8,8 @@ export interface VideoCardItem {
     embedId: string;
 }
 export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
-    primary: {
-        isActive?: boolean;
-        bgMode?: string;
-    };
+    isActive?: boolean;
+    bgMode?: string;
 
     controlNext?: (props: {
         isInverted?: boolean;
@@ -37,7 +35,7 @@ export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
 }
 
 export const VideoSlice: React.FC<VideoSliceType> = ({
-    primary: { bgMode },
+    bgMode,
     items,
 
     controlNext,
@@ -53,7 +51,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
     // get background mode
 
     // if more than one items are defined create a carousel
-    if (items.length > 1) {
+    if (items && items.length > 1) {
         return (
             <VideoCarousel
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}

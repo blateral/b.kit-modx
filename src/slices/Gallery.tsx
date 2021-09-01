@@ -3,30 +3,28 @@ import React from 'react';
 
 import { Gallery, ImageCarousel } from '@blateral/b.kit';
 import { ResponsiveObject } from 'slices/slick';
-import { BgMode, mapImageToComponentData, ModxImagePropsWithFormat, ModxSlice } from 'utils/modx';
+import {
+    BgMode,
+    ModxImageProps,
+    ModxImagePropsWithFormat,
+    ModxSlice,
+} from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 
-
-type ImageFormats = "square" | "landscape" | "landscape-wide" | "portrait";
+type ImageFormats = 'square' | 'landscape' | 'landscape-wide' | 'portrait';
 interface GalleryItems {
-     image: ModxImagePropsWithFormat & {format: ImageFormats} 
-
+    image: ModxImagePropsWithFormat & { imageFormat: ImageFormats };
 }
 
-export interface GallerySliceType
-    extends ModxSlice<
-        'Gallery',GalleryItems
-    > {
-    primary: {
-        isActive?: boolean;
-        isCarousel?: boolean;
-        bgMode?: BgMode;
-        superTitle?: string;
-        superTitleAs?: HeadlineTag;
-        title?: string;
-        titleAs?: HeadlineTag;
-        text?: string;
-    };
+export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
+    isActive?: boolean;
+    isCarousel?: boolean;
+    bgMode?: BgMode;
+    superTitle?: string;
+    superTitleAs?: HeadlineTag;
+    title?: string;
+    titleAs?: HeadlineTag;
+    text?: string;
 
     // helpers to define component elements outside of slice
     controlNext?: (props: {
@@ -51,11 +49,11 @@ export interface GallerySliceType
     responsive?: ResponsiveObject[];
 }
 
-
 export const GallerySlice: React.FC<GallerySliceType> = ({
-    primary: { isCarousel, bgMode  },
+    isCarousel,
+    bgMode,
     items,
-  
+
     controlNext,
     controlPrev,
     dot,
@@ -65,12 +63,15 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
     slidesToShow,
     responsive,
 }) => {
-
     const sharedProps = {
         images: items?.map((item) => {
+            const theImage: ModxImageProps =
+                item[item?.image?.imageFormat || 'landscape'];
             return {
-                ...mapImageToComponentData(item.image[item.image.format || "landscape"]),
-                isFull: item.image.format === 'landscape-wide',
+                ...theImage,
+                small: theImage.small || '',
+                alt: theImage.meta?.altText || '',
+                isFull: item?.image?.imageFormat === 'landscape-wide',
             };
         }),
     };
@@ -88,13 +89,11 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
                 dot={dot}
                 slidesToShow={slidesToShow}
                 responsive={responsive}
-
             />
         );
     } else {
         return (
             <Gallery
-
                 {...sharedProps}
                 bgMode={
                     bgMode === 'full' || bgMode === 'inverted'

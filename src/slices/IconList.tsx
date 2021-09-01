@@ -15,16 +15,14 @@ interface IconListImages {
 
 export interface IconListSliceType
     extends ModxSlice<'IconList', IconListImages> {
-    primary: {
-        is_active?: boolean;
+    isActive?: boolean;
 
-        isCentered?: boolean;
-        bgMode?: BgMode;
-        primary_link?: string;
-        secondary_link?: string;
-        primary_label?: string;
-        secondary_label?: string;
-    };
+    isCentered?: boolean;
+    bgMode?: BgMode;
+    primary_link?: string;
+    secondary_link?: string;
+    primary_label?: string;
+    secondary_label?: string;
 
     primaryAction?: (props: {
         isInverted?: boolean;
@@ -41,14 +39,12 @@ export interface IconListSliceType
 }
 
 export const IconListSlice: React.FC<IconListSliceType> = ({
-    primary: {
-        bgMode,
-        isCentered,
-        primary_link,
-        primary_label,
-        secondary_link,
-        secondary_label,
-    },
+    bgMode,
+    isCentered,
+    primary_link,
+    primary_label,
+    secondary_link,
+    secondary_label,
     items,
     primaryAction,
     secondaryAction,
@@ -57,7 +53,9 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
         <IconList
             isCentered={isCentered}
             bgMode={
-                bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
+                bgMode && (bgMode === 'full' || bgMode === 'inverted')
+                    ? bgMode
+                    : undefined
             }
             items={items.map((item) => {
                 return {
