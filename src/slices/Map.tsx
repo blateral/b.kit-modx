@@ -12,6 +12,7 @@ import {
     isHeadlineTag,
     isNumeric,
     isValidAction,
+    ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
@@ -25,7 +26,7 @@ interface MapLocationItems {
     titleAs?: string;
     longitude?: string;
     latitude?: string;
-    marker?: string;
+    marker?: Pick<ModxImageProps, 'small' | 'meta'>;
 
     phone?: string;
     mail?: string;
@@ -38,12 +39,10 @@ interface MapLocationItems {
 }
 
 export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
-    primary: {
-        isActive?: boolean;
-        bgMode?: string;
-        isMirrored?: boolean;
-        withFlyTo?: boolean;
-    };
+    isActive?: boolean;
+    bgMode?: string;
+    isMirrored?: boolean;
+    withFlyTo?: boolean;
     // helpers to define component elements outside of slice
     center?: [number, number];
     zoom?: number;
@@ -92,7 +91,9 @@ export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
 }
 
 export const MapSlice: React.FC<MapSliceType> = ({
-    primary: { bgMode, isMirrored, withFlyTo },
+    bgMode,
+    isMirrored,
+    withFlyTo,
     items,
     iconSettings,
     center,
@@ -205,7 +206,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
                         anchor: iconSettings?.anchor || [10, 28],
                         sizeActive: iconSettings?.sizeActive || [50, 70],
                         anchorActive: iconSettings?.anchorActive || [25, 70],
-                        url: location.marker || '',
+                        url: location.marker?.small || '',
                     },
                 };
             })}
