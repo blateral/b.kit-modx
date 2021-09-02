@@ -10,7 +10,12 @@ import {
 
 
 import { Navigation } from '@blateral/b.kit';
-import { isExternalLink, isValidAction, ModxSettingsPage } from 'utils/modx';
+import {
+    isExternalLink,
+    isValidAction,
+    ModxNavItem,
+    ModxSettingsPage,
+} from 'utils/modx';
 
 export interface NavigationSliceType {
     nav_primaryAction?: (props: {
@@ -114,6 +119,8 @@ export const NavigationSlice: React.FC<
         nav_secondaryPointerFn: secondaryActionPointer,
         logo,
     });
+
+    console.log(menu);
     return (
         <Navigation
             {...menu}
@@ -181,43 +188,76 @@ const createMenu = ({
     logo,
     search,
 }: MenuSliceType): NavProps => {
-    // return logo from prismic
-    // const logoFull = settingsData?.logo_image_full;
-    // const logoSmall = settingsData?.logo_image_small;
-    // const logoFullInverted = settingsData?.logo_image_full_inverted;
-    // const logoSmallInverted = settingsData?.logo_image_small_inverted;
+    // // return logo from prismic
+    // // const logoFull = settingsData?.logo_image_full;
+    // // const logoSmall = settingsData?.logo_image_small;
+    // // const logoFullInverted = settingsData?.logo_image_full_inverted;
+    // // const logoSmallInverted = settingsData?.logo_image_small_inverted;
+    // console.log('NAV ITEM', settingsData?.menu.menuPrimary);
 
-    const activeItemIndexes = {
-        groupId: '',
-        itemId: '',
-    };
+    // const activeItemIndexes = {
+    //     groupId: '',
+    //     itemId: '',
+    // };
 
-    settingsData?.menu.menuPrimary?.every((navGroup, groupIndex) => {
-        const navItems = navGroup?.items;
-        let hasFound = false;
+    // settingsData?.menu.menuPrimary?.every((navGroup, groupIndex) => {
+    //     const navItems = navGroup?.items;
+    //     let hasFound = false;
 
-        navItems?.every((navItem, itemIndex) => {
-            const itemLink = (navItem.link && navItem.link) || '';
+    //     navItems?.every((navItem, itemIndex) => {
+    //         const itemLink = (navItem.link && navItem.link) || '';
 
-            // try to get page URL
-            let pageUrlString = pageUrl;
-            try {
-                pageUrlString = new URL(pageUrl || '').pathname;
-            } catch (err) {
-                // console.log(err);
+    //         // try to get page URL
+    //         let pageUrlString = pageUrl;
+    //         try {
+    //             pageUrlString = new URL(pageUrl || '').pathname;
+    //         } catch (err) {
+    //             // console.log(err);
+    //         }
+
+    //         if (itemLink === pageUrlString) {
+    //             activeItemIndexes.groupId = groupIndex.toString();
+    //             activeItemIndexes.itemId = itemIndex.toString();
+    //             hasFound = true;
+    //             return false;
+    //         } else return true;
+    //     });
+    //     if (hasFound) return false;
+    //     else return true;
+    // });
+
+    const primaryMenu: NavGroup[] | undefined =
+        settingsData?.menu.menuPrimary?.map(
+            (navItem: ModxNavItem, index: number) => {
+                return {
+                    id: `navGroup${index}`,
+                    label: navItem?.label || '',
+                    isSmall: navItem?.isSmall || false,
+                    name: navItem?.label || '',
+                    items:
+                        navItem.items &&
+                        navItem.items.map(
+                            (
+                                item: Omit<ModxNavItem, 'items'>,
+                                subindex: number
+                            ) => {
+                                return {
+                                    id: `nav-link${subindex}`,
+                                    name: item?.label || '',
+                                    label: item.label || '',
+                                    link: {
+                                        href: item.link || '',
+                                    },
+                                    onClick: (id: string, fullId: string) =>
+                                        console.log(fullId),
+                                } as NavItem;
+                            }
+                        ),
+                } as NavGroup;
             }
+        );
 
-            if (itemLink === pageUrlString) {
-                activeItemIndexes.groupId = groupIndex.toString();
-                activeItemIndexes.itemId = itemIndex.toString();
-                hasFound = true;
-                return false;
-            } else return true;
-        });
-        if (hasFound) return false;
-        else return true;
-    });
-
+    console.log('PRIMARY MENU', primaryMenu);
     const logoLinkParsed = settingsData?.logo?.link;
     const logoLinkCleaned =
         logoLinkParsed && /index/.test(logoLinkParsed)
@@ -236,7 +276,7 @@ const createMenu = ({
             pageTopScale: logo && logo.pageTopScale,
         },
         socials: socials,
-        search:  search,
+        search: search,
 
         primaryCta: ({ isInverted, size }) => {
             const primary = getPrimaryButtonOrPointer({
@@ -252,7 +292,6 @@ const createMenu = ({
                 primaryAction: nav_primaryCtaFn,
                 primaryActionPointer: nav_primaryPointerFn,
             });
-            console.log(primary);
             if (primary) {
                 return primary(!!isInverted);
             } else {
@@ -279,30 +318,8 @@ const createMenu = ({
                 return undefined;
             }
         },
-        activeNavItem: `navGroup${activeItemIndexes.groupId}.nav-link${activeItemIndexes.itemId}`,
-        navItems: settingsData?.menu.menuPrimary?.map(
-            (navItem: any, index: number) => {
-                return {
-                    id: `navGroup${index}`,
-                    name: navItem?.name || '',
-                    isSmall: navItem?.is_small,
-
-                    items:
-                        navItem.items &&
-                        navItem.items.map((item: any, subindex: number) => {
-                            return {
-                                id: `nav-link${subindex}`,
-                                name: item?.label || '',
-                                link: {
-                                    href: item.link || '',
-                                },
-                                onClick: (id: string, fullId: string) =>
-                                    console.log(fullId),
-                            } as NavItem;
-                        }),
-                } as NavGroup;
-            }
-        ),
+        // activeNavItem: `navGroup${activeItemIndexes.groupId}.nav-link${activeItemIndexes.itemId}`,
+        navItems: primaryMenu,
     };
 };
 

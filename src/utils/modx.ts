@@ -328,8 +328,9 @@ export type ModxNavBarData = {
 export type ModxNavItem = {
     id: string;
     link?: string;
-    name: string;
+    label?: string;
     active?: boolean;
+    isSmall?: boolean;
     items: Array<Omit<ModxNavItem, 'items'>>;
 };
 
