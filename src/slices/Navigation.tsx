@@ -35,7 +35,7 @@ export interface NavigationSliceType {
 }
 
 export interface NavigationProps {
-    pageUrl?: string;
+    pageAlias?: string;
 
     isLargeMenu?: boolean; // Global Settings
     isMenuInverted?: boolean; // Global Settings
@@ -90,9 +90,9 @@ export interface NavigationProps {
 }
 
 export const NavigationSlice: React.FC<
-    NavigationProps & { pageUrl?: string; settingsPage?: ModxSettingsPage }
+    NavigationProps & { pageAlias?: string; settingsPage?: ModxSettingsPage }
 > = ({
-    pageUrl,
+    pageAlias,
     socialMapper,
     settingsPage,
     logo,
@@ -106,7 +106,7 @@ export const NavigationSlice: React.FC<
 }) => {
     const data = settingsPage;
     const menu = createMenu({
-        pageUrl,
+        pageAlias,
         socials: socialMapper && socialMapper(settingsPage?.socials),
         flyoutIsLarge: data?.flyoutMenu.isLarge,
 
@@ -120,7 +120,6 @@ export const NavigationSlice: React.FC<
         logo,
     });
 
-    console.log(menu);
     return (
         <Navigation
             {...menu}
@@ -134,7 +133,7 @@ export const NavigationSlice: React.FC<
 
 interface MenuSliceType {
     settingsData?: ModxSettingsPage;
-    pageUrl?: string;
+    pageAlias?: string;
     flyoutIsLarge?: boolean;
     flyoutIsInverted?: boolean;
     navbarInverted?: boolean;
@@ -175,7 +174,7 @@ interface MenuSliceType {
 }
 const createMenu = ({
     settingsData,
-    pageUrl,
+    pageAlias,
     flyoutIsLarge,
     flyoutIsInverted,
     navbarInverted,
@@ -195,36 +194,30 @@ const createMenu = ({
     // // const logoSmallInverted = settingsData?.logo_image_small_inverted;
     // console.log('NAV ITEM', settingsData?.menu.menuPrimary);
 
-    // const activeItemIndexes = {
-    //     groupId: '',
-    //     itemId: '',
-    // };
+    const activeItemIndexes = {
+        groupId: '',
+        itemId: '',
+    };
 
-    // settingsData?.menu.menuPrimary?.every((navGroup, groupIndex) => {
-    //     const navItems = navGroup?.items;
-    //     let hasFound = false;
+    settingsData?.menu.menuPrimary?.find((navGroup, groupIndex) => {
+        const navItems = navGroup?.items;
 
-    //     navItems?.every((navItem, itemIndex) => {
-    //         const itemLink = (navItem.link && navItem.link) || '';
+        const navItem = navItems?.find((navItem, itemIndex) => {
+            console.log(
+                'Navitem alias',
+                navItem.alias,
+                ' pageAlias',
+                pageAlias
+            );
+            if (navItem.alias === pageAlias) {
+                activeItemIndexes.groupId = groupIndex.toString();
+                activeItemIndexes.itemId = itemIndex.toString();
+                return true;
+            } else return false;
+        });
 
-    //         // try to get page URL
-    //         let pageUrlString = pageUrl;
-    //         try {
-    //             pageUrlString = new URL(pageUrl || '').pathname;
-    //         } catch (err) {
-    //             // console.log(err);
-    //         }
-
-    //         if (itemLink === pageUrlString) {
-    //             activeItemIndexes.groupId = groupIndex.toString();
-    //             activeItemIndexes.itemId = itemIndex.toString();
-    //             hasFound = true;
-    //             return false;
-    //         } else return true;
-    //     });
-    //     if (hasFound) return false;
-    //     else return true;
-    // });
+        return !!navItem;
+    });
 
     const primaryMenu: NavGroup[] | undefined =
         settingsData?.menu.menuPrimary?.map(
@@ -234,6 +227,7 @@ const createMenu = ({
                     label: navItem?.label || '',
                     isSmall: navItem?.isSmall || false,
                     name: navItem?.label || '',
+
                     items:
                         navItem.items &&
                         navItem.items.map(
@@ -245,6 +239,7 @@ const createMenu = ({
                                     id: `nav-link${subindex}`,
                                     name: item?.label || '',
                                     label: item.label || '',
+
                                     link: {
                                         href: item.link || '',
                                     },
@@ -257,7 +252,6 @@ const createMenu = ({
             }
         );
 
-    console.log('PRIMARY MENU', primaryMenu);
     const logoLinkParsed = settingsData?.logo?.link;
     const logoLinkCleaned =
         logoLinkParsed && /index/.test(logoLinkParsed)
@@ -318,7 +312,7 @@ const createMenu = ({
                 return undefined;
             }
         },
-        // activeNavItem: `navGroup${activeItemIndexes.groupId}.nav-link${activeItemIndexes.itemId}`,
+        activeNavItem: `navGroup${activeItemIndexes.groupId}.nav-link${activeItemIndexes.itemId}`,
         navItems: primaryMenu,
     };
 };

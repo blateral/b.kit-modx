@@ -135,6 +135,7 @@ export type ModxDocument = {
 
 export interface ModxPage extends ModxDocument {
     type: 'page' | 'settings' | 'news';
+    alias: string;
     header: HeaderSliceType;
     content: Array<PageContent>;
 }
@@ -327,26 +328,16 @@ export type ModxNavBarData = {
 
 export type ModxNavItem = {
     id: string;
+    alias?: string;
     link?: string;
     label?: string;
     active?: boolean;
     isSmall?: boolean;
-    items: Array<Omit<ModxNavItem, 'items'>>;
+    items: Array<ModxNavItem>;
 };
 
 export type ModxMenuItemData = {
-    menuPrimary: Array<{
-        id: string;
-        link?: string;
-        label: string;
-        active?: boolean;
-        items: Array<{
-            id: string;
-            link: string;
-            label: string;
-            active?: boolean;
-        }>;
-    }>;
+    menuPrimary: Array<ModxNavItem>;
 
     menuSecondary: Array<{
         id: string;

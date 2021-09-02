@@ -78,7 +78,7 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
     search?: (isInverted?: boolean) => React.ReactNode;
 
     settingsPage?: ModxMenuItemData;
-    pageUrl?: string;
+    pageAlias?: string;
 }
 
 export const HeaderSlice: React.FC<HeaderSliceType> = ({
