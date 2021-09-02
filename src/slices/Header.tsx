@@ -1,11 +1,10 @@
 import React from 'react';
-React;
 import { Header } from '@blateral/b.kit';
 import {
     isExternalLink,
     isValidAction,
     ModxImageProps,
-    ModxSettingsData,
+    ModxMenuItemData,
     ModxSlice,
     SizeSelect,
 } from 'utils/modx';
@@ -69,13 +68,6 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
         isExternal?: boolean;
     }) => React.ReactNode;
 
-    mapSocials?: (
-        socials?: Array<{ platform?: string; link?: string }>
-    ) => Array<{
-        href: string;
-        icon: JSX.Element;
-    }>;
-
     // inject logo icon for into slice
     injectLogo?: (props: {
         isInverted?: boolean;
@@ -85,7 +77,7 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
     customBottomGradient?: string;
     search?: (isInverted?: boolean) => React.ReactNode;
 
-    settingsPage?: ModxSettingsData;
+    settingsPage?: ModxMenuItemData;
     pageUrl?: string;
 }
 
@@ -103,7 +95,6 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     items,
     customBottomGradient,
     customTopGradient,
-
     primaryAction,
     secondaryAction,
     primaryActionPointer,

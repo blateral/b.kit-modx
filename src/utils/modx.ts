@@ -141,10 +141,9 @@ export interface ModxPage extends ModxDocument {
 
 export interface ModxSettingsPage extends ModxPage {
     type: 'settings';
-    menu: ModxSettingsData;
+    menu: ModxMenuItemData;
     navTopBar: ModxNavBarData;
     flyoutMenu: ModxFlyoutMenu;
-    data: ModxSettingsData;
 
     addressTitle: string;
     address: string;
@@ -153,6 +152,7 @@ export interface ModxSettingsPage extends ModxPage {
         title?: string;
         text?: string;
     };
+
     notification?: {
         title?: string;
         text?: string;
@@ -173,7 +173,10 @@ export interface ModxSettingsPage extends ModxPage {
     logo?: {
         desktop?: string;
         link?: string;
-        inverted: boolean;
+        inverted: string;
+        smallLogo: string;
+        smallLogoInverted: string;
+        footerLogo: string;
         alt?: string;
     };
 
@@ -194,6 +197,17 @@ export interface ModxSettingsPage extends ModxPage {
     footer?: {
         isInverted?: boolean;
         logo?: ModxImageProps;
+    };
+
+    headerPrimary: {
+        label: string;
+        link: string;
+        newTab: boolean;
+    };
+    headerSecondary: {
+        label: string;
+        link: string;
+        newTab: boolean;
     };
 }
 
@@ -297,9 +311,29 @@ export type ModxNavBarData = {
     navbarOffset?: boolean;
     hideTopBarUnderMenu?: boolean;
     buttonStyle?: string;
+    navbarPrimary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
+    navbarSecondary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
 };
 
-export type ModxSettingsData = {
+export type ModxNavItem = {
+    id: string;
+    link?: string;
+    name: string;
+    active?: boolean;
+    items: Array<Omit<ModxNavItem, 'items'>>;
+};
+
+export type ModxMenuItemData = {
     menuPrimary: Array<{
         id: string;
         link?: string;

@@ -10,7 +10,7 @@ import {
 
 
 import { Navigation } from '@blateral/b.kit';
-import { ModxSettingsData, ModxSettingsPage } from 'utils/modx';
+import { isExternalLink, isValidAction, ModxSettingsPage } from 'utils/modx';
 
 export interface NavigationSliceType {
     nav_primaryAction?: (props: {
@@ -43,12 +43,13 @@ export interface NavigationProps {
     activeNavItem?: string;
     navItems?: NavGroup[];
     socialMapper?: (
-        socials?:
-            | {
-                  platform?: string | undefined;
-                  link?: string | undefined;
-              }[]
-            | undefined,
+        socials?: {
+            headLabel?: string;
+            facebook?: string;
+            twitter?: string;
+            instagram?: string;
+            youtube?: string;
+        },
         id?: string | undefined
     ) => {
         href: string;
@@ -101,7 +102,7 @@ export const NavigationSlice: React.FC<
     const data = settingsPage;
     const menu = createMenu({
         pageUrl,
-        socials: socialMapper && socialMapper(),
+        socials: socialMapper && socialMapper(settingsPage?.socials),
         flyoutIsLarge: data?.flyoutMenu.isLarge,
 
         settingsData: data,
@@ -190,14 +191,13 @@ const createMenu = ({
         groupId: '',
         itemId: '',
     };
-    
-    settingsData?.main_nav?.every((navGroup, groupIndex) => {
+
+    settingsData?.menu.menuPrimary?.every((navGroup, groupIndex) => {
         const navItems = navGroup?.items;
         let hasFound = false;
 
         navItems?.every((navItem, itemIndex) => {
-            const itemLink =
-                (navItem.link && resolveUnknownLink(navItem.link)) || '';
+            const itemLink = (navItem.link && navItem.link) || '';
 
             // try to get page URL
             let pageUrlString = pageUrl;
@@ -218,7 +218,7 @@ const createMenu = ({
         else return true;
     });
 
-    const logoLinkParsed = resolveUnknownLink(settingsData?.logo_href);
+    const logoLinkParsed = settingsData?.logo?.link;
     const logoLinkCleaned =
         logoLinkParsed && /index/.test(logoLinkParsed)
             ? logoLinkParsed.replace('index', '')
@@ -236,21 +236,23 @@ const createMenu = ({
             pageTopScale: logo && logo.pageTopScale,
         },
         socials: socials,
-        search: search && search,
+        search:  search,
 
         primaryCta: ({ isInverted, size }) => {
             const primary = getPrimaryButtonOrPointer({
-                isCta: !!settingsData?.menu_buttonstyle,
+                isCta: !!settingsData?.navTopBar.buttonStyle,
                 isInverted: !!isInverted,
                 primary_label:
                     (size === 'desktop' ||
-                    !settingsData?.header_primary_label_short
-                        ? settingsData?.header_primary_label
-                        : settingsData?.header_primary_label_short) || '',
-                primary_link: settingsData?.header_primary_link,
+                    !settingsData?.navTopBar.navbarPrimary.labelShort
+                        ? settingsData?.navTopBar.navbarPrimary.label
+                        : settingsData?.navTopBar.navbarPrimary.labelShort) ||
+                    '',
+                primary_link: settingsData?.navTopBar.navbarPrimary.link,
                 primaryAction: nav_primaryCtaFn,
                 primaryActionPointer: nav_primaryPointerFn,
             });
+            console.log(primary);
             if (primary) {
                 return primary(!!isInverted);
             } else {
@@ -259,14 +261,15 @@ const createMenu = ({
         },
         secondaryCta: ({ isInverted, size }) => {
             const secondary = getSecondaryButtonOrPointer({
-                isCta: !!settingsData?.menu_buttonstyle,
+                isCta: !!settingsData?.navTopBar.buttonStyle,
                 isInverted: !!isInverted,
                 secondary_label:
                     (size === 'desktop' ||
-                    !settingsData?.header_secondary_label_short
-                        ? settingsData?.header_secondary_label
-                        : settingsData?.header_secondary_label_short) || '',
-                secondary_link: settingsData?.header_primary_link,
+                    !settingsData?.navTopBar.navbarSecondary.labelShort
+                        ? settingsData?.navTopBar.navbarSecondary.label
+                        : settingsData?.navTopBar.navbarSecondary.labelShort) ||
+                    '',
+                secondary_link: settingsData?.navTopBar.navbarSecondary.link,
                 secondaryAction: nav_secondaryCtaFn,
                 secondaryActionPointer: nav_secondaryPointerFn,
             });
@@ -277,27 +280,29 @@ const createMenu = ({
             }
         },
         activeNavItem: `navGroup${activeItemIndexes.groupId}.nav-link${activeItemIndexes.itemId}`,
-        navItems: settingsData?.main_nav?.map((navItem: any, index: number) => {
-            return {
-                id: `navGroup${index}`,
-                name: navItem?.primary?.name || '',
-                isSmall: navItem?.primary?.is_small,
+        navItems: settingsData?.menu.menuPrimary?.map(
+            (navItem: any, index: number) => {
+                return {
+                    id: `navGroup${index}`,
+                    name: navItem?.name || '',
+                    isSmall: navItem?.is_small,
 
-                items:
-                    navItem.items &&
-                    navItem.items.map((item: any, subindex: number) => {
-                        return {
-                            id: `nav-link${subindex}`,
-                            label: item?.label || '',
-                            link: {
-                                href: resolveUnknownLink(item.link) || '',
-                            },
-                            onClick: (id: string, fullId: string) =>
-                                console.log(fullId),
-                        } as NavItem;
-                    }),
-            } as NavGroup;
-        }),
+                    items:
+                        navItem.items &&
+                        navItem.items.map((item: any, subindex: number) => {
+                            return {
+                                id: `nav-link${subindex}`,
+                                name: item?.label || '',
+                                link: {
+                                    href: item.link || '',
+                                },
+                                onClick: (id: string, fullId: string) =>
+                                    console.log(fullId),
+                            } as NavItem;
+                        }),
+                } as NavGroup;
+            }
+        ),
     };
 };
 
@@ -309,8 +314,8 @@ const getPrimaryButtonOrPointer = ({
     primary_label,
     primary_link,
 }: {
-    isCta: PrismicBoolean;
-    isInverted: PrismicBoolean;
+    isCta: boolean;
+    isInverted: boolean;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -331,9 +336,9 @@ const getPrimaryButtonOrPointer = ({
             ? (isInverted: boolean) =>
                   primaryAction({
                       isInverted,
-                      label: getText(primary_label),
-                      href: resolveUnknownLink(primary_link) || '',
-                      isExternal: isstringExternal(primary_link),
+                      label: primary_label,
+                      href: primary_link || '',
+                      isExternal: isExternalLink(primary_link),
                   })
             : undefined;
     }
@@ -344,9 +349,9 @@ const getPrimaryButtonOrPointer = ({
             ? (isInverted: boolean) =>
                   primaryActionPointer({
                       isInverted,
-                      label: getText(primary_label),
-                      href: resolveUnknownLink(primary_link) || '',
-                      isExternal: isstringExternal(primary_link),
+                      label: primary_label,
+                      href: primary_link || '',
+                      isExternal: isExternalLink(primary_link),
                   })
             : undefined;
     }
@@ -362,8 +367,8 @@ const getSecondaryButtonOrPointer = ({
     secondary_label,
     secondary_link,
 }: {
-    isCta: PrismicBoolean;
-    isInverted: PrismicBoolean;
+    isCta: boolean;
+    isInverted: boolean;
 
     secondaryAction?: (props: {
         isInverted?: boolean;
@@ -385,9 +390,9 @@ const getSecondaryButtonOrPointer = ({
             ? (isInverted: boolean) =>
                   secondaryAction({
                       isInverted,
-                      label: getText(secondary_label),
-                      href: resolveUnknownLink(secondary_link) || '',
-                      isExternal: isstringExternal(secondary_link),
+                      label: secondary_label,
+                      href: secondary_link || '',
+                      isExternal: isExternalLink(secondary_link),
                   })
             : undefined;
     }
@@ -398,9 +403,9 @@ const getSecondaryButtonOrPointer = ({
             ? (isInverted: boolean) =>
                   secondaryActionPointer({
                       isInverted,
-                      label: getText(secondary_label),
-                      href: resolveUnknownLink(secondary_link) || '',
-                      isExternal: isstringExternal(secondary_link),
+                      label: secondary_label,
+                      href: secondary_link || '',
+                      isExternal: isExternalLink(secondary_link),
                   })
             : undefined;
     }

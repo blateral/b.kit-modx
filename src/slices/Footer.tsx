@@ -10,9 +10,13 @@ export interface FooterSliceType {
         placeholder?: string;
         buttonLabel?: string;
     }) => React.ReactNode;
-    mapSocials?: (
-        socials: Array<{ platform?: string; link?: string }>
-    ) => Array<{
+    mapSocials?: (socials: {
+        headLabel?: string;
+        facebook?: string;
+        twitter?: string;
+        instagram?: string;
+        youtube?: string;
+    }) => Array<{
         href: string;
         icon: JSX.Element;
     }>;
@@ -23,15 +27,14 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
     injectForm,
     mapSocials,
 }) => {
-    const settingsData = settingsPage?.data;
+    const settingsData = settingsPage;
     const mappedSocials =
         mapSocials &&
         settingsData &&
         settingsData.socials &&
-        settingsData.socials.length > 0 &&
         mapSocials(settingsData.socials);
 
-    const logoLinkParsed = settingsData?.logo?.small;
+    const logoLinkParsed = settingsData?.logo?.link;
 
     const logoLinkCleaned =
         logoLinkParsed && /index/.test(logoLinkParsed)
