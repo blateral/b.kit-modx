@@ -146,9 +146,6 @@ export interface ModxSettingsPage extends ModxPage {
     navTopBar: ModxNavBarData;
     flyoutMenu: ModxFlyoutMenu;
 
-    addressTitle: string;
-    address: string;
-
     cookie: {
         title?: string;
         text?: string;
@@ -189,6 +186,7 @@ export interface ModxSettingsPage extends ModxPage {
     };
 
     newsletter?: {
+        redirectUrl?: string;
         text?: string;
         title?: string;
         label?: string;
@@ -196,8 +194,8 @@ export interface ModxSettingsPage extends ModxPage {
     };
 
     footer?: {
+        address?: string;
         isInverted?: boolean;
-        logo?: ModxImageProps;
     };
 
     headerPrimary: {
@@ -338,7 +336,7 @@ export type ModxNavItem = {
 
 export type ModxMenuItemData = {
     menuPrimary: Array<ModxNavItem>;
-
+    footerMenuPrimary: Array<Omit<ModxNavItem, 'items'>>;
     menuSecondary: Array<{
         id: string;
         link: string;
@@ -346,13 +344,7 @@ export type ModxMenuItemData = {
         active?: boolean;
     }>;
 
-    menuQuicklinksTitle: string;
-    menuQuicklinks: Array<{
-        id: string;
-        link: string;
-        label: string;
-        active?: boolean;
-    }>;
+    footerBottomLinks: Array<Omit<ModxNavItem, 'items'>>;
 
     menuCompanyTitle: string;
     menuCompany: Array<{

@@ -203,12 +203,6 @@ const createMenu = ({
         const navItems = navGroup?.items;
 
         const navItem = navItems?.find((navItem, itemIndex) => {
-            console.log(
-                'Navitem alias',
-                navItem.alias,
-                ' pageAlias',
-                pageAlias
-            );
             if (navItem.alias === pageAlias) {
                 activeItemIndexes.groupId = groupIndex.toString();
                 activeItemIndexes.itemId = itemIndex.toString();

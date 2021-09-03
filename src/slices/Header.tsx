@@ -108,6 +108,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             size={size || 'full'}
             videoUrl={videoUrl || ''}
             images={headerImageMap}
+            title={intro?.title || ''}
             intro={intro}
             badge={headerBadge(badge, badgeOnMobile)}
             primaryCta={getPrimaryButtonOrPointer({
