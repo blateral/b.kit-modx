@@ -216,11 +216,12 @@ const createMenu = ({
     const primaryMenu: NavGroup[] | undefined =
         settingsData?.menu.menuPrimary?.map(
             (navItem: ModxNavItem, index: number) => {
+                console.log(navItem);
                 return {
                     id: `navGroup${index}`,
                     label: navItem?.label || '',
                     isSmall: navItem?.isSmall || false,
-                    name: navItem?.label || '',
+                    name: navItem?.navGroupLabel || '',
 
                     items:
                         navItem.items &&

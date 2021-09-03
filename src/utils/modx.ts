@@ -328,6 +328,7 @@ export type ModxNavItem = {
     id: string;
     alias?: string;
     link?: string;
+    navGroupLabel?: string;
     label?: string;
     active?: boolean;
     isSmall?: boolean;
