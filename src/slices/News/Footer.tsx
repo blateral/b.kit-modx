@@ -1,10 +1,9 @@
 import { NewsFooter } from '@blateral/b.kit';
 import React from 'react';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
-import { isExternalLink, ModxNewsPage, ModxSlice } from 'utils/modx';
+import { isExternalLink, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
 export interface NewsFooterSliceType
-    extends ModxSlice<'NewsFooter', ModxNewsPage> {
+    extends ModxSlice<'NewsFooter', ModxNewsTeaser> {
     isActive?: boolean;
     isInverted?: boolean;
     newsFooterBackground?: boolean;
@@ -52,7 +51,7 @@ function mapNewsListData({
     secondaryAction,
     onTagClick,
 }: {
-    newsCollection: ModxNewsPage[] | undefined;
+    newsCollection: ModxNewsTeaser[] | undefined;
     secondaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -63,36 +62,39 @@ function mapNewsListData({
 }) {
     if (!newsCollection) return [];
 
-    return newsCollection.sort(byDateDescending).map((news) => {
+    return newsCollection.map((news) => {
         let publicationDate = undefined;
         try {
-            publicationDate = news.publication_date
-                ? generatePublicationDateObject(news.publication_date)
+            publicationDate = news.publishedOn
+                ? generatePublicationDateObject(news.publishedOn)
                 : undefined;
         } catch {
             publicationDate = undefined;
         }
 
-        const mappedImage: ImageProps = {
-            ...news.news_image_preview,
-            small: news.news_image_preview?.small || '',
-            alt: news.news_image_preview?.meta?.altText || '',
-        };
+        const mappedImage = news?.intro?.image
+            ? {
+                  ...news.intro.image,
+                  small: news.intro.image?.small || '',
+                  alt: news.intro.image?.meta?.altText || '',
+              }
+            : undefined;
+
         return {
             image: mappedImage,
-            tag: news?.news_tags?.split(',')[0],
+            tag: news?.tag || '',
             publishDate: publicationDate,
-            title: (news?.news_heading && news.news_heading) || '',
-            text: news.news_intro && news.news_intro,
-            link: { href: `/news/${news.id}`, isExternal: false },
+            title: news?.intro?.title || '',
+            text: news.intro?.intro,
+            link: { href: news.link || '', isExternal: false },
 
             secondaryAction: secondaryAction
                 ? (isInverted: boolean) =>
                       secondaryAction({
                           isInverted,
                           label: 'Beitrag lesen',
-                          href: `/news/${news.id}`,
-                          isExternal: isExternalLink(news.secondary_link),
+                          href: news.action.link,
+                          isExternal: isExternalLink(news.action.link),
                       })
                 : undefined,
             onTagClick: onTagClick || undefined,
@@ -100,10 +102,10 @@ function mapNewsListData({
     });
 }
 
-function generatePublicationDateObject(publication_date?: string) {
-    if (!publication_date) return undefined;
+function generatePublicationDateObject(publicationDate?: string) {
+    if (!publicationDate) return undefined;
 
-    const parts = publication_date?.split('/').filter(Boolean);
+    const parts = publicationDate?.split(' ').filter(Boolean);
     try {
         const dateParts = parts[0].split('-').filter(Boolean);
 
@@ -115,17 +117,10 @@ function generatePublicationDateObject(publication_date?: string) {
 
         return publicationDate;
     } catch (e) {
-        console.error('Error in NewsFooter date generation. \n', e);
+        console.error('Error in NewsIntro date generation. \n', e);
         return undefined;
     }
 }
-const byDateDescending = (a: ModxNewsPage, b: ModxNewsPage) => {
-    if (!a.publicationDate || !b.publicationDate) return 0;
-    if (a.publicationDate > b.publicationDate) return -1;
-    if (a.publicationDate < b.publicationDate) return 1;
-
-    return 0;
-};
 
 // const byDateDescending = (a: PrismicNewsPage, b: PrismicNewsPage) => {
 //     let aDate: Date | undefined = new Date();
