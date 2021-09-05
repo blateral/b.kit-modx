@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Footer } from '@blateral/b.kit';
-import { ModxSettingsPage } from 'utils/modx';
+import { endpoint, isExternalLink, ModxSettingsPage } from 'utils/modx';
 
 export interface FooterSliceType {
     settingsPage?: ModxSettingsPage;
@@ -10,9 +10,13 @@ export interface FooterSliceType {
         placeholder?: string;
         buttonLabel?: string;
     }) => React.ReactNode;
-    mapSocials?: (
-        socials: Array<{ platform?: string; link?: string }>
-    ) => Array<{
+    mapSocials?: (socials: {
+        headLabel?: string;
+        facebook?: string;
+        twitter?: string;
+        instagram?: string;
+        youtube?: string;
+    }) => Array<{
         href: string;
         icon: JSX.Element;
     }>;
@@ -23,33 +27,33 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
     injectForm,
     mapSocials,
 }) => {
-    const settingsData = settingsPage?.data;
+    const settingsData = settingsPage;
     const mappedSocials =
         mapSocials &&
         settingsData &&
         settingsData.socials &&
-        settingsData.socials.length > 0 &&
         mapSocials(settingsData.socials);
 
-    const logoLinkParsed = settingsData?.logo?.small;
+    const logoLinkParsed = settingsData?.logo?.link;
 
     const logoLinkCleaned =
-        logoLinkParsed && /index/.test(logoLinkParsed)
-            ? logoLinkParsed.replace('index', '')
+        logoLinkParsed && /index|start/.test(logoLinkParsed)
+            ? logoLinkParsed.replace(/index|start/, '')
             : logoLinkParsed
             ? logoLinkParsed
             : '';
 
-    // FIXME: Updating footer data to use modx structures
     return (
         <Footer
             isInverted={settingsData?.footer?.isInverted}
             socials={mappedSocials || undefined}
             logo={{
-                img: settingsData?.footer?.logo?.small || '',
+                img: settingsData?.logo?.footerLogo
+                    ? `${endpoint}${settingsData.logo.footerLogo}`
+                    : '',
                 link: logoLinkCleaned,
             }}
-            contactData={settingsData?.address}
+            contactData={settingsData?.footer?.address}
             newsTitle={settingsData?.newsletter?.title}
             newsText={settingsData?.newsletter?.text}
             newsForm={
@@ -63,25 +67,25 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
                           })
                     : undefined
             }
-            // siteLinks={settingsData?.body?.map((linkSlice) => {
-            //     return {
-            //         href:
-            //             (linkSlice.primary.footer_nav_link) ||
-            //             '',
-            //         label: (linkSlice.primary.footer_nav_title as any) || '',
-            //         isExternal: isstringExternal(
-            //             linkSlice?.primary?.footer_nav_link
-            //         ),
-            //     };
-            // })}
-            // bottomLinks={settingsData?.footer_bottomlinks?.map((bottomLink) => {
-            //     const result = {
-            //         href: (bottomLink.href) || '',
-            //         label: bottomLink.label || '',
-            //         isExternal: isstringExternal(bottomLink.href),
-            //     };
-            //     return result;
-            // })}
+            siteLinks={settingsData?.menu?.footerMenuPrimary.map(
+                (linkSlice) => {
+                    return {
+                        href: linkSlice.link || '',
+                        label: linkSlice.label || '',
+                        isExternal: isExternalLink(linkSlice.link),
+                    };
+                }
+            )}
+            bottomLinks={settingsData?.menu.footerBottomLinks?.map(
+                (bottomLink) => {
+                    const result = {
+                        href: bottomLink.link || '',
+                        label: bottomLink.label || '',
+                        isExternal: isExternalLink(bottomLink.link),
+                    };
+                    return result;
+                }
+            )}
         />
     );
 };

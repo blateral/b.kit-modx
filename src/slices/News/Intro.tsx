@@ -4,31 +4,27 @@ import { NewsIntro } from '@blateral/b.kit';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
 export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
-    primary: {
-        isActive?: boolean;
-        news_heading?: string;
-        news_intro?: string;
-        news_image?: ModxImageProps;
-        author_name?: string;
-        publicationDate?: string;
-        bgMode?: BgMode;
-        primary_link?: string;
-        secondary_link?: string;
-        primary_label?: string;
-        secondary_label?: string;
-    };
+    isActive?: boolean;
+    news_heading?: string;
+    news_intro?: string;
+    news_image?: ModxImageProps;
+    author_name?: string;
+    publicationDate?: string;
+    bgMode?: BgMode;
+    primary_link?: string;
+    secondary_link?: string;
+    primary_label?: string;
+    secondary_label?: string;
     tags?: string;
 }
 
 export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
-    primary: {
-        bgMode,
-        author_name,
-        publicationDate,
-        news_image,
-        news_intro,
-        news_heading,
-    },
+    bgMode,
+    author_name,
+    publicationDate,
+    news_image,
+    news_intro,
+    news_heading,
 
     tags,
 }) => {
@@ -64,7 +60,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
 function generatePublicationDateObject(publicationDate?: string) {
     if (!publicationDate) return undefined;
 
-    const parts = publicationDate?.split('/').filter(Boolean);
+    const parts = publicationDate?.split(' ').filter(Boolean);
     try {
         const dateParts = parts[0].split('-').filter(Boolean);
 

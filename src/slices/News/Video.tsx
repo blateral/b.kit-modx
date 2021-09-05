@@ -4,16 +4,14 @@ import { isExternalLink, isValidAction, mapImageToComponentData, ModxImageProps,
 
 
 export interface NewsVideoSliceType extends ModxSlice<'NewsVideo'> {
-    primary: {
-        isActive?: boolean;
-        bgMode?: string;
-        embedId?: string;
-        image?: ModxImageProps;
-        primary_link?: string;
-        secondary_link?: string;
-        primary_label?: string;
-        secondary_label?: string;
-    };
+    isActive?: boolean;
+    bgMode?: string;
+    embedId?: string;
+    image?: ModxImageProps;
+    primary_link?: string;
+    secondary_link?: string;
+    primary_label?: string;
+    secondary_label?: string;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -29,15 +27,13 @@ export interface NewsVideoSliceType extends ModxSlice<'NewsVideo'> {
 }
 
 export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
-    primary: {
-        bgMode,
-        embedId,
-        image,
-        primary_link,
-        primary_label,
-        secondary_link,
-        secondary_label,
-    },
+    bgMode,
+    embedId,
+    image,
+    primary_link,
+    primary_label,
+    secondary_link,
+    secondary_label,
     primaryAction,
     secondaryAction,
 }) => {
@@ -53,8 +49,8 @@ export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
                     ? (isInverted) =>
                           primaryAction({
                               isInverted,
-                              label: (primary_label),
-                              href: (primary_link) || '',
+                              label: primary_label,
+                              href: primary_link || '',
                               isExternal: isExternalLink(primary_link),
                           })
                     : undefined
@@ -65,8 +61,8 @@ export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
                     ? (isInverted) =>
                           secondaryAction({
                               isInverted,
-                              label: (secondary_label),
-                              href: (secondary_link) || '',
+                              label: secondary_label,
+                              href: secondary_link || '',
                               isExternal: isExternalLink(secondary_link),
                           })
                     : undefined

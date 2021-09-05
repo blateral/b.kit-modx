@@ -9,19 +9,15 @@ import {
 } from 'utils/modx';
 
 export interface NewsImagesSliceType extends ModxSlice<'NewsImages'> {
-    primary: {
-        isActive?: boolean;
-        text?: string;
-        bgMode?: BgMode;
-        full: Pick<ModxImageProps, 'small' | 'medium' | 'meta'>;
-        half: Array<
-            Pick<ModxImageProps, 'small' | 'medium' | 'large' | 'meta'>
-        >;
-        primary_link?: string;
-        secondary_link?: string;
-        primary_label?: string;
-        secondary_label?: string;
-    };
+    isActive?: boolean;
+    text?: string;
+    bgMode?: BgMode;
+    full: Pick<ModxImageProps, 'small' | 'medium' | 'meta'>;
+    half: Array<Pick<ModxImageProps, 'small' | 'medium' | 'large' | 'meta'>>;
+    primary_link?: string;
+    secondary_link?: string;
+    primary_label?: string;
+    secondary_label?: string;
 
     primaryAction?: (props: {
         isInverted?: boolean;
@@ -38,20 +34,18 @@ export interface NewsImagesSliceType extends ModxSlice<'NewsImages'> {
 }
 
 export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
-    primary: {
-        bgMode,
-        full,
-        half,
-        primary_link,
-        primary_label,
-        secondary_link,
-        secondary_label,
-    },
+    bgMode,
+    full,
+    half,
+    primary_link,
+    primary_label,
+    secondary_link,
+    secondary_label,
 
     primaryAction,
     secondaryAction,
 }) => {
-    const images = full.small ? [full] : half;
+    const images = full?.small ? [full] : half[0]?.small ? half : [];
     return (
         <NewsImages
             bgMode={
@@ -81,7 +75,7 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
                           })
                     : undefined
             }
-            images={images.map((image) => {
+            images={images?.map((image) => {
                 return {
                     ...image,
                     small: image.small || '',

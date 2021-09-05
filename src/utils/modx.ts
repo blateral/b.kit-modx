@@ -24,8 +24,15 @@ import { IntroSliceType } from '../slices/Intro';
 import { AccordionSliceType } from '../slices/Accordion';
 import { QuickNavSliceType } from '../slices/QuickNav';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { HeaderSliceType } from 'slices/Header';
+import { NewsAuthorCardSliceType, NewsFooterSliceType } from 'index';
 
-export const endpoint = 'https://cms.ueberlingen-bodensee.de/';
+if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
+    console.error(
+        'Missing env: NEXT_PUBLIC_API_ENDPOINT is not defined. Error thrown in bkit-modx -> modx.ts'
+    );
+}
+export const endpoint = process.env.NEXT_PUBLIC_API_ENDPOINT || '';
 export const initApi = (alias: string) => {
     return `${endpoint}${alias}`;
 };
@@ -55,7 +62,7 @@ export type BgMode = 'full' | 'splitted' | 'inverted' | undefined;
 
 export interface ModxSlice<S, I = any> {
     slice_type: S;
-    primary: Record<string, unknown>;
+    primary?: Record<string, unknown>;
     items: I[];
 }
 
@@ -100,6 +107,16 @@ export type PageContent =
     | AccordionSliceType
     | QuickNavSliceType;
 
+export type NewsPageContent =
+    | NewsAuthorCardSliceType
+    | NewsFooterSliceType
+    | NewsImagesSliceType
+    | NewsIntroSliceType
+    | NewsListSliceType
+    | NewsTableSliceType
+    | NewsTextSliceType
+    | NewsVideoSliceType;
+
 export type ModxDocument = {
     id: string;
     pagetitle?: string;
@@ -129,34 +146,82 @@ export type ModxDocument = {
 
 export interface ModxPage extends ModxDocument {
     type: 'page' | 'settings' | 'news';
+    alias: string;
+    header: HeaderSliceType;
     content: Array<PageContent>;
 }
 
 export interface ModxSettingsPage extends ModxPage {
     type: 'settings';
-    data: ModxSettingsData;
+    menu: ModxMenuItemData;
+    navTopBar: ModxNavBarData;
+    flyoutMenu: ModxFlyoutMenu;
+
+    cookie: {
+        title?: string;
+        text?: string;
+    };
+
+    notification?: {
+        title?: string;
+        text?: string;
+        triggerLabel?: string;
+        action?: {
+            link: string;
+            label: string;
+            newTab?: boolean;
+        };
+    };
+    socials?: {
+        headLabel?: string;
+        facebook?: string;
+        twitter?: string;
+        instagram?: string;
+        youtube?: string;
+    };
+    logo?: {
+        desktop?: string;
+        link?: string;
+        inverted: string;
+        smallLogo: string;
+        smallLogoInverted: string;
+        footerLogo: string;
+        alt?: string;
+    };
+
+    webcamLink?: string;
+
+    webcam?: {
+        link: string;
+        label: string;
+    };
+
+    newsletter?: {
+        redirectUrl?: string;
+        text?: string;
+        title?: string;
+        label?: string;
+        placeholder?: string;
+    };
+
+    footer?: {
+        address?: string;
+        isInverted?: boolean;
+    };
+
+    headerPrimary: {
+        label: string;
+        link: string;
+        newTab: boolean;
+    };
+    headerSecondary: {
+        label: string;
+        link: string;
+        newTab: boolean;
+    };
 }
 
 export interface ModxNewsPage extends ModxDocument {
-    id: string;
-    pagetitle?: string;
-
-    publicationDate?: string;
-
-    seo_socialimage?: ModxImageProps;
-    seo_description?: string;
-    seo_keywords?: string;
-    seo_search_index?: boolean;
-    seo_trace_links?: boolean;
-    seo_content_group?: string;
-    seo_redirection?: string;
-
-    nav_isinverted?: boolean;
-    nav_withtopoffset?: boolean;
-    nav_menuicon?: string;
-
-    nav_allowtopbaroverflow?: boolean;
-
     news_tags?: string;
     news_image?: ModxImageProps;
     news_image_preview?: ModxImageProps;
@@ -179,44 +244,48 @@ export interface ModxNewsPage extends ModxDocument {
     author_has_background?: boolean;
     author_is_inverted?: boolean;
 
-    content: Array<
-        | NewsTextSliceType
-        | NewsTableSliceType
-        | NewsIntroSliceType
-        | NewsVideoSliceType
-        | NewsImagesSliceType
-    >;
+    content: Array<NewsPageContent>;
 }
 
-export interface ModxNewsOverviewPage extends ModxDocument {
+export interface ModxNewsData extends ModxDocument {
+    newsArticles?: ModxNewsTeaser[];
+}
+export interface ModxNewsTeaser {
     id: string;
-    pagetitle?: string;
-    seo_socialimage?: ModxImageProps;
-    seo_description?: string;
-    seo_keywords?: string;
-    seo_search_index?: boolean;
-    seo_trace_links?: boolean;
-    seo_content_group?: string;
-    seo_redirection?: string;
-
-    nav_isinverted?: boolean;
-    nav_withtopoffset?: boolean;
-    nav_menuicon?: string;
-
-    nav_allowtopbaroverflow?: boolean;
-
-    news_image?: ModxImageProps;
-    news_heading?: string;
-    news_intro?: string;
-    news_footer_inverted?: boolean;
-    news_footer_background?: boolean;
-
-    primary_link?: string;
-    primary_label?: string;
-    secondary_link?: string;
-    secondary_label?: string;
+    label?: string;
+    link?: string;
+    alias?: string;
+    publishedOn?: string;
+    tags?: string;
+    author?: {
+        name?: string;
+        image?: {
+            small?: string;
+            meta?: ModxImageMetaData;
+        };
+    };
+    intro?: {
+        image?: {
+            small?: string;
+            medium?: string;
+            semilarge?: string;
+            meta?: ModxImageMetaData;
+        };
+        image_preview?: {
+            small?: string;
+            medium?: string;
+            large?: string;
+            xlarge?: string;
+            meta?: ModxImageMetaData;
+        };
+        title?: string;
+        intro?: string;
+    };
+    action: {
+        label?: string;
+        link?: string;
+    };
 }
-
 
 export const hasGTag = (data: any): data is { gTag: string } => {
     return (
@@ -227,20 +296,45 @@ export const hasGTag = (data: any): data is { gTag: string } => {
     );
 };
 
-export type ModxSettingsData = {
-    menuPrimary: Array<{
-        id: string;
-        link?: string;
-        label: string;
-        active?: boolean;
-        items: Array<{
-            id: string;
-            link: string;
-            label: string;
-            active?: boolean;
-        }>;
-    }>;
+export type ModxFlyoutMenu = {
+    isInverted?: boolean;
+    isLarge?: boolean;
+    isMirrored?: boolean;
+};
 
+export type ModxNavBarData = {
+    navbarInverted?: boolean;
+    navbarOffset?: boolean;
+    hideTopBarUnderMenu?: boolean;
+    buttonStyle?: string;
+    navbarPrimary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
+    navbarSecondary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
+};
+
+export type ModxNavItem = {
+    id: string;
+    alias?: string;
+    link?: string;
+    navGroupLabel?: string;
+    label?: string;
+    active?: boolean;
+    isSmall?: boolean;
+    items: Array<ModxNavItem>;
+};
+
+export type ModxMenuItemData = {
+    menuPrimary: Array<ModxNavItem>;
+    footerMenuPrimary: Array<Omit<ModxNavItem, 'items'>>;
     menuSecondary: Array<{
         id: string;
         link: string;
@@ -248,13 +342,7 @@ export type ModxSettingsData = {
         active?: boolean;
     }>;
 
-    menuQuicklinksTitle: string;
-    menuQuicklinks: Array<{
-        id: string;
-        link: string;
-        label: string;
-        active?: boolean;
-    }>;
+    footerBottomLinks: Array<Omit<ModxNavItem, 'items'>>;
 
     menuCompanyTitle: string;
     menuCompany: Array<{
@@ -263,48 +351,6 @@ export type ModxSettingsData = {
         label: string;
         active?: boolean;
     }>;
-
-    addressTitle: string;
-    address: string;
-
-    cookie: {
-        title?: string;
-        text?: string;
-    };
-    notification?: {
-        title?: string;
-        text?: string;
-        triggerLabel?: string;
-        action?: {
-            link: string;
-            label: string;
-            newTab?: boolean;
-        };
-    };
-    socials?: Array<{
-        platform?: string,
-        link?: string;
-    }>
-    logo?: ModxImageProps
-
-    webcamLink?: string;
-
-    webcam?: {
-        link: string;
-        label: string;
-    };
-    
-    newsletter?: {
-        text?: string;
-        title?: string;
-        label?: string;
-        placeholder?: string;
-    }
-
-    footer?: {
-        isInverted?: boolean;
-        logo?:ModxImageProps;
-    }
 };
 
 export interface ModxImageProps {
