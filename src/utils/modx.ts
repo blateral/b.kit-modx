@@ -25,6 +25,7 @@ import { AccordionSliceType } from '../slices/Accordion';
 import { QuickNavSliceType } from '../slices/QuickNav';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeaderSliceType } from 'slices/Header';
+import { NewsAuthorCardSliceType, NewsFooterSliceType } from 'index';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -105,6 +106,16 @@ export type PageContent =
     | IntroSliceType
     | AccordionSliceType
     | QuickNavSliceType;
+
+export type NewsPageContent =
+    | NewsAuthorCardSliceType
+    | NewsFooterSliceType
+    | NewsImagesSliceType
+    | NewsIntroSliceType
+    | NewsListSliceType
+    | NewsTableSliceType
+    | NewsTextSliceType
+    | NewsVideoSliceType;
 
 export type ModxDocument = {
     id: string;
@@ -211,25 +222,6 @@ export interface ModxSettingsPage extends ModxPage {
 }
 
 export interface ModxNewsPage extends ModxDocument {
-    id: string;
-    pagetitle?: string;
-
-    publicationDate?: string;
-
-    seo_socialimage?: ModxImageProps;
-    seo_description?: string;
-    seo_keywords?: string;
-    seo_search_index?: boolean;
-    seo_trace_links?: boolean;
-    seo_content_group?: string;
-    seo_redirection?: string;
-
-    nav_isinverted?: boolean;
-    nav_withtopoffset?: boolean;
-    nav_menuicon?: string;
-
-    nav_allowtopbaroverflow?: boolean;
-
     news_tags?: string;
     news_image?: ModxImageProps;
     news_image_preview?: ModxImageProps;
@@ -252,42 +244,47 @@ export interface ModxNewsPage extends ModxDocument {
     author_has_background?: boolean;
     author_is_inverted?: boolean;
 
-    content: Array<
-        | NewsTextSliceType
-        | NewsTableSliceType
-        | NewsIntroSliceType
-        | NewsVideoSliceType
-        | NewsImagesSliceType
-    >;
+    content: Array<NewsPageContent>;
 }
 
-export interface ModxNewsOverviewPage extends ModxDocument {
+export interface ModxNewsData extends ModxDocument {
+    newsArticles?: ModxNewsTeaser[];
+}
+export interface ModxNewsTeaser {
     id: string;
-    pagetitle?: string;
-    seo_socialimage?: ModxImageProps;
-    seo_description?: string;
-    seo_keywords?: string;
-    seo_search_index?: boolean;
-    seo_trace_links?: boolean;
-    seo_content_group?: string;
-    seo_redirection?: string;
-
-    nav_isinverted?: boolean;
-    nav_withtopoffset?: boolean;
-    nav_menuicon?: string;
-
-    nav_allowtopbaroverflow?: boolean;
-
-    news_image?: ModxImageProps;
-    news_heading?: string;
-    news_intro?: string;
-    news_footer_inverted?: boolean;
-    news_footer_background?: boolean;
-
-    primary_link?: string;
-    primary_label?: string;
-    secondary_link?: string;
-    secondary_label?: string;
+    label?: string;
+    link?: string;
+    alias?: string;
+    publishedOn?: string;
+    tag?: string;
+    author?: {
+        name?: string;
+        image?: {
+            small?: string;
+            meta?: ModxImageMetaData;
+        };
+    };
+    intro?: {
+        image?: {
+            small?: string;
+            medium?: string;
+            semilarge?: string;
+            meta?: ModxImageMetaData;
+        };
+        image_preview?: {
+            small?: string;
+            medium?: string;
+            large?: string;
+            xlarge?: string;
+            meta?: ModxImageMetaData;
+        };
+        title?: string;
+        intro?: string;
+    };
+    action: {
+        label?: string;
+        link?: string;
+    };
 }
 
 export const hasGTag = (data: any): data is { gTag: string } => {
