@@ -47,11 +47,15 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
 
 function generateUniqueTag(newsCollection?: ModxNewsTeaser[]) {
     if (!newsCollection || newsCollection.length === 0) return [];
-    const allTags = newsCollection
-        .map((news) => news.tag)
-        .filter(Boolean) as string[];
 
-    const uniqueTags = Array.from(new Set(allTags));
+    let tagsString = '';
+
+    newsCollection.map((news) => {
+        tagsString += ',' + news.tags;
+    });
+    const tagsArray = tagsString.split(',').filter(Boolean);
+
+    const uniqueTags = Array.from(new Set(tagsArray));
 
     return uniqueTags;
 }
@@ -76,11 +80,11 @@ function mapNewsListData(
 
         const newsData = {
             image: mappedImage,
-            tag: news.tag || '',
+            tag: news?.tags?.split(',')[0] || '',
             publishDate: publicationDate,
             title: news.intro?.title || '',
             text: news.intro?.intro,
-            link: { href: news.link, isExternal: false },
+            link: { href: 'news/' + news.action.link, isExternal: false },
 
             secondaryAction:
                 cardAction && news.action.label && news.action.link
@@ -88,7 +92,7 @@ function mapNewsListData(
                           cardAction({
                               isInverted,
                               label: 'Beitrag lesen',
-                              href: news.action.link,
+                              href: 'news/' + news.action.link,
                               isExternal: false,
                           })
                     : undefined,
