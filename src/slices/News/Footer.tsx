@@ -5,11 +5,9 @@ import { isExternalLink, ModxNewsPage, ModxSlice } from 'utils/modx';
 
 export interface NewsFooterSliceType
     extends ModxSlice<'NewsFooter', ModxNewsPage> {
-    primary: {
-        isActive?: boolean;
-        isInverted?: boolean;
-        newsFooterBackground?: boolean;
-    };
+    isActive?: boolean;
+    isInverted?: boolean;
+    newsFooterBackground?: boolean;
 
     // helpers to define component elements outside of slice
     secondaryAction?: (props: {
@@ -23,7 +21,8 @@ export interface NewsFooterSliceType
 }
 
 export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
-    primary: { isInverted, newsFooterBackground },
+    isInverted,
+    newsFooterBackground,
     items,
     secondaryAction,
     onTagClick,

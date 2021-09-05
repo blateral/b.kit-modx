@@ -5,17 +5,18 @@ import { ModxSlice } from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 
 export interface NewsTableSliceType extends ModxSlice<'NewsTable'> {
-    primary: {
-        isActive?: boolean;
-        title?: string;
-        titleAs?: HeadlineTag;
-        table?: string;
-        as_table_header?: boolean;
-    };
+    isActive?: boolean;
+    title?: string;
+    titleAs?: HeadlineTag;
+    table?: string;
+    as_table_header?: boolean;
 }
 
 export const NewsTableSlice: React.FC<NewsTableSliceType> = ({
-    primary: { title, titleAs, table, as_table_header },
+    title,
+    titleAs,
+    table,
+    as_table_header,
 }) => {
     // get background mode
 

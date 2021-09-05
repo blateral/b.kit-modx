@@ -3,14 +3,12 @@ import React from 'react';
 import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
 export interface NewsTextSliceType extends ModxSlice<'NewsText'> {
-    primary: {
-        isActive?: boolean;
-        text?: string;
-        primary_link?: string;
-        secondary_link?: string;
-        primary_label?: string;
-        secondary_label?: string;
-    };
+    isActive?: boolean;
+    text?: string;
+    primary_link?: string;
+    secondary_link?: string;
+    primary_label?: string;
+    secondary_label?: string;
 
     primaryAction?: (props: {
         isInverted?: boolean;
@@ -27,13 +25,11 @@ export interface NewsTextSliceType extends ModxSlice<'NewsText'> {
 }
 
 export const NewsTextSlice: React.FC<NewsTextSliceType> = ({
-    primary: {
-        text,
-        primary_link,
-        primary_label,
-        secondary_link,
-        secondary_label,
-    },
+    text,
+    primary_link,
+    primary_label,
+    secondary_link,
+    secondary_label,
     primaryAction,
     secondaryAction,
 }) => {
