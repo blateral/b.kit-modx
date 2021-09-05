@@ -62,7 +62,7 @@ export type BgMode = 'full' | 'splitted' | 'inverted' | undefined;
 
 export interface ModxSlice<S, I = any> {
     slice_type: S;
-    primary: Record<string, unknown>;
+    primary?: Record<string, unknown>;
     items: I[];
 }
 
@@ -256,7 +256,7 @@ export interface ModxNewsTeaser {
     link?: string;
     alias?: string;
     publishedOn?: string;
-    tag?: string;
+    tags?: string;
     author?: {
         name?: string;
         image?: {

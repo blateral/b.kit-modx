@@ -1,69 +1,58 @@
 import { NewsTable } from '@blateral/b.kit';
 import React from 'react';
-import { TableProps } from '@blateral/b.kit/lib/components/sections/Table';
-import { ModxSlice } from 'utils/modx';
+import { BgMode, ModxSlice } from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { TableProps } from '@blateral/b.kit/lib/components/sections/news/NewsTable';
 
 export interface NewsTableSliceType extends ModxSlice<'NewsTable'> {
     isActive?: boolean;
+    bgMode?: BgMode;
     title?: string;
     titleAs?: HeadlineTag;
-    table?: string;
+    sliceRows?: Array<{ cols: string[] }>;
     as_table_header?: boolean;
 }
 
 export const NewsTableSlice: React.FC<NewsTableSliceType> = ({
     title,
-    titleAs,
-    table,
+    sliceRows,
     as_table_header,
+    bgMode,
 }) => {
-    // get background mode
-
     return (
         <NewsTable
+            bgMode={(bgMode as any) || undefined}
             tableItems={
-                table ? [createTableItem(table, title, as_table_header)] : []
+                sliceRows
+                    ? [
+                          createTableItem(
+                              sliceRows,
+                              title || '',
+                              !!as_table_header
+                          ),
+                      ]
+                    : []
             }
         />
     );
 };
 
 function createTableItem(
-    tableItem: string,
-    tableTitle?: string,
-    firstRowAsHeadings?: boolean
+    item: Array<{ cols: string[] }>,
+    title: string,
+    withTableHeader: boolean
 ): TableProps {
-    if (!tableItem) return { row: [], rowTitle: [] };
+    const tableRows = item;
+    let firstRowTitle: { cols: string[] } | undefined = undefined;
 
-    const { tableHeaders, sliceRows } = convertCsvToTable(
-        tableItem,
-        firstRowAsHeadings
-    );
-
-    return {
-        tableTitle: tableTitle,
-        rowTitle: tableHeaders || [],
-        row: sliceRows || [],
-    };
-}
-
-function convertCsvToTable(tableCsv: string, firstRowAsHeading = false) {
-    const rows = tableCsv.split('\n');
-
-    const sliceRows = rows.map((row) => {
-        const columns = row.split(',');
-        return {
-            cols: columns,
-        };
-    });
-
-    if (firstRowAsHeading) {
-        const tableHeaders = rows[0].split(',');
-        sliceRows.shift();
-
-        return { tableHeaders, sliceRows };
+    if (tableRows && withTableHeader) {
+        firstRowTitle = tableRows[0];
+        tableRows?.splice(0, 1);
     }
 
-    return { sliceRows };
+    return {
+        rowTitle: firstRowTitle?.cols,
+        row: tableRows || [],
+        tableTitle: title || '',
+    };
 }
