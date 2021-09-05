@@ -60,7 +60,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
 function generatePublicationDateObject(publicationDate?: string) {
     if (!publicationDate) return undefined;
 
-    const parts = publicationDate?.split('/').filter(Boolean);
+    const parts = publicationDate?.split(' ').filter(Boolean);
     try {
         const dateParts = parts[0].split('-').filter(Boolean);
 

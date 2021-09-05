@@ -73,11 +73,11 @@ function mapNewsListData({
         };
         return {
             image: mappedImage,
-            tag: news.tag || '',
+            tag: news?.tags?.split(',')[0] || '',
             publishDate: publicationDate,
             title: news.intro?.title || '',
             text: news.intro?.intro,
-            link: { href: news.link, isExternal: false },
+            link: { href: 'news/' + news.action.link, isExternal: false },
 
             secondaryAction:
                 cardAction && news.action.label && news.action.link
@@ -85,7 +85,7 @@ function mapNewsListData({
                           cardAction({
                               isInverted,
                               label: 'Beitrag lesen',
-                              href: news.action.link,
+                              href: 'news/' + news.action.link,
                               isExternal: false,
                           })
                     : undefined,

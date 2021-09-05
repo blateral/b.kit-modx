@@ -45,7 +45,7 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
     primaryAction,
     secondaryAction,
 }) => {
-    const images = full.small ? [full] : half;
+    const images = full?.small ? [full] : half[0]?.small ? half : [];
     return (
         <NewsImages
             bgMode={
@@ -75,7 +75,7 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
                           })
                     : undefined
             }
-            images={images.map((image) => {
+            images={images?.map((image) => {
                 return {
                     ...image,
                     small: image.small || '',
