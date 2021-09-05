@@ -82,7 +82,7 @@ function mapNewsListData({
 
         return {
             image: mappedImage,
-            tag: news?.tag || '',
+            tag: news?.tags?.split(',')[0] || '',
             publishDate: publicationDate,
             title: news?.intro?.title || '',
             text: news.intro?.intro,
