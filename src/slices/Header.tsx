@@ -1,13 +1,14 @@
-import React from 'react';
-import { Header } from '@blateral/b.kit';
 import {
-    isExternalLink,
-    isValidAction,
     ModxImageProps,
     ModxMenuItemData,
     ModxSlice,
     SizeSelect,
+    isExternalLink,
+    isValidAction,
 } from 'utils/modx';
+
+import { Header } from '@blateral/b.kit';
+import React from 'react';
 
 export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
     isActive?: boolean;
@@ -24,7 +25,7 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
     header_primary_link?: string;
     header_secondary_label?: string;
     header_secondary_link?: string;
-
+    allowNavbarOverflow?: boolean;
     isNavLarge?: boolean;
     isInverted?: boolean;
     navInverted?: boolean;
@@ -87,7 +88,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     badgeOnMobile,
     size,
     intro,
-    headerButtonstyle: header_buttonstyle,
+    headerButtonstyle,
     header_primary_label,
     header_primary_link,
     header_secondary_label,
@@ -112,14 +113,14 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             intro={intro}
             badge={headerBadge(badge, badgeOnMobile)}
             primaryCta={getPrimaryButtonOrPointer({
-                isCta: !header_buttonstyle,
+                isCta: !headerButtonstyle,
                 primary_label: header_primary_label,
                 primary_link: header_primary_link,
                 primaryAction,
                 primaryActionPointer,
             })}
             secondaryCta={getSecondaryButtonOrPointer({
-                isCta: !header_buttonstyle,
+                isCta: !headerButtonstyle,
                 secondary_label: header_secondary_label,
                 secondary_link: header_secondary_link,
                 secondaryAction,
