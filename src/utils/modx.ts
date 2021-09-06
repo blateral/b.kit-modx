@@ -1,31 +1,32 @@
+import { NewsAuthorCardSliceType, NewsFooterSliceType } from 'index';
+
+import { AccordionSliceType } from '../slices/Accordion';
 import { ArticleSliceType } from '../slices/Article';
 import { CallToActionSliceType } from '../slices/CallToAction';
+import { ComparisonSliderSliceType } from '../slices/ComparisonSlider';
 import { CrossPromotionListSliceType } from '../slices/CrossPromotionList';
-import { FactListSliceType } from '../slices/FactList';
 import { FactGridSliceType } from '../slices/FactGrid';
+import { FactListSliceType } from '../slices/FactList';
 import { FeatureListSliceType } from '../slices/FeatureList';
+import { FormSliceType } from '../slices/Form';
 import { GallerySliceType } from '../slices/Gallery';
+import { HeaderSliceType } from 'slices/Header';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { IconListSliceType } from '../slices/IconList';
+import { IntroSliceType } from '../slices/Intro';
 import { MapSliceType } from '../slices/Map';
+import { NewsImagesSliceType } from '../slices/News/Images';
+import { NewsIntroSliceType } from '../slices/News/Intro';
+import { NewsListSliceType } from '../slices/News/List';
+import { NewsOverviewSliceType } from '../slices/News/Overview';
+import { NewsTableSliceType } from '../slices/News/Table';
+import { NewsTextSliceType } from '../slices/News/Text';
+import { NewsVideoSliceType } from '../slices/News/Video';
 import { PosterSliceType } from '../slices/Poster';
+import { QuickNavSliceType } from '../slices/QuickNav';
 import { TableSliceType } from '../slices/Table';
 import { TeaserSliceType } from '../slices/Teaser';
 import { VideoSliceType } from '../slices/Video';
-import { FormSliceType } from '../slices/Form';
-import { ComparisonSliderSliceType } from '../slices/ComparisonSlider';
-import { NewsTextSliceType } from '../slices/News/Text';
-import { NewsTableSliceType } from '../slices/News/Table';
-import { NewsIntroSliceType } from '../slices/News/Intro';
-import { NewsVideoSliceType } from '../slices/News/Video';
-import { NewsListSliceType } from '../slices/News/List';
-import { NewsImagesSliceType } from '../slices/News/Images';
-import { NewsOverviewSliceType } from '../slices/News/Overview';
-import { IntroSliceType } from '../slices/Intro';
-import { AccordionSliceType } from '../slices/Accordion';
-import { QuickNavSliceType } from '../slices/QuickNav';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
-import { HeaderSliceType } from 'slices/Header';
-import { NewsAuthorCardSliceType, NewsFooterSliceType } from 'index';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -120,7 +121,7 @@ export type NewsPageContent =
 export type ModxDocument = {
     id: string;
     pagetitle?: string;
-    seo_socialimage?: ModxImageProps;
+    ogImage?: ModxImageProps;
     seo_description?: string;
     seo_keywords?: string;
     seo_search_index?: boolean;
@@ -131,8 +132,7 @@ export type ModxDocument = {
     nav_isinverted?: boolean;
     nav_withtopoffset?: boolean;
     nav_menuicon?: string;
-
-    nav_allowtopbaroverflow?: boolean;
+    navbarAllowOverflow?: boolean;
     publication_date?: string;
 
     primary_link?: string;
@@ -160,6 +160,9 @@ export interface ModxSettingsPage extends ModxPage {
     cookie: {
         title?: string;
         text?: string;
+        acceptanceLabel?: string;
+        declineLabel?: string;
+        icon?: ModxImageProps;
     };
 
     notification?: {
@@ -306,6 +309,7 @@ export type ModxNavBarData = {
     navbarInverted?: boolean;
     navbarOffset?: boolean;
     hideTopBarUnderMenu?: boolean;
+
     buttonStyle?: string;
     navbarPrimary: {
         label?: string;
@@ -380,7 +384,6 @@ export interface ModxComponentDataType extends ModxImageProps {
     alt: string;
 }
 
-
 export function isBgModeString(toCheck?: string): toCheck is BgMode {
     return (
         !toCheck ||
@@ -390,16 +393,20 @@ export function isBgModeString(toCheck?: string): toCheck is BgMode {
     );
 }
 
+export const mapImageToComponentData = (
+    image?: ModxImageProps
+): ModxComponentDataType | { small: string } => {
+    if (!image) return { small: '' };
+    return {
+        ...image,
+        small: image?.small || '',
+        alt: image?.meta?.altText || '',
+    };
+};
 
-export const mapImageToComponentData = (image?: ModxImageProps): ModxComponentDataType | {small: string}=> {
-    if(!image)return {small: ""};
-    return {...image, small: image?.small || "", alt: image?.meta?.altText || ""}
-
-}
-
-export type SizeSelect = "full" |"small" | undefined;
+export type SizeSelect = 'full' | 'small' | undefined;
 export function isSizeSelectString(toCheck?: string): toCheck is SizeSelect {
-    return !toCheck || toCheck==="full" || toCheck === "small"
+    return !toCheck || toCheck === 'full' || toCheck === 'small';
 }
 
 export function isHeadlineTag(tagString?: string): tagString is HeadlineTag {
@@ -436,4 +443,3 @@ export function isNumeric(str?: string) {
     if (typeof str != 'string') return false; // we only process strings!
     return /^\d+$/.test(str);
 }
-
