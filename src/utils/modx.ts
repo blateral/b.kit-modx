@@ -180,10 +180,8 @@ export interface ModxSettingsPage extends ModxPage {
             newTab?: boolean;
         };
     };
-    socials?: {
-        bgMode?: string;
-        platforms?: SocialMediaItem[];
-    };
+    socials?: SocialMediaItem[];
+
     logo?: {
         desktop?: string;
         link?: string;

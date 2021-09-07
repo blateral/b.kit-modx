@@ -28,6 +28,7 @@ export * from 'slices/News/Overview';
 export * from 'slices/News/Table';
 export * from 'slices/News/Text';
 export * from 'slices/News/Video';
+export * from 'slices/NumberList';
 export * from 'slices/Poster';
 export * from 'slices/QuickNav';
 export * from 'slices/SocialNav';
