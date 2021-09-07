@@ -1,10 +1,7 @@
 /***** Version: 1.1.0 *****/
-
 // export util types and functions
-export * from 'utils/sitemapGenerator';
-export * from 'utils/robotsGenerator';
-
 // slice exports
+export { endpoint } from 'utils/modx';
 export * from 'slices/Accordion';
 export * from 'slices/Article';
 export * from 'slices/CallToAction';
@@ -33,8 +30,10 @@ export * from 'slices/News/Text';
 export * from 'slices/News/Video';
 export * from 'slices/Poster';
 export * from 'slices/QuickNav';
+export * from 'slices/SocialNav';
 export * from 'slices/Table';
 export * from 'slices/Teaser';
 export * from 'slices/Timeline';
 export * from 'slices/Video';
-export { endpoint } from 'utils/modx';
+export * from 'utils/robotsGenerator';
+export * from 'utils/sitemapGenerator';

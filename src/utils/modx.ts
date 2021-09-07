@@ -151,6 +151,11 @@ export interface ModxPage extends ModxDocument {
     content: Array<PageContent>;
 }
 
+export interface SocialMediaItem {
+    link?: string;
+    icon?: Pick<ModxImageProps, 'small'>;
+}
+
 export interface ModxSettingsPage extends ModxPage {
     type: 'settings';
     menu: ModxMenuItemData;
@@ -176,11 +181,8 @@ export interface ModxSettingsPage extends ModxPage {
         };
     };
     socials?: {
-        headLabel?: string;
-        facebook?: string;
-        twitter?: string;
-        instagram?: string;
-        youtube?: string;
+        bgMode?: string;
+        platforms?: SocialMediaItem[];
     };
     logo?: {
         desktop?: string;
