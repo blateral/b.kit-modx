@@ -1,21 +1,21 @@
-import React from 'react';
 import {
     LogoProps,
     NavProps,
 } from '@blateral/b.kit/lib/components/sections/navigation/Navigation';
 import {
+    ModxNavItem,
+    ModxSettingsPage,
+    SocialMediaItem,
+    isExternalLink,
+    isValidAction,
+} from 'utils/modx';
+import {
     NavGroup,
     NavItem,
 } from '@blateral/b.kit/lib/components/sections/navigation/menu/Flyout';
 
-
 import { Navigation } from '@blateral/b.kit';
-import {
-    isExternalLink,
-    isValidAction,
-    ModxNavItem,
-    ModxSettingsPage,
-} from 'utils/modx';
+import React from 'react';
 
 export interface NavigationSliceType {
     nav_primaryAction?: (props: {
@@ -47,16 +47,7 @@ export interface NavigationProps {
 
     activeNavItem?: string;
     navItems?: NavGroup[];
-    socialMapper?: (
-        socials?: {
-            headLabel?: string;
-            facebook?: string;
-            twitter?: string;
-            instagram?: string;
-            youtube?: string;
-        },
-        id?: string | undefined
-    ) => {
+    socialMapper?: (socials?: SocialMediaItem[]) => {
         href: string;
         icon: JSX.Element;
     }[];

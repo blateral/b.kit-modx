@@ -1,7 +1,12 @@
-import React from 'react';
+import {
+    ModxSettingsPage,
+    SocialMediaItem,
+    endpoint,
+    isExternalLink,
+} from 'utils/modx';
 
 import { Footer } from '@blateral/b.kit';
-import { endpoint, isExternalLink, ModxSettingsPage } from 'utils/modx';
+import React from 'react';
 
 export interface FooterSliceType {
     settingsPage?: ModxSettingsPage;
@@ -10,13 +15,7 @@ export interface FooterSliceType {
         placeholder?: string;
         buttonLabel?: string;
     }) => React.ReactNode;
-    mapSocials?: (socials: {
-        headLabel?: string;
-        facebook?: string;
-        twitter?: string;
-        instagram?: string;
-        youtube?: string;
-    }) => Array<{
+    mapSocials?: (socials: SocialMediaItem[]) => Array<{
         href: string;
         icon: JSX.Element;
     }>;
