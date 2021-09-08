@@ -9,12 +9,11 @@ interface QuickNavItem {
 }
 
 export interface QuickNavSliceType extends ModxSlice<'QuickNav', QuickNavItem> {
-    primary: {
-        active_link?: string;
-    };
+    isActive?: boolean;
+    active_link?: string;
 }
 export const QuickNavSlice: React.FC<QuickNavSliceType> = ({
-    primary: { active_link },
+    active_link,
     items,
 }) => {
     return (

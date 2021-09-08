@@ -10,14 +10,12 @@ interface AccordionItem {
 
 export interface AccordionSliceType
     extends ModxSlice<'Accordion', AccordionItem> {
-    primary: {
-        isActive?: boolean;
-        bgMode?: BgMode;
-    };
+    isActive?: boolean;
+    bgMode?: BgMode;
 }
 
 export const AccordionSlice: React.FC<AccordionSliceType> = ({
-    primary: { bgMode },
+    bgMode,
     items,
 }) => {
     return (
