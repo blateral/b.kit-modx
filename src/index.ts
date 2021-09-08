@@ -38,3 +38,4 @@ export * from 'slices/Timeline';
 export * from 'slices/Video';
 export * from 'utils/robotsGenerator';
 export * from 'utils/sitemapGenerator';
+export * from 'utils/modx';
