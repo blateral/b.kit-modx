@@ -1,13 +1,14 @@
-import { Intro } from '@blateral/b.kit';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
-import React from 'react';
 import {
+    ModxSlice,
     isExternalLink,
     isHeadlineTag,
     isValidAction,
-    ModxSlice,
 } from 'utils/modx';
+
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
+import { Intro } from '@blateral/b.kit';
+import React from 'react';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
 
