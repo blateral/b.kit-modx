@@ -5,7 +5,7 @@ import { BgMode, ModxSlice } from 'utils/modx';
 interface AccordionItem {
     label: string;
     text?: string;
-    has_columns?: boolean;
+    hasColumns?: boolean;
 }
 
 export interface AccordionSliceType
@@ -24,7 +24,7 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
                 return {
                     label: item.label,
                     text: item.text,
-                    hasColumns: item.has_columns,
+                    hasColumns: item.hasColumns,
                 };
             })}
             bgMode={

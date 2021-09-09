@@ -1,17 +1,12 @@
 import { NewsOverview } from '@blateral/b.kit';
 import React from 'react';
 import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 
 export interface NewsOverviewSliceType
     extends ModxSlice<'NewsOverview', ModxNewsTeaser> {
     isActive?: boolean;
     bgMode?: BgMode;
     showMoreText?: string;
-    superTitle?: string;
-    superTitleAs?: HeadlineTag;
-    title?: string;
-    titleAs?: HeadlineTag;
 
     queryParams?: Record<string, any>;
     cardAction?: (props: {
