@@ -9,7 +9,6 @@ import {
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 
 type ImageFormats = 'square' | 'landscape' | 'landscape-wide' | 'portrait';
 interface GalleryItems {
@@ -20,11 +19,6 @@ export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
     isActive?: boolean;
     isCarousel?: boolean;
     bgMode?: BgMode;
-    superTitle?: string;
-    superTitleAs?: HeadlineTag;
-    title?: string;
-    titleAs?: HeadlineTag;
-    text?: string;
 
     // helpers to define component elements outside of slice
     controlNext?: (props: {
