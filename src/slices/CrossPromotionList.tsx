@@ -141,11 +141,12 @@ const createCPromoCarousel = ({
             bgMode={bgMode}
             promotions={items.map(({ image, title, link }) => {
                 const mappedImage = {
-                    small: image?.list?.landscape?.small || '',
-                    medium: image?.list[imageFormat || 'square']?.medium,
-                    semilarge: image?.list[imageFormat || 'square']?.semilarge,
-                    large: image?.list[imageFormat || 'square']?.large,
-                    xlarge: image?.list[imageFormat || 'square']?.xlarge,
+                    small: image?.carousel?.landscape?.small || '',
+                    medium: image?.carousel[imageFormat || 'square']?.medium,
+                    semilarge:
+                        image?.carousel[imageFormat || 'square']?.semilarge,
+                    large: image?.carousel[imageFormat || 'square']?.large,
+                    xlarge: image?.carousel[imageFormat || 'square']?.xlarge,
                 };
 
                 return {
