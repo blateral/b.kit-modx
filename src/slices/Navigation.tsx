@@ -10,6 +10,7 @@ import {
     isValidAction,
 } from 'utils/modx';
 import {
+    FlyoutBackgroundSettings,
     NavGroup,
     NavItem,
 } from '@blateral/b.kit/lib/components/sections/navigation/menu/Flyout';
@@ -52,6 +53,7 @@ export interface NavigationProps {
         icon: JSX.Element;
     }[];
     logo?: LogoProps;
+    background?: FlyoutBackgroundSettings;
 
     primaryCta?: (props: {
         isInverted?: boolean;
@@ -87,6 +89,7 @@ export const NavigationSlice: React.FC<
     socialMapper,
     settingsPage,
     logo,
+    background,
     primaryCta,
     secondaryCta,
     primaryActionPointer,
@@ -109,6 +112,7 @@ export const NavigationSlice: React.FC<
         nav_primaryPointerFn: primaryActionPointer,
         nav_secondaryPointerFn: secondaryActionPointer,
         logo,
+        background: background,
     });
 
     return (
@@ -159,6 +163,9 @@ interface MenuSliceType {
     }>;
     // inject logo icon into slice
     logo?: LogoProps;
+
+    // flyout background options
+    background?: FlyoutBackgroundSettings;
 
     // inject search into slice
     search?: (isInverted?: boolean) => React.ReactNode;
