@@ -29,7 +29,9 @@ export const NumberListSlice: React.FC<NumberListSliceType> = ({
                     number: item.listNumber || '',
                     label: item.label || '',
                     icon: {
-                        src: item?.icon?.small || '',
+                        src: item?.icon?.small
+                            ? `${process.env.NEXT_PUBLIC_API_ENDPOINT}/${item.icon.small}`
+                            : '',
                         alt: item?.icon?.meta?.altText || '',
                     },
                 };
