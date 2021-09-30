@@ -111,7 +111,7 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                                   return {
                                       decorator: item?.icon?.small && (
                                           <img
-                                              src={item?.icon?.small}
+                                              src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/${item?.icon?.small}`}
                                               alt={item?.icon.meta?.altText}
                                           />
                                       ),
