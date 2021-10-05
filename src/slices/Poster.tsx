@@ -1,7 +1,6 @@
 import React from 'react';
 
-
-import { Poster } from '@blateral/b.kit';
+import { Poster, Theme } from '@blateral/b.kit';
 import {
     isExternalLink,
     isHeadlineTag,
@@ -38,6 +37,7 @@ export interface PosterSliceType extends ModxSlice<'Poster'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const PosterSlice: React.FC<PosterSliceType> = ({
@@ -54,9 +54,11 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
 
     primaryAction,
     secondaryAction,
+    theme,
 }) => {
     return (
         <Poster
+            theme={theme}
             image={mapImageToComponentData(image)}
             title={title}
             titleAs={

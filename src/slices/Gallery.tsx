@@ -1,7 +1,6 @@
 import React from 'react';
 
-
-import { Gallery, ImageCarousel } from '@blateral/b.kit';
+import { assignTo, Gallery, ImageCarousel, Theme } from '@blateral/b.kit';
 import { ResponsiveObject } from 'slices/slick';
 import {
     BgMode,
@@ -19,6 +18,7 @@ export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
     isActive?: boolean;
     isCarousel?: boolean;
     bgMode?: BgMode;
+    bgColor?: string;
 
     // helpers to define component elements outside of slice
     controlNext?: (props: {
@@ -41,11 +41,13 @@ export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
     onInit?: (steps: number) => void;
     slidesToShow?: number;
     responsive?: ResponsiveObject[];
+    theme?: Theme;
 }
 
 export const GallerySlice: React.FC<GallerySliceType> = ({
     isCarousel,
     bgMode,
+    bgColor,
     items,
 
     controlNext,
@@ -56,7 +58,20 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
     onInit,
     slidesToShow,
     responsive,
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     const sharedProps = {
         images: items?.map((item) => {
             const theImage: ModxImageProps =
@@ -74,6 +89,7 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
         return (
             <ImageCarousel
                 {...sharedProps}
+                theme={sliceTheme}
                 bgMode={bgMode}
                 controlNext={controlNext}
                 controlPrev={controlPrev}
@@ -89,6 +105,7 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
         return (
             <Gallery
                 {...sharedProps}
+                theme={sliceTheme}
                 bgMode={
                     bgMode === 'full' || bgMode === 'inverted'
                         ? bgMode

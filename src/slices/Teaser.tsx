@@ -1,4 +1,4 @@
-import { Teaser, TeaserWide } from '@blateral/b.kit';
+import { assignTo, Teaser, TeaserWide, Theme } from '@blateral/b.kit';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
 import { HeadlineTagDefault } from '../utils/stringLexicon';
@@ -17,6 +17,7 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     isMirrored?: boolean;
     isWide?: boolean;
     bgMode?: string;
+    bgColor?: string;
     format?: string;
     superTitle?: string;
     superTitleAs?: HeadlineTag;
@@ -44,12 +45,14 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const TeaserSlice: React.FC<TeaserSliceType> = ({
     isMirrored,
     isWide,
     bgMode,
+    bgColor,
     format,
     superTitle,
     superTitleAs,
@@ -68,6 +71,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
 
     primaryAction,
     secondaryAction,
+    theme,
 }) => {
     const theImage: ModxImageProps = image && image[format || 'square'];
     const sharedProps = {
@@ -102,10 +106,23 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                 : undefined,
     };
 
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     if (isWide) {
         return (
             <TeaserWide
                 {...sharedProps}
+                theme={sliceTheme}
                 superTitleAs={
                     isHeadlineTag(superTitleAs)
                         ? (superTitleAs as HeadlineTag)
@@ -129,6 +146,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
         return (
             <Teaser
                 {...sharedProps}
+                theme={sliceTheme}
                 image={{
                     ...theImage,
                     small: theImage.small || '',

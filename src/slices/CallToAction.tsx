@@ -1,5 +1,5 @@
 import React from 'react';
-import { CallToAction } from '@blateral/b.kit';
+import { assignTo, CallToAction, Theme } from '@blateral/b.kit';
 import {
     BgMode,
     isExternalLink,
@@ -28,6 +28,7 @@ export interface CallToActionSliceType
 
     text?: string;
     bgMode?: BgMode;
+    bgColor?: string;
 
     contactAvatar?: Pick<ModxImageProps, 'small' | 'meta'>;
     contact: { name?: string; description?: string };
@@ -60,6 +61,7 @@ export interface CallToActionSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
@@ -69,6 +71,7 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     titleAs,
     text,
     bgMode,
+    bgColor,
 
     contactAvatar,
     contact,
@@ -85,9 +88,23 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     injectForm,
     primaryAction,
     secondaryAction,
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <CallToAction
+            theme={sliceTheme}
             bgMode={bgMode === 'inverted' ? 'inverted' : 'full'}
             title={title}
             titleAs={isHeadlineTag(titleAs) ? titleAs : 'div'}

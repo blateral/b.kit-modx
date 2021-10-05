@@ -15,7 +15,7 @@ import {
     NavItem,
 } from '@blateral/b.kit/lib/components/sections/navigation/menu/Flyout';
 
-import { Navigation } from '@blateral/b.kit';
+import { Navigation, Theme } from '@blateral/b.kit';
 import React from 'react';
 
 export interface NavigationSliceType {
@@ -80,6 +80,7 @@ export interface NavigationProps {
     search?: (isInverted?: boolean) => React.ReactNode;
     openMenuIcon?: (isInverted?: boolean) => React.ReactNode;
     closeMenuIcon?: (isInverted?: boolean) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const NavigationSlice: React.FC<
@@ -96,6 +97,7 @@ export const NavigationSlice: React.FC<
     secondaryActionPointer,
     allowTopbarOverflow,
     isTopbarLargeOnPageTop,
+    theme,
     ...rest
 }) => {
     const data = settingsPage;
@@ -118,6 +120,7 @@ export const NavigationSlice: React.FC<
     return (
         <Navigation
             {...menu}
+            theme={theme}
             allowTopbarOverflow={allowTopbarOverflow}
             isTopbarLargeOnPageTop={isTopbarLargeOnPageTop}
             {...rest}

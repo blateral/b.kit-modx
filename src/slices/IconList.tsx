@@ -1,4 +1,4 @@
-import { IconList } from '@blateral/b.kit';
+import { assignTo, IconList, Theme } from '@blateral/b.kit';
 import React from 'react';
 import {
     BgMode,
@@ -12,7 +12,6 @@ interface IconListImages {
     image: ModxImageProps;
 }
 
-
 export interface IconListSliceType
     extends ModxSlice<'IconList', IconListImages> {
     isActive?: boolean;
@@ -22,6 +21,7 @@ export interface IconListSliceType
     showLessText?: string;
     enableToggle?: boolean;
     bgMode?: BgMode;
+    bgColor?: string;
     primary_link?: string;
     secondary_link?: string;
     primary_label?: string;
@@ -39,10 +39,12 @@ export interface IconListSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const IconListSlice: React.FC<IconListSliceType> = ({
     bgMode,
+    bgColor,
     isCentered,
     enableToggle,
     showLessText,
@@ -54,9 +56,23 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
     items,
     primaryAction,
     secondaryAction,
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <IconList
+            theme={sliceTheme}
             enableToggle={enableToggle}
             isCentered={isCentered}
             bgMode={

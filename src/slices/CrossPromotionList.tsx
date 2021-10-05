@@ -1,4 +1,9 @@
-import { CrossPromotion, PromotionCarousel } from '@blateral/b.kit';
+import {
+    assignTo,
+    CrossPromotion,
+    PromotionCarousel,
+    Theme,
+} from '@blateral/b.kit';
 
 import { PromotionCardProps } from '@blateral/b.kit/lib/components/blocks/PromotionCard';
 import React from 'react';
@@ -27,6 +32,7 @@ export interface CrossPromotionListSliceType
     isCarousel?: boolean;
     isMirrored?: boolean;
     bgMode?: BgMode;
+    bgColor?: string;
     imageFormat: 'square' | 'landscape' | 'landscape-wide' | 'portrait';
 
     controlNext?: (props: {
@@ -49,6 +55,8 @@ export interface CrossPromotionListSliceType
     onInit?: (steps: number) => void;
     slidesToShow?: number;
     responsive?: ResponsiveObject[];
+
+    theme?: Theme;
 }
 
 export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = (
@@ -65,10 +73,12 @@ export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = (
 
 const createCPromoList = ({
     bgMode,
+    bgColor,
     imageFormat,
     isMirrored,
 
     items,
+    theme,
 }: CrossPromotionListSliceType) => {
     const promoItems: Array<CrossPromotionItems> = items;
     const itemCount = promoItems.length;
@@ -100,8 +110,21 @@ const createCPromoList = ({
     const mainItems = promoItems.filter((item) => item.isMain);
     const asideItems = promoItems.filter((item) => !item.isMain);
 
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <CrossPromotion
+            theme={sliceTheme}
             isMirrored={isMirrored}
             bgMode={bgMode}
             main={
@@ -124,6 +147,7 @@ const createCPromoList = ({
 
 const createCPromoCarousel = ({
     bgMode,
+    bgColor,
     imageFormat,
 
     items,
@@ -135,9 +159,23 @@ const createCPromoCarousel = ({
     onInit,
     slidesToShow,
     responsive,
+    theme,
 }: CrossPromotionListSliceType) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <PromotionCarousel
+            theme={sliceTheme}
             bgMode={bgMode}
             promotions={items.map(({ image, title, link }) => {
                 const mappedImage = {

@@ -7,7 +7,7 @@ import {
     isValidAction,
 } from 'utils/modx';
 
-import { Header } from '@blateral/b.kit';
+import { Header, Theme } from '@blateral/b.kit';
 import React from 'react';
 
 export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
@@ -78,6 +78,8 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
     customBottomGradient?: string;
     search?: (isInverted?: boolean) => React.ReactNode;
 
+    theme?: Theme;
+
     settingsPage?: ModxMenuItemData;
     pageAlias?: string;
 }
@@ -100,12 +102,14 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     secondaryAction,
     primaryActionPointer,
     secondaryActionPointer,
+    theme,
 }) => {
     // map header images
     const headerImageMap = items.map(toComponentImageFormat);
 
     return (
         <Header
+            theme={theme}
             size={size || 'full'}
             videoUrl={videoUrl || ''}
             images={headerImageMap}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Video, VideoCarousel } from '@blateral/b.kit';
+import { assignTo, Theme, Video, VideoCarousel } from '@blateral/b.kit';
 import { ResponsiveObject } from './slick';
 import { isBgModeString, ModxImageProps, ModxSlice } from 'utils/modx';
 
@@ -10,6 +10,7 @@ export interface VideoCardItem {
 export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
     isActive?: boolean;
     bgMode?: string;
+    bgColor?: string;
 
     controlNext?: (props: {
         isInverted?: boolean;
@@ -32,10 +33,13 @@ export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
     slidesToShow?: number;
     responsive?: ResponsiveObject[];
     playIcon?: React.ReactChild;
+
+    theme?: Theme;
 }
 
 export const VideoSlice: React.FC<VideoSliceType> = ({
     bgMode,
+    bgColor,
     items,
 
     controlNext,
@@ -47,13 +51,26 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
     slidesToShow,
     responsive,
     playIcon,
+
+    theme,
 }) => {
-    // get background mode
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
 
     // if more than one items are defined create a carousel
     if (items && items.length > 1) {
         return (
             <VideoCarousel
+                theme={sliceTheme}
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
                 videos={items.map((item) => {
                     return {
@@ -79,6 +96,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
 
         return (
             <Video
+                theme={sliceTheme}
                 bgMode={
                     isBgModeString(bgMode)
                         ? bgMode === 'full' || bgMode === 'inverted'
