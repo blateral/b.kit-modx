@@ -5,7 +5,7 @@ import {
     isExternalLink,
 } from 'utils/modx';
 
-import { Footer } from '@blateral/b.kit';
+import { Footer, Theme } from '@blateral/b.kit';
 import React from 'react';
 
 export interface FooterSliceType {
@@ -19,12 +19,14 @@ export interface FooterSliceType {
         href: string;
         icon: JSX.Element;
     }>;
+    theme?: Theme;
 }
 
 export const FooterSlice: React.FC<FooterSliceType> = ({
     settingsPage,
     injectForm,
     mapSocials,
+    theme,
 }) => {
     const settingsData = settingsPage;
     const mappedSocials =
@@ -44,6 +46,7 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
 
     return (
         <Footer
+            theme={theme}
             isInverted={settingsData?.footer?.isInverted}
             socials={mappedSocials || undefined}
             logo={{

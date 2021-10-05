@@ -1,6 +1,6 @@
 // import { FactList } from '@blateral/b.kit';
 import React from 'react';
-import { FactList } from '@blateral/b.kit';
+import { assignTo, FactList, Theme } from '@blateral/b.kit';
 import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
 
 interface FactListEntryItems {
@@ -16,6 +16,7 @@ export interface FactListSliceType
     extends ModxSlice<'FactList', FactListEntryItems> {
     isActive?: boolean;
     bgMode?: BgMode;
+    bgColor?: string;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -28,14 +29,31 @@ export interface FactListSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const FactListSlice: React.FC<FactListSliceType> = ({
     bgMode,
+    bgColor,
     items,
+
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <FactList
+            theme={sliceTheme}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }

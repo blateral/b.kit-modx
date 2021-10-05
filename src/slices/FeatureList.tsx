@@ -1,7 +1,6 @@
 import React from 'react';
 
-
-import { FeatureCarousel, FeatureList } from '@blateral/b.kit';
+import { assignTo, FeatureCarousel, FeatureList, Theme } from '@blateral/b.kit';
 import { ResponsiveObject } from './slick';
 import {
     BgMode,
@@ -33,6 +32,7 @@ export interface FeatureListSliceType
 
     isCentered?: boolean;
     bgMode?: BgMode;
+    bgColor?: string;
     imageFormat: 'square' | 'portrait' | 'landscape';
 
     primaryAction?: (props: {
@@ -67,12 +67,14 @@ export interface FeatureListSliceType
     onInit?: (steps: number) => void;
     slidesToShow?: number;
     responsive?: ResponsiveObject[];
+    theme?: Theme;
 }
 
 export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
     isCarousel,
     isCentered,
     bgMode,
+    bgColor,
     imageFormat,
     items,
     primaryAction,
@@ -85,7 +87,20 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
     onInit,
     slidesToShow,
     responsive,
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     // get image format for all images
     const sharedProps = {
         isCentered,
@@ -149,6 +164,7 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
         return (
             <FeatureCarousel
                 {...sharedProps}
+                theme={sliceTheme}
                 bgMode={bgMode}
                 controlNext={controlNext}
                 controlPrev={controlPrev}
@@ -161,7 +177,8 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
             />
         );
     } else {
-        return <FeatureList {...sharedProps} bgMode={bgMode} />;
+        return (
+            <FeatureList {...sharedProps} theme={sliceTheme} bgMode={bgMode} />
+        );
     }
 };
-

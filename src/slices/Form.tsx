@@ -1,7 +1,5 @@
-
-
 import React from 'react';
-import { Form } from '@blateral/b.kit';
+import { assignTo, Form, Theme } from '@blateral/b.kit';
 import {
     FormDataErrors,
     FormData,
@@ -20,6 +18,7 @@ type BgMode = 'full' | 'inverted';
 export interface FormSliceType extends ModxSlice<'Form'> {
     isActive?: boolean;
     bgMode?: BgMode;
+    bgColor?: string;
     submitLabel?: string;
     checkboxLabel?: string;
 
@@ -40,10 +39,13 @@ export interface FormSliceType extends ModxSlice<'Form'> {
     fieldSettings?: {
         [key in keyof FormData]: FormFieldProps;
     };
+
+    theme?: Theme;
 }
 
 export const FormSlice: React.FC<FormSliceType> = ({
     bgMode,
+    bgColor,
     subjectText,
     submitLabel,
     checkboxLabel,
@@ -54,9 +56,24 @@ export const FormSlice: React.FC<FormSliceType> = ({
     validation,
     onSubmit,
     fieldSettings,
+
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <Form
+            theme={sliceTheme}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }

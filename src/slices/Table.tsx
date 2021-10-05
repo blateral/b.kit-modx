@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table } from '@blateral/b.kit';
+import { assignTo, Table, Theme } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
 
 interface TableItem {
@@ -13,16 +13,37 @@ interface TableItem {
 export interface TableSliceType extends ModxSlice<'Table', TableItem> {
     isActive?: boolean;
     bgMode?: string;
+    bgColor?: string;
 
     primary_label?: string;
     secondary_label?: string;
     primary_link?: string;
     secondary_link?: string;
+
+    theme?: Theme;
 }
 
-export const TableSlice: React.FC<TableSliceType> = ({ bgMode, items }) => {
+export const TableSlice: React.FC<TableSliceType> = ({
+    bgMode,
+    bgColor,
+    items,
+    theme,
+}) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <Table
+            theme={sliceTheme}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }

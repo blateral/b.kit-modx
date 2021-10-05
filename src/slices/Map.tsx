@@ -1,11 +1,13 @@
 import React from 'react';
 
 import {
+    assignTo,
     FlyToIcon,
     MailIcon,
     Map,
     PhoneIcon,
     RouteIcon,
+    Theme,
 } from '@blateral/b.kit/lib';
 import {
     isExternalLink,
@@ -41,6 +43,7 @@ interface MapLocationItems {
 export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
     isActive?: boolean;
     bgMode?: string;
+    bgColor?: string;
     isMirrored?: boolean;
     withFlyTo?: boolean;
     // helpers to define component elements outside of slice
@@ -88,10 +91,12 @@ export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
     phoneIcon?: (isInverted?: boolean) => React.ReactNode;
     mailIcon?: (isInverted?: boolean) => React.ReactNode;
     routingIcon?: (isInverted?: boolean) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const MapSlice: React.FC<MapSliceType> = ({
     bgMode,
+    bgColor,
     isMirrored,
     withFlyTo,
     items,
@@ -110,9 +115,23 @@ export const MapSlice: React.FC<MapSliceType> = ({
     phoneIcon,
     mailIcon,
     routingIcon,
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <Map
+            theme={sliceTheme}
             bgMode={bgMode === 'inverted' ? 'inverted' : 'full'}
             isMirrored={isMirrored}
             initialLocation={items?.length > 0 ? `location-0` : undefined}

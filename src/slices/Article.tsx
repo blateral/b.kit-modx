@@ -1,4 +1,4 @@
-import { Article } from '@blateral/b.kit';
+import { Article, assignTo, Theme } from '@blateral/b.kit';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
 import { BgMode, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
@@ -13,6 +13,7 @@ export interface ArticleSliceType extends ModxSlice<'Article'> {
     text?: string;
     asideText?: string;
     bgMode?: BgMode;
+    bgColor?: string;
     primary_link?: string;
     secondary_link?: string;
     primary_label?: string;
@@ -29,6 +30,7 @@ export interface ArticleSliceType extends ModxSlice<'Article'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const ArticleSlice: React.FC<ArticleSliceType> = ({
@@ -39,15 +41,30 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
     text,
     asideText,
     bgMode,
+    bgColor,
     primary_link,
     primary_label,
     secondary_link,
     secondary_label,
     primaryAction,
     secondaryAction,
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <Article
+            theme={sliceTheme}
             bgMode={bgMode}
             title={title}
             titleAs={titleAs}

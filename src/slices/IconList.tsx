@@ -1,4 +1,4 @@
-import { IconList } from '@blateral/b.kit';
+import { assignTo, IconList, Theme } from '@blateral/b.kit';
 import React from 'react';
 import {
     BgMode,
@@ -12,13 +12,13 @@ interface IconListImages {
     image: ModxImageProps;
 }
 
-
 export interface IconListSliceType
     extends ModxSlice<'IconList', IconListImages> {
     isActive?: boolean;
 
     isCentered?: boolean;
     bgMode?: BgMode;
+    bgColor?: string;
     primary_link?: string;
     secondary_link?: string;
     primary_label?: string;
@@ -36,10 +36,12 @@ export interface IconListSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const IconListSlice: React.FC<IconListSliceType> = ({
     bgMode,
+    bgColor,
     isCentered,
     primary_link,
     primary_label,
@@ -48,9 +50,23 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
     items,
     primaryAction,
     secondaryAction,
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <IconList
+            theme={sliceTheme}
             isCentered={isCentered}
             bgMode={
                 bgMode && (bgMode === 'full' || bgMode === 'inverted')

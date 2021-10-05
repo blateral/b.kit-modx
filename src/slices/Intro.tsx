@@ -7,7 +7,7 @@ import {
 
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
-import { Intro } from '@blateral/b.kit';
+import { assignTo, Intro, Theme } from '@blateral/b.kit';
 import React from 'react';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
@@ -16,6 +16,7 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
     isActive?: boolean;
 
     bgMode?: BgMode;
+    bgColor?: string;
     title?: string;
     titleAs?: string;
     superTitle?: string;
@@ -42,12 +43,14 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const IntroSlice: React.FC<IntroSliceType> = ({
     isCentered,
     isStackable,
     bgMode,
+    bgColor,
     title,
     titleAs,
     superTitle,
@@ -60,9 +63,23 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
 
     primaryAction,
     secondaryAction,
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <Intro
+            theme={sliceTheme}
             bgMode={bgMode}
             isStackable={isStackable}
             isCentered={isCentered}
