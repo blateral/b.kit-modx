@@ -17,6 +17,9 @@ export interface IconListSliceType
     isActive?: boolean;
 
     isCentered?: boolean;
+    showMoreText?: string;
+    showLessText?: string;
+    enableToggle?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
     primary_link?: string;
@@ -43,6 +46,9 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
     bgMode,
     bgColor,
     isCentered,
+    enableToggle,
+    showLessText,
+    showMoreText,
     primary_link,
     primary_label,
     secondary_link,
@@ -67,12 +73,15 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
     return (
         <IconList
             theme={sliceTheme}
+            enableToggle={enableToggle}
             isCentered={isCentered}
             bgMode={
                 bgMode && (bgMode === 'full' || bgMode === 'inverted')
                     ? bgMode
                     : undefined
             }
+            showMoreText={showMoreText}
+            showLessText={showLessText}
             items={items.map((item) => {
                 return {
                     src: item?.image?.small || '',

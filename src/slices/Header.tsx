@@ -18,7 +18,7 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
         text?: string;
     };
     videoUrl?: string;
-    badge?: string;
+    badge?: Omit<ModxImageProps, 'meta'>;
     badgeOnMobile?: boolean;
     headerButtonstyle?: boolean;
     header_primary_label?: string;
@@ -115,7 +115,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             images={headerImageMap}
             title={intro?.title || ''}
             intro={intro}
-            badge={headerBadge(badge, badgeOnMobile)}
+            badge={headerBadge(badge?.xlarge, badgeOnMobile)}
             primaryCta={getPrimaryButtonOrPointer({
                 isCta: !headerButtonstyle,
                 primary_label: header_primary_label,
@@ -136,12 +136,12 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     );
 };
 
-function headerBadge(badge?: string, showOnMobile = true) {
-    return badge
+function headerBadge(badgeUrl?: string, showOnMobile = true) {
+    return badgeUrl
         ? {
               content: (
                   <img
-                      src={badge || ''}
+                      src={badgeUrl || ''}
                       //FIXME: Missing meta tags
                       //   alt={badge?.meta?.altText || ''}
                       alt="Verzierung für die Kopfzeile"
