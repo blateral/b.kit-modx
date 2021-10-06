@@ -1,4 +1,4 @@
-/***** Version: 0.2.1 *****/
+/***** Version: 0.2.2 *****/
 // export util types and functions
 // slice exports
 export { endpoint } from 'utils/modx';
@@ -32,6 +32,7 @@ export * from 'slices/NumberList';
 export * from 'slices/Poster';
 export * from 'slices/QuickNav';
 export * from 'slices/SocialNav';
+export * from 'slices/SocialWall';
 export * from 'slices/Table';
 export * from 'slices/Teaser';
 export * from 'slices/Timeline';
