@@ -27,6 +27,7 @@ import { QuickNavSliceType } from '../slices/QuickNav';
 import { TableSliceType } from '../slices/Table';
 import { TeaserSliceType } from '../slices/Teaser';
 import { VideoSliceType } from '../slices/Video';
+import { SocialWallSliceType } from 'slices/SocialWall';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -106,7 +107,8 @@ export type PageContent =
     | NewsOverviewSliceType
     | IntroSliceType
     | AccordionSliceType
-    | QuickNavSliceType;
+    | QuickNavSliceType
+    | SocialWallSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType
