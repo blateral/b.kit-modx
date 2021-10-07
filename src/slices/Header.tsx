@@ -21,10 +21,10 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
     badge?: Omit<ModxImageProps, 'meta'>;
     badgeOnMobile?: boolean;
     headerButtonstyle?: boolean;
-    header_primary_label?: string;
-    header_primary_link?: string;
-    header_secondary_label?: string;
-    header_secondary_link?: string;
+    primary_label?: string;
+    primary_link?: string;
+    secondary_label?: string;
+    secondary_link?: string;
     allowNavbarOverflow?: boolean;
     isNavLarge?: boolean;
     isInverted?: boolean;
@@ -91,10 +91,10 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     size,
     intro,
     headerButtonstyle,
-    header_primary_label,
-    header_primary_link,
-    header_secondary_label,
-    header_secondary_link,
+    primary_label,
+    primary_link,
+    secondary_label,
+    secondary_link,
     items,
     customBottomGradient,
     customTopGradient,
@@ -118,15 +118,15 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             badge={headerBadge(badge?.xlarge, badgeOnMobile)}
             primaryCta={getPrimaryButtonOrPointer({
                 isCta: !headerButtonstyle,
-                primary_label: header_primary_label,
-                primary_link: header_primary_link,
+                primary_label: primary_label,
+                primary_link: primary_link,
                 primaryAction,
                 primaryActionPointer,
             })}
             secondaryCta={getSecondaryButtonOrPointer({
                 isCta: !headerButtonstyle,
-                secondary_label: header_secondary_label,
-                secondary_link: header_secondary_link,
+                secondary_label: secondary_label,
+                secondary_link: secondary_link,
                 secondaryAction,
                 secondaryActionPointer,
             })}
