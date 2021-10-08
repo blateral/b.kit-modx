@@ -119,5 +119,7 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
         theme
     );
 
+    sliceTheme;
+
     return <DynamicForm />;
 };
