@@ -88,27 +88,28 @@ export interface SitemapItem {
 }
 
 export type PageContent =
+    | AccordionSliceType
     | ArticleSliceType
-    | GallerySliceType
-    | FeatureListSliceType
-    | VideoSliceType
-    | PosterSliceType
-    | FactListSliceType
-    | FactGridSliceType
-    | IconListSliceType
-    | TeaserSliceType
-    | MapSliceType
     | CallToActionSliceType
-    | CrossPromotionListSliceType
     | ComparisonSliderSliceType
-    | TableSliceType
+    | CrossPromotionListSliceType
+    | FactGridSliceType
+    | FactListSliceType
+    | FeatureListSliceType
     | FormSliceType
+    | GallerySliceType
+    | HeaderSliceType
+    | IconListSliceType
+    | IntroSliceType
+    | MapSliceType
     | NewsListSliceType
     | NewsOverviewSliceType
-    | IntroSliceType
-    | AccordionSliceType
+    | PosterSliceType
     | QuickNavSliceType
-    | SocialWallSliceType;
+    | SocialWallSliceType
+    | TableSliceType
+    | TeaserSliceType
+    | VideoSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType
