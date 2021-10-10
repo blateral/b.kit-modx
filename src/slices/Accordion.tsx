@@ -5,13 +5,13 @@ import { BgMode, ModxSlice } from 'utils/modx';
 interface AccordionItem {
     label: string;
     text?: string;
-    hasColumns?: boolean;
+    aside?: string;
 }
 
 export interface AccordionSliceType
     extends ModxSlice<'Accordion', AccordionItem> {
     isActive?: boolean;
-    bgMode?: BgMode;
+    bgMode?: Omit<BgMode, 'splitted'>;
     bgColor?: string;
     theme?: Theme;
 }
@@ -41,11 +41,14 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
                 return {
                     label: item.label,
                     text: item.text,
-                    hasColumns: item.hasColumns,
+                    aside: item.aside,
+                    hasColumns: !!item.aside,
                 };
             })}
             bgMode={
-                bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
+                bgMode === 'inverted' || bgMode === 'full'
+                    ? (bgMode as 'full' | 'inverted')
+                    : undefined
             }
         />
     );

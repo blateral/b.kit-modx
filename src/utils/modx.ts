@@ -1,4 +1,8 @@
-import { NewsAuthorCardSliceType, NewsFooterSliceType } from 'index';
+import {
+    NewsAuthorCardSliceType,
+    NewsFooterSliceType,
+    ParallaxBackgroundSliceType,
+} from 'index';
 
 import { AccordionSliceType } from '../slices/Accordion';
 import { ArticleSliceType } from '../slices/Article';
@@ -28,6 +32,7 @@ import { TableSliceType } from '../slices/Table';
 import { TeaserSliceType } from '../slices/Teaser';
 import { VideoSliceType } from '../slices/Video';
 import { SocialWallSliceType } from 'slices/SocialWall';
+import { DynamicFormSliceType } from 'slices/DynamicForm';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -96,6 +101,7 @@ export type PageContent =
     | FactGridSliceType
     | FactListSliceType
     | FeatureListSliceType
+    | DynamicFormSliceType
     | FormSliceType
     | GallerySliceType
     | HeaderSliceType
@@ -109,7 +115,9 @@ export type PageContent =
     | SocialWallSliceType
     | TableSliceType
     | TeaserSliceType
-    | VideoSliceType;
+    | VideoSliceType
+    | ParallaxBackgroundSliceType
+    | QuickNavSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType

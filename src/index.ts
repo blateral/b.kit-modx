@@ -2,12 +2,14 @@
 // export util types and functions
 // slice exports
 export { endpoint } from 'utils/modx';
+
 export * from 'slices/Accordion';
 export * from 'slices/Article';
 export * from 'slices/CallToAction';
 export * from 'slices/ComparisonSlider';
 export * from 'slices/CookieConsent';
 export * from 'slices/CrossPromotionList';
+export * from 'slices/DynamicForm';
 export * from 'slices/FactGrid';
 export * from 'slices/FactList';
 export * from 'slices/FeatureList';
@@ -37,6 +39,8 @@ export * from 'slices/Table';
 export * from 'slices/Teaser';
 export * from 'slices/Timeline';
 export * from 'slices/Video';
+export * from 'utils/modx';
 export * from 'utils/robotsGenerator';
 export * from 'utils/sitemapGenerator';
-export * from 'utils/modx';
+export * from 'slices/ParallaxBackground';
+export * from 'slices/QuickNav';
