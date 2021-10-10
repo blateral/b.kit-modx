@@ -4,7 +4,13 @@ import {
     FileUpload,
 } from '@blateral/b.kit/lib/components/sections/DynamicForm';
 import React from 'react';
-import { Field as BkitField, Area as BkitArea, Select as BkitSelect,  Datepicker as BkitDatepicker} from '@blateral/b.kit/lib/components/sections/DynamicForm';
+import {
+    Field as BkitField,
+    Area as BkitArea,
+    Select as BkitSelect,
+    Datepicker as BkitDatepicker,
+    FieldGroup as BkitFieldGroup,
+} from '@blateral/b.kit/lib/components/sections/DynamicForm';
 import { ModxSlice } from '../utils/modx';
 
 type FormFieldTypes =
@@ -20,7 +26,7 @@ export interface FormField {
     isRequired?: boolean;
     type: FormFieldTypes;
     label?: string;
-    column?: "left" | "right";
+    column?: 'left' | 'right';
 }
 
 export interface Field extends FormField {
@@ -86,7 +92,7 @@ export interface FieldGroup extends FormField {
     type: 'FieldGroup';
     groupType: 'Radio' | 'Checkbox';
     fields: Array<{ initialChecked?: boolean; text?: string }>;
-
+    fieldString?: string;
     validate?: (
         value: Array<string> | string,
         config: FieldGroup
@@ -158,7 +164,8 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
         theme
     );
 
-    const formFieldsData: Record<string, BkitField | BkitArea | BkitSelect> = itemsToFormFields(items);
+    const formFieldsData: Record<string, BkitField | BkitArea | BkitSelect> =
+        itemsToFormFields(items);
 
     return (
         <DynamicForm
@@ -178,27 +185,31 @@ const itemsToFormFields = (formFields?: FormField[]) => {
     return formFields.reduce(generateFormFieldMap, {});
 };
 
-const generateFormFieldMap = (accumulator: Record<string, any>, formfield: FormField) => {
-    if (isField(formfield)){     
-        const field =  createField(formfield)
-        return {...accumulator, ...field};
+const generateFormFieldMap = (
+    accumulator: Record<string, any>,
+    formfield: FormField
+) => {
+    if (isField(formfield)) {
+        const field = createField(formfield);
+        return { ...accumulator, ...field };
     }
-    if (isArea(formfield)){ 
-        const area =  createArea(formfield)
-        return {...accumulator, ...area};
-
+    if (isArea(formfield)) {
+        const area = createArea(formfield);
+        return { ...accumulator, ...area };
     }
-    if (isSelect(formfield)){ 
-
-        const select =  createSelect(formfield)
-        return {...accumulator, ...select};
+    if (isSelect(formfield)) {
+        const select = createSelect(formfield);
+        return { ...accumulator, ...select };
     }
 
     // if (isDatepicker(formfield)) return createDatePicker(formfield);
-    // if (isFieldGroup(formfield)) return createFieldGroup(formfield);
+    if (isFieldGroup(formfield)) {
+        const fieldGroup = createFieldGroup(formfield);
+        return { ...accumulator, ...fieldGroup };
+    }
     // if (isUpload(formfield)) return createUpload(formfield);
-    return accumulator
-}
+    return accumulator;
+};
 
 function createField(formfield: Field): Record<string, BkitField> | undefined {
     if (!formfield.label) return undefined;
@@ -214,13 +225,13 @@ function createField(formfield: Field): Record<string, BkitField> | undefined {
         column: formfield.column,
         initalValue: formfield.initalValue,
         inputType: formfield.inputType,
-        errorMsg: formfield.errorMsg
+        errorMsg: formfield.errorMsg,
     };
-    
+
     formFieldData[formfield.label] = formFieldValues;
 
     return formFieldData;
- }
+}
 
 function createArea(formfield: Area): Record<string, BkitArea> | undefined {
     if (!formfield.label) return undefined;
@@ -235,20 +246,20 @@ function createArea(formfield: Area): Record<string, BkitArea> | undefined {
         column: formfield.column,
         initalValue: formfield.initalValue,
         errorMsg: formfield.errorMsg,
-
     };
 
-    formFieldData[formfield.label] = formFieldValues
+    formFieldData[formfield.label] = formFieldValues;
 
     return formFieldData;
- }
+}
 
-function createSelect(formfield: Select): Record<string,BkitSelect> | undefined {
+function createSelect(
+    formfield: Select
+): Record<string, BkitSelect> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
     const dropdownValues = formfield.dropdownItems.split(/\r?\n/);
-
 
     const formFieldValues: BkitSelect = {
         type: 'Select',
@@ -256,20 +267,45 @@ function createSelect(formfield: Select): Record<string,BkitSelect> | undefined 
         isRequired: formfield.isRequired,
         info: formfield.info,
         initalValue: formfield.initalValue,
-        dropdownItems: dropdownValues.map(value=>{return{label: value, value}}),
+        dropdownItems: dropdownValues.map((value) => {
+            return { label: value, value };
+        }),
         column: formfield.column,
         validate: formfield.validate as any,
         errorMsg: formfield.errorMsg,
-        icon: formfield.icon?.src? {src: formfield.icon.src} : undefined,
+        icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
     };
 
-    formFieldData[formfield.label] = formFieldValues
+    formFieldData[formfield.label] = formFieldValues;
 
-    return formFieldData
+    return formFieldData;
 }
 
+function createFieldGroup(
+    formfield: FieldGroup
+): Record<string, BkitFieldGroup> | undefined {
+    if (!formfield.label) return undefined;
+    const formFieldData = {};
 
+    const fields =
+        formfield?.fieldString?.split(/\r?\n/)?.map((value) => {
+            return { initialChecked: false, text: value };
+        }) || [];
 
+    const formFieldValues: BkitFieldGroup = {
+        type: 'FieldGroup',
+        isRequired: formfield.isRequired,
+        validate: formfield.validate,
+        column: formfield.column,
+        errorMsg: formfield.errorMsg,
+        groupType: formfield.groupType,
+        fields: fields,
+    };
+
+    formFieldData[formfield.label] = formFieldValues;
+
+    return formFieldData;
+}
 
 // function createDatePicker(formfield: Datepicker): Record<string, BkitDatepicker> |undefined {
 
@@ -289,10 +325,6 @@ function createSelect(formfield: Select): Record<string,BkitSelect> | undefined 
 //     formFieldData[formfield.label] = formFieldValues
 
 //     return formFieldData
-// }
-
-// function createFieldGroup(formfield: FieldGroup): any {
-//     throw new Error('Function not implemented.');
 // }
 
 // function createUpload(formfield: FileUploadField): any {
@@ -315,9 +347,9 @@ const isSelect = (formfield: FormField): formfield is Select => {
 //     return formfield.type === 'Datepicker';
 // };
 
-// const isFieldGroup = (formfield: FormField): formfield is FieldGroup => {
-//     return formfield.type === 'FieldGroup';
-// };
+const isFieldGroup = (formfield: FormField): formfield is FieldGroup => {
+    return formfield.type === 'FieldGroup';
+};
 
 // const isUpload = (formfield: FormField): formfield is FileUploadField => {
 //     return formfield.type === 'Upload';
