@@ -116,7 +116,8 @@ export type PageContent =
     | TableSliceType
     | TeaserSliceType
     | VideoSliceType
-    | ParallaxBackgroundSliceType;
+    | ParallaxBackgroundSliceType
+    | QuickNavSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType

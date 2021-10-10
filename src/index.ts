@@ -43,3 +43,4 @@ export * from 'utils/modx';
 export * from 'utils/robotsGenerator';
 export * from 'utils/sitemapGenerator';
 export * from 'slices/ParallaxBackground';
+export * from 'slices/QuickNav';
