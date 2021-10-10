@@ -4,7 +4,7 @@ import { assignTo, FactList, Theme } from '@blateral/b.kit';
 import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
 
 interface FactListEntryItems {
-    label?: string;
+    title?: string;
     text?: string;
     icon?: {
         url?: string;
@@ -59,7 +59,7 @@ export const FactListSlice: React.FC<FactListSliceType> = ({
             }
             facts={items?.map((item) => {
                 return {
-                    label: item.label,
+                    label: item.title,
                     text: item.text,
                     icon: {
                         src: item?.icon?.url || '',
