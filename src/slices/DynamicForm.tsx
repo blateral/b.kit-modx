@@ -2,10 +2,9 @@ import { assignTo, DynamicForm, Theme } from '@blateral/b.kit';
 import {
     FieldGenerationProps,
     FileUpload,
-    FormStructure,
 } from '@blateral/b.kit/lib/components/sections/DynamicForm';
 import React from 'react';
-import { Field as BkitField } from '@blateral/b.kit/lib/components/sections/DynamicForm';
+import { Field as BkitField, Area as BkitArea, Select as BkitSelect,  Datepicker as BkitDatepicker} from '@blateral/b.kit/lib/components/sections/DynamicForm';
 import { ModxSlice } from '../utils/modx';
 
 type FormFieldTypes =
@@ -17,9 +16,11 @@ type FormFieldTypes =
     | 'Upload';
 
 export interface FormField {
+    fuck: BkitDatepicker;
     isRequired?: boolean;
     type: FormFieldTypes;
     label?: string;
+    column?: "left" | "right";
 }
 
 export interface Field extends FormField {
@@ -46,10 +47,7 @@ export interface Select extends FormField {
     type: 'Select';
     initalValue?: string;
     placeholder?: string;
-    dropdownItems: {
-        value?: string;
-        label?: string;
-    }[];
+    dropdownItems: string;
     info?: string;
     icon?: { src: string; alt?: string };
     validate?: (value: string, config: Select) => Promise<string>;
@@ -114,7 +112,8 @@ export interface FormData {
         | [Date | null, Date | null];
 }
 
-export interface DynamicFormSlice extends ModxSlice<'DynamicForm', FormField> {
+export interface DynamicFormSliceType
+    extends ModxSlice<'DynamicForm', FormField> {
     isActive?: boolean;
     theme?: Theme;
     bgColor?: string;
@@ -126,9 +125,9 @@ export interface DynamicFormSlice extends ModxSlice<'DynamicForm', FormField> {
         isDisabled?: boolean | undefined;
     }) => React.ReactNode;
     definitions?: {
-        field?: (props: FieldGenerationProps<Field>) => React.ReactNode;
-        area?: (props: FieldGenerationProps<Area>) => React.ReactNode;
-        select?: (props: FieldGenerationProps<Select>) => React.ReactNode;
+        field?: (props: FieldGenerationProps<BkitField>) => React.ReactNode;
+        area?: (props: FieldGenerationProps<BkitArea>) => React.ReactNode;
+        select?: (props: FieldGenerationProps<BkitSelect>) => React.ReactNode;
         datepicker?: (
             props: FieldGenerationProps<Datepicker>
         ) => React.ReactNode;
@@ -138,7 +137,7 @@ export interface DynamicFormSlice extends ModxSlice<'DynamicForm', FormField> {
     };
 }
 
-export const ArticleSlice: React.FC<DynamicFormSlice> = ({
+export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     theme,
     bgColor,
     bgMode,
@@ -159,6 +158,8 @@ export const ArticleSlice: React.FC<DynamicFormSlice> = ({
         theme
     );
 
+    const formFieldsData: Record<string, BkitField | BkitArea | BkitSelect> = itemsToFormFields(items);
+
     return (
         <DynamicForm
             bgMode={bgMode}
@@ -166,6 +167,7 @@ export const ArticleSlice: React.FC<DynamicFormSlice> = ({
             submitAction={submitAction}
             theme={sliceTheme}
             definitions={definitions}
+            fields={formFieldsData}
         />
     );
 };
@@ -173,51 +175,129 @@ export const ArticleSlice: React.FC<DynamicFormSlice> = ({
 const itemsToFormFields = (formFields?: FormField[]) => {
     if (!formFields) return {};
 
-    return formFields.map((formfield) => {
-        if (isField(formfield)) return createField(formfield);
-        if (isArea(formfield)) return createArea(formfield);
-        if (isSelect(formfield)) return createSelect(formfield);
-        if (isDatepicker(formfield)) return createDatePicker(formfield);
-        if (isFieldGroup(formfield)) return createFieldGroup(formfield);
-        if (isUpload(formfield)) return createUpload(formfield);
-    });
+    return formFields.reduce(generateFormFieldMap, {});
 };
 
-function createField(formfield: Field): BkitField | undefined {
+const generateFormFieldMap = (accumulator: Record<string, any>, formfield: FormField) => {
+    if (isField(formfield)){     
+        const field =  createField(formfield)
+        return {...accumulator, ...field};
+    }
+    if (isArea(formfield)){ 
+        const area =  createArea(formfield)
+        return {...accumulator, ...area};
+
+    }
+    if (isSelect(formfield)){ 
+
+        const select =  createSelect(formfield)
+        return {...accumulator, ...select};
+    }
+
+    // if (isDatepicker(formfield)) return createDatePicker(formfield);
+    // if (isFieldGroup(formfield)) return createFieldGroup(formfield);
+    // if (isUpload(formfield)) return createUpload(formfield);
+    return accumulator
+}
+
+function createField(formfield: Field): Record<string, BkitField> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
-    formFieldData[formfield.label] = {
+    const formFieldValues: BkitField = {
         type: 'Field',
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
         icon: formfield.icon?.src ? { src: formfield.icon?.src } : undefined,
         validate: formfield.validate,
+        column: formfield.column,
+        initalValue: formfield.initalValue,
+        inputType: formfield.inputType,
+        errorMsg: formfield.errorMsg
+    };
+    
+    formFieldData[formfield.label] = formFieldValues;
+
+    return formFieldData;
+ }
+
+function createArea(formfield: Area): Record<string, BkitArea> | undefined {
+    if (!formfield.label) return undefined;
+    const formFieldData = {};
+
+    const formFieldValues: BkitArea = {
+        type: 'Area',
+        placeholder: formfield.placeholder,
+        isRequired: formfield.isRequired,
+        info: formfield.info,
+        validate: formfield.validate,
+        column: formfield.column,
+        initalValue: formfield.initalValue,
+        errorMsg: formfield.errorMsg,
+
     };
 
-    return formFieldData as any;
+    formFieldData[formfield.label] = formFieldValues
+
+    return formFieldData;
+ }
+
+function createSelect(formfield: Select): Record<string,BkitSelect> | undefined {
+    if (!formfield.label) return undefined;
+    const formFieldData = {};
+
+    const dropdownValues = formfield.dropdownItems.split(/\r?\n/);
+
+
+    const formFieldValues: BkitSelect = {
+        type: 'Select',
+        placeholder: formfield.placeholder,
+        isRequired: formfield.isRequired,
+        info: formfield.info,
+        initalValue: formfield.initalValue,
+        dropdownItems: dropdownValues.map(value=>{return{label: value, value}}),
+        column: formfield.column,
+        validate: formfield.validate as any,
+        errorMsg: formfield.errorMsg,
+        icon: formfield.icon?.src? {src: formfield.icon.src} : undefined,
+    };
+
+    formFieldData[formfield.label] = formFieldValues
+
+    return formFieldData
 }
 
-function createArea(formfield: Area): any {
-    throw new Error('Function not implemented.');
-}
 
-function createSelect(formfield: Select): any {
-    throw new Error('Function not implemented.');
-}
 
-function createDatePicker(formfield: Datepicker): any {
-    throw new Error('Function not implemented.');
-}
 
-function createFieldGroup(formfield: FieldGroup): any {
-    throw new Error('Function not implemented.');
-}
+// function createDatePicker(formfield: Datepicker): Record<string, BkitDatepicker> |undefined {
 
-function createUpload(formfield: FileUploadField): any {
-    throw new Error('Function not implemented.');
-}
+//     if (!formfield.label) return undefined;
+//     const formFieldData = {};
+
+//     const formFieldValues: BkitDatepicker = {
+//         type: "Datepicker",
+//         placeholder: formfield.placeholder,
+//         isRequired: formfield.isRequired,
+//         info: formfield.info,
+//         column: formfield.column,
+//         validate: formfield.validate,
+//         icon: formfield.icon?.src? {src: formfield.icon.src} : undefined,
+//     };
+
+//     formFieldData[formfield.label] = formFieldValues
+
+//     return formFieldData
+// }
+
+// function createFieldGroup(formfield: FieldGroup): any {
+//     throw new Error('Function not implemented.');
+// }
+
+// function createUpload(formfield: FileUploadField): any {
+//     throw new Error('Function not implemented.');
+// }
 
 const isField = (formfield: FormField): formfield is Field => {
     return formfield.type === 'Field';
@@ -231,14 +311,14 @@ const isSelect = (formfield: FormField): formfield is Select => {
     return formfield.type === 'Select';
 };
 
-const isDatepicker = (formfield: FormField): formfield is Datepicker => {
-    return formfield.type === 'Datepicker';
-};
+// const isDatepicker = (formfield: FormField): formfield is Datepicker => {
+//     return formfield.type === 'Datepicker';
+// };
 
-const isFieldGroup = (formfield: FormField): formfield is FieldGroup => {
-    return formfield.type === 'FieldGroup';
-};
+// const isFieldGroup = (formfield: FormField): formfield is FieldGroup => {
+//     return formfield.type === 'FieldGroup';
+// };
 
-const isUpload = (formfield: FormField): formfield is FileUploadField => {
-    return formfield.type === 'Upload';
-};
+// const isUpload = (formfield: FormField): formfield is FileUploadField => {
+//     return formfield.type === 'Upload';
+// };
