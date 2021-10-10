@@ -10,6 +10,7 @@ import {
     Select as BkitSelect,
     Datepicker as BkitDatepicker,
     FieldGroup as BkitFieldGroup,
+    FileUpload as BkitFileUpload,
 } from '@blateral/b.kit/lib/components/sections/DynamicForm';
 import { ModxSlice } from '../utils/modx';
 
@@ -22,7 +23,6 @@ type FormFieldTypes =
     | 'Upload';
 
 export interface FormField {
-    fuck: BkitDatepicker;
     isRequired?: boolean;
     type: FormFieldTypes;
     label?: string;
@@ -207,7 +207,10 @@ const generateFormFieldMap = (
         const fieldGroup = createFieldGroup(formfield);
         return { ...accumulator, ...fieldGroup };
     }
-    // if (isUpload(formfield)) return createUpload(formfield);
+    if (isUpload(formfield)) {
+        const upload = createUpload(formfield);
+        return { ...accumulator, ...upload };
+    }
     return accumulator;
 };
 
@@ -307,29 +310,51 @@ function createFieldGroup(
     return formFieldData;
 }
 
-// function createDatePicker(formfield: Datepicker): Record<string, BkitDatepicker> |undefined {
-
+// FIXME:
+// function createDatePicker(
+//     formfield: Datepicker
+// ): Record<string, BkitDatepicker> | undefined {
 //     if (!formfield.label) return undefined;
 //     const formFieldData = {};
 
 //     const formFieldValues: BkitDatepicker = {
-//         type: "Datepicker",
+//         type: 'Datepicker',
 //         placeholder: formfield.placeholder,
 //         isRequired: formfield.isRequired,
 //         info: formfield.info,
 //         column: formfield.column,
 //         validate: formfield.validate,
-//         icon: formfield.icon?.src? {src: formfield.icon.src} : undefined,
+//         icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
+
 //     };
 
-//     formFieldData[formfield.label] = formFieldValues
+//     formFieldData[formfield.label] = formFieldValues;
 
-//     return formFieldData
+//     return formFieldData;
 // }
 
-// function createUpload(formfield: FileUploadField): any {
-//     throw new Error('Function not implemented.');
-// }
+function createUpload(
+    formfield: FileUploadField
+): Record<string, BkitFileUpload> {
+    if (!formfield.label) return {};
+    const formFieldData = {};
+
+    const formFieldValues: BkitFileUpload = {
+        type: 'Upload',
+        isRequired: formfield.isRequired,
+        info: formfield.info,
+        column: formfield.column,
+        validate: formfield.validate,
+        addBtnLabel: formfield.addBtnLabel,
+        removeBtnLabel: formfield.removeBtnLabel,
+        acceptedFormats: formfield.acceptedFormats,
+        errorMsg: formfield.errorMsg,
+    };
+
+    formFieldData[formfield.label] = formFieldValues;
+
+    return formFieldData;
+}
 
 const isField = (formfield: FormField): formfield is Field => {
     return formfield.type === 'Field';
@@ -351,6 +376,6 @@ const isFieldGroup = (formfield: FormField): formfield is FieldGroup => {
     return formfield.type === 'FieldGroup';
 };
 
-// const isUpload = (formfield: FormField): formfield is FileUploadField => {
-//     return formfield.type === 'Upload';
-// };
+const isUpload = (formfield: FormField): formfield is FileUploadField => {
+    return formfield.type === 'Upload';
+};
