@@ -1,4 +1,8 @@
-import { NewsAuthorCardSliceType, NewsFooterSliceType } from 'index';
+import {
+    NewsAuthorCardSliceType,
+    NewsFooterSliceType,
+    ParallaxBackgroundSliceType,
+} from 'index';
 
 import { AccordionSliceType } from '../slices/Accordion';
 import { ArticleSliceType } from '../slices/Article';
@@ -111,7 +115,8 @@ export type PageContent =
     | SocialWallSliceType
     | TableSliceType
     | TeaserSliceType
-    | VideoSliceType;
+    | VideoSliceType
+    | ParallaxBackgroundSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType
