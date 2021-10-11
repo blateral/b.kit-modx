@@ -11,11 +11,5 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
     image,
 }) => {
     if (!image) return null;
-    return (
-        <ParallaxBackground
-            image={
-                <img src={`${process.env.NEXT_PUBLIC_API_ENDPOINT}/${image}`} />
-            }
-        />
-    );
+    return <ParallaxBackground image={<img src={`${image}`} />} />;
 };
