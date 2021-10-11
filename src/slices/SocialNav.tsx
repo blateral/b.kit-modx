@@ -6,7 +6,7 @@ import { assignTo, SocialNav, Theme } from '@blateral/b.kit';
 export interface SocialNavSliceType
     extends ModxSlice<'SocialNav', SocialMediaItem> {
     isActive?: boolean;
-    bgMode?: Omit<BgMode, 'full' | 'splitted'>;
+    bgMode?: Omit<BgMode, 'splitted'>;
     bgColor?: string;
 
     theme?: Theme;
@@ -33,7 +33,7 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
     return (
         <SocialNav
             theme={sliceTheme}
-            bgMode={bgMode && bgMode === 'transparent' ? undefined : 'inverted'}
+            bgMode={bgMode as 'inverted' | 'full' | undefined}
             socials={items
                 .filter((item) => item?.link && item?.icon?.small)
                 .map((item) => {
