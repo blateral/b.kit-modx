@@ -11,7 +11,7 @@ interface QuickNavItem {
 export interface QuickNavSliceType extends ModxSlice<'QuickNav', QuickNavItem> {
     isActive?: boolean;
     active_link?: string;
-
+    bgMode?: 'inverted';
     theme?: Theme;
 }
 
@@ -19,9 +19,11 @@ export const QuickNavSlice: React.FC<QuickNavSliceType> = ({
     active_link,
     items,
     theme,
+    bgMode,
 }) => {
     return (
         <QuickNav
+            bgMode={bgMode}
             theme={theme}
             navItems={items?.map((item) => {
                 return {

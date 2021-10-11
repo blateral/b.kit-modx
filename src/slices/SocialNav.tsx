@@ -1,12 +1,17 @@
-import { BgMode, ModxSlice, SocialMediaItem } from '../utils/modx';
+import { BgMode, endpoint, ModxSlice } from '../utils/modx';
 
 import React from 'react';
 import { assignTo, SocialNav, Theme } from '@blateral/b.kit';
 
+interface SocialNavItem {
+    href?: string;
+    icon?: string;
+}
+
 export interface SocialNavSliceType
-    extends ModxSlice<'SocialNav', SocialMediaItem> {
+    extends ModxSlice<'SocialNav', SocialNavItem> {
     isActive?: boolean;
-    bgMode?: Omit<BgMode, 'full' | 'splitted'>;
+    bgMode?: Omit<BgMode, 'splitted'>;
     bgColor?: string;
 
     theme?: Theme;
@@ -30,16 +35,22 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
         theme
     );
 
+    const svgRegex = new RegExp(/.svg/gi);
     return (
         <SocialNav
             theme={sliceTheme}
-            bgMode={bgMode && bgMode === 'transparent' ? undefined : 'inverted'}
+            bgMode={bgMode as 'inverted' | 'full' | undefined}
             socials={items
-                .filter((item) => item?.link && item?.icon?.small)
+                .filter((item) => item?.icon)
                 .map((item) => {
+                    const iconpath = item?.icon?.match(svgRegex)
+                        ? `${endpoint}${item.icon}`
+                        : item.icon;
+
+                    console.log(iconpath);
                     return {
-                        href: item.link || '',
-                        icon: <img src={item?.icon?.small || ''}></img>,
+                        href: item.href || '',
+                        icon: <img src={iconpath}></img>,
                     };
                 })}
         />
