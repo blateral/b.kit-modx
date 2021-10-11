@@ -13,6 +13,13 @@ export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
     isActive?: boolean;
     bgMode?: BgMode;
     isMirrored?: boolean;
+    newsForm?: (props: {
+        isInverted?: boolean;
+        placeholder?: string;
+        buttonIcon?: React.ReactNode;
+        backgroundStyle?: 'white' | 'gray';
+    }) => React.ReactNode;
+
     mainColumn?: {
         superTitle?: string;
         title?: string;
@@ -24,7 +31,8 @@ export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
             description?: string;
         };
         badge?: Pick<ModxImageProps, 'small' | 'meta'>;
-
+        newsPlaceholder?: string;
+        hasNewsletter?: boolean;
         primary_link?: string;
         primary_label?: string;
         secondary_link?: string;
@@ -36,6 +44,8 @@ export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
         superTitleAs?: string;
         titleAs?: string;
         text?: string;
+        newsPlaceholder?: string;
+        hasNewsletter?: boolean;
         primary_link?: string;
         primary_label?: string;
         secondary_link?: string;
@@ -60,12 +70,30 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     bgMode,
     mainColumn,
     secondaryColumn,
+    newsForm,
     primaryAction,
     secondaryAction,
 }) => {
-    console.log(mainColumn?.contact?.description);
     return (
         <CallToAction
+            newsFormMain={
+                newsForm
+                    ? (isInverted) =>
+                          newsForm({
+                              isInverted,
+                              placeholder: mainColumn?.newsPlaceholder,
+                          })
+                    : undefined
+            }
+            newsFormSecondary={
+                newsForm
+                    ? (isInverted) =>
+                          newsForm({
+                              isInverted,
+                              placeholder: secondaryColumn?.newsPlaceholder,
+                          })
+                    : undefined
+            }
             superTitleAs={(mainColumn?.superTitleAs as HeadlineTag) || 'div'}
             titleAs={(mainColumn?.titleAs as HeadlineTag) || 'div'}
             bgMode={
@@ -85,6 +113,7 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
             badge={
                 mainColumn?.badge ? <img src={mainColumn.badge.small} /> : null
             }
+            hasNewsletter={mainColumn?.hasNewsletter}
             primaryAction={
                 primaryAction &&
                 isValidAction(
@@ -124,6 +153,7 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                 secondaryColumn?.superTitle ||
                 secondaryColumn?.text
                     ? {
+                          hasNewsletter: secondaryColumn.hasNewsletter,
                           title: secondaryColumn?.title,
                           superTitle: secondaryColumn?.superTitle,
                           text: secondaryColumn?.text,
