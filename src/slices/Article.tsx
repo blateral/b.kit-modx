@@ -9,7 +9,7 @@ export interface ArticleSliceType extends ModxSlice<'Article'> {
     superTitleAs?: HeadlineTag;
     title?: string;
     titleAs?: HeadlineTag;
-    largeLeft?: boolean;
+    halfAside?: boolean;
     text?: string;
     asideText?: string;
     bgMode?: BgMode;
@@ -38,7 +38,7 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
     superTitleAs,
     title,
     titleAs,
-    largeLeft,
+    halfAside,
     text,
     asideText,
     bgMode,
@@ -69,8 +69,7 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
             bgMode={bgMode}
             title={title}
             titleAs={titleAs}
-            // FIXME:
-            // largeLeft={largeLeft}
+            halfAside={halfAside}
             superTitle={superTitle}
             superTitleAs={superTitleAs}
             text={text}
