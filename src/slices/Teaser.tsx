@@ -1,11 +1,8 @@
 import { assignTo, Teaser, TeaserWide, Theme } from '@blateral/b.kit';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
-import { HeadlineTagDefault } from '../utils/stringLexicon';
 import {
     isBgModeString,
     isExternalLink,
-    isHeadlineTag,
     isValidAction,
     ModxImageProps,
     ModxImagePropsWithFormat,
@@ -19,13 +16,7 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     bgMode?: string;
     bgColor?: string;
     format?: string;
-    superTitle?: string;
-    superTitleAs?: HeadlineTag;
-    title?: string;
-    titleAs?: HeadlineTag;
-    intro?: string;
     text?: string;
-    subText?: string;
     image?: ModxImagePropsWithFormat;
     description?: string;
 
@@ -54,13 +45,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     bgMode,
     bgColor,
     format,
-    superTitle,
-    superTitleAs,
-    title,
-    titleAs,
-    intro,
     text,
-    subText,
     image,
     description,
 
@@ -74,15 +59,11 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     theme,
 }) => {
     const theImage: ModxImageProps = image && image[format || 'square'];
+
     const sharedProps = {
         isMirrored,
-        superTitle,
-        superTitleAs: superTitleAs,
-        title: title,
-        titleAs: titleAs,
-        intro: intro,
+
         text: text,
-        subText,
 
         primaryAction:
             primaryAction && isValidAction(primary_label, primary_link)
@@ -123,16 +104,6 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
             <TeaserWide
                 {...sharedProps}
                 theme={sliceTheme}
-                superTitleAs={
-                    isHeadlineTag(superTitleAs)
-                        ? (superTitleAs as HeadlineTag)
-                        : HeadlineTagDefault
-                }
-                titleAs={
-                    isHeadlineTag(titleAs)
-                        ? (titleAs as HeadlineTag)
-                        : HeadlineTagDefault
-                }
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
                 image={{
                     ...theImage,
@@ -153,16 +124,6 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                     alt: image?.meta?.altText || '',
                     description: description,
                 }}
-                superTitleAs={
-                    isHeadlineTag(superTitleAs)
-                        ? superTitleAs
-                        : HeadlineTagDefault
-                }
-                titleAs={
-                    isHeadlineTag(titleAs)
-                        ? (titleAs as HeadlineTag)
-                        : HeadlineTagDefault
-                }
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
             />
         );
