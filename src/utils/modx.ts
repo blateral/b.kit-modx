@@ -454,3 +454,19 @@ export function isNumeric(str?: string) {
     if (typeof str != 'string') return false; // we only process strings!
     return /^\d+$/.test(str);
 }
+
+
+export const injectNewsData = async (
+    slice: NewsOverviewSliceType | NewsListSliceType
+) => {
+    if (!slice.collectionId || slice.collectionId === -1) return slice;
+
+    const sliceWithRice = await getPageData(`?id=${slice.collectionId}`);
+
+    slice.items = sliceWithRice?.page?.newsArticles || [];
+
+    return slice;
+};
+
+export const getNewsCollectors = (slice: PageContent) =>
+    slice.slice_type === 'NewsOverview' || slice.slice_type === 'NewsList';
