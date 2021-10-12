@@ -69,8 +69,7 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
             bgMode={bgMode}
             title={title}
             titleAs={titleAs}
-            // FIXME:
-            // largeLeft={largeLeft}
+            halfAside={!largeLeft}
             superTitle={superTitle}
             superTitleAs={superTitleAs}
             text={text}
