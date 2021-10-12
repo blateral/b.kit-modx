@@ -1,38 +1,22 @@
 import React from 'react';
 
-import {
-    assignTo,
-    FlyToIcon,
-    MailIcon,
-    Map,
-    PhoneIcon,
-    RouteIcon,
-    Theme,
-} from '@blateral/b.kit/lib';
+import { assignTo, FlyToIcon, Map, Theme } from '@blateral/b.kit/lib';
 import {
     isExternalLink,
-    isHeadlineTag,
     isNumeric,
     isValidAction,
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
-import { HeadlineTagDefault } from 'utils/stringLexicon';
 
 interface MapLocationItems {
-    superTitle?: string;
-    superTitleAs?: string;
-
-    title?: string;
-    titleAs?: string;
-    longitude?: string;
-    latitude?: string;
     marker?: Pick<ModxImageProps, 'small' | 'meta'>;
 
-    phone?: string;
-    mail?: string;
-    route?: string;
+    longitude?: string;
+    latitude?: string;
+    title?: string;
+    titleAs?: string;
+    contact?: string;
 
     primary_link?: string;
     primary_label?: string;
@@ -112,9 +96,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
     controlNext,
     controlPrev,
     dot,
-    phoneIcon,
-    mailIcon,
-    routingIcon,
+
     theme,
 }) => {
     // merging cms and component theme settings
@@ -151,39 +133,12 @@ export const MapSlice: React.FC<MapSliceType> = ({
                         ? +location.longitude
                         : 0;
 
-                const contactInfo: {
-                    label: string;
-                    icon: React.ReactNode;
-                }[] = [];
-                if (location.phone) {
-                    contactInfo.push({
-                        icon: phoneIcon || <PhoneIcon />,
-                        label: location?.phone,
-                    });
-                }
-                if (location.mail) {
-                    contactInfo.push({
-                        icon: mailIcon || <MailIcon />,
-                        label: location?.mail,
-                    });
-                }
-                if (location.route) {
-                    contactInfo.push({
-                        icon: routingIcon || <RouteIcon />,
-                        label: location?.route,
-                    });
-                }
-
                 return {
                     id: `location-${i}`,
                     position: [posLat, posLng],
                     meta: {
                         title: location.title,
-                        titleAs: 'span',
-                        superTitle: location.superTitle,
-                        superTitleAs: isHeadlineTag(location.superTitleAs)
-                            ? (location.superTitleAs as HeadlineTag)
-                            : HeadlineTagDefault,
+                        contact: location.contact,
 
                         primaryAction:
                             primaryAction &&
@@ -217,8 +172,6 @@ export const MapSlice: React.FC<MapSliceType> = ({
                                           ),
                                       })
                                 : undefined,
-
-                        contact: contactInfo,
                     },
                     icon: {
                         size: iconSettings?.size || [20, 28],

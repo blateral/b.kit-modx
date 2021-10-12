@@ -2,18 +2,15 @@ import React from 'react';
 import { assignTo, Table, Theme } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
 
-interface TableItem {
-    tableTitle?: string;
-    sliceRows?: Array<{ cols: string[] }>;
-    isInverted?: boolean;
-    hasBack?: boolean;
-    firstRowTitle?: boolean;
-}
 
-export interface TableSliceType extends ModxSlice<'Table', TableItem> {
+export interface TableSliceType extends ModxSlice<'Table'> {
     isActive?: boolean;
     bgMode?: string;
     bgColor?: string;
+
+    tableTitle?: string;
+    sliceRows?: Array<{ cols: string[] }>;
+    hasFirstRowTitle?: boolean;
 
     primary_label?: string;
     secondary_label?: string;
@@ -26,8 +23,10 @@ export interface TableSliceType extends ModxSlice<'Table', TableItem> {
 export const TableSlice: React.FC<TableSliceType> = ({
     bgMode,
     bgColor,
-    items,
     theme,
+    tableTitle,
+    sliceRows,
+    hasFirstRowTitle,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -41,32 +40,41 @@ export const TableSlice: React.FC<TableSliceType> = ({
         theme
     );
 
+    const tableItems = createTableItems(
+        sliceRows,
+        hasFirstRowTitle,
+        tableTitle
+    );
+
+    console.log(tableItems);
+
     return (
         <Table
             theme={sliceTheme}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
-            tableItems={createTableItems(items)}
+            tableItems={tableItems}
         />
     );
 };
 
-function createTableItems(items: TableItem[]) {
-    return items?.map((item) => {
-        const tableRows = item.sliceRows;
-        let firstRowTitle: { cols: string[] } | undefined = undefined;
-        if (tableRows && item.firstRowTitle) {
-            firstRowTitle = tableRows[0];
-            tableRows?.splice(0, 1);
-        }
+function createTableItems(
+    sliceRows?: Array<{ cols: string[] }>,
+    hasFirstRowTitle?: boolean,
+    tableTitle?: string
+) {
+    const rowData = JSON.parse(JSON.stringify(sliceRows));
+    let rowTitle: { cols: string[] } | undefined = undefined;
+    if (rowData && hasFirstRowTitle) {
+        rowTitle = rowData.shift();
+    }
 
-        return {
-            rowTitle: firstRowTitle?.cols,
-            row: tableRows || [],
-            tableTitle: item.tableTitle || '',
-            isInverted: item.isInverted,
-            hasBack: item.hasBack,
-        };
-    });
+    return [
+        {
+            tableTitle: tableTitle || '',
+            rowTitle: hasFirstRowTitle ? rowTitle?.cols : undefined,
+            row: rowData || [],
+        },
+    ];
 }

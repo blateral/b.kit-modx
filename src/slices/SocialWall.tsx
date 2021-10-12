@@ -50,7 +50,10 @@ export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
             hashtag={hashtag}
             followUs={followUs}
             items={items?.map((item) => ({
-                link: item.link,
+                link: {
+                    href: item.link,
+                    isExternal: true,
+                },
                 image: {
                     src: item?.image?.small || '',
                     alt: item?.image?.meta?.altText || '',

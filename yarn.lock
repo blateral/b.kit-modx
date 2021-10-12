@@ -107,10 +107,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@blateral/b.kit@1.7.4":
-  version "1.7.4"
-  resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-1.7.4.tgz#8188f696a2e8ab407338375bb4ebf429b055fd5d"
-  integrity sha512-yBJeCSv083mmgKfTAHFD6+5T2lg7Q0CLU7mlpdHZxthLSib4EZpK6VO296VQ4GmfnGPwsDmDYYVbnBE6B5Rj5A==
+"@blateral/b.kit@1.7.7":
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-1.7.7.tgz#bd037ab7728a75ae4bd84e8da9df8e1b0b495bbd"
+  integrity sha512-8DgB38js3Z+ny8b/Qa3zPCnDKTYWKk7n3W/aRoPBjYRQpdO3C7Ul9lY2IpCo2GBZvYUIIpHEWPfAqHeNQ7tUDg==
 
 "@emotion/is-prop-valid@^0.8.8":
   version "0.8.8"
