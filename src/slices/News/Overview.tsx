@@ -7,7 +7,7 @@ export interface NewsOverviewSliceType
     isActive?: boolean;
     bgMode?: BgMode;
     showMoreText?: string;
-
+    collectionId?: number;
     queryParams?: Record<string, any>;
     cardAction?: (props: {
         isInverted?: boolean;

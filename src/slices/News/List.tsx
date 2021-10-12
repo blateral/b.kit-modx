@@ -7,6 +7,7 @@ export interface NewsListSliceType
     isActive?: boolean;
     showMoreText?: string;
     bgMode?: BgMode;
+    collectionId?: number;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
