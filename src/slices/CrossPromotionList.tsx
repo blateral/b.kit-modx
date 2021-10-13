@@ -26,6 +26,17 @@ interface CrossPromotionItems {
     link?: string;
 }
 
+type ImageFormats =
+    | 'gallery-square'
+    | 'gallery-portrait'
+    | 'gallery-landscape'
+    | 'gallery-triple-left'
+    | 'gallery-triple-right'
+    | 'carousel-square'
+    | 'carousel-portrait'
+    | 'carousel-big-portrait'
+    | 'carousel-landscape'
+    | 'landscape-wide';
 export interface CrossPromotionListSliceType
     extends ModxSlice<'CrossPromotionList', CrossPromotionItems> {
     isActive?: boolean;
@@ -33,7 +44,7 @@ export interface CrossPromotionListSliceType
     isMirrored?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
-    imageFormat: 'square' | 'landscape' | 'landscape-wide' | 'portrait';
+    imageFormat: ImageFormats;
 
     controlNext?: (props: {
         isInverted?: boolean;
@@ -83,32 +94,26 @@ const createCPromoList = ({
     const promoItems: Array<CrossPromotionItems> = items;
     const itemCount = promoItems.length;
 
-    const mapPromotionItem = (item: CrossPromotionItems) => {
-        const isFull =
-            itemCount === 1 || imageFormat === 'landscape-wide' || item.isMain;
+    const mapPromotionItem = (item: CrossPromotionItems, index: number) => {
+        const isFull = itemCount === 1 || imageFormat === 'landscape-wide';
         if (isFull) imageFormat = 'landscape-wide';
 
-        const mappedImage = {
-            small: item.image?.list?.landscape?.small || '',
-            medium: item.image?.list?.landscape?.medium,
-            semilarge: item.image?.list[imageFormat || 'square']?.semilarge,
-            large: item.image?.list[imageFormat || 'square']?.large,
-            xlarge: item.image?.list[imageFormat || 'square']?.xlarge,
-        };
+        if (imageFormat === 'gallery-triple-right') {
+            return mapTripleImageRight(item, index);
+        }
+        if (imageFormat === 'gallery-triple-left') {
+            return mapTripleImageLeft(item, index);
+        }
 
-        return {
-            size: isFull ? 'full' : 'half',
-            image: {
-                ...mappedImage,
-                alt: item.image?.meta.altText || '',
-            },
-            title: item.title,
-            href: item.link || undefined,
-        } as PromotionCardProps & { size?: 'full' | 'half' | undefined };
+        return mapNonTripleGalleryImage(item, imageFormat, isFull);
     };
 
-    const mainItems = promoItems.filter((item) => item.isMain);
-    const asideItems = promoItems.filter((item) => !item.isMain);
+    const mainItems = promoItems
+        .map(mapPromotionItem)
+        .filter((item) => item.isMain);
+    const asideItems = promoItems
+        .map(mapPromotionItem)
+        .filter((item) => !item.isMain);
 
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -127,20 +132,8 @@ const createCPromoList = ({
             theme={sliceTheme}
             isMirrored={isMirrored}
             bgMode={bgMode}
-            main={
-                mainItems.length > 0
-                    ? mainItems.map((item: CrossPromotionItems) =>
-                          mapPromotionItem(item)
-                      )
-                    : undefined
-            }
-            aside={
-                asideItems.length > 0
-                    ? asideItems.map((item: CrossPromotionItems) =>
-                          mapPromotionItem(item)
-                      )
-                    : undefined
-            }
+            main={mainItems}
+            aside={asideItems}
         />
     );
 };
@@ -173,6 +166,7 @@ const createCPromoCarousel = ({
         theme
     );
 
+    const mappedImageFormat = mapCarouselImageFormat(imageFormat);
     return (
         <PromotionCarousel
             theme={sliceTheme}
@@ -180,11 +174,15 @@ const createCPromoCarousel = ({
             promotions={items.map(({ image, title, link }) => {
                 const mappedImage = {
                     small: image?.carousel?.landscape?.small || '',
-                    medium: image?.carousel[imageFormat || 'square']?.medium,
+                    medium: image?.carousel[mappedImageFormat || 'square']
+                        ?.medium,
                     semilarge:
-                        image?.carousel[imageFormat || 'square']?.semilarge,
-                    large: image?.carousel[imageFormat || 'square']?.large,
-                    xlarge: image?.carousel[imageFormat || 'square']?.xlarge,
+                        image?.carousel[mappedImageFormat || 'square']
+                            ?.semilarge,
+                    large: image?.carousel[mappedImageFormat || 'square']
+                        ?.large,
+                    xlarge: image?.carousel[mappedImageFormat || 'square']
+                        ?.xlarge,
                 };
 
                 return {
@@ -208,4 +206,153 @@ const createCPromoCarousel = ({
             responsive={responsive}
         />
     );
+};
+
+function mapGalleryImageFormat(imageFormat: ImageFormats) {
+    switch (imageFormat) {
+        case 'gallery-square':
+            return 'square';
+        case 'gallery-portrait':
+            return 'portrait';
+        case 'gallery-landscape':
+            return 'landscape';
+        default:
+            return 'square';
+    }
+}
+
+function mapCarouselImageFormat(imageFormat: ImageFormats) {
+    switch (imageFormat) {
+        case 'carousel-square':
+            return 'square';
+        case 'carousel-portrait':
+            return 'portrait';
+        case 'carousel-landscape':
+            return 'landscape';
+        case 'carousel-big-portrait':
+            return 'portrait';
+        default:
+            return 'square';
+    }
+}
+
+function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
+    const calcIndex = index + 1;
+    if (index === 1 || calcIndex % 4 === 0) {
+        const mappedImage = {
+            small: item.image?.list?.landscape?.small || '',
+            medium: item.image?.list?.landscape?.medium,
+            semilarge: item.image?.list['portrait']?.semilarge,
+            large: item.image?.list['portrait']?.large,
+            xlarge: item.image?.list['portrait']?.xlarge,
+        };
+        return {
+            isMain: true,
+            size: 'half',
+            image: {
+                ...mappedImage,
+                alt: item.image?.meta.altText || '',
+            },
+            title: item.title,
+            href: item.link || undefined,
+        } as PromotionCardProps & {
+            isMain?: boolean;
+            size?: 'full' | 'half' | undefined;
+        };
+    } else {
+        const mappedImage = {
+            small: item.image?.list?.landscape?.small || '',
+            medium: item.image?.list?.landscape?.medium,
+            semilarge: item.image?.list['landscape']?.semilarge,
+            large: item.image?.list['landscape']?.large,
+            xlarge: item.image?.list['landscape']?.xlarge,
+        };
+        return {
+            isMain: false,
+            size: 'half',
+            image: {
+                ...mappedImage,
+                alt: item.image?.meta.altText || '',
+            },
+            title: item.title,
+            href: item.link || undefined,
+        } as PromotionCardProps & {
+            isMain?: boolean;
+            size?: 'full' | 'half' | undefined;
+        };
+    }
+}
+
+function mapTripleImageRight(item: CrossPromotionItems, index: number) {
+    const calcIndex = index + 1;
+    if (calcIndex % 3 === 0) {
+        const mappedImage = {
+            small: item.image?.list?.landscape?.small || '',
+            medium: item.image?.list?.landscape?.medium,
+            semilarge: item.image?.list['portrait']?.semilarge,
+            large: item.image?.list['portrait']?.large,
+            xlarge: item.image?.list['portrait']?.xlarge,
+        };
+        return {
+            isMain: true,
+            size: 'half',
+            image: {
+                ...mappedImage,
+                alt: item.image?.meta.altText || '',
+            },
+            title: item.title,
+            href: item.link || undefined,
+        } as PromotionCardProps & {
+            isMain?: boolean;
+            size?: 'full' | 'half' | undefined;
+        };
+    } else {
+        const mappedImage = {
+            small: item.image?.list?.landscape?.small || '',
+            medium: item.image?.list?.landscape?.medium,
+            semilarge: item.image?.list['landscape']?.semilarge,
+            large: item.image?.list['landscape']?.large,
+            xlarge: item.image?.list['landscape']?.xlarge,
+        };
+        return {
+            isMain: false,
+            size: 'half',
+            image: {
+                ...mappedImage,
+                alt: item.image?.meta.altText || '',
+            },
+            title: item.title,
+            href: item.link || undefined,
+        } as PromotionCardProps & {
+            isMain?: boolean;
+            size?: 'full' | 'half' | undefined;
+        };
+    }
+}
+
+const mapNonTripleGalleryImage = (
+    item: CrossPromotionItems,
+    imageFormat: ImageFormats,
+    isFull: boolean
+) => {
+    const mappedImageFormat = mapGalleryImageFormat(imageFormat);
+    const mappedImage = {
+        small: item.image?.list?.landscape?.small || '',
+        medium: item.image?.list?.landscape?.medium,
+        semilarge: item.image?.list[mappedImageFormat || 'square']?.semilarge,
+        large: item.image?.list[mappedImageFormat || 'square']?.large,
+        xlarge: item.image?.list[mappedImageFormat || 'square']?.xlarge,
+    };
+    return {
+        size: isFull ? 'full' : 'half',
+        image: {
+            ...mappedImage,
+            alt: item.image?.meta.altText || '',
+        },
+        title: item.title,
+        href: item.link || undefined,
+    } as PromotionCardProps & {
+        isMain?: boolean;
+        size?: 'full' | 'half' | undefined;
+    };
 };
