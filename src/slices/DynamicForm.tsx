@@ -8,7 +8,7 @@ import {
     Field as BkitField,
     Area as BkitArea,
     Select as BkitSelect,
-    // Datepicker as BkitDatepicker,
+    Datepicker as BkitDatepicker,
     FieldGroup as BkitFieldGroup,
     FileUpload as BkitFileUpload,
 } from '@blateral/b.kit/lib/components/sections/DynamicForm';
@@ -62,10 +62,10 @@ export interface Select extends FormField {
 
 export interface Datepicker extends FormField {
     type: 'Datepicker';
-    initialDates?: [Date, Date];
+    initialDates?: [string, string];
     placeholder?: string;
-    minDate?: Date;
-    maxDate?: Date;
+    minDate?: string;
+    maxDate?: string;
     singleSelect?: boolean;
     info?: string;
     icon?: { src: string; alt?: string };
@@ -175,7 +175,7 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
             onSubmit={onSubmit}
             submitAction={submitAction}
             theme={sliceTheme}
-            definitions={definitions}
+            definitions={definitions as any}
             fields={formFieldsData}
         />
     );
@@ -206,7 +206,10 @@ const generateFormFieldMap =
             return { ...accumulator, ...select };
         }
 
-        // if (isDatepicker(formfield)) return createDatePicker(formfield, onValidate);
+        if (isDatepicker(formfield)) {
+            const fieldGroup = createDatePicker(formfield, onValidate);
+            return { ...accumulator, ...fieldGroup };
+        }
         if (isFieldGroup(formfield)) {
             const fieldGroup = createFieldGroup(formfield, onValidate);
             return { ...accumulator, ...fieldGroup };
@@ -303,9 +306,13 @@ function createFieldGroup(
     const formFieldData = {};
 
     const fields =
-        formfield?.fieldString?.split(/\r?\n/)?.map((value) => {
-            return { initialChecked: false, text: value };
-        }) || [];
+        formfield?.fieldString
+            ?.replace(/<p>/gi, '')
+            ?.replace(/<\/p>/gi, '')
+            ?.split(/\r?\n/)
+            ?.map((value) => {
+                return { initialChecked: false, text: value };
+            }) || [];
 
     const formFieldValues: BkitFieldGroup = {
         type: 'FieldGroup',
@@ -323,28 +330,55 @@ function createFieldGroup(
 }
 
 // FIXME:
-// function createDatePicker(
-//     formfield: Datepicker,
-//     onValidate?: (value: unknown, config: FormField) => Promise<string>
-// ): Record<string, BkitDatepicker> | undefined {
-//     if (!formfield.label) return undefined;
-//     const formFieldData = {};
+function createDatePicker(
+    formfield: Datepicker,
+    onValidate?: (value: unknown, config: FormField) => Promise<string>
+): Record<string, BkitDatepicker> | undefined {
+    if (!formfield.label) return undefined;
+    const formFieldData = {};
 
-//     const formFieldValues: BkitDatepicker = {
-//         type: 'Datepicker',
-//         placeholder: formfield.placeholder,
-//         isRequired: formfield.isRequired,
-//         info: formfield.info,
-//         column: formfield.column,
-//         validate: onValidate,
-//         icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
+    const formFieldValues: BkitDatepicker = {
+        type: 'Datepicker',
+        placeholder: formfield.placeholder,
+        isRequired: formfield.isRequired,
+        info: formfield.info,
+        column: formfield.column,
+        validate: onValidate,
+        icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
+        initialDates: !formfield.singleSelect
+            ? [
+                  formfield.initialDates
+                      ? createDateFromDateString(formfield?.initialDates[0])
+                      : new Date(),
+                  formfield.initialDates
+                      ? createDateFromDateString(formfield?.initialDates[1])
+                      : new Date(),
+              ]
+            : undefined,
+        singleSelect: formfield.singleSelect,
+        submitAction: formfield.submitAction,
+        deleteAction: formfield.deleteAction,
+        minDate: createDateFromDateString(formfield?.minDate),
+        maxDate: createDateFromDateString(formfield?.maxDate),
+    };
 
-//     };
+    formFieldData[formfield.label] = formFieldValues;
 
-//     formFieldData[formfield.label] = formFieldValues;
+    return formFieldData;
+}
 
-//     return formFieldData;
-// }
+function createDateFromDateString(datestring?: string) {
+    if (!datestring) return new Date();
+
+    const dateparts = datestring.split('-');
+
+    try {
+        return new Date(+dateparts[0], +dateparts[1], +dateparts[2]);
+    } catch (e) {
+        console.error(e);
+        return new Date();
+    }
+}
 
 function createUpload(
     formfield: FileUploadField,
@@ -382,9 +416,9 @@ const isSelect = (formfield: FormField): formfield is Select => {
     return formfield.type === 'Select';
 };
 
-// const isDatepicker = (formfield: FormField): formfield is Datepicker => {
-//     return formfield.type === 'Datepicker';
-// };
+const isDatepicker = (formfield: FormField): formfield is Datepicker => {
+    return formfield.type === 'Datepicker';
+};
 
 const isFieldGroup = (formfield: FormField): formfield is FieldGroup => {
     return formfield.type === 'FieldGroup';
