@@ -114,13 +114,6 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
             />
         );
     } else {
-        return (
-            <Gallery
-                {...sharedProps}
-                theme={sliceTheme}
-                // FIXME:
-                bgMode={bgMode as any}
-            />
-        );
+        return <Gallery {...sharedProps} theme={sliceTheme} bgMode={bgMode} />;
     }
 };
