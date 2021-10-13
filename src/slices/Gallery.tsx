@@ -90,7 +90,7 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
                 item[item?.image?.imageFormat || 'small-square'];
             return {
                 ...theImage,
-                small: theImage.small || '',
+                small: theImage?.small || '',
                 alt: theImage.meta?.altText || '',
                 isFull: item?.image?.imageFormat?.includes('wide'),
             };
