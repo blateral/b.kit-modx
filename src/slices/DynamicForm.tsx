@@ -141,6 +141,7 @@ export interface DynamicFormSliceType
         radio?: (props: FieldGenerationProps<FieldGroup>) => React.ReactNode;
         upload?: (props: FieldGenerationProps<FieldGroup>) => React.ReactNode;
     };
+    onValidate?: (value: unknown, config: FormField) => Promise<string>;
 }
 
 export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
@@ -151,6 +152,7 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     onSubmit,
     submitAction,
     items,
+    onValidate,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -165,7 +167,7 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     );
 
     const formFieldsData: Record<string, BkitField | BkitArea | BkitSelect> =
-        itemsToFormFields(items);
+        itemsToFormFields(items, onValidate);
 
     return (
         <DynamicForm
@@ -179,42 +181,47 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     );
 };
 
-const itemsToFormFields = (formFields?: FormField[]) => {
+const itemsToFormFields = (
+    formFields?: FormField[],
+    onValidate?: (value: unknown, config: FormField) => Promise<string>
+) => {
     if (!formFields) return {};
 
-    return formFields.reduce(generateFormFieldMap, {});
+    return formFields.reduce(generateFormFieldMap(onValidate), {});
 };
 
-const generateFormFieldMap = (
-    accumulator: Record<string, any>,
-    formfield: FormField
-) => {
-    if (isField(formfield)) {
-        const field = createField(formfield);
-        return { ...accumulator, ...field };
-    }
-    if (isArea(formfield)) {
-        const area = createArea(formfield);
-        return { ...accumulator, ...area };
-    }
-    if (isSelect(formfield)) {
-        const select = createSelect(formfield);
-        return { ...accumulator, ...select };
-    }
+const generateFormFieldMap =
+    (onValidate?: (value: unknown, config: FormField) => Promise<string>) =>
+    (accumulator: Record<string, any>, formfield: FormField) => {
+        if (isField(formfield)) {
+            const field = createField(formfield, onValidate);
+            return { ...accumulator, ...field };
+        }
+        if (isArea(formfield)) {
+            const area = createArea(formfield, onValidate);
+            return { ...accumulator, ...area };
+        }
+        if (isSelect(formfield)) {
+            const select = createSelect(formfield, onValidate);
+            return { ...accumulator, ...select };
+        }
 
-    // if (isDatepicker(formfield)) return createDatePicker(formfield);
-    if (isFieldGroup(formfield)) {
-        const fieldGroup = createFieldGroup(formfield);
-        return { ...accumulator, ...fieldGroup };
-    }
-    if (isUpload(formfield)) {
-        const upload = createUpload(formfield);
-        return { ...accumulator, ...upload };
-    }
-    return accumulator;
-};
+        // if (isDatepicker(formfield)) return createDatePicker(formfield, onValidate);
+        if (isFieldGroup(formfield)) {
+            const fieldGroup = createFieldGroup(formfield, onValidate);
+            return { ...accumulator, ...fieldGroup };
+        }
+        if (isUpload(formfield)) {
+            const upload = createUpload(formfield, onValidate);
+            return { ...accumulator, ...upload };
+        }
+        return accumulator;
+    };
 
-function createField(formfield: Field): Record<string, BkitField> | undefined {
+function createField(
+    formfield: Field,
+    onValidate?: (value: unknown, config: FormField) => Promise<string>
+): Record<string, BkitField> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
@@ -224,7 +231,7 @@ function createField(formfield: Field): Record<string, BkitField> | undefined {
         isRequired: formfield.isRequired,
         info: formfield.info,
         icon: formfield.icon?.src ? { src: formfield.icon?.src } : undefined,
-        validate: formfield.validate,
+        validate: onValidate,
         column: formfield.column,
         initalValue: formfield.initalValue,
         inputType: formfield.inputType,
@@ -236,7 +243,10 @@ function createField(formfield: Field): Record<string, BkitField> | undefined {
     return formFieldData;
 }
 
-function createArea(formfield: Area): Record<string, BkitArea> | undefined {
+function createArea(
+    formfield: Area,
+    onValidate?: (value: unknown, config: FormField) => Promise<string>
+): Record<string, BkitArea> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
@@ -245,7 +255,7 @@ function createArea(formfield: Area): Record<string, BkitArea> | undefined {
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        validate: formfield.validate,
+        validate: onValidate,
         column: formfield.column,
         initalValue: formfield.initalValue,
         errorMsg: formfield.errorMsg,
@@ -257,7 +267,8 @@ function createArea(formfield: Area): Record<string, BkitArea> | undefined {
 }
 
 function createSelect(
-    formfield: Select
+    formfield: Select,
+    onValidate?: (value: unknown, config: FormField) => Promise<string>
 ): Record<string, BkitSelect> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
@@ -274,7 +285,7 @@ function createSelect(
             return { label: value, value };
         }),
         column: formfield.column,
-        validate: formfield.validate as any,
+        validate: onValidate,
         errorMsg: formfield.errorMsg,
         icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
     };
@@ -285,7 +296,8 @@ function createSelect(
 }
 
 function createFieldGroup(
-    formfield: FieldGroup
+    formfield: FieldGroup,
+    onValidate?: (value: unknown, config: FormField) => Promise<string>
 ): Record<string, BkitFieldGroup> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
@@ -298,7 +310,7 @@ function createFieldGroup(
     const formFieldValues: BkitFieldGroup = {
         type: 'FieldGroup',
         isRequired: formfield.isRequired,
-        validate: formfield.validate,
+        validate: onValidate,
         column: formfield.column,
         errorMsg: formfield.errorMsg,
         groupType: formfield.groupType,
@@ -312,7 +324,8 @@ function createFieldGroup(
 
 // FIXME:
 // function createDatePicker(
-//     formfield: Datepicker
+//     formfield: Datepicker,
+//     onValidate?: (value: unknown, config: FormField) => Promise<string>
 // ): Record<string, BkitDatepicker> | undefined {
 //     if (!formfield.label) return undefined;
 //     const formFieldData = {};
@@ -323,7 +336,7 @@ function createFieldGroup(
 //         isRequired: formfield.isRequired,
 //         info: formfield.info,
 //         column: formfield.column,
-//         validate: formfield.validate,
+//         validate: onValidate,
 //         icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
 
 //     };
@@ -334,7 +347,8 @@ function createFieldGroup(
 // }
 
 function createUpload(
-    formfield: FileUploadField
+    formfield: FileUploadField,
+    onValidate?: (value: unknown, config: FormField) => Promise<string>
 ): Record<string, BkitFileUpload> {
     if (!formfield.label) return {};
     const formFieldData = {};
@@ -344,7 +358,7 @@ function createUpload(
         isRequired: formfield.isRequired,
         info: formfield.info,
         column: formfield.column,
-        validate: formfield.validate,
+        validate: onValidate,
         addBtnLabel: formfield.addBtnLabel,
         removeBtnLabel: formfield.removeBtnLabel,
         acceptedFormats: formfield.acceptedFormats,
