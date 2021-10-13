@@ -23,7 +23,8 @@ interface ModxGalleryImageProps {
 }
 
 interface GalleryItems {
-    image: ModxGalleryImageProps & { imageFormat: ImageFormats };
+    image: ModxGalleryImageProps;
+    imageFormat: ImageFormats;
 }
 
 export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
@@ -87,12 +88,13 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
     const sharedProps = {
         images: items?.map((item) => {
             const theImage: ModxImageProps =
-                item[item?.image?.imageFormat || 'small-square'];
+                item[item?.imageFormat || 'small-square'];
+
             return {
                 ...theImage,
                 small: theImage?.small || '',
-                alt: theImage.meta?.altText || '',
-                isFull: item?.image?.imageFormat?.includes('wide-'),
+                alt: theImage?.meta?.altText || '',
+                isFull: item?.imageFormat?.includes('wide-'),
             };
         }),
     };
