@@ -1,16 +1,10 @@
 import React from 'react';
 
 import { assignTo, FlyToIcon, Map, Theme } from '@blateral/b.kit/lib';
-import {
-    isExternalLink,
-    isNumeric,
-    isValidAction,
-    ModxImageProps,
-    ModxSlice,
-} from 'utils/modx';
+import { endpoint, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
 interface MapLocationItems {
-    marker?: Pick<ModxImageProps, 'small' | 'meta'>;
+    marker?: string;
 
     longitude?: string;
     latitude?: string;
@@ -124,14 +118,8 @@ export const MapSlice: React.FC<MapSliceType> = ({
             allMarkersOnInit={allMarkersOnInit}
             fitBoundsPadding={fitBoundsPadding || [30, 30]}
             locations={items?.map((location, i) => {
-                const posLat =
-                    location.latitude && isNumeric(location.latitude)
-                        ? +location.latitude
-                        : 0;
-                const posLng =
-                    location.longitude && isNumeric(location.longitude)
-                        ? +location.longitude
-                        : 0;
+                const posLat = location.latitude ? +location.latitude : 0;
+                const posLng = location.longitude ? +location.longitude : 0;
 
                 return {
                     id: `location-${i}`,
@@ -178,7 +166,9 @@ export const MapSlice: React.FC<MapSliceType> = ({
                         anchor: iconSettings?.anchor || [10, 28],
                         sizeActive: iconSettings?.sizeActive || [50, 70],
                         anchorActive: iconSettings?.anchorActive || [25, 70],
-                        url: location.marker?.small || '',
+                        url: location.marker
+                            ? `${endpoint}${location.marker}`
+                            : '',
                     },
                 };
             })}

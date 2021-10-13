@@ -106,11 +106,8 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
             <Gallery
                 {...sharedProps}
                 theme={sliceTheme}
-                bgMode={
-                    bgMode === 'full' || bgMode === 'inverted'
-                        ? bgMode
-                        : undefined
-                }
+                // FIXME:
+                bgMode={bgMode as any}
             />
         );
     }
