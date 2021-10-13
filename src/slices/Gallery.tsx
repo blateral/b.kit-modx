@@ -92,7 +92,7 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
                 ...theImage,
                 small: theImage?.small || '',
                 alt: theImage.meta?.altText || '',
-                isFull: item?.image?.imageFormat?.includes('wide'),
+                isFull: item?.image?.imageFormat?.includes('wide-'),
             };
         }),
     };
