@@ -2,16 +2,28 @@ import React from 'react';
 
 import { assignTo, Gallery, ImageCarousel, Theme } from '@blateral/b.kit';
 import { ResponsiveObject } from 'slices/slick';
-import {
-    BgMode,
-    ModxImageProps,
-    ModxImagePropsWithFormat,
-    ModxSlice,
-} from 'utils/modx';
+import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
-type ImageFormats = 'square' | 'landscape' | 'landscape-wide' | 'portrait';
+type ImageFormats =
+    | 'small-square'
+    | 'wide-square'
+    | 'small-landscape'
+    | 'wide-landscape'
+    | 'small-portrait'
+    | 'wide-portrait';
+
+interface ModxGalleryImageProps {
+    'small-square'?: ModxImageProps;
+    'small-landscape'?: ModxImageProps;
+    'small-portrait'?: ModxImageProps;
+    'wide-square'?: ModxImageProps;
+    'wide-landscape'?: ModxImageProps;
+    'wide-landscape-wide'?: ModxImageProps;
+    'wide-portrait'?: ModxImageProps;
+}
+
 interface GalleryItems {
-    image: ModxImagePropsWithFormat & { imageFormat: ImageFormats };
+    image: ModxGalleryImageProps & { imageFormat: ImageFormats };
 }
 
 export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
@@ -75,12 +87,12 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
     const sharedProps = {
         images: items?.map((item) => {
             const theImage: ModxImageProps =
-                item[item?.image?.imageFormat || 'landscape'];
+                item[item?.image?.imageFormat || 'small-square'];
             return {
                 ...theImage,
                 small: theImage.small || '',
                 alt: theImage.meta?.altText || '',
-                isFull: item?.image?.imageFormat === 'landscape-wide',
+                isFull: item?.image?.imageFormat?.includes('wide'),
             };
         }),
     };
