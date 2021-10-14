@@ -20,7 +20,7 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
     videoUrl?: string;
     badge?: Omit<ModxImageProps, 'meta'>;
     badgeOnMobile?: boolean;
-    headerButtonstyle?: boolean;
+    buttonstyle?: boolean;
     primary_label?: string;
     primary_link?: string;
     secondary_label?: string;
@@ -90,7 +90,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     badgeOnMobile,
     size,
     intro,
-    headerButtonstyle,
+    buttonstyle,
     primary_label,
     primary_link,
     secondary_label,
@@ -105,7 +105,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     theme,
 }) => {
     // map header images
-    const headerImageMap = items.map(toComponentImageFormat);
+    const headerImageMap = items?.map(toComponentImageFormat) || undefined;
 
     return (
         <Header
@@ -117,14 +117,14 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             intro={intro}
             badge={headerBadge(badge?.xlarge, badgeOnMobile)}
             primaryCta={getPrimaryButtonOrPointer({
-                isCta: !headerButtonstyle,
+                isCta: !buttonstyle,
                 primary_label: primary_label,
                 primary_link: primary_link,
                 primaryAction,
                 primaryActionPointer,
             })}
             secondaryCta={getSecondaryButtonOrPointer({
-                isCta: !headerButtonstyle,
+                isCta: !buttonstyle,
                 secondary_label: secondary_label,
                 secondary_link: secondary_link,
                 secondaryAction,
@@ -176,6 +176,31 @@ const getPrimaryButtonOrPointer = ({
     primary_label?: string;
     primary_link?: string;
 }) => {
+    if (!primaryAction && !primaryActionPointer) return undefined;
+
+    if (primaryAction && !primaryActionPointer) {
+        return isValidAction(primary_label, primary_link)
+            ? (isInverted: boolean) =>
+                  primaryAction({
+                      isInverted,
+                      label: primary_label,
+                      href: primary_link || '',
+                      isExternal: isExternalLink(primary_link),
+                  })
+            : undefined;
+    }
+    if (!primaryAction && primaryActionPointer) {
+        return isValidAction(primary_label, primary_link)
+            ? (isInverted: boolean) =>
+                  primaryActionPointer({
+                      isInverted,
+                      label: primary_label,
+                      href: primary_link || '',
+                      isExternal: isExternalLink(primary_link),
+                  })
+            : undefined;
+    }
+
     if (isCta) {
         return primaryAction && isValidAction(primary_label, primary_link)
             ? (isInverted: boolean) =>
@@ -227,6 +252,31 @@ const getSecondaryButtonOrPointer = ({
     secondary_label?: string;
     secondary_link?: string;
 }) => {
+    if (!secondaryAction && !secondaryActionPointer) return undefined;
+
+    if (secondaryAction && !secondaryActionPointer) {
+        return isValidAction(secondary_label, secondary_link)
+            ? (isInverted: boolean) =>
+                  secondaryAction({
+                      isInverted,
+                      label: secondary_label,
+                      href: secondary_link || '',
+                      isExternal: isExternalLink(secondary_link),
+                  })
+            : undefined;
+    }
+    if (!secondaryAction && secondaryActionPointer) {
+        return isValidAction(secondary_label, secondary_link)
+            ? (isInverted: boolean) =>
+                  secondaryActionPointer({
+                      isInverted,
+                      label: secondary_label,
+                      href: secondary_link || '',
+                      isExternal: isExternalLink(secondary_link),
+                  })
+            : undefined;
+    }
+
     if (isCta) {
         return secondaryAction && isValidAction(secondary_label, secondary_link)
             ? (isInverted: boolean) =>
