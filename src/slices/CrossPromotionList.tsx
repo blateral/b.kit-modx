@@ -93,7 +93,8 @@ const createCPromoList = ({
 }: CrossPromotionListSliceType) => {
     const promoItems: Array<CrossPromotionItems> = items;
     const itemCount = promoItems.length;
-
+    const isImagesMirrored =
+        isMirrored || imageFormat === 'gallery-triple-right' ? true : false;
     const mapPromotionItem = (item: CrossPromotionItems, index: number) => {
         const isFull = itemCount === 1 || imageFormat === 'landscape-wide';
         if (isFull) imageFormat = 'landscape-wide';
@@ -130,7 +131,7 @@ const createCPromoList = ({
     return (
         <CrossPromotion
             theme={sliceTheme}
-            isMirrored={isMirrored}
+            isMirrored={isImagesMirrored}
             bgMode={bgMode}
             main={mainItems}
             aside={asideItems}
