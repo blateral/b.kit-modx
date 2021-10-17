@@ -11,8 +11,8 @@ import {
 
 export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     isActive?: boolean;
+    theme?: Theme;
     isMirrored?: boolean;
-    isWide?: boolean;
     bgMode?: string;
     bgColor?: string;
     format?: string;
@@ -36,12 +36,10 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
 }
 
 export const TeaserSlice: React.FC<TeaserSliceType> = ({
     isMirrored,
-    isWide,
     bgMode,
     bgColor,
     format,
@@ -59,7 +57,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     theme,
 }) => {
     const theImage: ModxImageProps = image && image[format || 'square'];
-
+    const isWide = format?.includes('landscape');
     const sharedProps = {
         isMirrored,
 
