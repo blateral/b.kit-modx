@@ -1,6 +1,6 @@
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
-import { CallToAction } from '@blateral/b.kit';
+import { assignTo, CallToAction, Theme } from '@blateral/b.kit';
 import {
     ModxSlice,
     BgMode,
@@ -11,7 +11,10 @@ import {
 
 export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
     isActive?: boolean;
+    theme?: Theme;
+
     bgMode?: BgMode;
+    bgColor?: string;
     isMirrored?: boolean;
     newsForm?: (props: {
         isInverted?: boolean;
@@ -67,15 +70,29 @@ export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
 }
 
 export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
+    theme,
     bgMode,
+    bgColor,
     mainColumn,
     secondaryColumn,
     newsForm,
     primaryAction,
     secondaryAction,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <CallToAction
+            theme={sliceTheme}
             newsFormMain={
                 newsForm
                     ? (isInverted) =>
@@ -103,10 +120,12 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
             superTitle={mainColumn?.superTitle}
             text={mainColumn?.text}
             contact={{
-                avatar: {
-                    src: mainColumn?.contact?.avatar?.small || '',
-                    alt: mainColumn?.contact?.avatar?.meta?.altText || '',
-                },
+                avatar: mainColumn?.contact?.avatar?.small
+                    ? {
+                          src: mainColumn?.contact?.avatar?.small || '',
+                          alt: mainColumn?.contact?.avatar?.meta?.altText || '',
+                      }
+                    : undefined,
 
                 description: mainColumn?.contact?.description || '',
             }}

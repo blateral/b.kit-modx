@@ -11,6 +11,7 @@ import {
 
 export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     isActive?: boolean;
+    theme?: Theme;
     isMirrored?: boolean;
     bgMode?: string;
     bgColor?: string;
@@ -35,7 +36,6 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
 }
 
 export const TeaserSlice: React.FC<TeaserSliceType> = ({
