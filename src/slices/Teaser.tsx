@@ -111,6 +111,29 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                     alt: image?.meta?.altText || '',
                     description: description,
                 }}
+                primaryAction={
+                    primaryAction && isValidAction(primary_label, primary_link)
+                        ? (isInverted: boolean) =>
+                              primaryAction({
+                                  isInverted,
+                                  label: primary_label,
+                                  href: primary_link || '',
+                                  isExternal: isExternalLink(primary_link),
+                              })
+                        : undefined
+                }
+                secondaryAction={
+                    secondaryAction &&
+                    isValidAction(secondary_label, secondary_link)
+                        ? (isInverted: boolean) =>
+                              secondaryAction({
+                                  isInverted,
+                                  label: secondary_label,
+                                  href: secondary_link || '',
+                                  isExternal: isExternalLink(secondary_link),
+                              })
+                        : undefined
+                }
             />
         );
     } else {
@@ -125,6 +148,29 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                     description: description,
                 }}
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
+                primaryAction={
+                    primaryAction && isValidAction(primary_label, primary_link)
+                        ? (isInverted: boolean) =>
+                              primaryAction({
+                                  isInverted,
+                                  label: primary_label,
+                                  href: primary_link || '',
+                                  isExternal: isExternalLink(primary_link),
+                              })
+                        : undefined
+                }
+                secondaryAction={
+                    secondaryAction &&
+                    isValidAction(secondary_label, secondary_link)
+                        ? (isInverted: boolean) =>
+                              secondaryAction({
+                                  isInverted,
+                                  label: secondary_label,
+                                  href: secondary_link || '',
+                                  isExternal: isExternalLink(secondary_link),
+                              })
+                        : undefined
+                }
             />
         );
     }
