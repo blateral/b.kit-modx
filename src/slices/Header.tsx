@@ -5,6 +5,7 @@ import {
     SizeSelect,
     isExternalLink,
     isValidAction,
+    endpoint,
 } from 'utils/modx';
 
 import { Header, Theme } from '@blateral/b.kit';
@@ -111,7 +112,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
         <Header
             theme={theme}
             size={size || 'full'}
-            videoUrl={videoUrl || ''}
+            videoUrl={videoUrl ? `${endpoint}${videoUrl}` : ''}
             images={headerImageMap}
             title={intro?.title || ''}
             intro={intro}
