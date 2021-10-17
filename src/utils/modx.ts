@@ -1,7 +1,10 @@
 import {
     NewsAuthorCardSliceType,
     NewsFooterSliceType,
+    NumberListSliceType,
     ParallaxBackgroundSliceType,
+    SocialNavSliceType,
+    TimelineSliceType,
 } from 'index';
 
 import { AccordionSliceType } from '../slices/Accordion';
@@ -117,7 +120,10 @@ export type PageContent =
     | TeaserSliceType
     | VideoSliceType
     | ParallaxBackgroundSliceType
-    | QuickNavSliceType;
+    | QuickNavSliceType
+    | TimelineSliceType
+    | SocialNavSliceType
+    | NumberListSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType
