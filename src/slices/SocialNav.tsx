@@ -40,19 +40,23 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
         <SocialNav
             theme={sliceTheme}
             bgMode={bgMode as 'inverted' | 'full' | undefined}
-            socials={items
-                .filter((item) => item?.icon)
-                .map((item) => {
-                    const iconpath = item?.icon?.match(svgRegex)
-                        ? `${endpoint}${item.icon}`
-                        : item.icon;
+            socials={
+                items
+                    ? items
+                          .filter((item) => item?.icon)
+                          .map((item) => {
+                              const iconpath = item?.icon?.match(svgRegex)
+                                  ? `${endpoint}${item.icon}`
+                                  : item.icon;
 
-                    console.log(iconpath);
-                    return {
-                        href: item.href || '',
-                        icon: <img src={iconpath}></img>,
-                    };
-                })}
+                              console.log(iconpath);
+                              return {
+                                  href: item.href || '',
+                                  icon: <img src={iconpath}></img>,
+                              };
+                          })
+                    : []
+            }
         />
     );
 };
