@@ -1,4 +1,5 @@
 import { assignTo, Teaser, TeaserWide, Theme } from '@blateral/b.kit';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
 import {
     isBgModeString,
@@ -15,7 +16,10 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     isMirrored?: boolean;
     bgMode?: string;
     bgColor?: string;
+    isWide?: boolean;
     format?: string;
+    superTitle?: string;
+    superTitleAs?: HeadlineTag;
     text?: string;
     image?: ModxImagePropsWithFormat;
     description?: string;
@@ -40,9 +44,13 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
 
 export const TeaserSlice: React.FC<TeaserSliceType> = ({
     isMirrored,
+    isWide,
     bgMode,
     bgColor,
     format,
+
+    superTitleAs,
+    superTitle,
     text,
     image,
     description,
@@ -57,10 +65,10 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     theme,
 }) => {
     const theImage: ModxImageProps = image && image[format || 'square'];
-    const isWide = format?.includes('landscape');
     const sharedProps = {
         isMirrored,
-
+        superTitle,
+        superTitleAs,
         text: text,
 
         primaryAction:
