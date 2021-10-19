@@ -1,13 +1,13 @@
 import React from 'react';
 import { ParallaxBackground } from '@blateral/b.kit';
-import { ModxSlice } from '../utils/modx';
+import { isNumeric, ModxSlice } from '../utils/modx';
 
 export interface ParallaxBackgroundSliceType
     extends ModxSlice<'ParallaxBackground'> {
     isActive?: boolean;
     image?: string;
     hAlign?: 'left' | 'center' | 'right';
-    contentWidth?: number;
+    contentWidth?: string;
 }
 
 export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
@@ -19,9 +19,14 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
     return (
         <ParallaxBackground
             // In %
-            contentWidth={contentWidth}
-            hAlign={hAlign}
+            contentWidth={
+                contentWidth && isNumeric(contentWidth)
+                    ? +contentWidth / 100
+                    : undefined
+            }
+            hAlign={hAlign || 'left'}
             image={image ? <img src={`${image}`} /> : false}
         />
     );
 };
+
