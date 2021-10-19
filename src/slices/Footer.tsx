@@ -1,9 +1,4 @@
-import {
-    ModxSettingsPage,
-    SocialMediaItem,
-    endpoint,
-    isExternalLink,
-} from 'utils/modx';
+import { ModxSettingsPage, SocialMediaItem, isExternalLink } from 'utils/modx';
 
 import { Footer, Theme } from '@blateral/b.kit';
 import React from 'react';
@@ -51,7 +46,7 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
             socials={mappedSocials || undefined}
             logo={{
                 img: settingsData?.logo?.footerLogo
-                    ? `${endpoint}${settingsData.logo.footerLogo}`
+                    ? `${settingsData.logo.footerLogo}`
                     : '',
                 link: logoLinkCleaned,
             }}
