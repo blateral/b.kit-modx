@@ -105,7 +105,6 @@ export const NavigationSlice: React.FC<
         pageAlias,
         socials: socialMapper && socialMapper(settingsPage?.socials),
         flyoutIsLarge: data?.flyoutMenu.isLarge,
-
         settingsData: data,
         flyoutIsInverted: data?.flyoutMenu.isInverted,
         navbarInverted: data?.navTopBar.navbarInverted,
@@ -371,6 +370,8 @@ const getPrimaryButtonOrPointer = ({
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
+        size?: 'desktop' | 'mobile';
+
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
@@ -385,10 +386,11 @@ const getPrimaryButtonOrPointer = ({
 }) => {
     if (isCta) {
         return primaryAction && isValidAction(primary_label, primary_link)
-            ? (isInverted: boolean) =>
+            ? (isInverted: boolean, size?: 'mobile' | 'desktop') =>
                   primaryAction({
                       isInverted,
                       label: primary_label,
+                      size,
                       href: primary_link || '',
                       isExternal: isExternalLink(primary_link),
                   })
@@ -425,6 +427,8 @@ const getSecondaryButtonOrPointer = ({
     secondaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
+        size?: 'desktop' | 'mobile';
+
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
@@ -439,9 +443,10 @@ const getSecondaryButtonOrPointer = ({
 }) => {
     if (isCta) {
         return secondaryAction && isValidAction(secondary_label, secondary_link)
-            ? (isInverted: boolean) =>
+            ? (isInverted: boolean, size?: 'mobile' | 'desktop') =>
                   secondaryAction({
                       isInverted,
+                      size,
                       label: secondary_label,
                       href: secondary_link || '',
                       isExternal: isExternalLink(secondary_link),
