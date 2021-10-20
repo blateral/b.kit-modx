@@ -200,16 +200,39 @@ const createMenu = ({
         itemId: '',
     };
 
+    //FIXME: Refactor this mess
+
     settingsData?.menu.menuPrimary?.find((navGroup, groupIndex) => {
         const navItems = navGroup?.items;
 
-        const navItem = navItems?.find((navItem, itemIndex) => {
-            if (navItem.alias === pageAlias) {
-                activeItemIndexes.groupId = groupIndex.toString();
-                activeItemIndexes.itemId = itemIndex.toString();
-                return true;
-            } else return false;
-        });
+        let navItem;
+        if (navGroup.items.length > 0) {
+            navItem = navItems?.find((navItem, itemIndex) => {
+                console.log('PAGE ALIAS', pageAlias, ' NAV ITEM ', navItem);
+
+                if (navItem.alias === pageAlias) {
+                    activeItemIndexes.groupId = groupIndex.toString();
+                    activeItemIndexes.itemId = itemIndex.toString();
+                    return true;
+                } else return false;
+            });
+        } else if (navGroup.items.length === 0) {
+            navGroup.items.push({
+                id: navGroup.id,
+                label: navGroup.label,
+                link: navGroup.link,
+                alias: navGroup.alias,
+                items: [],
+            });
+
+            navItem = navItems?.find((navItem, itemIndex) => {
+                if (navItem.alias === pageAlias) {
+                    activeItemIndexes.groupId = groupIndex.toString();
+                    activeItemIndexes.itemId = itemIndex.toString();
+                    return true;
+                } else return false;
+            });
+        }
 
         return !!navItem;
     });
@@ -217,6 +240,28 @@ const createMenu = ({
     const primaryMenu: NavGroup[] | undefined =
         settingsData?.menu.menuPrimary?.map(
             (navItem: ModxNavItem, index: number) => {
+                if (navItem?.items?.length === 0) {
+                    return {
+                        id: `navGroup${index}`,
+                        label: '',
+                        isSmall: navItem?.isSmall || false,
+                        name: navItem?.navGroupLabel || '',
+
+                        items: [
+                            {
+                                id: `nav-link${index}`,
+                                label: navItem.label || '',
+
+                                link: {
+                                    href: navItem.link || '',
+                                },
+                                onClick: (id: string, fullId: string) =>
+                                    console.log(fullId),
+                            },
+                        ],
+                    } as NavGroup;
+                }
+
                 return {
                     id: `navGroup${index}`,
                     label: navItem?.label || '',
@@ -307,6 +352,7 @@ const createMenu = ({
                 return undefined;
             }
         },
+
         activeNavItem: `navGroup${activeItemIndexes.groupId}.nav-link${activeItemIndexes.itemId}`,
         navItems: primaryMenu,
     };
