@@ -7,7 +7,7 @@ import {
     ModxImageProps,
     isExternalLink,
     isValidAction,
-} from 'index';
+} from 'utils/modx';
 
 export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
     isActive?: boolean;
