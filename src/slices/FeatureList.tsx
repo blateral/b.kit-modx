@@ -16,7 +16,6 @@ interface FeatureItemType {
     text?: string;
 
     description?: string;
-    intro?: string;
     image: Omit<ModxImagePropsWithFormat, 'landscape-wide'>;
 
     primary_link?: string;
@@ -109,7 +108,6 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
                 title,
                 text,
                 description,
-                intro,
                 image,
                 primary_label,
                 primary_link,
@@ -125,7 +123,6 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
                     title: title,
                     text: text,
                     description: description,
-                    intro: intro,
                     image: {
                         ...image[imageFormat],
                         small: image[imageFormat]?.small || '',
