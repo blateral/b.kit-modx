@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { assignTo, FlyToIcon, Map, Theme } from '@blateral/b.kit/lib';
-import { endpoint, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
+import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
 interface MapLocationItems {
     marker?: string;
@@ -166,9 +166,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
                         anchor: iconSettings?.anchor || [10, 28],
                         sizeActive: iconSettings?.sizeActive || [50, 70],
                         anchorActive: iconSettings?.anchorActive || [25, 70],
-                        url: location.marker
-                            ? `${endpoint}${location.marker}`
-                            : '',
+                        url: location.marker ? `${location.marker}` : '',
                     },
                 };
             })}

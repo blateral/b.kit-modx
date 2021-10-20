@@ -105,7 +105,6 @@ export const NavigationSlice: React.FC<
         pageAlias,
         socials: socialMapper && socialMapper(settingsPage?.socials),
         flyoutIsLarge: data?.flyoutMenu.isLarge,
-
         settingsData: data,
         flyoutIsInverted: data?.flyoutMenu.isInverted,
         navbarInverted: data?.navTopBar.navbarInverted,
@@ -200,16 +199,39 @@ const createMenu = ({
         itemId: '',
     };
 
+    //FIXME: Refactor this mess
+
     settingsData?.menu.menuPrimary?.find((navGroup, groupIndex) => {
         const navItems = navGroup?.items;
 
-        const navItem = navItems?.find((navItem, itemIndex) => {
-            if (navItem.alias === pageAlias) {
-                activeItemIndexes.groupId = groupIndex.toString();
-                activeItemIndexes.itemId = itemIndex.toString();
-                return true;
-            } else return false;
-        });
+        let navItem;
+        if (navGroup.items.length > 0) {
+            navItem = navItems?.find((navItem, itemIndex) => {
+                console.log('PAGE ALIAS', pageAlias, ' NAV ITEM ', navItem);
+
+                if (navItem.alias === pageAlias) {
+                    activeItemIndexes.groupId = groupIndex.toString();
+                    activeItemIndexes.itemId = itemIndex.toString();
+                    return true;
+                } else return false;
+            });
+        } else if (navGroup.items.length === 0) {
+            navGroup.items.push({
+                id: navGroup.id,
+                label: navGroup.label,
+                link: navGroup.link,
+                alias: navGroup.alias,
+                items: [],
+            });
+
+            navItem = navItems?.find((navItem, itemIndex) => {
+                if (navItem.alias === pageAlias) {
+                    activeItemIndexes.groupId = groupIndex.toString();
+                    activeItemIndexes.itemId = itemIndex.toString();
+                    return true;
+                } else return false;
+            });
+        }
 
         return !!navItem;
     });
@@ -217,6 +239,28 @@ const createMenu = ({
     const primaryMenu: NavGroup[] | undefined =
         settingsData?.menu.menuPrimary?.map(
             (navItem: ModxNavItem, index: number) => {
+                if (navItem?.items?.length === 0) {
+                    return {
+                        id: `navGroup${index}`,
+                        label: '',
+                        isSmall: navItem?.isSmall || false,
+                        name: navItem?.navGroupLabel || '',
+
+                        items: [
+                            {
+                                id: `nav-link${index}`,
+                                label: navItem.label || '',
+
+                                link: {
+                                    href: navItem.link || '',
+                                },
+                                onClick: (id: string, fullId: string) =>
+                                    console.log(fullId),
+                            },
+                        ],
+                    } as NavGroup;
+                }
+
                 return {
                     id: `navGroup${index}`,
                     label: navItem?.label || '',
@@ -282,7 +326,7 @@ const createMenu = ({
                 primaryActionPointer: nav_primaryPointerFn,
             });
             if (primary) {
-                return primary(!!isInverted);
+                return primary(!!isInverted, size);
             } else {
                 return undefined;
             }
@@ -302,11 +346,12 @@ const createMenu = ({
                 secondaryActionPointer: nav_secondaryPointerFn,
             });
             if (secondary) {
-                return secondary(!!isInverted);
+                return secondary(!!isInverted, size);
             } else {
                 return undefined;
             }
         },
+
         activeNavItem: `navGroup${activeItemIndexes.groupId}.nav-link${activeItemIndexes.itemId}`,
         navItems: primaryMenu,
     };
@@ -325,6 +370,8 @@ const getPrimaryButtonOrPointer = ({
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
+        size?: 'desktop' | 'mobile';
+
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
@@ -339,10 +386,11 @@ const getPrimaryButtonOrPointer = ({
 }) => {
     if (isCta) {
         return primaryAction && isValidAction(primary_label, primary_link)
-            ? (isInverted: boolean) =>
+            ? (isInverted: boolean, size?: 'mobile' | 'desktop') =>
                   primaryAction({
                       isInverted,
                       label: primary_label,
+                      size,
                       href: primary_link || '',
                       isExternal: isExternalLink(primary_link),
                   })
@@ -379,6 +427,8 @@ const getSecondaryButtonOrPointer = ({
     secondaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
+        size?: 'desktop' | 'mobile';
+
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
@@ -393,9 +443,10 @@ const getSecondaryButtonOrPointer = ({
 }) => {
     if (isCta) {
         return secondaryAction && isValidAction(secondary_label, secondary_link)
-            ? (isInverted: boolean) =>
+            ? (isInverted: boolean, size?: 'mobile' | 'desktop') =>
                   secondaryAction({
                       isInverted,
+                      size,
                       label: secondary_label,
                       href: secondary_link || '',
                       isExternal: isExternalLink(secondary_link),
