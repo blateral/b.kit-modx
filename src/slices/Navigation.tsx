@@ -326,7 +326,7 @@ const createMenu = ({
                 primaryActionPointer: nav_primaryPointerFn,
             });
             if (primary) {
-                return primary(!!isInverted);
+                return primary(!!isInverted, size);
             } else {
                 return undefined;
             }
@@ -346,7 +346,7 @@ const createMenu = ({
                 secondaryActionPointer: nav_secondaryPointerFn,
             });
             if (secondary) {
-                return secondary(!!isInverted);
+                return secondary(!!isInverted, size);
             } else {
                 return undefined;
             }
