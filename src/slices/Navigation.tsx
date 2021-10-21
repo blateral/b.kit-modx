@@ -307,6 +307,7 @@ const createMenu = ({
             icon: logo && logo.icon,
             link: logoLinkCleaned,
             pageTopScale: logo && logo.pageTopScale,
+            scrolledScale: logo && logo.scrolledScale,
         },
         socials: socials,
         search: search,
