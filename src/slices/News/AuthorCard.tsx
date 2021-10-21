@@ -5,32 +5,33 @@ import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 export interface NewsAuthorCardSliceType extends ModxSlice<'NewsAuthor'> {
     isActive?: boolean;
     bgMode?: BgMode;
-    author_name?: string;
-    author_image?: Pick<ModxImageProps, 'small' | 'meta'>;
-    author_label?: string;
+    authorName?: string;
+    authorImage?: Pick<ModxImageProps, 'small' | 'meta'>;
+    authorLabel?: string;
 }
 
 export const NewsAuthorCardSlice: React.FC<NewsAuthorCardSliceType> = ({
     bgMode,
-    author_name,
-    author_image,
-    author_label,
+    authorName,
+    authorImage,
+    authorLabel,
 }) => {
+    if (!authorName) return null;
     const mappedImage =
         {
-            ...author_image,
-            small: author_image?.small || '',
-            alt: author_image?.meta?.altText || '',
+            ...authorImage,
+            small: authorImage?.small || '',
+            alt: authorImage?.meta?.altText || '',
         } || undefined;
 
     return (
         <NewsAuthorCard
-            author={author_name}
+            author={authorName}
             avatar={mappedImage && { src: mappedImage.small || '' }}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
-            label={author_label || 'Geschrieben von'}
+            label={authorLabel || 'Geschrieben von'}
         />
     );
 };

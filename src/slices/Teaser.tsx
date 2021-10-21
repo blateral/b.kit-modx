@@ -18,6 +18,8 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     bgColor?: string;
     isWide?: boolean;
     format?: string;
+    title?: string;
+    titleAs?: HeadlineTag;
     superTitle?: string;
     superTitleAs?: HeadlineTag;
     text?: string;
@@ -49,6 +51,8 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     bgColor,
     format,
 
+    title,
+    titleAs,
     superTitleAs,
     superTitle,
     text,
@@ -67,6 +71,8 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     const theImage: ModxImageProps = image && image[format || 'square'];
     const sharedProps = {
         isMirrored,
+        title,
+        titleAs,
         superTitle,
         superTitleAs,
         text: text,

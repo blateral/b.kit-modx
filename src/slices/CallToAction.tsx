@@ -155,8 +155,8 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
             secondaryAction={
                 secondaryAction &&
                 isValidAction(
-                    mainColumn?.primary_label,
-                    mainColumn?.primary_link
+                    mainColumn?.secondary_label,
+                    mainColumn?.secondary_link
                 )
                     ? (isInverted: boolean) =>
                           secondaryAction({
