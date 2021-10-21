@@ -82,11 +82,11 @@ function mapNewsListData(
             link: { href: 'news/' + news.action.link, isExternal: false },
 
             secondaryAction:
-                cardAction && news.action.label && news.action.link
+                cardAction && news.action.link
                     ? (isInverted: boolean) =>
                           cardAction({
                               isInverted,
-                              label: 'Beitrag lesen',
+                              label: news.readMeLabel || 'Beitrag lesen',
                               href: 'news/' + news.action.link,
                               isExternal: false,
                           })
