@@ -5,10 +5,10 @@ import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
 export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
     isActive?: boolean;
-    news_heading?: string;
-    news_intro?: string;
-    news_image?: ModxImageProps;
-    author_name?: string;
+    newsHeading?: string;
+    newsIntro?: string;
+    newsImage?: ModxImageProps;
+    authorName?: string;
     publicationDate?: string;
     bgMode?: BgMode;
     primary_link?: string;
@@ -20,28 +20,28 @@ export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
 
 export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     bgMode,
-    author_name,
+    authorName,
     publicationDate,
-    news_image,
-    news_intro,
-    news_heading,
+    newsImage,
+    newsIntro,
+    newsHeading,
 
     tags,
 }) => {
     const preppedPubDate = generatePublicationDateObject(publicationDate);
-    const mappedImage = news_image
+    const mappedImage = newsImage
         ? {
-              ...news_image,
-              small: news_image?.small || '',
-              alt: news_image?.meta?.altText || '',
+              ...newsImage,
+              small: newsImage?.small || '',
+              alt: newsImage?.meta?.altText || '',
           }
         : undefined;
 
     const tagsArray = tags?.split(',');
     return (
         <NewsIntro
-            title={news_heading}
-            text={news_intro}
+            title={newsHeading}
+            text={newsIntro}
             image={mappedImage}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
@@ -51,7 +51,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
                 window.location.href = `/news?selected=${encodeURI(tag)}`;
             }}
             meta={{
-                author: author_name || '',
+                author: authorName || '',
                 date: preppedPubDate,
             }}
         />
