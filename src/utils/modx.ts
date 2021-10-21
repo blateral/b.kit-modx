@@ -277,6 +277,7 @@ export interface ModxNewsTeaser {
     alias?: string;
     publishedOn?: string;
     tags?: string;
+    readMeLabel?: string;
     author?: {
         name?: string;
         image?: {

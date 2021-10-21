@@ -193,6 +193,7 @@ const itemsToFormFields = (
 const generateFormFieldMap =
     (onValidate?: (value: unknown, config: FormField) => Promise<string>) =>
     (accumulator: Record<string, any>, formfield: FormField) => {
+
         if (isField(formfield)) {
             const field = createField(formfield, onValidate);
             return { ...accumulator, ...field };
