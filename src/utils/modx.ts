@@ -242,12 +242,12 @@ export interface ModxSettingsPage extends ModxPage {
 }
 
 export interface ModxNewsPage extends ModxDocument {
-    news_tags?: string;
-    news_image?: ModxImageProps;
-    news_image_preview?: ModxImageProps;
+    tags?: string;
+    newsImage?: ModxImageProps;
+    newsImagePreview?: ModxImageProps;
 
-    news_heading?: string;
-    news_intro?: string;
+    newsHeading?: string;
+    newsIntro?: string;
     news_footer_inverted?: boolean;
     news_footer_background?: boolean;
 
