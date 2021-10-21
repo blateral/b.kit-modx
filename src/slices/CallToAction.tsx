@@ -130,7 +130,9 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                 description: mainColumn?.contact?.description || '',
             }}
             badge={
-                mainColumn?.badge ? <img src={mainColumn.badge.small} /> : null
+                mainColumn?.badge?.small ? (
+                    <img src={mainColumn.badge.small} />
+                ) : null
             }
             hasNewsletter={mainColumn?.hasNewsletter}
             primaryAction={
