@@ -32,7 +32,7 @@ export interface FormField {
 export interface Field extends FormField {
     type: 'Field';
     inputType?: 'text' | 'number' | 'email' | 'password' | 'tel';
-    initalValue?: string;
+    initialValue?: string;
     placeholder?: string;
     info?: string;
     icon?: { src: string; alt?: string };
@@ -42,7 +42,7 @@ export interface Field extends FormField {
 
 export interface Area extends FormField {
     type: 'Area';
-    initalValue?: string;
+    initialValue?: string;
     placeholder?: string;
     info?: string;
     validate?: (value: string, config: Area) => Promise<string>;
@@ -51,7 +51,7 @@ export interface Area extends FormField {
 
 export interface Select extends FormField {
     type: 'Select';
-    initalValue?: string;
+    initialValue?: string;
     placeholder?: string;
     dropdownItems: string;
     info?: string;
@@ -62,7 +62,8 @@ export interface Select extends FormField {
 
 export interface Datepicker extends FormField {
     type: 'Datepicker';
-    initialDates?: [string, string];
+    initialDate?: string;
+    initialEndDate?: string;
     placeholder?: string;
     minDate?: string;
     maxDate?: string;
@@ -70,8 +71,10 @@ export interface Datepicker extends FormField {
     info?: string;
     icon?: { src: string; alt?: string };
 
+    dateSubmitLabel?: string;
+    dateDeleteLabel?: string;
     singleDateError?: string;
-    mutliDateError?: string;
+    multiDateError?: string;
     nextCtrlUrl?: string;
     prevCtrlUrl?: string;
     validate?: (
@@ -118,18 +121,43 @@ export interface FormData {
         | [Date | null, Date | null];
 }
 
+export interface SubmitActionProps {
+    isInverted?: boolean | undefined;
+    label?: string;
+    additionalProps?: { type: 'submit'; as: 'button' | 'a' };
+    handleSubmit?: (() => Promise<any>) | undefined;
+    isDisabled?: boolean | undefined;
+}
+
+export interface DatepickerSubmitActionProps {
+    label?: string;
+    handleSubmit?:
+        | ((ev: React.SyntheticEvent<HTMLButtonElement>) => void)
+        | undefined;
+}
+
+export interface DatepickerDeleteActionProps {
+    label?: string;
+    handleReset?:
+        | ((ev: React.SyntheticEvent<HTMLButtonElement>) => void)
+        | undefined;
+}
 export interface DynamicFormSliceType
     extends ModxSlice<'DynamicForm', FormField> {
     isActive?: boolean;
     theme?: Theme;
     bgColor?: string;
     bgMode?: 'full' | 'inverted';
+    submitLabel?: string;
+    buttonAs?: 'button' | 'a';
     onSubmit?: (values: FormData) => Promise<void>;
-    submitAction?: (props: {
-        isInverted?: boolean | undefined;
-        handleSubmit?: (() => Promise<any>) | undefined;
-        isDisabled?: boolean | undefined;
-    }) => React.ReactNode;
+    submitAction?: (props: SubmitActionProps) => React.ReactNode;
+    datepickerSubmitAction?: (
+        props?: DatepickerSubmitActionProps
+    ) => React.ReactNode;
+    datepickerDeleteAction?: (
+        props: DatepickerDeleteActionProps
+    ) => React.ReactNode;
     definitions?: {
         field?: (props: FieldGenerationProps<BkitField>) => React.ReactNode;
         area?: (props: FieldGenerationProps<BkitArea>) => React.ReactNode;
@@ -149,11 +177,15 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     bgColor,
     bgMode,
     definitions,
+    submitLabel,
     onSubmit,
     submitAction,
+    datepickerSubmitAction,
+    datepickerDeleteAction,
     items,
     onValidate,
 }) => {
+    console.log(datepickerDeleteAction);
     // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
@@ -166,34 +198,80 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
         theme
     );
 
-    const formFieldsData: Record<string, BkitField | BkitArea | BkitSelect> =
-        itemsToFormFields(items, onValidate);
-
     return (
         <DynamicForm
             bgMode={bgMode}
             onSubmit={onSubmit}
-            submitAction={submitAction}
+            submitAction={createLabeledSubmitAction(submitAction, submitLabel)}
+            fields={itemsToFormFields({
+                formFields: items,
+                onValidate,
+                datepickerSubmitAction,
+                datepickerDeleteAction,
+            })}
             theme={sliceTheme}
             definitions={definitions as any}
-            fields={formFieldsData}
         />
     );
 };
 
-const itemsToFormFields = (
-    formFields?: FormField[],
-    onValidate?: (value: unknown, config: FormField) => Promise<string>
+const createLabeledSubmitAction = (
+    submitAction?: (props: SubmitActionProps) => React.ReactNode,
+    label?: string
 ) => {
+    return submitAction
+        ? ({ isInverted, isDisabled, handleSubmit }: SubmitActionProps) =>
+              submitAction({
+                  label: label || 'Submit',
+                  handleSubmit,
+                  isDisabled,
+                  isInverted,
+              })
+        : undefined;
+};
+
+const itemsToFormFields = ({
+    formFields,
+    onValidate,
+    datepickerSubmitAction,
+    datepickerDeleteAction,
+}: {
+    formFields?: FormField[];
+    onValidate?: (value: unknown, config: FormField) => Promise<string>;
+    datepickerSubmitAction?: (
+        props: DatepickerSubmitActionProps
+    ) => React.ReactNode;
+    datepickerDeleteAction?: (
+        props: DatepickerDeleteActionProps
+    ) => React.ReactNode;
+}) => {
     if (!formFields) return {};
 
-    return formFields.reduce(generateFormFieldMap(onValidate), {});
+    return formFields.reduce(
+        generateFormFieldMap({
+            onValidate,
+            datepickerSubmitAction,
+            datepickerDeleteAction,
+        }),
+        {}
+    );
 };
 
 const generateFormFieldMap =
-    (onValidate?: (value: unknown, config: FormField) => Promise<string>) =>
+    ({
+        onValidate,
+        datepickerSubmitAction,
+        datepickerDeleteAction,
+    }: {
+        onValidate?: (value: unknown, config: FormField) => Promise<string>;
+        datepickerSubmitAction?: (
+            props: DatepickerSubmitActionProps
+        ) => React.ReactNode;
+        datepickerDeleteAction?: (
+            props: DatepickerDeleteActionProps
+        ) => React.ReactNode;
+    }) =>
     (accumulator: Record<string, any>, formfield: FormField) => {
-
         if (isField(formfield)) {
             const field = createField(formfield, onValidate);
             return { ...accumulator, ...field };
@@ -208,7 +286,12 @@ const generateFormFieldMap =
         }
 
         if (isDatepicker(formfield)) {
-            const fieldGroup = createDatePicker(formfield, onValidate);
+            const fieldGroup = createDatePicker({
+                formfield,
+                onValidate,
+                datepickerSubmitAction,
+                datepickerDeleteAction,
+            });
             return { ...accumulator, ...fieldGroup };
         }
         if (isFieldGroup(formfield)) {
@@ -237,7 +320,7 @@ function createField(
         icon: formfield.icon?.src ? { src: formfield.icon?.src } : undefined,
         validate: onValidate,
         column: formfield.column,
-        initalValue: formfield.initalValue,
+        initialValue: formfield.initialValue,
         inputType: formfield.inputType,
         errorMsg: formfield.errorMsg,
     };
@@ -261,7 +344,7 @@ function createArea(
         info: formfield.info,
         validate: onValidate,
         column: formfield.column,
-        initalValue: formfield.initalValue,
+        initialValue: formfield.initialValue,
         errorMsg: formfield.errorMsg,
     };
 
@@ -284,7 +367,7 @@ function createSelect(
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        initalValue: formfield.initalValue,
+        initialValue: formfield.initialValue,
         dropdownItems: dropdownValues.map((value) => {
             return { label: value, value };
         }),
@@ -331,10 +414,21 @@ function createFieldGroup(
 }
 
 // FIXME:
-function createDatePicker(
-    formfield: Datepicker,
-    onValidate?: (value: unknown, config: FormField) => Promise<string>
-): Record<string, BkitDatepicker> | undefined {
+function createDatePicker({
+    formfield,
+    onValidate,
+    datepickerSubmitAction,
+    datepickerDeleteAction,
+}: {
+    formfield: Datepicker;
+    onValidate?: (value: unknown, config: FormField) => Promise<string>;
+    datepickerSubmitAction?: (
+        props: DatepickerSubmitActionProps
+    ) => React.ReactNode;
+    datepickerDeleteAction?: (
+        props: DatepickerDeleteActionProps
+    ) => React.ReactNode;
+}): Record<string, BkitDatepicker> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
@@ -345,22 +439,38 @@ function createDatePicker(
         info: formfield.info,
         column: formfield.column,
         validate: onValidate,
+        singleDateError: formfield.singleDateError,
+        multiDateError: formfield.multiDateError,
         icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
         initialDates: !formfield.singleSelect
             ? [
-                  formfield.initialDates
-                      ? createDateFromDateString(formfield?.initialDates[0])
-                      : new Date(),
-                  formfield.initialDates
-                      ? createDateFromDateString(formfield?.initialDates[1])
-                      : new Date(),
+                  createDateFromDateString(formfield.initialDate),
+                  createDateFromDateString(formfield.initialEndDate),
               ]
             : undefined,
-        singleSelect: formfield.singleSelect,
-        submitAction: formfield.submitAction,
-        deleteAction: formfield.deleteAction,
         minDate: createDateFromDateString(formfield?.minDate),
         maxDate: createDateFromDateString(formfield?.maxDate),
+        nextCtrlUrl: formfield.nextCtrlUrl,
+        prevCtrlUrl: formfield.prevCtrlUrl,
+        singleSelect: formfield.singleSelect,
+        submitAction:
+            datepickerSubmitAction && formfield.dateSubmitLabel
+                ? (handleClick) =>
+                      datepickerSubmitAction &&
+                      datepickerSubmitAction({
+                          handleSubmit: handleClick,
+                          label: formfield.dateSubmitLabel,
+                      })
+                : undefined,
+        datepickerDeleteAction:
+            datepickerDeleteAction && formfield.dateDeleteLabel
+                ? (handleReset) =>
+                      datepickerDeleteAction &&
+                      datepickerDeleteAction({
+                          handleReset,
+                          label: formfield.dateDeleteLabel,
+                      })
+                : undefined,
     };
 
     formFieldData[formfield.label] = formFieldValues;
@@ -371,10 +481,12 @@ function createDatePicker(
 function createDateFromDateString(datestring?: string) {
     if (!datestring) return new Date();
 
-    const dateparts = datestring.split('-');
+    const dateparts = datestring
+        .split('/')
+        .map((datepart) => datepart.replace(/^0+/, ''));
 
     try {
-        return new Date(+dateparts[0], +dateparts[1], +dateparts[2]);
+        return new Date(+dateparts[0], +dateparts[1] - 1, +dateparts[2]);
     } catch (e) {
         console.error(e);
         return new Date();
