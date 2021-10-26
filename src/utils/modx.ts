@@ -243,6 +243,7 @@ export interface ModxSettingsPage extends ModxPage {
 }
 
 export interface ModxNewsPage extends ModxDocument {
+    newsCollectionUrl?: string;
     tags?: string;
     newsImage?: ModxImageProps;
     newsImagePreview?: ModxImageProps;
@@ -269,6 +270,8 @@ export interface ModxNewsPage extends ModxDocument {
 }
 
 export interface ModxNewsData extends ModxDocument {
+    newsAlias?: string;
+    newsOverviewUrl?: string;
     newsArticles?: ModxNewsTeaser[];
 }
 export interface ModxNewsTeaser {
@@ -301,11 +304,7 @@ export interface ModxNewsTeaser {
             meta?: ModxImageMetaData;
         };
         title?: string;
-        intro?: string;
-    };
-    action: {
-        label?: string;
-        link?: string;
+        text?: string;
     };
 }
 

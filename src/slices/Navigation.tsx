@@ -192,115 +192,15 @@ const createMenu = ({
     logo,
     search,
 }: MenuSliceType): NavProps => {
-    // // return logo from prismic
-    // // const logoFull = settingsData?.logo_image_full;
-    // // const logoSmall = settingsData?.logo_image_small;
-    // // const logoFullInverted = settingsData?.logo_image_full_inverted;
-    // // const logoSmallInverted = settingsData?.logo_image_small_inverted;
-    // console.log('NAV ITEM', settingsData?.menu.menuPrimary);
-
-    const activeItemIndexes = {
-        groupId: '',
-        itemId: '',
-    };
-
-    //FIXME: Refactor this mess
-
-    settingsData?.menu.menuPrimary?.find((navGroup, groupIndex) => {
-        const navItems = navGroup?.items;
-
-        let navItem;
-        if (navGroup.items.length > 0) {
-            navItem = navItems?.find((navItem, itemIndex) => {
-                if (navItem.alias === pageAlias) {
-                    activeItemIndexes.groupId = groupIndex.toString();
-                    activeItemIndexes.itemId = itemIndex.toString();
-                    return true;
-                } else return false;
-            });
-        } else if (navGroup.items.length === 0) {
-            navGroup.items.push({
-                id: navGroup.id,
-                label: navGroup.label,
-                link: navGroup.link,
-                alias: navGroup.alias,
-                items: [],
-            });
-
-            navItem = navItems?.find((navItem, itemIndex) => {
-                if (navItem.alias === pageAlias) {
-                    activeItemIndexes.groupId = groupIndex.toString();
-                    activeItemIndexes.itemId = itemIndex.toString();
-                    return true;
-                } else return false;
-            });
-        }
-
-        return !!navItem;
-    });
+    const activeItemIndexes = getActiveNavGroupItem(
+        settingsData?.menu.menuPrimary,
+        pageAlias
+    );
 
     const primaryMenu: NavGroup[] | undefined =
-        settingsData?.menu.menuPrimary?.map(
-            (navItem: ModxNavItem, index: number) => {
-                if (navItem?.items?.length === 0) {
-                    return {
-                        id: `navGroup${index}`,
-                        label: '',
-                        isSmall: navItem?.isSmall || false,
-                        name: navItem?.navGroupLabel || '',
+        settingsData?.menu.menuPrimary?.map(mapDataToPrimaryMenuItems);
 
-                        items: [
-                            {
-                                id: `nav-link${index}`,
-                                label: navItem.label || '',
-
-                                link: {
-                                    href: navItem.link || '',
-                                },
-                                onClick: (id: string, fullId: string) =>
-                                    console.log(fullId),
-                            },
-                        ],
-                    } as NavGroup;
-                }
-
-                return {
-                    id: `navGroup${index}`,
-                    label: navItem?.label || '',
-                    isSmall: navItem?.isSmall || false,
-                    name: navItem?.navGroupLabel || '',
-
-                    items:
-                        navItem.items &&
-                        navItem.items.map(
-                            (
-                                item: Omit<ModxNavItem, 'items'>,
-                                subindex: number
-                            ) => {
-                                return {
-                                    id: `nav-link${subindex}`,
-                                    name: item?.label || '',
-                                    label: item.label || '',
-
-                                    link: {
-                                        href: item.link || '',
-                                    },
-                                    onClick: (id: string, fullId: string) =>
-                                        console.log(fullId),
-                                } as NavItem;
-                            }
-                        ),
-                } as NavGroup;
-            }
-        );
-
-    const logoLinkParsed = settingsData?.logo?.link;
-    const logoLinkCleaned =
-        logoLinkParsed && /index/.test(logoLinkParsed)
-            ? logoLinkParsed.replace('index', '')
-            : logoLinkParsed
-            ? logoLinkParsed
-            : '';
+    const logoLink = createCleanedLogoLink(settingsData?.logo?.link);
 
     return {
         isLargeMenu: flyoutIsLarge || false,
@@ -308,7 +208,7 @@ const createMenu = ({
         isMenuInverted: flyoutIsInverted,
         logo: {
             icon: logo && logo.icon,
-            link: logoLinkCleaned,
+            link: logoLink,
             pageTopScale: logo && logo.pageTopScale,
             scrolledScale: logo && logo.scrolledScale,
         },
@@ -356,7 +256,9 @@ const createMenu = ({
             }
         },
 
-        activeNavItem: `navGroup${activeItemIndexes.groupId}.nav-link${activeItemIndexes.itemId}`,
+        activeNavItem: hasActiveNavGroup(activeItemIndexes)
+            ? `navGroup${activeItemIndexes.groupId}.nav-link${activeItemIndexes.itemId}`
+            : undefined,
         navItems: primaryMenu,
     };
 };
@@ -474,24 +376,117 @@ const getSecondaryButtonOrPointer = ({
     return undefined;
 };
 
-// const logoFn = ({
-//     isInverted,
-//     size,
-//     imgUrlSmall,
-//     imgUrlSmallInverted,
-//     imgUrlFull,
-//     imgUrlFullInverted,
-// }: {
-//     isInverted: boolean;
-//     size: 'full' | 'small';
-//     imgUrlSmall: string;
-//     imgUrlSmallInverted: string;
-//     imgUrlFull: string;
-//     imgUrlFullInverted: string;
-// }) => {
-//     const url = size === 'full' ? imgUrlFull : imgUrlSmall;
-//     const invertedUrl =
-//         size === 'full' ? imgUrlFullInverted : imgUrlSmallInverted;
+const getActiveNavGroupItem = (
+    menuPrimary?: ModxNavItem[],
+    pageAlias?: string
+) => {
+    const activeItemIndexes = {
+        groupId: '',
+        itemId: '',
+    };
 
-//     return <img src={isInverted ? invertedUrl : url} />;
-// };
+    //FIXME: Refactor this mess
+
+    menuPrimary?.find((navGroup, groupIndex) => {
+        const navItems = navGroup?.items;
+
+        let navItem;
+        if (navGroup.items.length > 0) {
+            navItem = navItems?.find((navItem, itemIndex) => {
+                if (navItem.alias === pageAlias) {
+                    activeItemIndexes.groupId = groupIndex.toString();
+                    activeItemIndexes.itemId = itemIndex.toString();
+                    return true;
+                } else return false;
+            });
+        } else if (navGroup.items.length === 0) {
+            navGroup.items.push({
+                id: navGroup.id,
+                label: navGroup.label,
+                link: navGroup.link,
+                alias: navGroup.alias,
+                items: [],
+            });
+
+            navItem = navItems?.find((navItem, itemIndex) => {
+                if (navItem.alias === pageAlias) {
+                    activeItemIndexes.groupId = groupIndex.toString();
+                    activeItemIndexes.itemId = itemIndex.toString();
+                    return true;
+                } else return false;
+            });
+        }
+
+        return !!navItem;
+    });
+    return activeItemIndexes;
+};
+
+const hasActiveNavGroup = (
+    navGroupIndixes: { groupId: string; itemId: string } | null
+) => {
+    if (!navGroupIndixes) return false;
+    return (
+        'groupId' in navGroupIndixes &&
+        navGroupIndixes.groupId &&
+        'itemId' in navGroupIndixes &&
+        navGroupIndixes.itemId
+    );
+};
+
+const mapDataToPrimaryMenuItems = (navItem: ModxNavItem, index: number) => {
+    if (navItem?.items?.length === 0) {
+        return {
+            id: `navGroup${index}`,
+            label: '',
+            isSmall: navItem?.isSmall || false,
+            name: navItem?.navGroupLabel || '',
+
+            items: [
+                {
+                    id: `nav-link${index}`,
+                    label: navItem.label || '',
+
+                    link: {
+                        href: navItem.link || '',
+                    },
+                    onClick: (id: string, fullId: string) =>
+                        console.log(fullId),
+                },
+            ],
+        } as NavGroup;
+    }
+
+    return {
+        id: `navGroup${index}`,
+        label: navItem?.label || '',
+        isSmall: navItem?.isSmall || false,
+        name: navItem?.navGroupLabel || '',
+
+        items:
+            navItem.items &&
+            navItem.items.map(
+                (item: Omit<ModxNavItem, 'items'>, subindex: number) => {
+                    return {
+                        id: `nav-link${subindex}`,
+                        name: item?.label || '',
+                        label: item.label || '',
+
+                        link: {
+                            href: item.link || '',
+                        },
+                        onClick: (id: string, fullId: string) =>
+                            console.log(fullId),
+                    } as NavItem;
+                }
+            ),
+    } as NavGroup;
+};
+
+const createCleanedLogoLink = (link?: string) => {
+    return link && /index/.test(link)
+        ? link.replace('index', '')
+        : link
+        ? link
+        : '';
+};
