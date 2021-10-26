@@ -77,17 +77,17 @@ function mapNewsListData(
             image: mappedImage,
             tag: news?.tags?.split(',')[0] || '',
             publishDate: publicationDate,
-            title: news.intro?.title || '',
-            text: news.intro?.intro,
-            link: { href: 'news/' + news.action.link, isExternal: false },
+            title: news?.label || '',
+            text: news.intro?.text,
+            link: { href: 'news/' + news.link, isExternal: false },
 
             secondaryAction:
-                cardAction && news.action.link
+                cardAction && news.link
                     ? (isInverted: boolean) =>
                           cardAction({
                               isInverted,
                               label: news.readMeLabel || 'Beitrag lesen',
-                              href: 'news/' + news.action.link,
+                              href: 'news/' + news.link,
                               isExternal: false,
                           })
                     : undefined,
