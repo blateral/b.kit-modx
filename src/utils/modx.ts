@@ -171,6 +171,7 @@ export interface ModxPage extends ModxDocument {
 export interface SocialMediaItem {
     link?: string;
     icon?: Pick<ModxImageProps, 'small'>;
+    'icon-inverted'?: Pick<ModxImageProps, 'small'>;
 }
 
 export interface ModxSettingsPage extends ModxPage {
