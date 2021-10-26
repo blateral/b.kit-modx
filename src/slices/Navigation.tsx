@@ -48,7 +48,10 @@ export interface NavigationProps {
 
     activeNavItem?: string;
     navItems?: NavGroup[];
-    socialMapper?: (socials?: SocialMediaItem[]) => {
+    socialMapper?: (
+        socials?: SocialMediaItem[],
+        isInverted?: boolean
+    ) => {
         href: string;
         icon: JSX.Element;
     }[];
@@ -103,7 +106,9 @@ export const NavigationSlice: React.FC<
     const data = settingsPage;
     const menu = createMenu({
         pageAlias,
-        socials: socialMapper && socialMapper(settingsPage?.socials),
+        socials:
+            socialMapper &&
+            socialMapper(settingsPage?.socials, data?.flyoutMenu.isInverted),
         flyoutIsLarge: data?.flyoutMenu.isLarge,
         settingsData: data,
         flyoutIsInverted: data?.flyoutMenu.isInverted,
@@ -207,8 +212,6 @@ const createMenu = ({
         let navItem;
         if (navGroup.items.length > 0) {
             navItem = navItems?.find((navItem, itemIndex) => {
-                console.log('PAGE ALIAS', pageAlias, ' NAV ITEM ', navItem);
-
                 if (navItem.alias === pageAlias) {
                     activeItemIndexes.groupId = groupIndex.toString();
                     activeItemIndexes.itemId = itemIndex.toString();
