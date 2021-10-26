@@ -1,7 +1,7 @@
 import React from 'react';
 import { assignTo, Table, Theme } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
-
+import { TableProps } from '@blateral/b.kit/lib/components/sections/Table';
 
 export interface TableSliceType extends ModxSlice<'Table'> {
     isActive?: boolean;
@@ -11,7 +11,7 @@ export interface TableSliceType extends ModxSlice<'Table'> {
     tableTitle?: string;
     sliceRows?: Array<{ cols: string[] }>;
     hasFirstRowTitle?: boolean;
-
+    lastCol?: 'left' | 'right';
     primary_label?: string;
     secondary_label?: string;
     primary_link?: string;
@@ -27,6 +27,7 @@ export const TableSlice: React.FC<TableSliceType> = ({
     tableTitle,
     sliceRows,
     hasFirstRowTitle,
+    lastCol,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -43,10 +44,9 @@ export const TableSlice: React.FC<TableSliceType> = ({
     const tableItems = createTableItems(
         sliceRows,
         hasFirstRowTitle,
-        tableTitle
+        tableTitle,
+        lastCol
     );
-
-    console.log(tableItems);
 
     return (
         <Table
@@ -62,7 +62,8 @@ export const TableSlice: React.FC<TableSliceType> = ({
 function createTableItems(
     sliceRows?: Array<{ cols: string[] }>,
     hasFirstRowTitle?: boolean,
-    tableTitle?: string
+    tableTitle?: string,
+    lastCol?: 'left' | 'right'
 ) {
     const rowData = JSON.parse(JSON.stringify(sliceRows));
     let rowTitle: { cols: string[] } | undefined = undefined;
@@ -75,6 +76,7 @@ function createTableItems(
             tableTitle: tableTitle || '',
             rowTitle: hasFirstRowTitle ? rowTitle?.cols : undefined,
             row: rowData || [],
+            lastCol,
         },
-    ];
+    ] as TableProps[];
 }
