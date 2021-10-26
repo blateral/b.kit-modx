@@ -26,6 +26,7 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     secondaryAction,
     onTagClick,
 }) => {
+
     const newsListMap = mapNewsListData({
         newsCollection: items,
         cardAction: secondaryAction,

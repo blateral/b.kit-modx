@@ -1,4 +1,9 @@
-import { ModxSettingsPage, SocialMediaItem, isExternalLink } from 'utils/modx';
+import {
+    ModxSettingsPage,
+    SocialMediaItem,
+    isExternalLink,
+    endpoint,
+} from 'utils/modx';
 
 import { Footer, Theme } from '@blateral/b.kit';
 import React from 'react';
@@ -10,7 +15,10 @@ export interface FooterSliceType {
         placeholder?: string;
         buttonLabel?: string;
     }) => React.ReactNode;
-    mapSocials?: (socials: SocialMediaItem[]) => Array<{
+    mapSocials?: (
+        socials: SocialMediaItem[],
+        isInverted?: boolean
+    ) => Array<{
         href: string;
         icon: JSX.Element;
     }>;
@@ -24,11 +32,12 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
     theme,
 }) => {
     const settingsData = settingsPage;
+
     const mappedSocials =
         mapSocials &&
         settingsData &&
         settingsData.socials &&
-        mapSocials(settingsData.socials);
+        mapSocials(settingsData.socials, settingsData.footer?.isInverted);
 
     const logoLinkParsed = settingsData?.logo?.link;
 
@@ -46,7 +55,7 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
             socials={mappedSocials || undefined}
             logo={{
                 img: settingsData?.logo?.footerLogo
-                    ? `${settingsData.logo.footerLogo}`
+                    ? `${endpoint}/${settingsData.logo.footerLogo}`
                     : '',
                 link: logoLinkCleaned,
             }}
