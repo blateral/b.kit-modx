@@ -159,6 +159,8 @@ export type ModxDocument = {
 
     menuBreadcrumbs?: { link?: string; label: string }[];
     gTag?: string;
+
+    settings?: ModxSettingsPage;
 };
 
 export interface ModxPage extends ModxDocument {
