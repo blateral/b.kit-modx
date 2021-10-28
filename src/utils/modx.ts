@@ -137,6 +137,9 @@ export type NewsPageContent =
 
 export type ModxDocument = {
     id: string;
+    type: 'page' | 'settings' | 'news_page';
+    alias: string;
+
     pagetitle?: string;
     ogImage?: ModxImageProps;
     seo_description?: string;
@@ -164,8 +167,6 @@ export type ModxDocument = {
 };
 
 export interface ModxPage extends ModxDocument {
-    type: 'page' | 'settings' | 'news';
-    alias: string;
     header: HeaderSliceType;
     content: Array<PageContent>;
 }
@@ -464,7 +465,6 @@ export function isNumeric(str?: string) {
     return /^\d+$/.test(str);
 }
 
-
 export const injectNewsData = async (
     slice: NewsOverviewSliceType | NewsListSliceType
 ) => {
@@ -479,3 +479,11 @@ export const injectNewsData = async (
 
 export const getNewsCollectors = (slice: PageContent) =>
     slice.slice_type === 'NewsOverview' || slice.slice_type === 'NewsList';
+
+export const isModxPage = (pageToCheck: any): pageToCheck is ModxPage => {
+    return pageToCheck?.type === 'page';
+};
+
+export const isNewsPage = (pageToCheck: any): pageToCheck is ModxNewsPage => {
+    return pageToCheck?.type === 'news_page';
+};

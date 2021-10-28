@@ -48,7 +48,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
             }
             tags={tagsArray && tagsArray.length > 0 ? [tagsArray[0]] : []}
             onTagClick={(tag) => {
-                window.location.href = `/news?selected=${encodeURI(tag)}`;
+                window.location.href = `?selected=${encodeURI(tag)}`;
             }}
             meta={{
                 author: authorName || '',
