@@ -150,6 +150,7 @@ export interface DynamicFormSliceType
     bgMode?: 'full' | 'inverted';
     submitLabel?: string;
     buttonAs?: 'button' | 'a';
+    targetEmails?: string;
     onSubmit?: (values: FormData) => Promise<void>;
     submitAction?: (props: SubmitActionProps) => React.ReactNode;
     datepickerSubmitAction?: (
@@ -178,6 +179,7 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     bgMode,
     definitions,
     submitLabel,
+    targetEmails,
     onSubmit,
     submitAction,
     datepickerSubmitAction,
@@ -185,7 +187,6 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     items,
     onValidate,
 }) => {
-    console.log(datepickerDeleteAction);
     // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
@@ -209,6 +210,7 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
                 datepickerSubmitAction,
                 datepickerDeleteAction,
             })}
+            targetEmails={targetEmails}
             theme={sliceTheme}
             definitions={definitions as any}
         />
