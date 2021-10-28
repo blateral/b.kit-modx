@@ -1,6 +1,7 @@
 import React from 'react';
 import { ParallaxBackground } from '@blateral/b.kit';
-import { isNumeric, ModxSlice } from '../utils/modx';
+import { endpoint, isNumeric, ModxSlice } from '../utils/modx';
+import { isSVG } from 'utils/mapping';
 
 export interface ParallaxBackgroundSliceType
     extends ModxSlice<'ParallaxBackground'> {
@@ -25,7 +26,13 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
                     : undefined
             }
             hAlign={hAlign || 'left'}
-            image={image ? <img src={`${image}`} /> : false}
+            image={
+                image ? (
+                    <img src={`${isSVG(image) ? endpoint + image : image}`} />
+                ) : (
+                    false
+                )
+            }
         />
     );
 };
