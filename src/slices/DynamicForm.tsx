@@ -462,7 +462,7 @@ function createDatePicker({
                           label: formfield.dateSubmitLabel,
                       })
                 : undefined,
-        datepickerDeleteAction:
+        deleteAction:
             datepickerDeleteAction && formfield.dateDeleteLabel
                 ? (handleReset) =>
                       datepickerDeleteAction &&

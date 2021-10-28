@@ -87,11 +87,11 @@ export interface NavigationProps {
 }
 
 export const NavigationSlice: React.FC<
-    NavigationProps & { pageAlias?: string; settingsPage?: ModxSettingsPage }
+    NavigationProps & { pageAlias?: string; settings?: ModxSettingsPage }
 > = ({
     pageAlias,
     socialMapper,
-    settingsPage,
+    settings,
     logo,
     background,
     primaryCta,
@@ -103,12 +103,12 @@ export const NavigationSlice: React.FC<
     theme,
     ...rest
 }) => {
-    const data = settingsPage;
+    const data = settings;
     const menu = createMenu({
         pageAlias,
         socials:
             socialMapper &&
-            socialMapper(settingsPage?.socials, data?.flyoutMenu.isInverted),
+            socialMapper(data?.socials, data?.flyoutMenu.isInverted),
         flyoutIsLarge: data?.flyoutMenu.isLarge,
         settingsData: data,
         flyoutIsInverted: data?.flyoutMenu.isInverted,

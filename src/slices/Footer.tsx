@@ -9,7 +9,7 @@ import { Footer, Theme } from '@blateral/b.kit';
 import React from 'react';
 
 export interface FooterSliceType {
-    settingsPage?: ModxSettingsPage;
+    settings?: ModxSettingsPage;
     injectForm?: (props: {
         isInverted?: boolean;
         placeholder?: string;
@@ -26,12 +26,12 @@ export interface FooterSliceType {
 }
 
 export const FooterSlice: React.FC<FooterSliceType> = ({
-    settingsPage,
+    settings,
     injectForm,
     mapSocials,
     theme,
 }) => {
-    const settingsData = settingsPage;
+    const settingsData = settings;
 
     const mappedSocials =
         mapSocials &&
