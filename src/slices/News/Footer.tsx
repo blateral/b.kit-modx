@@ -7,6 +7,7 @@ export interface NewsFooterSliceType
     isActive?: boolean;
     isInverted?: boolean;
     newsFooterBackground?: boolean;
+    pageAlias?: string;
 
     // helpers to define component elements outside of slice
     secondaryAction?: (props: {
@@ -21,14 +22,16 @@ export interface NewsFooterSliceType
 
 export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     isInverted,
+    pageAlias,
     newsFooterBackground,
     items,
     secondaryAction,
     onTagClick,
 }) => {
+    const newsWithoutSelf = filterSelfFromNewsCollection(items, pageAlias);
 
     const newsListMap = mapNewsListData({
-        newsCollection: items,
+        newsCollection: newsWithoutSelf,
         cardAction: secondaryAction,
         onTagClick,
     });
@@ -92,7 +95,7 @@ function mapNewsListData({
                           cardAction({
                               isInverted,
                               label: news.readMeLabel || 'Beitrag lesen',
-                              href: 'news/' + news.link,
+                              href: news.link,
                               isExternal: false,
                           })
                     : undefined,
@@ -137,3 +140,13 @@ function generatePublicationDateObject(publication_date?: string) {
         return undefined;
     }
 }
+
+const filterSelfFromNewsCollection = (
+    items: ModxNewsTeaser[],
+    pageAlias?: string
+) => {
+    return items.filter(
+        (item) =>
+            !pageAlias?.includes(item?.alias || 'HolymolyhumbugToasterino')
+    );
+};
