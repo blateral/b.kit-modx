@@ -95,7 +95,7 @@ function mapNewsListData({
                           cardAction({
                               isInverted,
                               label: news.readMeLabel || 'Beitrag lesen',
-                              href: 'news/' + news.link,
+                              href: news.link,
                               isExternal: false,
                           })
                     : undefined,
