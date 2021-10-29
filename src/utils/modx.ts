@@ -3,6 +3,7 @@ import {
     NewsFooterSliceType,
     NumberListSliceType,
     ParallaxBackgroundSliceType,
+    PriceListSliceType,
     SocialNavSliceType,
     TimelineSliceType,
 } from 'index';
@@ -120,6 +121,7 @@ export type PageContent =
     | TeaserSliceType
     | VideoSliceType
     | ParallaxBackgroundSliceType
+    | PriceListSliceType
     | QuickNavSliceType
     | TimelineSliceType
     | SocialNavSliceType
