@@ -107,16 +107,7 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
             //               })
             //         : undefined
             // }
-            //FIXME:
-            // newsFormSecondary={
-            //     newsForm
-            //         ? (isInverted) =>
-            //               newsForm({
-            //                   isInverted,
-            //                   placeholder: secondaryColumn?.newsPlaceholder,
-            //               })
-            //         : undefined
-            // }
+
             superTitleAs={(superTitleAs as HeadlineTag) || 'div'}
             titleAs={(titleAs as HeadlineTag) || 'div'}
             bgMode={
@@ -163,56 +154,6 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                           })
                     : undefined
             }
-            //FIXME:
-            // column={
-            //     secondaryColumn?.title ||
-            //     secondaryColumn?.superTitle ||
-            //     secondaryColumn?.text
-            //         ? {
-            //               hasNewsletter: secondaryColumn.hasNewsletter,
-            //               title: secondaryColumn?.title,
-            //               superTitle: secondaryColumn?.superTitle,
-            //               text: secondaryColumn?.text,
-            //               primaryAction:
-            //                   primaryAction &&
-            //                   isValidAction(
-            //                       secondaryColumn?.primary_label,
-            //                       secondaryColumn?.primary_link
-            //                   )
-            //                       ? (isInverted: boolean) =>
-            //                             primaryAction({
-            //                                 isInverted,
-            //                                 label: secondaryColumn?.primary_label,
-            //                                 href:
-            //                                     secondaryColumn?.primary_link ||
-            //                                     '',
-            //                                 isExternal: isExternalLink(
-            //                                     secondaryColumn?.primary_link
-            //                                 ),
-            //                             })
-            //                       : undefined,
-
-            //               secondaryAction:
-            //                   secondaryAction &&
-            //                   isValidAction(
-            //                       secondaryColumn?.secondary_label,
-            //                       secondaryColumn?.secondary_link
-            //                   )
-            //                       ? (isInverted: boolean) =>
-            //                             secondaryAction({
-            //                                 isInverted,
-            //                                 label: secondaryColumn?.secondary_label,
-            //                                 href:
-            //                                     secondaryColumn?.secondary_link ||
-            //                                     '',
-            //                                 isExternal: isExternalLink(
-            //                                     secondaryColumn?.secondary_link
-            //                                 ),
-            //                             })
-            //                       : undefined,
-            //           }
-            //         : undefined
-            // }
         />
     );
 };
