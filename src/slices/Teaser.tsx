@@ -117,12 +117,16 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                 {...sharedProps}
                 theme={sliceTheme}
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
-                image={{
-                    ...theImage,
-                    small: theImage.small || '',
-                    alt: image?.meta?.altText || '',
-                    description: description,
-                }}
+                image={
+                    theImage?.small
+                        ? {
+                              ...theImage,
+                              small: theImage?.small || '',
+                              alt: image?.meta?.altText || '',
+                              description: description,
+                          }
+                        : undefined
+                }
                 primaryAction={
                     primaryAction && isValidAction(primary_label, primary_link)
                         ? (isInverted: boolean) =>
