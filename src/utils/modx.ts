@@ -3,6 +3,7 @@ import {
     NewsFooterSliceType,
     NumberListSliceType,
     ParallaxBackgroundSliceType,
+    PriceListSliceType,
     SocialNavSliceType,
     TimelineSliceType,
 } from 'index';
@@ -36,6 +37,7 @@ import { TeaserSliceType } from '../slices/Teaser';
 import { VideoSliceType } from '../slices/Video';
 import { SocialWallSliceType } from 'slices/SocialWall';
 import { DynamicFormSliceType } from 'slices/DynamicForm';
+import { CallToActionDoubleSliceType } from 'slices/CallToActionDouble';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -98,13 +100,14 @@ export interface SitemapItem {
 export type PageContent =
     | AccordionSliceType
     | ArticleSliceType
+    | CallToActionDoubleSliceType
     | CallToActionSliceType
     | ComparisonSliderSliceType
     | CrossPromotionListSliceType
+    | DynamicFormSliceType
     | FactGridSliceType
     | FactListSliceType
     | FeatureListSliceType
-    | DynamicFormSliceType
     | FormSliceType
     | GallerySliceType
     | HeaderSliceType
@@ -113,17 +116,18 @@ export type PageContent =
     | MapSliceType
     | NewsListSliceType
     | NewsOverviewSliceType
+    | NumberListSliceType
+    | ParallaxBackgroundSliceType
     | PosterSliceType
+    | PriceListSliceType
     | QuickNavSliceType
+    | QuickNavSliceType
+    | SocialNavSliceType
     | SocialWallSliceType
     | TableSliceType
     | TeaserSliceType
-    | VideoSliceType
-    | ParallaxBackgroundSliceType
-    | QuickNavSliceType
     | TimelineSliceType
-    | SocialNavSliceType
-    | NumberListSliceType;
+    | VideoSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType
