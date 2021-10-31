@@ -60,7 +60,7 @@ export interface CallToActionDoubleSliceType
     }) => React.ReactNode;
 }
 
-export const CallToActionSlice: React.FC<CallToActionDoubleSliceType> = ({
+export const CallToActionDoubleSlice: React.FC<CallToActionDoubleSliceType> = ({
     bgMode,
     title,
     titleAs,
