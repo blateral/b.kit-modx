@@ -15,6 +15,7 @@ export interface PosterSliceType extends ModxSlice<'Poster'> {
     isActive?: boolean;
     isInverted?: boolean;
     image?: ModxImageProps;
+    hasWrapper?: boolean;
     superTitle?: string;
     superTitleAs?: HeadlineTag;
     title?: string;
@@ -51,7 +52,7 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
     secondary_label,
     primary_link,
     secondary_link,
-
+    hasWrapper,
     primaryAction,
     secondaryAction,
     theme,
@@ -59,6 +60,7 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
     return (
         <Poster
             theme={theme}
+            hasWrapper={hasWrapper}
             image={mapImageToComponentData(image)}
             title={title}
             titleAs={
