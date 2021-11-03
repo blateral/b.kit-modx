@@ -116,16 +116,20 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
             title={title}
             superTitle={superTitle}
             text={text}
-            contact={{
-                avatar: contact?.avatar?.src
+            contact={
+                contact?.avatar?.src
                     ? {
-                          src: contact?.avatar?.src || '',
-                          alt: contact?.avatar?.meta?.altText || '',
-                      }
-                    : undefined,
+                          avatar: contact?.avatar?.src
+                              ? {
+                                    src: contact?.avatar?.src || '',
+                                    alt: contact?.avatar?.meta?.altText || '',
+                                }
+                              : undefined,
 
-                description: contact?.description || '',
-            }}
+                          description: contact?.description || '',
+                      }
+                    : undefined
+            }
             badge={
                 badge?.src ? (
                     <img src={badge.src} alt={badge.meta?.altText || ''} />
