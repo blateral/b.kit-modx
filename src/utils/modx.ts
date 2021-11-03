@@ -451,7 +451,7 @@ export function isHeadlineTag(tagString?: string): tagString is HeadlineTag {
 }
 
 export const isValidAction = (label?: string, link?: string) => {
-    return label && link;
+    return !!(label && link);
 };
 
 export const isExternalLink = (link?: string) => {

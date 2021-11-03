@@ -92,29 +92,32 @@ const createCPromoList = ({
     theme,
 }: CrossPromotionListSliceType) => {
     const promoItems: Array<CrossPromotionItems> = items;
-    const itemCount = promoItems.length;
     const isImagesMirrored =
         isMirrored || imageFormat === 'gallery-triple-right' ? true : false;
-    const mapPromotionItem = (item: CrossPromotionItems, index: number) => {
-        const isFull = itemCount === 1 || imageFormat === 'landscape-wide';
-        if (isFull) imageFormat = 'landscape-wide';
 
-        if (imageFormat === 'gallery-triple-right') {
-            return mapTripleImageRight(item, index);
-        }
-        if (imageFormat === 'gallery-triple-left') {
-            return mapTripleImageLeft(item, index);
-        }
+    let mainItems: PromotionCardProps[] | undefined = [];
+    let asideItems: PromotionCardProps[] | undefined = [];
 
-        return mapNonTripleGalleryImage(item, imageFormat, isFull);
-    };
+    const isFull = items?.length === 1 || imageFormat === 'landscape-wide';
+    if (isFull) imageFormat = 'landscape-wide';
 
-    const mainItems = promoItems
-        .map(mapPromotionItem)
-        .filter((item) => item.isMain);
-    const asideItems = promoItems
-        .map(mapPromotionItem)
-        .filter((item) => !item.isMain);
+    if (imageFormat === 'gallery-triple-right') {
+        const allImages = promoItems.map(mapTripleImageRight);
+        mainItems = allImages.filter((item) => item.isMain);
+        asideItems = allImages.filter((item) => !item.isMain);
+    } else if (imageFormat === 'gallery-triple-left') {
+        const allImages = promoItems.map(mapTripleImageLeft);
+        console.log('allImages', allImages);
+        mainItems = allImages.filter((item) => item.isMain);
+        asideItems = allImages.filter((item) => !item.isMain);
+    } else {
+        const allImages = items.map((image, index, array) =>
+            mapNonTripleGalleryImage(image, index, array, imageFormat, isFull)
+        );
+
+        mainItems = allImages.filter((image, index) => index % 2 === 0);
+        asideItems = allImages.filter((image, index) => index % 2 !== 0);
+    }
 
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -134,7 +137,7 @@ const createCPromoList = ({
             isMirrored={isImagesMirrored}
             bgMode={bgMode}
             main={mainItems}
-            aside={asideItems}
+            aside={asideItems.length > 0 ? asideItems : undefined}
         />
     );
 };
@@ -333,9 +336,33 @@ function mapTripleImageRight(item: CrossPromotionItems, index: number) {
 
 const mapNonTripleGalleryImage = (
     item: CrossPromotionItems,
+    index: number,
+    array: CrossPromotionItems[],
     imageFormat: ImageFormats,
     isFull: boolean
 ) => {
+    if (array.length === 1) {
+        const mappedImage = {
+            small: item.image?.list?.['landscape-wide']?.small || '',
+            medium: item.image?.list?.['landscape-wide']?.medium,
+            large: item.image?.list['landscape-wide']?.large,
+            xlarge: item.image?.list['landscape-wide']?.xlarge,
+        };
+        return {
+            size: 'full',
+            isMain: true,
+            image: {
+                ...mappedImage,
+                alt: item.image?.meta.altText || '',
+            },
+            title: item.title,
+            href: item.link || undefined,
+        } as PromotionCardProps & {
+            isMain?: boolean;
+            size?: 'full' | 'half' | undefined;
+        };
+    }
+
     const mappedImageFormat = mapGalleryImageFormat(imageFormat);
     const mappedImage = {
         small: item.image?.list?.landscape?.small || '',
@@ -346,6 +373,7 @@ const mapNonTripleGalleryImage = (
     };
     return {
         size: isFull ? 'full' : 'half',
+        isMain: isFull,
         image: {
             ...mappedImage,
             alt: item.image?.meta.altText || '',
@@ -357,3 +385,4 @@ const mapNonTripleGalleryImage = (
         size?: 'full' | 'half' | undefined;
     };
 };
+
