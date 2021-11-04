@@ -1,7 +1,12 @@
 // import { FactList } from '@blateral/b.kit';
 import React from 'react';
 import { assignTo, FactGrid, Theme } from '@blateral/b.kit';
-import { BgMode, ModxImagePropsWithFormat, ModxSlice } from 'utils/modx';
+import {
+    BgMode,
+    endpoint,
+    ModxImagePropsWithFormat,
+    ModxSlice,
+} from 'utils/modx';
 import { isSVG } from 'utils/mapping';
 interface FactGridEntryItems {
     title?: string;
@@ -58,15 +63,38 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
                     isSVG(image?.landscape?.small) ||
                     isSVG(image?.['landscape-wide']?.xlarge);
 
+                let completeImage = image && {
+                    ...image[imageFormat || 'landscape-wide'],
+                    small: image[imageFormat || 'landscape-wide']?.small || '',
+                    coverSpace: !isSvgImage,
+                };
+
+                if (isSvgImage) {
+                    completeImage = image && {
+                        small: `${endpoint}${
+                            image[imageFormat || 'landscape-wide']?.small || ''
+                        }`,
+                        medium: `${endpoint}${
+                            image[imageFormat || 'landscape-wide']?.medium || ''
+                        }`,
+                        semilarge: `${endpoint}${
+                            image[imageFormat || 'landscape-wide']?.semilarge ||
+                            ''
+                        }`,
+                        large: `${endpoint}${
+                            image[imageFormat || 'landscape-wide']?.large || ''
+                        }`,
+                        xlarge: `${endpoint}${
+                            image[imageFormat || 'landscape-wide']?.xlarge || ''
+                        }`,
+                        coverSpace: !isSvgImage,
+                    };
+                }
+
                 return {
                     title: title,
                     text: text,
-                    image: image && {
-                        ...image[imageFormat || 'landscape-wide'],
-                        small:
-                            image[imageFormat || 'landscape-wide']?.small || '',
-                        coverSpace: !isSvgImage,
-                    },
+                    image: completeImage,
                 };
             })}
         />
