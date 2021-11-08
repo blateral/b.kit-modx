@@ -79,6 +79,8 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
     customBottomGradient?: string;
     search?: (isInverted?: boolean) => React.ReactNode;
 
+    height?: string;
+
     theme?: Theme;
 
     settingsPage?: ModxMenuItemData;
@@ -103,6 +105,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     secondaryAction,
     primaryActionPointer,
     secondaryActionPointer,
+    height,
     theme,
 }) => {
     // map header images
@@ -112,6 +115,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
         <Header
             theme={theme}
             size={size || 'full'}
+            height={height}
             videoUrl={videoUrl ? `${endpoint}${videoUrl}` : ''}
             images={headerImageMap}
             title={intro?.title || ''}
