@@ -376,6 +376,12 @@ const getSecondaryButtonOrPointer = ({
     return undefined;
 };
 
+const isNoGroupNaventry = (navGroup: ModxNavItem) =>
+    navGroup?.items?.length === 0;
+const isGroupNaventry = (navGroup: ModxNavItem) => navGroup?.items?.length > 0;
+const isActiveNaventry = (entryAlias?: string, pageAlias?: string) =>
+    entryAlias === pageAlias;
+
 const getActiveNavGroupItem = (
     menuPrimary?: ModxNavItem[],
     pageAlias?: string
@@ -391,15 +397,15 @@ const getActiveNavGroupItem = (
         const navItems = navGroup?.items;
 
         let navItem;
-        if (navGroup.items.length > 0) {
+        if (isGroupNaventry(navGroup)) {
             navItem = navItems?.find((navItem, itemIndex) => {
-                if (navItem.alias === pageAlias) {
+                if (isActiveNaventry(navItem?.alias, pageAlias)) {
                     activeItemIndexes.groupId = groupIndex.toString();
                     activeItemIndexes.itemId = itemIndex.toString();
                     return true;
                 } else return false;
             });
-        } else if (navGroup.items.length === 0) {
+        } else if (isNoGroupNaventry(navGroup)) {
             navGroup.items.push({
                 id: navGroup.id,
                 label: navGroup.label,
@@ -409,7 +415,7 @@ const getActiveNavGroupItem = (
             });
 
             navItem = navItems?.find((navItem, itemIndex) => {
-                if (navItem.alias === pageAlias) {
+                if (isActiveNaventry(navItem?.alias, pageAlias)) {
                     activeItemIndexes.groupId = groupIndex.toString();
                     activeItemIndexes.itemId = itemIndex.toString();
                     return true;
