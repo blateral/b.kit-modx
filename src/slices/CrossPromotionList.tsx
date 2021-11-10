@@ -108,7 +108,6 @@ const createCPromoList = ({
         asideItems = allImages.filter((item) => !item.isMain);
     } else if (imageFormat === 'gallery-triple-left') {
         const allImages = promoItems.map(mapTripleImageLeft);
-        console.log('allImages', allImages);
         mainItems = allImages.filter((item) => item.isMain);
         asideItems = allImages.filter((item) => !item.isMain);
     } else {
