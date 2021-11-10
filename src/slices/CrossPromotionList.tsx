@@ -45,7 +45,7 @@ export interface CrossPromotionListSliceType
     isMirrored?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
-    externalLinkIcon?: string;
+    externalLinkIcon?: React.ReactNode;
     imageFormat: ImageFormats;
     controlNext?: (props: {
         isInverted?: boolean;
