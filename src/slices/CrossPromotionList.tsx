@@ -9,6 +9,7 @@ import { PromotionCardProps } from '@blateral/b.kit/lib/components/blocks/Promot
 import React from 'react';
 import {
     BgMode,
+    isExternalLink,
     ModxImageMetaData,
     ModxImagePropsWithFormat,
     ModxSlice,
@@ -190,7 +191,13 @@ const createCPromoCarousel = ({
                 };
 
                 return {
-                    href: link || undefined,
+                    // href: link || undefined,
+                    link: link
+                        ? {
+                              href: link,
+                              isExternal: isExternalLink(link),
+                          }
+                        : undefined,
                     title: title,
                     image: {
                         ...mappedImage,
@@ -258,7 +265,13 @@ function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
                 alt: item.image?.meta.altText || '',
             },
             title: item.title,
-            href: item.link || undefined,
+            // href: item.link || undefined,
+            link: item.link
+                ? {
+                      href: item.link,
+                      isExternal: isExternalLink(item.link),
+                  }
+                : undefined,
         } as PromotionCardProps & {
             isMain?: boolean;
             size?: 'full' | 'half' | undefined;
@@ -279,7 +292,13 @@ function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
                 alt: item.image?.meta.altText || '',
             },
             title: item.title,
-            href: item.link || undefined,
+            //href: item.link || undefined,
+            link: item.link
+                ? {
+                      href: item.link,
+                      isExternal: isExternalLink(item.link),
+                  }
+                : undefined,
         } as PromotionCardProps & {
             isMain?: boolean;
             size?: 'full' | 'half' | undefined;
@@ -305,7 +324,13 @@ function mapTripleImageRight(item: CrossPromotionItems, index: number) {
                 alt: item.image?.meta.altText || '',
             },
             title: item.title,
-            href: item.link || undefined,
+            // href: item.link || undefined,
+            link: item.link
+                ? {
+                      href: item.link,
+                      isExternal: isExternalLink(item.link),
+                  }
+                : undefined,
         } as PromotionCardProps & {
             isMain?: boolean;
             size?: 'full' | 'half' | undefined;
@@ -326,7 +351,13 @@ function mapTripleImageRight(item: CrossPromotionItems, index: number) {
                 alt: item.image?.meta.altText || '',
             },
             title: item.title,
-            href: item.link || undefined,
+            // href: item.link || undefined,
+            link: item.link
+                ? {
+                      href: item.link,
+                      isExternal: isExternalLink(item.link),
+                  }
+                : undefined,
         } as PromotionCardProps & {
             isMain?: boolean;
             size?: 'full' | 'half' | undefined;
@@ -356,7 +387,13 @@ const mapNonTripleGalleryImage = (
                 alt: item.image?.meta.altText || '',
             },
             title: item.title,
-            href: item.link || undefined,
+            // href: item.link || undefined,
+            link: item.link
+                ? {
+                      href: item.link,
+                      isExternal: isExternalLink(item.link),
+                  }
+                : undefined,
         } as PromotionCardProps & {
             isMain?: boolean;
             size?: 'full' | 'half' | undefined;
@@ -379,10 +416,15 @@ const mapNonTripleGalleryImage = (
             alt: item.image?.meta.altText || '',
         },
         title: item.title,
-        href: item.link || undefined,
+        // href: item.link || undefined,
+        link: item.link
+            ? {
+                  href: item.link,
+                  isExternal: isExternalLink(item.link),
+              }
+            : undefined,
     } as PromotionCardProps & {
         isMain?: boolean;
         size?: 'full' | 'half' | undefined;
     };
 };
-
