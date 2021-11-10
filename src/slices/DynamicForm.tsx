@@ -151,6 +151,7 @@ export interface DynamicFormSliceType
     submitLabel?: string;
     buttonAs?: 'button' | 'a';
     targetEmails?: string;
+    subjectLine?: string;
     successPage?: string;
     onSubmit?: (values: FormData) => Promise<void>;
     submitAction?: (props: SubmitActionProps) => React.ReactNode;
@@ -179,9 +180,9 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     bgColor,
     bgMode,
     definitions,
+    subjectLine,
     submitLabel,
     targetEmails,
-    successPage,
     onSubmit,
     submitAction,
     datepickerSubmitAction,
@@ -206,7 +207,6 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
             bgMode={bgMode}
             onSubmit={onSubmit}
             submitAction={createLabeledSubmitAction(submitAction, submitLabel)}
-            successPage={successPage}
             fields={itemsToFormFields({
                 formFields: items,
                 onValidate,
@@ -214,6 +214,7 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
                 datepickerDeleteAction,
             })}
             targetEmails={targetEmails}
+            subjectLine={subjectLine}
             theme={sliceTheme}
             definitions={definitions as any}
         />
