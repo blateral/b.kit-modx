@@ -45,8 +45,8 @@ export interface CrossPromotionListSliceType
     isMirrored?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
+    externalLinkIcon?: string;
     imageFormat: ImageFormats;
-
     controlNext?: (props: {
         isInverted?: boolean;
         isActive?: boolean;
@@ -88,7 +88,7 @@ const createCPromoList = ({
     bgColor,
     imageFormat,
     isMirrored,
-
+    externalLinkIcon,
     items,
     theme,
 }: CrossPromotionListSliceType) => {
@@ -133,6 +133,7 @@ const createCPromoList = ({
 
     return (
         <CrossPromotion
+            externalLinkIcon={externalLinkIcon}
             theme={sliceTheme}
             isMirrored={isImagesMirrored}
             bgMode={bgMode}
