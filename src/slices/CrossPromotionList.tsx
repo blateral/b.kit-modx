@@ -45,8 +45,8 @@ export interface CrossPromotionListSliceType
     isMirrored?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
+    externalLinkIcon?: React.ReactNode;
     imageFormat: ImageFormats;
-
     controlNext?: (props: {
         isInverted?: boolean;
         isActive?: boolean;
@@ -88,7 +88,7 @@ const createCPromoList = ({
     bgColor,
     imageFormat,
     isMirrored,
-
+    externalLinkIcon,
     items,
     theme,
 }: CrossPromotionListSliceType) => {
@@ -108,7 +108,6 @@ const createCPromoList = ({
         asideItems = allImages.filter((item) => !item.isMain);
     } else if (imageFormat === 'gallery-triple-left') {
         const allImages = promoItems.map(mapTripleImageLeft);
-        console.log('allImages', allImages);
         mainItems = allImages.filter((item) => item.isMain);
         asideItems = allImages.filter((item) => !item.isMain);
     } else {
@@ -134,6 +133,7 @@ const createCPromoList = ({
 
     return (
         <CrossPromotion
+            externalLinkIcon={externalLinkIcon}
             theme={sliceTheme}
             isMirrored={isImagesMirrored}
             bgMode={bgMode}
@@ -155,6 +155,7 @@ const createCPromoCarousel = ({
     beforeChange,
     afterChange,
     onInit,
+    externalLinkIcon,
     slidesToShow,
     responsive,
     theme,
@@ -213,6 +214,7 @@ const createCPromoCarousel = ({
             afterChange={afterChange}
             onInit={onInit}
             dot={dot}
+            externalLinkIcon={externalLinkIcon}
             slidesToShow={slidesToShow}
             responsive={responsive}
         />
