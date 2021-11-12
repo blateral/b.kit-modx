@@ -75,8 +75,12 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
         isInverted?: boolean;
         size?: 'full' | 'small';
     }) => React.ReactNode;
-    customTopGradient?: string;
     customBottomGradient?: string;
+    kenBurnsSettings?: {
+        interval?: number;
+        zoom?: number;
+        zoomPoint?: [number, number];
+    };
     search?: (isInverted?: boolean) => React.ReactNode;
 
     height?: string;
@@ -100,7 +104,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     secondary_link,
     items,
     customBottomGradient,
-    customTopGradient,
+    kenBurnsSettings,
     primaryAction,
     secondaryAction,
     primaryActionPointer,
@@ -120,6 +124,9 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             images={headerImageMap}
             title={intro?.title || ''}
             intro={intro}
+            kenBurnsInterval={kenBurnsSettings?.interval}
+            kenBurnsZoom={kenBurnsSettings?.zoom}
+            kenBurnsZoomPoint={kenBurnsSettings?.zoomPoint}
             badge={headerBadge(badge?.xlarge, badgeOnMobile)}
             primaryCta={getPrimaryButtonOrPointer({
                 isCta: !buttonstyle,
@@ -135,7 +142,6 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
                 secondaryAction,
                 secondaryActionPointer,
             })}
-            customTopGradient={customTopGradient}
             customBottomGradient={customBottomGradient}
         />
     );

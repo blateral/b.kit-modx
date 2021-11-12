@@ -155,6 +155,7 @@ const createCPromoCarousel = ({
     beforeChange,
     afterChange,
     onInit,
+    externalLinkIcon,
     slidesToShow,
     responsive,
     theme,
@@ -213,6 +214,7 @@ const createCPromoCarousel = ({
             afterChange={afterChange}
             onInit={onInit}
             dot={dot}
+            externalLinkIcon={externalLinkIcon}
             slidesToShow={slidesToShow}
             responsive={responsive}
         />

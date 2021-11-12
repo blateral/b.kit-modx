@@ -46,6 +46,8 @@ export interface NavigationProps {
     backdropOpacity?: number; // Not Prismic
     allowTopbarOverflow?: boolean; // Page Settings
 
+    customGradient?: string; // Not CMS
+
     activeNavItem?: string;
     navItems?: NavGroup[];
     socialMapper?: (
@@ -100,6 +102,7 @@ export const NavigationSlice: React.FC<
     secondaryActionPointer,
     allowTopbarOverflow,
     isTopbarLargeOnPageTop,
+    customGradient,
     theme,
     ...rest
 }) => {
@@ -129,6 +132,7 @@ export const NavigationSlice: React.FC<
             isTopbarLargeOnPageTop={isTopbarLargeOnPageTop}
             {...rest}
             isMirrored={data?.flyoutMenu.isMirrored || false}
+            customGradient={customGradient}
         />
     );
 };
