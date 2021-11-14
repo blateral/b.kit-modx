@@ -1,14 +1,15 @@
 import React from 'react';
 import { ParallaxBackground } from '@blateral/b.kit';
-import { endpoint, isNumeric, ModxSlice } from 'utils/modx';
+import { endpoint, ModxImageProps, ModxSlice } from 'utils/modx';
 import { isSVG } from 'utils/mapping';
+import { ParallaxWidth } from '@blateral/b.kit/lib/components/sections/ParallaxBackground';
 
 export interface ParallaxBackgroundSliceType
     extends ModxSlice<'ParallaxBackground'> {
     isActive?: boolean;
-    image?: string;
+    image?: ModxImageProps;
     hAlign?: 'left' | 'center' | 'right';
-    contentWidth?: string;
+    contentWidth?: ParallaxWidth;
 }
 
 export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
@@ -19,26 +20,17 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
     if (!image) return null;
     return (
         <ParallaxBackground
-            // In %
-            // #TODO: Neuer width type
-            contentWidth={
-                contentWidth && isNumeric(contentWidth)
-                    ? +contentWidth / 100
-                    : undefined
-            }
+            // TODO:  Josef, Akasol
+            contentWidth={contentWidth}
             hAlign={hAlign || 'left'}
             // #TODO: Bilder umbauen
-            image={{
-                small: `${isSVG(image) ? endpoint + image : image}`,
-            }}
-
-            // image={
-            //     image ? (
-            //         <img src={`${isSVG(image) ? endpoint + image : image}`} />
-            //     ) : (
-            //         false
-            //     )
-            // }
+            image={
+                isSVG(image.small)
+                    ? {
+                          small: `${endpoint + image.small}`,
+                      }
+                    : image
+            }
         />
     );
 };
