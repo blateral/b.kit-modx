@@ -32,7 +32,9 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
             image={
                 isSVG(image[format || 'square']?.small)
                     ? {
-                          small: `${endpoint + image[format || 'square']}`,
+                          small: `${
+                              endpoint + image[format || 'square']?.small
+                          }`,
                       }
                     : image[format || 'square']
             }
