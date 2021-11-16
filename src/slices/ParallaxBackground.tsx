@@ -29,7 +29,11 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
             // TODO:  Josef
             contentWidth={contentWidth}
             hAlign={hAlign || 'left'}
-            image={isString(image) ? image : imageToImageProps(image, format)}
+            image={
+                isString(image)
+                    ? { small: image || '' }
+                    : imageToImageProps(image, format)
+            }
         />
     );
 };
