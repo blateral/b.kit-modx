@@ -31,7 +31,11 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
             hAlign={hAlign || 'left'}
             image={
                 isString(image)
-                    ? { small: image || '' }
+                    ? {
+                          small: isSVG(image as string)
+                              ? `${endpoint + image}`
+                              : image,
+                      }
                     : imageToImageProps(image, format)
             }
         />
