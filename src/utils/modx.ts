@@ -146,12 +146,11 @@ export type ModxDocument = {
 
     pagetitle?: string;
     ogImage?: ModxImageProps;
-    seo_description?: string;
-    seo_keywords?: string;
-    seo_search_index?: boolean;
-    seo_trace_links?: boolean;
-    seo_content_group?: string;
-    seo_redirection?: string;
+    seoDescription?: string;
+    seoKeywords?: string;
+    robots?: string;
+    seoContentGroup?: string;
+    seoRedirection?: string;
 
     nav_isinverted?: boolean;
     nav_withtopoffset?: boolean;
