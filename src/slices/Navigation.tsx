@@ -50,6 +50,7 @@ export interface NavigationProps {
 
     activeNavItem?: string;
     navItems?: NavGroup[];
+    navItemIndicator?: (isInverted: boolean) => React.ReactNode;
     socialMapper?: (
         socials?: SocialMediaItem[],
         isInverted?: boolean
@@ -103,6 +104,7 @@ export const NavigationSlice: React.FC<
     allowTopbarOverflow,
     isTopbarLargeOnPageTop,
     customGradient,
+    navItemIndicator,
     theme,
     ...rest
 }) => {
@@ -133,6 +135,7 @@ export const NavigationSlice: React.FC<
             {...rest}
             isMirrored={data?.flyoutMenu.isMirrored || false}
             customGradient={customGradient}
+            navItemIndicator={navItemIndicator}
         />
     );
 };
