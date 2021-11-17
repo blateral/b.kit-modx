@@ -158,6 +158,8 @@ export type ModxDocument = {
     navbarAllowOverflow?: boolean;
     publication_date?: string;
 
+    headScripts?: string;
+
     primary_link?: string;
     primary_label?: string;
     secondary_link?: string;
