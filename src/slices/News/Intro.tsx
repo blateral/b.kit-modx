@@ -37,7 +37,8 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
           }
         : undefined;
 
-    const tagsArray = tags?.split(',');
+    const tagsArray = tags && tags.length > 0 ? tags?.split(',') : [];
+
     return (
         <NewsIntro
             title={newsHeading}
