@@ -3,7 +3,7 @@ import React from 'react';
 import { assignTo, FactGrid, Theme } from '@blateral/b.kit';
 import {
     BgMode,
-    endpoint,
+    // endpoint,
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
@@ -63,33 +63,33 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
                     isSVG(image?.landscape?.small) ||
                     isSVG(image?.['landscape-wide']?.xlarge);
 
-                let completeImage = image && {
+                const completeImage = image && {
                     ...image[imageFormat || 'landscape-wide'],
                     small: image[imageFormat || 'landscape-wide']?.small || '',
                     coverSpace: !isSvgImage,
                 };
 
-                if (isSvgImage) {
-                    completeImage = image && {
-                        small: `${endpoint}${
-                            image[imageFormat || 'landscape-wide']?.small || ''
-                        }`,
-                        medium: `${endpoint}${
-                            image[imageFormat || 'landscape-wide']?.medium || ''
-                        }`,
-                        semilarge: `${endpoint}${
-                            image[imageFormat || 'landscape-wide']?.semilarge ||
-                            ''
-                        }`,
-                        large: `${endpoint}${
-                            image[imageFormat || 'landscape-wide']?.large || ''
-                        }`,
-                        xlarge: `${endpoint}${
-                            image[imageFormat || 'landscape-wide']?.xlarge || ''
-                        }`,
-                        coverSpace: !isSvgImage,
-                    };
-                }
+                // if (isSvgImage) {
+                //     completeImage = image && {
+                //         small: `${endpoint}${
+                //             image[imageFormat || 'landscape-wide']?.small || ''
+                //         }`,
+                //         medium: `${endpoint}${
+                //             image[imageFormat || 'landscape-wide']?.medium || ''
+                //         }`,
+                //         semilarge: `${endpoint}${
+                //             image[imageFormat || 'landscape-wide']?.semilarge ||
+                //             ''
+                //         }`,
+                //         large: `${endpoint}${
+                //             image[imageFormat || 'landscape-wide']?.large || ''
+                //         }`,
+                //         xlarge: `${endpoint}${
+                //             image[imageFormat || 'landscape-wide']?.xlarge || ''
+                //         }`,
+                //         coverSpace: !isSvgImage,
+                //     };
+                // }
 
                 return {
                     title: title,
