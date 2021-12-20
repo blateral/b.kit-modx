@@ -172,7 +172,11 @@ export interface DynamicFormSliceType
         radio?: (props: FieldGenerationProps<FieldGroup>) => React.ReactNode;
         upload?: (props: FieldGenerationProps<FieldGroup>) => React.ReactNode;
     };
-    onValidate?: (value: unknown, config: FormField) => Promise<string>;
+    onValidate?: (
+        key: string,
+        value: unknown,
+        config: FormField
+    ) => Promise<string>;
 }
 
 export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
@@ -243,7 +247,11 @@ const itemsToFormFields = ({
     datepickerDeleteAction,
 }: {
     formFields?: FormField[];
-    onValidate?: (value: unknown, config: FormField) => Promise<string>;
+    onValidate?: (
+        key: string,
+        value: unknown,
+        config: FormField
+    ) => Promise<string>;
     datepickerSubmitAction?: (
         props: DatepickerSubmitActionProps
     ) => React.ReactNode;
@@ -269,7 +277,11 @@ const generateFormFieldMap =
         datepickerSubmitAction,
         datepickerDeleteAction,
     }: {
-        onValidate?: (value: unknown, config: FormField) => Promise<string>;
+        onValidate?: (
+            key: string,
+            value: unknown,
+            config: FormField
+        ) => Promise<string>;
         datepickerSubmitAction?: (
             props: DatepickerSubmitActionProps
         ) => React.ReactNode;
@@ -313,7 +325,11 @@ const generateFormFieldMap =
 
 function createField(
     formfield: Field,
-    onValidate?: (value: unknown, config: FormField) => Promise<string>
+    onValidate?: (
+        key: string,
+        value: unknown,
+        config: FormField
+    ) => Promise<string>
 ): Record<string, BkitField> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
@@ -338,7 +354,11 @@ function createField(
 
 function createArea(
     formfield: Area,
-    onValidate?: (value: unknown, config: FormField) => Promise<string>
+    onValidate?: (
+        key: string,
+        value: unknown,
+        config: FormField
+    ) => Promise<string>
 ): Record<string, BkitArea> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
@@ -361,7 +381,11 @@ function createArea(
 
 function createSelect(
     formfield: Select,
-    onValidate?: (value: unknown, config: FormField) => Promise<string>
+    onValidate?: (
+        key: string,
+        value: unknown,
+        config: FormField
+    ) => Promise<string>
 ): Record<string, BkitSelect> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
@@ -390,7 +414,11 @@ function createSelect(
 
 function createFieldGroup(
     formfield: FieldGroup,
-    onValidate?: (value: unknown, config: FormField) => Promise<string>
+    onValidate?: (
+        key: string,
+        value: unknown,
+        config: FormField
+    ) => Promise<string>
 ): Record<string, BkitFieldGroup> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
@@ -427,7 +455,11 @@ function createDatePicker({
     datepickerDeleteAction,
 }: {
     formfield: Datepicker;
-    onValidate?: (value: unknown, config: FormField) => Promise<string>;
+    onValidate?: (
+        key: string,
+        value: unknown,
+        config: FormField
+    ) => Promise<string>;
     datepickerSubmitAction?: (
         props: DatepickerSubmitActionProps
     ) => React.ReactNode;
@@ -455,7 +487,9 @@ function createDatePicker({
               ]
             : undefined,
         minDate: createDateFromDateString(formfield?.minDate),
-        maxDate: createDateFromDateString(formfield?.maxDate),
+        maxDate: formfield?.maxDate
+            ? createDateFromDateString(formfield?.maxDate)
+            : undefined,
         nextCtrlUrl: formfield.nextCtrlUrl,
         prevCtrlUrl: formfield.prevCtrlUrl,
         singleSelect: formfield.singleSelect,
@@ -501,7 +535,11 @@ function createDateFromDateString(datestring?: string) {
 
 function createUpload(
     formfield: FileUploadField,
-    onValidate?: (value: unknown, config: FormField) => Promise<string>
+    onValidate?: (
+        key: string,
+        value: unknown,
+        config: FormField
+    ) => Promise<string>
 ): Record<string, BkitFileUpload> {
     if (!formfield.label) return {};
     const formFieldData = {};
