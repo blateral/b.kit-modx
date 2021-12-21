@@ -36,6 +36,7 @@ export * from 'slices/Poster';
 export * from 'slices/PriceList';
 export * from 'slices/QuickNav';
 export * from 'slices/QuickNav';
+export * from 'slices/SimpleImage';
 export * from 'slices/SocialNav';
 export * from 'slices/SocialWall';
 export * from 'slices/Table';
