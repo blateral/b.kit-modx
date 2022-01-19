@@ -1,4 +1,4 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run tc && npx --no-install yalc check
+npx --no-install yalc check && npm run tc
