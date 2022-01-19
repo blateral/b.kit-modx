@@ -228,7 +228,8 @@ export interface ModxSettingsPage extends ModxPage {
     };
 
     newsletter?: {
-        redirectUrl?: string;
+        successLink?: string;
+        link?: string;
         text?: string;
         title?: string;
         label?: string;
