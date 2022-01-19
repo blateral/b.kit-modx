@@ -11,4 +11,4 @@ v=${b%%[)| ]*}
 
 export PATH="$NVM_DIR/versions/node/$v/bin:$PATH"
 
-yarn check-yalc && yarn tc
+npm run check-yalc && npm run tc
