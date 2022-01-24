@@ -32,9 +32,7 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
             items={filteredItems.map((item) => {
                 return {
                     text: item.text,
-                    action: action
-                        ? (isInverted) => action(isInverted)
-                        : undefined,
+                    action: action ? action : undefined,
                 };
             })}
         />
