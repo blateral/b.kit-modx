@@ -4,6 +4,7 @@ import {
     NumberListSliceType,
     ParallaxBackgroundSliceType,
     PriceListSliceType,
+    PriceTableSliceType,
     SimpleImageSliceType,
     SocialNavSliceType,
     TimelineSliceType,
@@ -121,6 +122,7 @@ export type PageContent =
     | ParallaxBackgroundSliceType
     | PosterSliceType
     | PriceListSliceType
+    | PriceTableSliceType
     | QuickNavSliceType
     | QuickNavSliceType
     | SimpleImageSliceType

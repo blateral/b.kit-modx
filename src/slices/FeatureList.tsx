@@ -4,6 +4,7 @@ import { assignTo, FeatureCarousel, FeatureList, Theme } from '@blateral/b.kit';
 import { ResponsiveObject } from './slick';
 import {
     BgMode,
+    endpoint,
     isExternalLink,
     isValidAction,
     ModxImagePropsWithFormat,
@@ -124,8 +125,26 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
                     text: text,
                     description: description,
                     image: {
-                        ...image[imageFormat],
-                        small: image[imageFormat]?.small || '',
+                        small: `${isSvgImage ? endpoint : ''}${
+                            image[imageFormat]?.small
+                        }`,
+                        medium:
+                            `${isSvgImage ? endpoint : ''}${
+                                image[imageFormat]?.medium
+                            }` || '',
+                        semilarge:
+                            `${isSvgImage ? endpoint : ''}${
+                                image[imageFormat]?.semilarge
+                            }` || '',
+                        large:
+                            `${isSvgImage ? endpoint : ''}${
+                                image[imageFormat]?.large
+                            }` || '',
+                        xlarge:
+                            `${isSvgImage ? endpoint : ''}${
+                                image[imageFormat]?.xlarge
+                            }` || '',
+
                         alt: image.meta?.altText || '',
                         coverSpace: !isSvgImage,
                     },
