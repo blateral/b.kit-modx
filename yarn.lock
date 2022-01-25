@@ -107,8 +107,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@blateral/b.kit@file:.yalc/@blateral/b.kit":
-  version "1.16.2"
+"@blateral/b.kit@1.17.0":
+  version "1.17.0"
+  resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-1.17.0.tgz#c974fcd1007dfc8bb7b9d622f483e8004fd0cf53"
+  integrity sha512-HqzK25xv4JDCRd6b7tQ/3+fozuNu0//aXseSwfkzli3uolIVaw7PptwJgWRjFk8/Or9g86TkOv+kGsKQNuuwjg==
 
 "@emotion/is-prop-valid@^0.8.8":
   version "0.8.8"
