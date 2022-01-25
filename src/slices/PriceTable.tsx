@@ -3,6 +3,9 @@ import React from 'react';
 import { ModxSlice } from '../utils/modx';
 
 interface PriceTableItem {
+    title?: string;
+    superTitle?: string;
+
     text?: string;
     primary_link?: string;
     primary_label?: string;
@@ -31,6 +34,10 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
             bgMode={bgMode}
             items={filteredItems.map((item) => {
                 return {
+                    title: item.title,
+                    superTitle: item.superTitle,
+                    hasBackground: !!bgMode,
+                    isInverted: bgMode === 'inverted',
                     text: item.text,
                     action: action ? action : undefined,
                 };
