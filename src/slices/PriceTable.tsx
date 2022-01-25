@@ -18,7 +18,11 @@ export interface PriceTableSliceType
     bgColor?: string;
     primary_link?: string;
     primary_label?: string;
-    action?: (isInverted?: boolean) => React.ReactNode;
+    action?: (props: {
+        isInverted?: boolean;
+        label?: string;
+        href?: string;
+    }) => React.ReactNode;
 }
 
 export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
@@ -39,7 +43,14 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
                     hasBackground: !!bgMode,
                     isInverted: bgMode === 'inverted',
                     text: item.text,
-                    action: action ? action : undefined,
+                    action: action
+                        ? (isInverted) =>
+                              action({
+                                  isInverted,
+                                  href: item.primary_link || '',
+                                  label: item.primary_label,
+                              })
+                        : undefined,
                 };
             })}
         />
