@@ -1,4 +1,4 @@
-import { PriceTable } from '@blateral/b.kit';
+import { assignTo, PriceTable, Theme } from '@blateral/b.kit';
 import React from 'react';
 import { ModxSlice } from '../utils/modx';
 
@@ -23,15 +23,29 @@ export interface PriceTableSliceType
         label?: string;
         href?: string;
     }) => React.ReactNode;
+    theme?: Theme;
 }
 
 export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
     bgMode,
     items,
     action,
+    theme,
+    bgColor,
 }) => {
     const filteredItems = items.filter(filterEmptyItems);
     if (filteredItems.length < 1) return null;
+
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
 
     return (
         <PriceTable
@@ -53,6 +67,7 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
                         : undefined,
                 };
             })}
+            theme={sliceTheme}
         />
     );
 };
