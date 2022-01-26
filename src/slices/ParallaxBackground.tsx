@@ -1,10 +1,6 @@
 import React from 'react';
 import { ParallaxBackground } from '@blateral/b.kit';
-import {
-    endpoint,
-    ModxImagePropsWithFormat,
-    ModxSlice,
-} from 'utils/modx';
+import { endpoint, ModxImagePropsWithFormat, ModxSlice } from 'utils/modx';
 import { isSVG } from 'utils/mapping';
 import { ParallaxWidth } from '@blateral/b.kit/lib/components/sections/ParallaxBackground';
 
@@ -23,18 +19,19 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
     format,
     contentWidth,
 }) => {
-    if (!image) return null;
     return (
         <ParallaxBackground
             // TODO:  Josef
             contentWidth={contentWidth}
             hAlign={hAlign || 'left'}
             image={
-                isString(image)
-                    ? {
-                          small: image,
-                      }
-                    : imageToImageProps(image, format)
+                image
+                    ? isString(image)
+                        ? {
+                              small: image,
+                          }
+                        : imageToImageProps(image, format)
+                    : undefined
             }
         />
     );
