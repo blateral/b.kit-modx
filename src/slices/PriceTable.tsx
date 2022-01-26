@@ -9,6 +9,8 @@ interface PriceTableItem {
     text?: string;
     primary_link?: string;
     primary_label?: string;
+
+    isHighlighted?: boolean;
 }
 
 export interface PriceTableSliceType
@@ -58,6 +60,7 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
                     hasBackground: !!bgMode,
                     isInverted: bgMode === 'inverted',
                     text: item.text,
+                    isHighlighted: !!item.isHighlighted,
                     action: action
                         ? ({ isInverted, isHighlighted }) =>
                               action({
