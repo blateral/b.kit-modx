@@ -19,6 +19,7 @@ export interface PriceTableSliceType
     primary_link?: string;
     primary_label?: string;
     action?: (props: {
+        isHighlighted?: boolean;
         isInverted?: boolean;
         label?: string;
         href?: string;
@@ -58,9 +59,10 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
                     isInverted: bgMode === 'inverted',
                     text: item.text,
                     action: action
-                        ? (isInverted) =>
+                        ? ({ isInverted, isHighlighted }) =>
                               action({
                                   isInverted,
+                                  isHighlighted,
                                   href: item.primary_link || '',
                                   label: item.primary_label,
                               })
