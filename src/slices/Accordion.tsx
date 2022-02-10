@@ -42,7 +42,6 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
                     label: item.label,
                     text: item.text,
                     aside: item.aside,
-                    hasColumns: !!item.aside,
                 };
             })}
             bgMode={
