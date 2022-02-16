@@ -104,76 +104,75 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
     // get image format for all images
     const sharedProps = {
         isCentered,
-        features: items.map(
-            ({
-                title,
-                text,
-                description,
-                image,
-                primary_label,
-                primary_link,
-                secondary_label,
-                secondary_link,
-            }) => {
-                // check if image urls are path to SVG image
-                const isSvgImage =
-                    isSVG(image.landscape?.small) ||
-                    isSVG(image.landscape?.small);
+        features: items
+            .filter(filterMissingSmallFormat)
+            .map(
+                ({
+                    title,
+                    text,
+                    description,
+                    image,
+                    primary_label,
+                    primary_link,
+                    secondary_label,
+                    secondary_link,
+                }) => {
+                    // check if image urls are path to SVG image
+                    const isSvgImage =
+                        isSVG(image.landscape?.small) ||
+                        isSVG(image.landscape?.small);
 
-                return {
-                    title: title,
-                    text: text,
-                    description: description,
-                    image: {
-                        small: `${isSvgImage ? endpoint : ''}${
-                            image[imageFormat]?.small
-                        }`,
-                        medium:
-                            `${isSvgImage ? endpoint : ''}${
-                                image[imageFormat]?.medium
-                            }` || '',
-                        semilarge:
-                            `${isSvgImage ? endpoint : ''}${
-                                image[imageFormat]?.semilarge
-                            }` || '',
-                        large:
-                            `${isSvgImage ? endpoint : ''}${
-                                image[imageFormat]?.large
-                            }` || '',
-                        xlarge:
-                            `${isSvgImage ? endpoint : ''}${
-                                image[imageFormat]?.xlarge
-                            }` || '',
+                    return {
+                        title: title,
+                        text: text,
+                        description: description,
+                        image: {
+                            small: `${isSvgImage ? endpoint : ''}${
+                                image[imageFormat]?.small
+                            }`,
+                            medium:
+                                `${isSvgImage ? endpoint : ''}${
+                                    image[imageFormat]?.medium
+                                }` || '',
+                            large:
+                                `${isSvgImage ? endpoint : ''}${
+                                    image[imageFormat]?.large
+                                }` || '',
+                            xlarge:
+                                `${isSvgImage ? endpoint : ''}${
+                                    image[imageFormat]?.xlarge
+                                }` || '',
 
-                        alt: image.meta?.altText || '',
-                        coverSpace: !isSvgImage,
-                    },
-                    primaryAction:
-                        primaryAction &&
-                        isValidAction(primary_label, primary_link)
-                            ? (isInverted: boolean) =>
-                                  primaryAction({
-                                      isInverted,
-                                      label: primary_label,
-                                      href: primary_link || '',
-                                      isExternal: isExternalLink(primary_link),
-                                  })
-                            : undefined,
-                    secondaryAction:
-                        secondaryAction &&
-                        isValidAction(secondary_label, secondary_link)
-                            ? (isInverted: boolean) =>
-                                  secondaryAction({
-                                      isInverted,
-                                      label: secondary_label,
-                                      href: secondary_link || '',
-                                      isExternal:
-                                          isExternalLink(secondary_link),
-                                  })
-                            : undefined,
-                };
-            }
-        ),
+                            alt: image.meta?.altText || '',
+                            coverSpace: !isSvgImage,
+                        },
+                        primaryAction:
+                            primaryAction &&
+                            isValidAction(primary_label, primary_link)
+                                ? (isInverted: boolean) =>
+                                      primaryAction({
+                                          isInverted,
+                                          label: primary_label,
+                                          href: primary_link || '',
+                                          isExternal:
+                                              isExternalLink(primary_link),
+                                      })
+                                : undefined,
+                        secondaryAction:
+                            secondaryAction &&
+                            isValidAction(secondary_label, secondary_link)
+                                ? (isInverted: boolean) =>
+                                      secondaryAction({
+                                          isInverted,
+                                          label: secondary_label,
+                                          href: secondary_link || '',
+                                          isExternal:
+                                              isExternalLink(secondary_link),
+                                      })
+                                : undefined,
+                    };
+                }
+            ),
     };
 
     if (isCarousel) {
@@ -198,3 +197,8 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
         );
     }
 };
+
+const filterMissingSmallFormat = (item: FeatureItemType) =>
+    item.image.landscape?.small ||
+    item.image.portrait?.small ||
+    item.image.square?.small;
