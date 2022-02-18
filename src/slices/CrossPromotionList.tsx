@@ -23,6 +23,7 @@ interface CrossPromotionItems {
         list: ModxImagePropsWithFormat;
         meta: ModxImageMetaData;
     };
+    superTitle?: string;
     title?: string;
     link?: string;
 }
@@ -325,6 +326,7 @@ function mapTripleImageRight(item: CrossPromotionItems, index: number) {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
             },
+            superTitle: item.superTitle,
             title: item.title,
             // href: item.link || undefined,
             link: item.link
@@ -352,6 +354,7 @@ function mapTripleImageRight(item: CrossPromotionItems, index: number) {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
             },
+            superTitle: item.superTitle,
             title: item.title,
             // href: item.link || undefined,
             link: item.link
@@ -388,6 +391,7 @@ const mapNonTripleGalleryImage = (
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
             },
+            superTitle: item.superTitle,
             title: item.title,
             // href: item.link || undefined,
             link: item.link
@@ -417,6 +421,7 @@ const mapNonTripleGalleryImage = (
             ...mappedImage,
             alt: item.image?.meta.altText || '',
         },
+        superTitle: item.superTitle,
         title: item.title,
         // href: item.link || undefined,
         link: item.link
