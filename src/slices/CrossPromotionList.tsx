@@ -178,7 +178,7 @@ const createCPromoCarousel = ({
         <PromotionCarousel
             theme={sliceTheme}
             bgMode={bgMode}
-            promotions={items.map(({ image, title, link }) => {
+            promotions={items.map(({ image, superTitle, title, link }) => {
                 const mappedImage = {
                     small: image?.carousel?.landscape?.small || '',
                     medium: image?.carousel[mappedImageFormat || 'square']
@@ -200,6 +200,7 @@ const createCPromoCarousel = ({
                               isExternal: isExternalLink(link),
                           }
                         : undefined,
+                    superTitle: superTitle,
                     title: title,
                     image: {
                         ...mappedImage,
