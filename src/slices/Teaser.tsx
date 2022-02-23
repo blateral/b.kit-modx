@@ -123,7 +123,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                               ...theImage,
                               small: theImage?.small || '',
                               alt: image?.meta?.altText || '',
-                              description: description,
+                              //   description: description,
                           }
                         : undefined
                 }
