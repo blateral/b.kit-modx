@@ -5,6 +5,7 @@ import {
     ParallaxBackgroundSliceType,
     PriceListSliceType,
     PriceTableSliceType,
+    QuoteSliceType,
     SimpleImageSliceType,
     SocialNavSliceType,
     TimelineSliceType,
@@ -129,7 +130,8 @@ export type PageContent =
     | TableSliceType
     | TeaserSliceType
     | TimelineSliceType
-    | VideoSliceType;
+    | VideoSliceType
+    | QuoteSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType
