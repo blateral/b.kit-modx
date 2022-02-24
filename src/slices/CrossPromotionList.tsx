@@ -23,6 +23,7 @@ interface CrossPromotionItems {
         list: ModxImagePropsWithFormat;
         meta: ModxImageMetaData;
     };
+    superTitle?: string;
     title?: string;
     link?: string;
 }
@@ -177,7 +178,7 @@ const createCPromoCarousel = ({
         <PromotionCarousel
             theme={sliceTheme}
             bgMode={bgMode}
-            promotions={items.map(({ image, title, link }) => {
+            promotions={items.map(({ image, superTitle, title, link }) => {
                 const mappedImage = {
                     small: image?.carousel?.landscape?.small || '',
                     medium: image?.carousel[mappedImageFormat || 'square']
@@ -199,6 +200,7 @@ const createCPromoCarousel = ({
                               isExternal: isExternalLink(link),
                           }
                         : undefined,
+                    superTitle: superTitle,
                     title: title,
                     image: {
                         ...mappedImage,
@@ -325,6 +327,7 @@ function mapTripleImageRight(item: CrossPromotionItems, index: number) {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
             },
+            superTitle: item.superTitle,
             title: item.title,
             // href: item.link || undefined,
             link: item.link
@@ -352,6 +355,7 @@ function mapTripleImageRight(item: CrossPromotionItems, index: number) {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
             },
+            superTitle: item.superTitle,
             title: item.title,
             // href: item.link || undefined,
             link: item.link
@@ -388,6 +392,7 @@ const mapNonTripleGalleryImage = (
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
             },
+            superTitle: item.superTitle,
             title: item.title,
             // href: item.link || undefined,
             link: item.link
@@ -417,6 +422,7 @@ const mapNonTripleGalleryImage = (
             ...mappedImage,
             alt: item.image?.meta.altText || '',
         },
+        superTitle: item.superTitle,
         title: item.title,
         // href: item.link || undefined,
         link: item.link
