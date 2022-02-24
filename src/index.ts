@@ -43,6 +43,7 @@ export * from 'slices/SocialWall';
 export * from 'slices/Table';
 export * from 'slices/Teaser';
 export * from 'slices/Timeline';
+export * from 'slices/Quote';
 export * from 'slices/Video';
 export * from 'structuredData/Organization';
 export * from 'structuredData/NavBreadcrumbs';
