@@ -1,4 +1,4 @@
-import { assignTo, Teaser, TeaserWide, Theme } from '@blateral/b.kit';
+import { assignTo, Teaser, TeaserWide } from '@blateral/b.kit';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
 import {
@@ -10,9 +10,25 @@ import {
     ModxSlice,
 } from 'utils/modx';
 
+export interface TeaserVideo {
+    video?: {
+        urls?: Array<string>;
+        aspectRatios?: {
+            small?: number;
+        };
+    };
+    image?: ModxImageProps & {
+        ratios?: {
+            small?: {
+                w: number;
+                h: number;
+            };
+        };
+    };
+}
 export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     isActive?: boolean;
-    theme?: Theme;
+    // theme?: Theme;
     isMirrored?: boolean;
     bgMode?: string;
     bgColor?: string;
@@ -24,8 +40,7 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     superTitleAs?: HeadlineTag;
     text?: string;
     image?: ModxImagePropsWithFormat;
-    description?: string;
-
+    teaserVideo?: TeaserVideo;
     primary_link?: string;
     secondary_link?: string;
     primary_label?: string;
@@ -57,7 +72,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     superTitle,
     text,
     image,
-    description,
+    teaserVideo,
 
     primary_link,
     primary_label,
@@ -66,9 +81,16 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
 
     primaryAction,
     secondaryAction,
-    theme,
+    // theme,
 }) => {
-    const theImage: ModxImageProps = image && image[format || 'square'];
+    const theImage: ModxImageProps & {
+        ratios?: {
+            small: {
+                w: number;
+                h: number;
+            };
+        };
+    } = (image && image[format || 'square']) || teaserVideo?.image;
     const sharedProps = {
         isMirrored,
         title,
@@ -107,8 +129,8 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                     light: bgColor || '',
                 },
             },
-        },
-        theme
+        }
+        // theme
     );
 
     if (isWide) {
@@ -122,7 +144,8 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                         ? {
                               ...theImage,
                               small: theImage?.small || '',
-                              alt: image?.meta?.altText || '',
+                              alt: theImage?.meta?.altText || '',
+                              ratios: theImage.ratios,
                               //   description: description,
                           }
                         : undefined
@@ -161,7 +184,13 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                     ...theImage,
                     small: theImage.small || '',
                     alt: image?.meta?.altText || '',
-                    description: description,
+                    ratios: theImage.ratios,
+                }}
+                video={{
+                    urls: teaserVideo?.video?.urls || [],
+                    aspectRatios: {
+                        small: teaserVideo?.video?.aspectRatios?.small || 1,
+                    },
                 }}
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
                 primaryAction={
