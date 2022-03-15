@@ -1,6 +1,6 @@
 // import { FactList } from '@blateral/b.kit';
 import React from 'react';
-import { assignTo, FactGrid, Theme } from '@blateral/b.kit';
+import { assignTo, FactGrid, ThemeMods } from '@blateral/b.kit';
 import {
     BgMode,
     // endpoint,
@@ -24,7 +24,7 @@ export interface FactGridSliceType
     imageFormat?: 'landscape-wide' | 'landscape';
     columns?: 3 | 4 | 6 | string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const FactGridSlice: React.FC<FactGridSliceType> = ({

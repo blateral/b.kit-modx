@@ -1,4 +1,4 @@
-import { assignTo, PriceTable, Theme } from '@blateral/b.kit';
+import { assignTo, PriceTable, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { ModxSlice } from '../utils/modx';
 
@@ -26,7 +26,7 @@ export interface PriceTableSliceType
         label?: string;
         href?: string;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const PriceTableSlice: React.FC<PriceTableSliceType> = ({

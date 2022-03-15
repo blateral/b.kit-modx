@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { assignTo, Gallery, ImageCarousel, Theme } from '@blateral/b.kit';
+import { assignTo, Gallery, ImageCarousel, ThemeMods } from '@blateral/b.kit';
 import { ResponsiveObject } from 'slices/slick';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
@@ -54,7 +54,7 @@ export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
     onInit?: (steps: number) => void;
     slidesToShow?: number;
     responsive?: ResponsiveObject[];
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const GallerySlice: React.FC<GallerySliceType> = ({

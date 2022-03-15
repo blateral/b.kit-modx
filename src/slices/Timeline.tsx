@@ -1,6 +1,6 @@
 import { ModxSlice } from '../utils/modx';
 import React from 'react';
-import { assignTo, Theme, Timeline } from '@blateral/b.kit';
+import { assignTo, ThemeMods, Timeline } from '@blateral/b.kit';
 
 interface TimelineItems {
     label?: string;
@@ -17,7 +17,7 @@ export interface TimelineSliceType
     bgMode?: BgMode;
     bgColor?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const TimelineSlice: React.FC<TimelineSliceType> = ({

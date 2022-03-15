@@ -21,7 +21,6 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
 }) => {
     return (
         <ParallaxBackground
-            // TODO:  Josef
             contentWidth={contentWidth}
             hAlign={hAlign || 'left'}
             image={

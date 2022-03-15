@@ -8,7 +8,7 @@ import {
     endpoint,
 } from 'utils/modx';
 
-import { Header, Theme } from '@blateral/b.kit';
+import { Header, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 
 export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
@@ -85,7 +85,7 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
 
     height?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 
     settingsPage?: ModxMenuItemData;
     pageAlias?: string;

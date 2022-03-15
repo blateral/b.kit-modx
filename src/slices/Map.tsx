@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { assignTo, FlyToIcon, Map, Theme } from '@blateral/b.kit/lib';
+import { assignTo, FlyToIcon, Map, ThemeMods } from '@blateral/b.kit/lib';
 import {
     isExternalLink,
     isHeadlineTag,
@@ -101,7 +101,7 @@ export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
     phoneIcon?: (props: { isInverted?: boolean }) => React.ReactNode;
     mailIcon?: (props: { isInverted?: boolean }) => React.ReactNode;
     routingIcon?: (props: { isInverted?: boolean }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const MapSlice: React.FC<MapSliceType> = ({

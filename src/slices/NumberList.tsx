@@ -1,6 +1,6 @@
 import { BgMode, ModxImageProps, ModxSlice } from '../utils/modx';
 
-import { assignTo, NumberList, Theme } from '@blateral/b.kit';
+import { assignTo, NumberList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 
 interface NumberListItem {
@@ -15,7 +15,7 @@ export interface NumberListSliceType
     bgMode?: BgMode;
     bgColor?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const NumberListSlice: React.FC<NumberListSliceType> = ({

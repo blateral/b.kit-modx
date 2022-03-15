@@ -2,7 +2,7 @@ import {
     assignTo,
     CrossPromotion,
     PromotionCarousel,
-    Theme,
+    ThemeMods,
 } from '@blateral/b.kit';
 
 import { PromotionCardProps } from '@blateral/b.kit/lib/components/blocks/PromotionCard';
@@ -69,7 +69,7 @@ export interface CrossPromotionListSliceType
     slidesToShow?: number;
     responsive?: ResponsiveObject[];
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = (

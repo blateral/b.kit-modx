@@ -5,7 +5,7 @@ import {
     endpoint,
 } from 'utils/modx';
 
-import { Footer, Theme } from '@blateral/b.kit';
+import { Footer, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 
 export interface FooterSliceType {
@@ -22,7 +22,7 @@ export interface FooterSliceType {
         href: string;
         icon: JSX.Element;
     }>;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const FooterSlice: React.FC<FooterSliceType> = ({

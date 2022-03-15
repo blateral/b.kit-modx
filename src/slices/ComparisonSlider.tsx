@@ -1,4 +1,4 @@
-import { assignTo, ComparisonSlider, Theme } from '@blateral/b.kit';
+import { assignTo, ComparisonSlider, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import {
@@ -25,7 +25,7 @@ export interface ComparisonSliderSliceType
     labelColor?: string;
     dragControl?: React.ReactNode;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({

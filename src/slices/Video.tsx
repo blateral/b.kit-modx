@@ -1,5 +1,5 @@
 import React from 'react';
-import { assignTo, Theme, Video, VideoCarousel } from '@blateral/b.kit';
+import { assignTo, ThemeMods, Video, VideoCarousel } from '@blateral/b.kit';
 import { ResponsiveObject } from './slick';
 import { isBgModeString, ModxImageProps, ModxSlice } from 'utils/modx';
 
@@ -34,7 +34,7 @@ export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
     responsive?: ResponsiveObject[];
     playIcon?: React.ReactChild;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const VideoSlice: React.FC<VideoSliceType> = ({

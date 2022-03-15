@@ -1,4 +1,4 @@
-import { assignTo, IconList, Theme } from '@blateral/b.kit';
+import { assignTo, IconList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import {
     BgMode,
@@ -39,7 +39,7 @@ export interface IconListSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const IconListSlice: React.FC<IconListSliceType> = ({

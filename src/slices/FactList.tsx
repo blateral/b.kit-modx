@@ -1,6 +1,6 @@
 // import { FactList } from '@blateral/b.kit';
 import React from 'react';
-import { assignTo, FactList, Theme } from '@blateral/b.kit';
+import { assignTo, FactList, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
 
 interface FactListEntryItems {
@@ -29,7 +29,7 @@ export interface FactListSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const FactListSlice: React.FC<FactListSliceType> = ({

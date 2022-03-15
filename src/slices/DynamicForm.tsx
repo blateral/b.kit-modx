@@ -1,4 +1,4 @@
-import { assignTo, DynamicForm, Theme } from '@blateral/b.kit';
+import { assignTo, DynamicForm, ThemeMods } from '@blateral/b.kit';
 import {
     FieldGenerationProps,
     FileUpload,
@@ -145,7 +145,7 @@ export interface DatepickerDeleteActionProps {
 export interface DynamicFormSliceType
     extends ModxSlice<'DynamicForm', FormField> {
     isActive?: boolean;
-    theme?: Theme;
+    theme?: ThemeMods;
     bgColor?: string;
     bgMode?: 'full' | 'inverted';
     submitLabel?: string;

@@ -1,4 +1,4 @@
-import { Accordion, assignTo, Theme } from '@blateral/b.kit';
+import { Accordion, assignTo, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { BgMode, ModxSlice } from 'utils/modx';
 
@@ -13,7 +13,7 @@ export interface AccordionSliceType
     isActive?: boolean;
     bgMode?: Omit<BgMode, 'splitted'>;
     bgColor?: string;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const AccordionSlice: React.FC<AccordionSliceType> = ({

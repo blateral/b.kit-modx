@@ -15,7 +15,7 @@ import {
     NavItem,
 } from '@blateral/b.kit/lib/components/sections/navigation/menu/Flyout';
 
-import { Navigation, Theme } from '@blateral/b.kit';
+import { Navigation, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 
 export interface NavigationSliceType {
@@ -86,7 +86,7 @@ export interface NavigationProps {
     search?: (isInverted?: boolean) => React.ReactNode;
     openMenuIcon?: (isInverted?: boolean) => React.ReactNode;
     closeMenuIcon?: (isInverted?: boolean) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const NavigationSlice: React.FC<

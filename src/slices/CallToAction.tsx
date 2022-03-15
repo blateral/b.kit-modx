@@ -1,6 +1,6 @@
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
-import { assignTo, CallToAction, Theme } from '@blateral/b.kit';
+import { assignTo, CallToAction, ThemeMods } from '@blateral/b.kit';
 import {
     ModxSlice,
     BgMode,
@@ -24,7 +24,7 @@ interface BadgeData {
 
 export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
     isActive?: boolean;
-    theme?: Theme;
+    theme?: ThemeMods;
 
     bgMode?: BgMode;
     bgColor?: string;

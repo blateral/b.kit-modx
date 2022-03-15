@@ -7,7 +7,7 @@ import {
 
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
-import { assignTo, Intro, Theme } from '@blateral/b.kit';
+import { assignTo, Intro, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
@@ -43,7 +43,7 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const IntroSlice: React.FC<IntroSliceType> = ({

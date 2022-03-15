@@ -1,5 +1,5 @@
 import React from 'react';
-import { assignTo, Form, Theme } from '@blateral/b.kit';
+import { assignTo, Form, ThemeMods } from '@blateral/b.kit';
 import {
     FormDataErrors,
     FormData,
@@ -40,7 +40,7 @@ export interface FormSliceType extends ModxSlice<'Form'> {
         [key in keyof FormData]: FormFieldProps;
     };
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const FormSlice: React.FC<FormSliceType> = ({

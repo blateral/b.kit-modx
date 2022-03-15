@@ -1,6 +1,11 @@
 import React from 'react';
 
-import { assignTo, FeatureCarousel, FeatureList, Theme } from '@blateral/b.kit';
+import {
+    assignTo,
+    FeatureCarousel,
+    FeatureList,
+    ThemeMods,
+} from '@blateral/b.kit';
 import { ResponsiveObject } from './slick';
 import {
     BgMode,
@@ -67,7 +72,7 @@ export interface FeatureListSliceType
     onInit?: (steps: number) => void;
     slidesToShow?: number;
     responsive?: ResponsiveObject[];
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const FeatureListSlice: React.FC<FeatureListSliceType> = ({

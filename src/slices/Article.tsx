@@ -1,4 +1,4 @@
-import { Article, assignTo, Theme } from '@blateral/b.kit';
+import { Article, assignTo, ThemeMods } from '@blateral/b.kit';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
 import { BgMode, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
@@ -30,7 +30,7 @@ export interface ArticleSliceType extends ModxSlice<'Article'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const ArticleSlice: React.FC<ArticleSliceType> = ({

@@ -1,5 +1,5 @@
 import React from 'react';
-import { assignTo, Table, Theme } from '@blateral/b.kit';
+import { assignTo, Table, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
 import { TableProps } from '@blateral/b.kit/lib/components/sections/Table';
 
@@ -17,7 +17,7 @@ export interface TableSliceType extends ModxSlice<'Table'> {
     primary_link?: string;
     secondary_link?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const TableSlice: React.FC<TableSliceType> = ({

@@ -1,4 +1,4 @@
-import { QuickNav, Theme } from '@blateral/b.kit';
+import { QuickNav, ThemeMods } from '@blateral/b.kit';
 
 import React from 'react';
 import { ModxSlice } from 'utils/modx';
@@ -12,7 +12,7 @@ export interface QuickNavSliceType extends ModxSlice<'QuickNav', QuickNavItem> {
     isActive?: boolean;
     active_link?: string;
     bgMode?: 'inverted';
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const QuickNavSlice: React.FC<QuickNavSliceType> = ({

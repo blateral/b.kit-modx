@@ -1,6 +1,6 @@
 import { ModxSlice, ModxImageProps } from 'utils/modx';
 
-import { assignTo, SocialWall, Theme } from '@blateral/b.kit';
+import { assignTo, SocialWall, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 
 type BgMode = 'full' | 'inverted';
@@ -19,7 +19,7 @@ export interface SocialWallSliceType
     followUs?: string;
     hashtag?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
@@ -47,17 +47,14 @@ export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
         <SocialWall
             theme={sliceTheme}
             bgMode={bgMode}
-            hashtag={hashtag}
+            hashTag={hashtag}
             followUs={followUs}
             items={items?.map((item) => ({
                 link: {
                     href: item.link,
                     isExternal: true,
                 },
-                image: {
-                    src: item?.image?.small || '',
-                    alt: item?.image?.meta?.altText || '',
-                },
+                image: item.image,
             }))}
         />
     );

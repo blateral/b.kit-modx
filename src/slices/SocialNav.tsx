@@ -1,7 +1,7 @@
 import { BgMode, endpoint, ModxSlice } from '../utils/modx';
 
 import React from 'react';
-import { assignTo, SocialNav, Theme } from '@blateral/b.kit';
+import { assignTo, SocialNav, ThemeMods } from '@blateral/b.kit';
 
 interface SocialNavItem {
     href?: string;
@@ -14,7 +14,7 @@ export interface SocialNavSliceType
     bgMode?: Omit<BgMode, 'splitted'>;
     bgColor?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
     bgMode,

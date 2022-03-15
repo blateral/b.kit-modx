@@ -1,5 +1,5 @@
 import React from 'react';
-import { assignTo, PriceList, Theme } from '@blateral/b.kit';
+import { assignTo, PriceList, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from '../utils/modx';
 
 interface PriceListItem {
@@ -11,7 +11,7 @@ export interface PriceListSliceType
     extends ModxSlice<'PriceList', PriceListItem> {
     isActive?: boolean;
     bgMode?: 'full' | 'inverted';
-    theme?: Theme;
+    theme?: ThemeMods;
     bgColor?: string;
 }
 

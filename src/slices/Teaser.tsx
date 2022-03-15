@@ -1,4 +1,4 @@
-import { assignTo, Teaser, TeaserWide } from '@blateral/b.kit';
+import { assignTo, Teaser, TeaserWide, ThemeMods } from '@blateral/b.kit';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
 import {
@@ -28,7 +28,7 @@ export interface TeaserVideo {
 }
 export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     isActive?: boolean;
-    // theme?: Theme;
+    theme?: ThemeMods;
     isMirrored?: boolean;
     bgMode?: string;
     bgColor?: string;
@@ -81,7 +81,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
 
     primaryAction,
     secondaryAction,
-    // theme,
+    theme,
 }) => {
     const theImage: ModxImageProps & {
         ratios?: {
@@ -129,8 +129,8 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                     light: bgColor || '',
                 },
             },
-        }
-        // theme
+        },
+        theme
     );
 
     if (isWide) {

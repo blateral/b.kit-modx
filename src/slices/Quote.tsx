@@ -1,4 +1,4 @@
-import { assignTo, Quote, Theme } from '@blateral/b.kit';
+import { assignTo, Quote, ThemeMods } from '@blateral/b.kit';
 
 import React from 'react';
 import { ModxSlice } from '../utils/modx';
@@ -8,7 +8,7 @@ export interface QuoteSliceType extends ModxSlice<'Quote'> {
     active_link?: string;
     bgMode?: 'full' | 'inverted';
     bgColor?: string;
-    theme?: Theme;
+    theme?: ThemeMods;
 
     text?: string;
     source?: string;
