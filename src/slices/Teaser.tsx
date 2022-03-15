@@ -182,7 +182,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                 theme={sliceTheme}
                 image={{
                     ...theImage,
-                    small: theImage.small || '',
+                    small: theImage?.small || '',
                     alt: image?.meta?.altText || '',
                     ratios: theImage.ratios,
                 }}
