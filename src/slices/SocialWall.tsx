@@ -17,7 +17,7 @@ export interface SocialWallSliceType
     bgMode?: BgMode;
     bgColor?: string;
     followUs?: string;
-    hashtag?: string;
+    hashTag?: string;
 
     theme?: ThemeMods;
 }
@@ -26,7 +26,7 @@ export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
     bgMode,
     bgColor,
     followUs,
-    hashtag,
+    hashTag,
     items,
 
     theme,
@@ -47,7 +47,7 @@ export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
         <SocialWall
             theme={sliceTheme}
             bgMode={bgMode}
-            hashTag={hashtag}
+            hashTag={hashTag}
             followUs={followUs}
             items={items?.map((item) => ({
                 link: {
