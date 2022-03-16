@@ -171,6 +171,7 @@ export type ModxDocument = {
     gTag?: string;
 
     settings?: ModxSettingsPage;
+    strucOrganization: StructuredOrganizationData;
 };
 
 export interface ModxPage extends ModxDocument {
