@@ -174,6 +174,39 @@ export type ModxDocument = {
     strucOrganization: StructuredOrganizationData;
 };
 
+export interface StructuredOrganizationData {
+    '@context': string;
+    '@type':
+        | 'Organization'
+        | 'Airline'
+        | 'Consortium'
+        | 'Corporation'
+        | 'EducationalOrganization'
+        | 'FundingScheme'
+        | 'GovernmentOrganization'
+        | 'LibrarySystem'
+        | 'LocalBusiness'
+        | 'MedicalOrganization'
+        | 'NGO'
+        | 'NewsMediaOrganization'
+        | 'PerformingGroup'
+        | 'Project'
+        | 'ResearchOrganization'
+        | 'SportsOrganization'
+        | 'WorkersUnion';
+    name: string;
+    url: string;
+    telephone: string;
+    email: string;
+    sameAs: string[];
+    address: {
+        '@type': 'PostalAddress';
+        streetAddress: string;
+        addressLocality: string;
+        postalCode: string;
+        addressCountry: string;
+    };
+}
 export interface ModxPage extends ModxDocument {
     header: HeaderSliceType;
     content: Array<PageContent>;
