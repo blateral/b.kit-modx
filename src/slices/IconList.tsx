@@ -10,6 +10,10 @@ import {
 
 interface IconListImages {
     image: ModxImageProps;
+    link: {
+        href?: string;
+        isExternal?: boolean;
+    };
 }
 
 export interface IconListSliceType
@@ -86,6 +90,7 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
                 return {
                     src: item?.image?.small || '',
                     alt: item?.image?.meta?.altText || '',
+                    link: item?.link?.href ? item.link : undefined,
                 };
             })}
             primaryAction={
