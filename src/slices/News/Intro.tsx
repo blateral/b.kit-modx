@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { NewsIntro } from '@blateral/b.kit';
+import { assignTo, NewsIntro, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
 export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
@@ -16,6 +16,9 @@ export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
     primary_label?: string;
     secondary_label?: string;
     tags?: string;
+
+    bgColor?: string;
+    theme?: ThemeMods;
 }
 
 export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
@@ -25,7 +28,8 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     newsImage,
     newsIntro,
     newsHeading,
-
+    bgColor,
+    theme,
     tags,
 }) => {
     const preppedPubDate = generatePublicationDateObject(publicationDate);
@@ -39,8 +43,20 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
 
     const tagsArray = tags && tags.length > 0 ? tags?.split(',') : [];
 
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <NewsIntro
+            theme={sliceTheme}
             title={newsHeading}
             text={newsIntro}
             image={mappedImage}

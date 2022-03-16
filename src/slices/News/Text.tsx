@@ -1,4 +1,4 @@
-import { NewsText } from '@blateral/b.kit';
+import { assignTo, NewsText, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
@@ -22,6 +22,9 @@ export interface NewsTextSliceType extends ModxSlice<'NewsText'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+
+    bgColor?: string;
+    theme?: ThemeMods;
 }
 
 export const NewsTextSlice: React.FC<NewsTextSliceType> = ({
@@ -32,9 +35,22 @@ export const NewsTextSlice: React.FC<NewsTextSliceType> = ({
     secondary_label,
     primaryAction,
     secondaryAction,
+    bgColor,
+    theme,
 }) => {
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <NewsText
+            theme={sliceTheme}
             text={text || ''}
             primaryAction={
                 primaryAction && isValidAction(primary_label, primary_link)

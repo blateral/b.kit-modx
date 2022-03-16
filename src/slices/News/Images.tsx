@@ -1,4 +1,4 @@
-import { NewsImages } from '@blateral/b.kit';
+import { assignTo, NewsImages, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import {
     BgMode,
@@ -14,6 +14,8 @@ export interface NewsImagesSliceType extends ModxSlice<'NewsImages'> {
     bgMode?: BgMode;
     full: Pick<ModxImageProps, 'small' | 'medium' | 'meta'>;
     half: Array<Pick<ModxImageProps, 'small' | 'medium' | 'large' | 'meta'>>;
+    bgColor?: string;
+    theme?: ThemeMods;
     primary_link?: string;
     secondary_link?: string;
     primary_label?: string;
@@ -37,6 +39,8 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
     bgMode,
     full,
     half,
+    bgColor,
+    theme,
     primary_link,
     primary_label,
     secondary_link,
@@ -46,8 +50,19 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
     secondaryAction,
 }) => {
     const images = full?.small ? [full] : half[0]?.small ? half : [];
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <NewsImages
+            theme={sliceTheme}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }

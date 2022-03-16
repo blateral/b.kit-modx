@@ -1,4 +1,4 @@
-import { NewsList } from '@blateral/b.kit';
+import { assignTo, NewsList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
@@ -8,6 +8,8 @@ export interface NewsListSliceType
     showMoreText?: string;
     bgMode?: BgMode;
     collectionId?: number;
+    bgColor?: string;
+    theme?: ThemeMods;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -23,6 +25,8 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     items,
     cardAction,
     onTagClick,
+    bgColor,
+    theme,
 }) => {
     // get background mode
     const newsListMap = mapNewsListData({
@@ -30,9 +34,19 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
         cardAction,
         onTagClick,
     });
-
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <NewsList
+            theme={sliceTheme}
             showMoreText={showMoreText}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
