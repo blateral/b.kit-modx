@@ -1,4 +1,4 @@
-import { NewsTable } from '@blateral/b.kit';
+import { assignTo, NewsTable, Theme } from '@blateral/b.kit';
 import React from 'react';
 import { BgMode, ModxSlice } from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
@@ -11,6 +11,8 @@ export interface NewsTableSliceType extends ModxSlice<'NewsTable'> {
     titleAs?: HeadlineTag;
     sliceRows?: Array<{ cols: string[] }>;
     as_table_header?: boolean;
+    bgColor?: string;
+    theme?: Theme;
 }
 
 export const NewsTableSlice: React.FC<NewsTableSliceType> = ({
@@ -18,9 +20,22 @@ export const NewsTableSlice: React.FC<NewsTableSliceType> = ({
     sliceRows,
     as_table_header,
     bgMode,
+    bgColor,
+    theme,
 }) => {
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <NewsTable
+            theme={sliceTheme}
             bgMode={(bgMode as any) || undefined}
             tableItems={
                 sliceRows

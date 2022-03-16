@@ -24,9 +24,9 @@ export const LdOrganizationScript: React.FC<{ page: ModxNewsPage }> = ({
         '@context': 'https://schema.org',
         '@type': 'NewsArticle',
         headline: page.newsHeading || '',
-        image: [page.newsImage.small || ''],
-        datePublished: parseModxDateToObject(page.publishedOn),
-        dateModified: parseModxDateToObject(page.updatedAt),
+        image: [page?.newsImage?.small || ''],
+        datePublished: parseModxDateToObject(page?.publishedOn || ''),
+        dateModified: parseModxDateToObject(page?.updatedAt || ''),
         // TODO: Add url to user profile for full data compataibility
         // author: [{
         //     "@type": "Person",

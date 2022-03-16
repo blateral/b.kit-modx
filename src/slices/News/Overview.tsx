@@ -1,4 +1,4 @@
-import { NewsOverview } from '@blateral/b.kit';
+import { assignTo, NewsOverview, Theme } from '@blateral/b.kit';
 import React from 'react';
 import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
@@ -15,20 +15,33 @@ export interface NewsOverviewSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+
+    bgColor?: string;
+    theme?: Theme;
 }
 
 export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     bgMode,
     showMoreText,
-
+    bgColor,
+    theme,
     cardAction,
     queryParams,
     items,
 }) => {
-    // get background mode
-
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <NewsOverview
+            theme={sliceTheme}
             tags={generateUniqueTag(items)}
             queryParams={queryParams}
             news={mapNewsListData(items, cardAction) || []}
