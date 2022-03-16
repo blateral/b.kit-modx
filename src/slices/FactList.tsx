@@ -6,10 +6,6 @@ import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
 interface FactListEntryItems {
     title?: string;
     text?: string;
-    icon?: {
-        url?: string;
-        meta?: ModxImageMetaData;
-    };
 }
 
 export interface FactListSliceType
@@ -17,6 +13,10 @@ export interface FactListSliceType
     isActive?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
+    icon?: {
+        url?: string;
+        meta?: ModxImageMetaData;
+    };
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -36,7 +36,7 @@ export const FactListSlice: React.FC<FactListSliceType> = ({
     bgMode,
     bgColor,
     items,
-
+    icon,
     theme,
 }) => {
     // merging cms and component theme settings
@@ -57,14 +57,18 @@ export const FactListSlice: React.FC<FactListSliceType> = ({
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
+            icon={
+                icon?.url
+                    ? {
+                          src: icon.url,
+                          alt: icon.meta?.altText || '',
+                      }
+                    : undefined
+            }
             facts={items?.map((item) => {
                 return {
                     label: item.title,
                     text: item.text,
-                    icon: {
-                        src: item?.icon?.url || '',
-                        alt: item?.icon?.meta?.altText || '',
-                    },
                 };
             })}
         />
