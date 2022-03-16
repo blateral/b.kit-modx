@@ -1,4 +1,4 @@
-import { NewsFooter } from '@blateral/b.kit';
+import { assignTo, NewsFooter, Theme } from '@blateral/b.kit';
 import React from 'react';
 import { ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
@@ -8,7 +8,8 @@ export interface NewsFooterSliceType
     isInverted?: boolean;
     newsFooterBackground?: boolean;
     pageAlias?: string;
-
+    bgColor?: string;
+    theme?: Theme;
     // helpers to define component elements outside of slice
     secondaryAction?: (props: {
         isInverted?: boolean;
@@ -27,6 +28,8 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     items,
     secondaryAction,
     onTagClick,
+    bgColor,
+    theme,
 }) => {
     const newsWithoutSelf = filterSelfFromNewsCollection(items, pageAlias);
 
@@ -36,8 +39,20 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
         onTagClick,
     });
 
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <NewsFooter
+            theme={sliceTheme}
             news={newsListMap || []}
             bgMode={
                 isInverted

@@ -148,6 +148,9 @@ export type ModxDocument = {
     type: 'page' | 'settings' | 'news_page';
     alias: string;
 
+    publishedOn?: string;
+    updatedAt?: string;
+
     pagetitle?: string;
     ogImage?: ModxImageProps;
     seoDescription?: string;

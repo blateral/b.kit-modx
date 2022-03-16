@@ -1,7 +1,12 @@
 import React from 'react';
-import { NewsVideo } from '@blateral/b.kit';
-import { isExternalLink, isValidAction, mapImageToComponentData, ModxImageProps, ModxSlice } from 'utils/modx';
-
+import { assignTo, NewsVideo, Theme } from '@blateral/b.kit';
+import {
+    isExternalLink,
+    isValidAction,
+    mapImageToComponentData,
+    ModxImageProps,
+    ModxSlice,
+} from 'utils/modx';
 
 export interface NewsVideoSliceType extends ModxSlice<'NewsVideo'> {
     isActive?: boolean;
@@ -24,6 +29,9 @@ export interface NewsVideoSliceType extends ModxSlice<'NewsVideo'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+
+    bgColor?: string;
+    theme?: Theme;
 }
 
 export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
@@ -36,9 +44,22 @@ export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
     secondary_label,
     primaryAction,
     secondaryAction,
+    bgColor,
+    theme,
 }) => {
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <NewsVideo
+            theme={sliceTheme}
             embedId={embedId || ''}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
