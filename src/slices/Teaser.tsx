@@ -11,19 +11,9 @@ import {
 } from 'utils/modx';
 
 export interface TeaserVideo {
-    video?: {
-        urls?: Array<string>;
-        aspectRatios?: {
-            small?: number;
-        };
-    };
-    image?: ModxImageProps & {
-        ratios?: {
-            small?: {
-                w: number;
-                h: number;
-            };
-        };
+    urls?: Array<string>;
+    aspectRatios?: {
+        small?: number;
     };
 }
 export interface TeaserSliceType extends ModxSlice<'Teaser'> {
@@ -39,8 +29,8 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     superTitle?: string;
     superTitleAs?: HeadlineTag;
     text?: string;
-    image?: ModxImagePropsWithFormat;
-    teaserVideo?: TeaserVideo;
+    image?: ModxImagePropsWithFormat & { ratios: { w: number; h: number } };
+    video?: TeaserVideo;
     primary_link?: string;
     secondary_link?: string;
     primary_label?: string;
@@ -72,7 +62,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     superTitle,
     text,
     image,
-    teaserVideo,
+    video,
 
     primary_link,
     primary_label,
@@ -83,6 +73,15 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     secondaryAction,
     theme,
 }) => {
+    const aspectRatios = {
+        square: { w: 1, h: 1 },
+        landscape: { w: 4, h: 3 },
+        portrait: { w: 3, h: 4 },
+        'landscape-wide': { w: 4, h: 3 },
+    };
+
+    const selectedAspect: { w: number; h: number } =
+        aspectRatios[format || 'square'];
     const theImage: ModxImageProps & {
         ratios?: {
             small: {
@@ -90,7 +89,16 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                 h: number;
             };
         };
-    } = (image && image[format || 'square']) || teaserVideo?.image;
+    } = image && {
+        ...image[format || 'square'],
+        ratios: selectedAspect,
+    };
+
+    const theVideo = {
+        urls: video?.urls || [],
+        aspectRatios: { small: selectedAspect.w / selectedAspect.h },
+    };
+
     const sharedProps = {
         isMirrored,
         title,
@@ -184,14 +192,12 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                     ...theImage,
                     small: theImage?.small || '',
                     alt: image?.meta?.altText || '',
-                    ratios: theImage.ratios,
                 }}
-                video={{
-                    urls: teaserVideo?.video?.urls || [],
-                    aspectRatios: {
-                        small: teaserVideo?.video?.aspectRatios?.small || 1,
-                    },
-                }}
+                video={
+                    Array.isArray(theVideo.urls) && theVideo.urls.length > 0
+                        ? theVideo
+                        : undefined
+                }
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
                 primaryAction={
                     primaryAction && isValidAction(primary_label, primary_link)
