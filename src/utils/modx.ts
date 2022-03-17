@@ -428,6 +428,7 @@ export interface ModxImageProps {
     semilarge?: string;
     large?: string;
     xlarge?: string;
+
     meta?: ModxImageMetaData;
 }
 

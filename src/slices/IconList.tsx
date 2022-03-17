@@ -9,7 +9,16 @@ import {
 } from 'utils/modx';
 
 interface IconListImages {
-    image: ModxImageProps;
+    image: ModxImageProps & {
+        originals?: {
+            w?: number;
+            h?: number;
+        };
+    };
+    sizes?: {
+        w?: string;
+        h?: string;
+    };
     link: {
         href?: string;
         isExternal?: boolean;
@@ -87,8 +96,21 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
             showMoreText={showMoreText}
             showLessText={showLessText}
             items={items.map((item) => {
+                console.log(item.sizes);
                 return {
                     src: item?.image?.small || '',
+                    ratio:
+                        item?.sizes?.w && item.sizes.h
+                            ? {
+                                  w: +item.sizes.w,
+                                  h: +item.sizes.h,
+                              }
+                            : item.image.originals?.w && item.image.originals.h
+                            ? {
+                                  w: +item.image.originals.w,
+                                  h: +item.image.originals.h,
+                              }
+                            : undefined,
                     alt: item?.image?.meta?.altText || '',
                     link: item?.link?.href ? item.link : undefined,
                 };
