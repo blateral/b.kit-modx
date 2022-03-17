@@ -43,7 +43,6 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
         <NewsOverview
             theme={sliceTheme}
             tags={generateUniqueTag(items)}
-            queryParams={queryParams}
             news={mapNewsListData(items, cardAction) || []}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined

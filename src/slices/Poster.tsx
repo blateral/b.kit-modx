@@ -60,7 +60,7 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
     return (
         <Poster
             theme={theme}
-            hasWrapper={hasWrapper}
+            width={hasWrapper ? 'content' : 'full'}
             image={mapImageToComponentData(image)}
             title={title}
             titleAs={

@@ -5,7 +5,6 @@ import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 export interface NewsListSliceType
     extends ModxSlice<'NewsList', ModxNewsTeaser> {
     isActive?: boolean;
-    showMoreText?: string;
     bgMode?: BgMode;
     collectionId?: number;
     bgColor?: string;
@@ -20,7 +19,6 @@ export interface NewsListSliceType
 }
 
 export const NewsListSlice: React.FC<NewsListSliceType> = ({
-    showMoreText,
     bgMode,
     items,
     cardAction,
@@ -47,7 +45,6 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     return (
         <NewsList
             theme={sliceTheme}
-            showMoreText={showMoreText}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
