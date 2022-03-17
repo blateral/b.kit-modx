@@ -96,7 +96,6 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
             showMoreText={showMoreText}
             showLessText={showLessText}
             items={items.map((item) => {
-                console.log(item.sizes);
                 return {
                     src: item?.image?.small || '',
                     ratio:
