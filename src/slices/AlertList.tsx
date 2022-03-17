@@ -47,24 +47,26 @@ export const AlertListSlice: React.FC<AlertListSliceType> = ({
         <AlertList
             theme={sliceTheme}
             bgMode={bgMode}
-            items={items.map((alert) => {
-                const dateParts = alert.date?.split('.') || [];
+            items={items
+                .filter((alert) => alert.label && alert.link?.href)
+                .map((alert) => {
+                    const dateParts = alert.date?.split('.') || [];
 
-                let date = undefined;
-                if (dateParts?.length > 0) {
-                    date = new Date(
-                        +dateParts[0],
-                        +dateParts[1],
-                        +dateParts[2]
-                    );
-                }
-                return {
-                    title: alert.label,
-                    date: date,
-                    description: alert.description,
-                    link: alert.link,
-                };
-            })}
+                    let date = undefined;
+                    if (dateParts?.length > 0) {
+                        date = new Date(
+                            +dateParts[0],
+                            +dateParts[1],
+                            +dateParts[2]
+                        );
+                    }
+                    return {
+                        title: alert.label,
+                        date: date,
+                        description: alert.description,
+                        link: alert.link,
+                    };
+                })}
         />
     );
 };
