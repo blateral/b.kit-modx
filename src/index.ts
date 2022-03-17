@@ -19,6 +19,7 @@ export * from 'slices/Gallery';
 export * from 'slices/Header';
 export * from 'slices/IconList';
 export * from 'slices/Intro';
+export * from 'slices/NavList';
 export * from 'slices/Map';
 export * from 'slices/Navigation';
 export * from 'slices/News/AuthorCard';

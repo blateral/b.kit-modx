@@ -41,6 +41,7 @@ import { SocialWallSliceType } from 'slices/SocialWall';
 import { DynamicFormSliceType } from 'slices/DynamicForm';
 import { QuoteSliceType } from 'slices/Quote';
 import { AlertListSliceType } from 'slices/AlertList';
+import { NavListSliceType } from 'slices/NavList';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -116,6 +117,7 @@ export type PageContent =
     | HeaderSliceType
     | IconListSliceType
     | IntroSliceType
+    | NavListSliceType
     | MapSliceType
     | NewsListSliceType
     | NewsOverviewSliceType
