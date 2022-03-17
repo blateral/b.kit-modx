@@ -3,6 +3,7 @@
 // slice exports
 export { endpoint } from 'utils/modx';
 export * from 'slices/Accordion';
+export * from 'slices/AlertList';
 export * from 'slices/Article';
 export * from 'slices/CallToAction';
 export * from 'slices/ComparisonSlider';
