@@ -352,6 +352,12 @@ export interface ModxNewsTeaser {
             medium?: string;
             large?: string;
             xlarge?: string;
+            ratios: {
+                small: {
+                    w: number;
+                    h: number;
+                };
+            };
             meta?: ModxImageMetaData;
         };
         title?: string;

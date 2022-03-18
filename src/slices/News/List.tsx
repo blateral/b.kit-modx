@@ -8,7 +8,14 @@ export interface NewsListSliceType
     bgMode?: BgMode;
     collectionId?: number;
     bgColor?: string;
+    mode?: 'short' | 'expanded';
     theme?: ThemeMods;
+    customTag?: (props: {
+        name: string;
+        isInverted?: boolean;
+        isActive?: boolean;
+        clickHandler?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void;
+    }) => React.ReactNode;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -21,6 +28,8 @@ export interface NewsListSliceType
 export const NewsListSlice: React.FC<NewsListSliceType> = ({
     bgMode,
     items,
+    mode,
+    customTag,
     cardAction,
     onTagClick,
     bgColor,
@@ -48,6 +57,8 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
+            mode={mode}
+            customTag={customTag}
             news={newsListMap}
         />
     );
