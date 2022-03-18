@@ -74,14 +74,17 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     theme,
 }) => {
     const aspectRatios = {
-        square: { w: 1, h: 1 },
-        landscape: { w: 4, h: 3 },
-        portrait: { w: 3, h: 4 },
-        'landscape-wide': { w: 4, h: 3 },
+        square: { small: { w: 1, h: 1 } },
+        landscape: { small: { w: 4, h: 3 } },
+        portrait: { small: { w: 3, h: 4 } },
+        'landscape-wide': { small: { w: 4, h: 3 }, semilarge: { w: 1, h: 1 } },
     };
 
-    const selectedAspect: { w: number; h: number } =
-        aspectRatios[format || 'square'];
+    const selectedAspect: {
+        small: { w: number; h: number };
+        semilarge: { w: number; h: number };
+    } = aspectRatios[format || 'square'];
+
     const theImage: ModxImageProps & {
         ratios?: {
             small: {
@@ -96,7 +99,13 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
 
     const theVideo = {
         urls: video?.urls || [],
-        aspectRatios: { small: selectedAspect.w / selectedAspect.h },
+        aspectRatios: {
+            small: selectedAspect.small.w / selectedAspect.small.h,
+            semilarge:
+                format === 'landscape-wide'
+                    ? selectedAspect.semilarge.w / selectedAspect.semilarge.h
+                    : undefined,
+        },
     };
 
     const sharedProps = {
@@ -156,6 +165,11 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                               ratios: theImage.ratios,
                               //   description: description,
                           }
+                        : undefined
+                }
+                video={
+                    Array.isArray(theVideo.urls) && theVideo.urls.length > 0
+                        ? theVideo
                         : undefined
                 }
                 primaryAction={
