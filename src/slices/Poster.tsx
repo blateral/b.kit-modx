@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Poster, ThemeMods } from '@blateral/b.kit';
+import { assignTo, Poster, ThemeMods } from '@blateral/b.kit';
 import {
     isExternalLink,
     isHeadlineTag,
@@ -21,6 +21,7 @@ export interface PosterSliceType extends ModxSlice<'Poster'> {
     title?: string;
     titleAs?: HeadlineTag;
     text?: string;
+    bgColor?: string;
     primary_label?: string;
     secondary_label?: string;
     primary_link?: string;
@@ -56,10 +57,21 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
     primaryAction,
     secondaryAction,
     theme,
+    bgColor,
 }) => {
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <Poster
-            theme={theme}
+            theme={sliceTheme}
             width={hasWrapper ? 'content' : 'full'}
             image={mapImageToComponentData(image)}
             title={title}

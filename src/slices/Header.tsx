@@ -8,7 +8,7 @@ import {
     endpoint,
 } from 'utils/modx';
 
-import { Header, ThemeMods } from '@blateral/b.kit';
+import { assignTo, Header, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 
 export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
@@ -30,7 +30,7 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
     isNavLarge?: boolean;
     isInverted?: boolean;
     navInverted?: boolean;
-
+    bgColor?: string;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -111,13 +111,23 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     secondaryActionPointer,
     height,
     theme,
+    bgColor,
 }) => {
     // map header images
     const headerImageMap = items?.map(toComponentImageFormat) || undefined;
-
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <Header
-            theme={theme}
+            theme={sliceTheme}
             size={size || 'full'}
             height={height}
             videoUrl={videoUrl ? `${endpoint}${videoUrl}` : ''}
