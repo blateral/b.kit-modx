@@ -4,6 +4,7 @@
 export { endpoint } from 'utils/modx';
 export * from 'slices/Accordion';
 export * from 'slices/Article';
+export * from 'slices/AlertList';
 export * from 'slices/CallToAction';
 export * from 'slices/ComparisonSlider';
 export * from 'slices/CookieConsent';
@@ -20,6 +21,7 @@ export * from 'slices/IconList';
 export * from 'slices/Intro';
 export * from 'slices/Map';
 export * from 'slices/Navigation';
+export * from 'slices/NavList';
 export * from 'slices/News/AuthorCard';
 export * from 'slices/News/Footer';
 export * from 'slices/News/Images';
