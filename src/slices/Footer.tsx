@@ -5,7 +5,7 @@ import {
     endpoint,
 } from 'utils/modx';
 
-import { Footer, ThemeMods } from '@blateral/b.kit';
+import { assignTo, Footer, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 
 export interface FooterSliceType {
@@ -23,6 +23,7 @@ export interface FooterSliceType {
         icon: JSX.Element;
     }>;
     theme?: ThemeMods;
+    bgColor?: string;
 }
 
 export const FooterSlice: React.FC<FooterSliceType> = ({
@@ -30,6 +31,7 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
     injectForm,
     mapSocials,
     theme,
+    bgColor,
 }) => {
     const settingsData = settings;
 
@@ -47,10 +49,19 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
             : logoLinkParsed
             ? logoLinkParsed
             : '';
-
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <Footer
-            theme={theme}
+            theme={sliceTheme}
             isInverted={settingsData?.footer?.isInverted}
             socials={mappedSocials || undefined}
             logo={{
