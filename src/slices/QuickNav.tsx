@@ -1,4 +1,4 @@
-import { QuickNav, ThemeMods } from '@blateral/b.kit';
+import { assignTo, QuickNav, ThemeMods } from '@blateral/b.kit';
 
 import React from 'react';
 import { ModxSlice } from 'utils/modx';
@@ -12,6 +12,7 @@ export interface QuickNavSliceType extends ModxSlice<'QuickNav', QuickNavItem> {
     isActive?: boolean;
     active_link?: string;
     bgMode?: 'inverted';
+    bgColor?: string;
     theme?: ThemeMods;
 }
 
@@ -20,11 +21,22 @@ export const QuickNavSlice: React.FC<QuickNavSliceType> = ({
     items,
     theme,
     bgMode,
+    bgColor,
 }) => {
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
     return (
         <QuickNav
             bgMode={bgMode}
-            theme={theme}
+            theme={sliceTheme}
             navItems={items?.map((item) => {
                 return {
                     link: item.link || '',
