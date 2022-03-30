@@ -19,6 +19,8 @@ export * from 'slices/Form';
 export * from 'slices/Gallery';
 export * from 'slices/Header';
 export * from 'slices/IconList';
+export * from 'slices/IndexList';
+
 export * from 'slices/Intro';
 export * from 'slices/Map';
 export * from 'slices/Navigation';
