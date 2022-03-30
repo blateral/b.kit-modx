@@ -34,7 +34,10 @@ export interface FeatureListSliceType
     extends ModxSlice<'FeatureList', FeatureItemType> {
     isActive?: boolean;
     isCarousel?: boolean;
-
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     isCentered?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
@@ -76,6 +79,7 @@ export interface FeatureListSliceType
 }
 
 export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
+    anchor,
     isCarousel,
     isCentered,
     bgMode,
@@ -109,6 +113,7 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
     // get image format for all images
     const sharedProps = {
         isCentered,
+        anchorId: anchor?.id || '',
         features: items
             .filter(filterMissingSmallFormat)
             .map(
