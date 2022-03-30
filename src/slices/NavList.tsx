@@ -20,12 +20,21 @@ export interface NavListSliceType extends ModxSlice<'NavList', NavListItems> {
     bgMode?: BgMode;
     bgColor?: string;
 
+    customTitleIcon?:
+        | ((props: { isInverted?: boolean | undefined }) => React.ReactNode)
+        | undefined;
+    customIcon?:
+        | ((props: { isInverted?: boolean | undefined }) => React.ReactNode)
+        | undefined;
+
     theme?: ThemeMods;
 }
 
 export const NavListSlice: React.FC<NavListSliceType> = ({
     bgMode,
     bgColor,
+    customTitleIcon,
+    customIcon,
     items,
     theme,
 }) => {
@@ -45,6 +54,8 @@ export const NavListSlice: React.FC<NavListSliceType> = ({
         <NavList
             theme={sliceTheme}
             bgMode={bgMode}
+            customIcon={customIcon}
+            customTitleIcon={customTitleIcon}
             items={items
                 .filter((navitem) => navitem.title && navitem.link?.href)
                 .map((navitem) => {
