@@ -43,6 +43,7 @@ import { QuoteSliceType } from 'slices/Quote';
 import { AlertListSliceType } from 'slices/AlertList';
 import { NavListSliceType } from 'slices/NavList';
 import { CardListSliceType } from 'slices/CardList';
+import { IndexListSliceType } from 'slices/IndexList';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -118,6 +119,7 @@ export type PageContent =
     | GallerySliceType
     | HeaderSliceType
     | IconListSliceType
+    | IndexListSliceType
     | IntroSliceType
     | MapSliceType
     | NavListSliceType
