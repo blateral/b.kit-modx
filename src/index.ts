@@ -8,6 +8,7 @@ export * from 'slices/AlertList';
 export * from 'slices/CallToAction';
 export * from 'slices/ComparisonSlider';
 export * from 'slices/CookieConsent';
+export * from 'slices/CardList';
 export * from 'slices/CrossPromotionList';
 export * from 'slices/DynamicForm';
 export * from 'slices/FactGrid';

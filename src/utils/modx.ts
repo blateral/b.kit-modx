@@ -42,6 +42,7 @@ import { DynamicFormSliceType } from 'slices/DynamicForm';
 import { QuoteSliceType } from 'slices/Quote';
 import { AlertListSliceType } from 'slices/AlertList';
 import { NavListSliceType } from 'slices/NavList';
+import { CardListSliceType } from 'slices/CardList';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -106,6 +107,7 @@ export type PageContent =
     | AlertListSliceType
     | ArticleSliceType
     | CallToActionSliceType
+    | CardListSliceType
     | ComparisonSliderSliceType
     | CrossPromotionListSliceType
     | DynamicFormSliceType
