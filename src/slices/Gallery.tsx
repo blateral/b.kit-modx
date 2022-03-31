@@ -91,6 +91,7 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
     );
 
     const sharedProps = {
+        anchorId: anchor?.id || '',
         images: items?.map((item) => {
             const theImage: ModxImageProps =
                 item[item?.imageFormat || 'small-square'];
@@ -108,7 +109,6 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
         return (
             <ImageCarousel
                 {...sharedProps}
-                anchorId={anchor?.id || ''}
                 theme={sliceTheme}
                 bgMode={bgMode}
                 controlNext={controlNext}
@@ -122,13 +122,6 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
             />
         );
     } else {
-        return (
-            <Gallery
-                {...sharedProps}
-                anchorId={anchor?.id || ''}
-                theme={sliceTheme}
-                bgMode={bgMode}
-            />
-        );
+        return <Gallery {...sharedProps} theme={sliceTheme} bgMode={bgMode} />;
     }
 };

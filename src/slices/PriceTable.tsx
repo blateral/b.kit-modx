@@ -13,9 +13,12 @@ interface PriceTableItem {
     isHighlighted?: boolean;
 }
 
-export interface PriceTableSliceType
-    extends ModxSlice<'PriceTable', PriceTableItem> {
+export interface PriceTableSliceType extends ModxSlice<'PriceTable', PriceTableItem> {
     isActive?: boolean;
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: 'full' | 'inverted';
     bgColor?: string;
     primary_link?: string;
@@ -31,6 +34,7 @@ export interface PriceTableSliceType
 
 export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
     bgMode,
+    anchor,
     items,
     action,
     theme,
@@ -53,6 +57,7 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
     return (
         <PriceTable
             bgMode={bgMode}
+            anchorId={anchor?.id || ''}
             items={filteredItems.map((item) => {
                 return {
                     title: item.title,

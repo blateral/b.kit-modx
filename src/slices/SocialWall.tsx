@@ -10,10 +10,12 @@ interface WallItems {
     image?: ModxImageProps;
 }
 
-export interface SocialWallSliceType
-    extends ModxSlice<'SocialWall', WallItems> {
+export interface SocialWallSliceType extends ModxSlice<'SocialWall', WallItems> {
     isActive?: boolean;
-
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: BgMode;
     bgColor?: string;
     followUs?: string;
@@ -24,6 +26,7 @@ export interface SocialWallSliceType
 
 export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
     bgMode,
+    anchor,
     bgColor,
     followUs,
     hashTag,
@@ -46,6 +49,7 @@ export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
     return (
         <SocialWall
             theme={sliceTheme}
+            anchorId={anchor?.id || ''}
             bgMode={bgMode}
             hashTag={hashTag}
             followUs={followUs}

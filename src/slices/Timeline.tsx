@@ -10,10 +10,12 @@ interface TimelineItems {
 
 type BgMode = 'full' | 'inverted';
 
-export interface TimelineSliceType
-    extends ModxSlice<'Timeline', TimelineItems> {
+export interface TimelineSliceType extends ModxSlice<'Timeline', TimelineItems> {
     isActive?: boolean;
-
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: BgMode;
     bgColor?: string;
 
@@ -22,6 +24,7 @@ export interface TimelineSliceType
 
 export const TimelineSlice: React.FC<TimelineSliceType> = ({
     items,
+    anchor,
     bgMode,
     bgColor,
     theme,
@@ -38,5 +41,12 @@ export const TimelineSlice: React.FC<TimelineSliceType> = ({
         theme
     );
 
-    return <Timeline bgMode={bgMode} theme={sliceTheme} items={items} />;
+    return (
+        <Timeline
+            bgMode={bgMode}
+            theme={sliceTheme}
+            anchorId={anchor?.id || ''}
+            items={items}
+        />
+    );
 };

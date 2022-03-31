@@ -9,9 +9,12 @@ interface NumberListItem {
     label?: string;
 }
 
-export interface NumberListSliceType
-    extends ModxSlice<'NumberList', NumberListItem> {
+export interface NumberListSliceType extends ModxSlice<'NumberList', NumberListItem> {
     isActive?: boolean;
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: BgMode;
     bgColor?: string;
 
@@ -21,6 +24,7 @@ export interface NumberListSliceType
 export const NumberListSlice: React.FC<NumberListSliceType> = ({
     bgMode,
     bgColor,
+    anchor,
     items,
 
     theme,

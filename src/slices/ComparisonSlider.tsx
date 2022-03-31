@@ -8,10 +8,12 @@ import {
     ModxSlice,
 } from 'utils/modx';
 
-export interface ComparisonSliderSliceType
-    extends ModxSlice<'ComparisonSlider'> {
+export interface ComparisonSliderSliceType extends ModxSlice<'ComparisonSlider'> {
     isActive?: boolean;
-
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: BgMode;
     bgColor?: string;
     hasAnim?: boolean;
@@ -30,6 +32,7 @@ export interface ComparisonSliderSliceType
 
 export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({
     bgMode,
+    anchor,
     bgColor,
     hasAnim,
     foregroundImage,
@@ -68,6 +71,7 @@ export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({
     return (
         <ComparisonSlider
             theme={sliceTheme}
+            anchorId={anchor?.id || ''}
             bgMode={bgMode}
             initialValue={initalValue}
             foregroundImg={mappedForegroundImage}

@@ -8,9 +8,12 @@ interface SocialNavItem {
     icon?: string;
 }
 
-export interface SocialNavSliceType
-    extends ModxSlice<'SocialNav', SocialNavItem> {
+export interface SocialNavSliceType extends ModxSlice<'SocialNav', SocialNavItem> {
     isActive?: boolean;
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: Omit<BgMode, 'splitted'>;
     bgColor?: string;
 
@@ -20,7 +23,7 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
     bgMode,
     bgColor,
     items,
-
+    anchor,
     theme,
 }) => {
     // merging cms and component theme settings
@@ -39,6 +42,7 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
     return (
         <SocialNav
             theme={sliceTheme}
+            anchorId={anchor?.id || ''}
             bgMode={bgMode as 'inverted' | 'full' | undefined}
             socials={
                 items

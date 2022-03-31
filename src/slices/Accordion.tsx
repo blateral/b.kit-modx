@@ -8,9 +8,12 @@ interface AccordionItem {
     aside?: string;
 }
 
-export interface AccordionSliceType
-    extends ModxSlice<'Accordion', AccordionItem> {
+export interface AccordionSliceType extends ModxSlice<'Accordion', AccordionItem> {
     isActive?: boolean;
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: Omit<BgMode, 'splitted'>;
     bgColor?: string;
     theme?: ThemeMods;
@@ -18,6 +21,7 @@ export interface AccordionSliceType
 
 export const AccordionSlice: React.FC<AccordionSliceType> = ({
     bgMode,
+    anchor,
     items,
     bgColor,
     theme,
@@ -37,6 +41,7 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
     return (
         <Accordion
             theme={sliceTheme}
+            anchorId={anchor?.id || ''}
             items={items.map((item) => {
                 return {
                     label: item.label,

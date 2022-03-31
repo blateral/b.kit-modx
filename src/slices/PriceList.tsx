@@ -7,9 +7,12 @@ interface PriceListItem {
     price?: string;
 }
 
-export interface PriceListSliceType
-    extends ModxSlice<'PriceList', PriceListItem> {
+export interface PriceListSliceType extends ModxSlice<'PriceList', PriceListItem> {
     isActive?: boolean;
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: 'full' | 'inverted';
     theme?: ThemeMods;
     bgColor?: string;
@@ -17,6 +20,7 @@ export interface PriceListSliceType
 
 export const PriceListSlice: React.FC<PriceListSliceType> = ({
     bgMode,
+    anchor,
     items,
     theme,
     bgColor,
@@ -36,7 +40,12 @@ export const PriceListSlice: React.FC<PriceListSliceType> = ({
     );
 
     return (
-        <PriceList bgMode={bgMode} items={filteredItems} theme={sliceTheme} />
+        <PriceList
+            bgMode={bgMode}
+            anchorId={anchor?.id || ''}
+            items={filteredItems}
+            theme={sliceTheme}
+        />
     );
 };
 
