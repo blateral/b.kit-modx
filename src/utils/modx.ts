@@ -232,6 +232,18 @@ export interface NavBarProperties {
     isStickable?: boolean;
     isCollapsible?: boolean;
     pageFlow?: 'beforeContent' | 'overContent';
+    navbarPrimary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
+    navbarSecondary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
 }
 export interface ModxSettingsPage extends ModxPage {
     type: 'settings';
@@ -396,18 +408,6 @@ export type ModxNavBarData = {
     hideTopBarUnderMenu?: boolean;
 
     buttonStyle?: string;
-    navbarPrimary: {
-        label?: string;
-        labelShort?: string;
-        link?: string;
-        newTab?: boolean;
-    };
-    navbarSecondary: {
-        label?: string;
-        labelShort?: string;
-        link?: string;
-        newTab?: boolean;
-    };
 };
 
 export type ModxNavItem = {
