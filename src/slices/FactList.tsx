@@ -8,11 +8,14 @@ interface FactListEntryItems {
     text?: string;
 }
 
-export interface FactListSliceType
-    extends ModxSlice<'FactList', FactListEntryItems> {
+export interface FactListSliceType extends ModxSlice<'FactList', FactListEntryItems> {
     isActive?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     icon?: {
         url?: string;
         meta?: ModxImageMetaData;
@@ -35,6 +38,7 @@ export interface FactListSliceType
 export const FactListSlice: React.FC<FactListSliceType> = ({
     bgMode,
     bgColor,
+    anchor,
     items,
     icon,
     theme,
@@ -54,6 +58,7 @@ export const FactListSlice: React.FC<FactListSliceType> = ({
     return (
         <FactList
             theme={sliceTheme}
+            anchorId={anchor?.id || ''}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }

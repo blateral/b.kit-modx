@@ -18,6 +18,10 @@ export interface TeaserVideo {
 }
 export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     isActive?: boolean;
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     theme?: ThemeMods;
     isMirrored?: boolean;
     bgMode?: string;
@@ -55,7 +59,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     bgMode,
     bgColor,
     format,
-
+    anchor,
     title,
     titleAs,
     superTitleAs,
@@ -109,6 +113,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     };
 
     const sharedProps = {
+        anchorId: anchor?.id || '',
         isMirrored,
         title,
         titleAs,

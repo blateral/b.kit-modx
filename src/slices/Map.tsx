@@ -52,6 +52,10 @@ interface MapLocationItems {
 
 export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
     isActive?: boolean;
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: string;
     bgColor?: string;
     isMirrored?: boolean;
@@ -106,6 +110,7 @@ export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
 
 export const MapSlice: React.FC<MapSliceType> = ({
     bgMode,
+    anchor,
     bgColor,
     isMirrored,
     withFlyTo,
@@ -141,6 +146,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
     return (
         <Map
             theme={sliceTheme}
+            anchorId={anchor?.id || ''}
             bgMode={bgMode === 'inverted' ? 'inverted' : 'full'}
             isMirrored={isMirrored}
             initialLocation={items?.length > 0 ? `location-0` : undefined}

@@ -108,6 +108,7 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
         return (
             <ImageCarousel
                 {...sharedProps}
+                anchorId={anchor?.id || ''}
                 theme={sliceTheme}
                 bgMode={bgMode}
                 controlNext={controlNext}
