@@ -164,10 +164,10 @@ export type ModxDocument = {
     seoContentGroup?: string;
     seoRedirection?: string;
 
-    nav_isinverted?: boolean;
-    nav_withtopoffset?: boolean;
-    nav_menuicon?: string;
-    navbarAllowOverflow?: boolean;
+    // nav_isinverted?: boolean;
+    // nav_withtopoffset?: boolean;
+    // nav_menuicon?: string;
+    // navbarAllowOverflow?: boolean;
     publication_date?: string;
 
     headScripts?: string;
@@ -228,9 +228,15 @@ export interface SocialMediaItem {
     'icon-inverted'?: Pick<ModxImageProps, 'small'>;
 }
 
+export interface NavBarProperties {
+    isStickable?: boolean;
+    isCollapsible?: boolean;
+    pageFlow?: 'beforeContent' | 'overContent';
+}
 export interface ModxSettingsPage extends ModxPage {
     type: 'settings';
     menu: ModxMenuItemData;
+    navBar: NavBarProperties;
     navTopBar: ModxNavBarData;
     flyoutMenu: ModxFlyoutMenu;
 
@@ -440,12 +446,15 @@ export type ModxNavSubItem = {
     items?: Array<ModxNavSubItem>;
 };
 
-
 export type ModxMenuItemData = {
-    menuPrimary: Array<ModxNavItem>;
+    type?: 'flyout' | 'large';
     // NEW
     primaryMenu: Array<ModxNavGroup>;
+    // NEW
+    secondaryMenu: Array<ModxNavSubItem>;
+
     footerMenuPrimary: Array<Omit<ModxNavItem, 'items'>>;
+    menuPrimary: Array<ModxNavItem>;
     menuSecondary: Array<{
         id: string;
         link: string;
