@@ -452,6 +452,7 @@ export type ModxMenuItemData = {
     primaryMenu: Array<ModxNavGroup>;
     // NEW
     secondaryMenu: Array<ModxNavSubItem>;
+    navBarTopMenu: Array<ModxNavSubItem>;
 
     footerMenuPrimary: Array<Omit<ModxNavItem, 'items'>>;
     menuPrimary: Array<ModxNavItem>;
