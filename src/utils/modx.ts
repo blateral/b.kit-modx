@@ -415,8 +415,36 @@ export type ModxNavItem = {
     items: Array<ModxNavItem>;
 };
 
+// NEW
+export type ModxNavGroup = {
+    id: string;
+    alias?: string;
+    link?: {
+        href: string;
+    };
+    label?: string;
+    isFeatured?: boolean;
+    isCurrent?: boolean;
+    items: Array<ModxNavSubItem>;
+};
+
+// NEW
+export type ModxNavSubItem = {
+    id: string;
+    alias?: string;
+    label?: string;
+    link?: {
+        href: string;
+    };
+    isCurrent?: boolean;
+    items?: Array<ModxNavSubItem>;
+};
+
+
 export type ModxMenuItemData = {
     menuPrimary: Array<ModxNavItem>;
+    // NEW
+    primaryMenu: Array<ModxNavGroup>;
     footerMenuPrimary: Array<Omit<ModxNavItem, 'items'>>;
     menuSecondary: Array<{
         id: string;
