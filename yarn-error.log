@@ -2,7 +2,7 @@ Arguments:
   /usr/local/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js publish --tag beta
 
 PATH: 
-  /var/folders/k9/g1kzzn2d5sqc2xfn60s13qlc0000gn/T/yarn--1647414877288-0.2203163687295695:/Users/falco/Documents/b.kit-modx/node_modules/.bin:/Users/falco/.config/yarn/link/node_modules/.bin:/usr/local/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/bin/node_modules/npm/bin/node-gyp-bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin
+  /Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin
 
 Yarn version: 
   1.22.5
@@ -14,22 +14,22 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/-/user/org.couchdb.user:blateral: failed to authenticate: Could not authenticate blateral: bad password
-      at Request.params.callback [as _callback] (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:66988:18)
-      at Request.self.callback (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:140749:22)
-      at Request.emit (events.js:210:5)
-      at Request.<anonymous> (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:141721:10)
-      at Request.emit (events.js:210:5)
-      at IncomingMessage.<anonymous> (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:141643:12)
-      at Object.onceWrapper (events.js:299:28)
-      at IncomingMessage.emit (events.js:215:7)
-      at endReadableNT (_stream_readable.js:1183:12)
-      at processTicksAndRejections (internal/process/task_queues.js:80:21)
+  Error: canceled
+      at Interface.<anonymous> (/usr/local/Cellar/yarn/1.22.5/libexec/lib/cli.js:137009:13)
+      at Interface.emit (events.js:210:5)
+      at Interface._ttyWrite (readline.js:887:16)
+      at ReadStream.onkeypress (readline.js:191:10)
+      at ReadStream.emit (events.js:210:5)
+      at emitKeys (internal/readline/utils.js:433:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1153:36)
+      at ReadStream.emit (events.js:210:5)
+      at addChunk (_stream_readable.js:308:12)
 
 npm manifest: 
   {
       "name": "@blateral/b.kit-modx",
-      "version": "2.0.0-beta.2",
+      "version": "2.0.0-beta.5.2",
       "description": "",
       "main": "lib/index.js",
       "module": "lib/index.es.js",
@@ -60,7 +60,7 @@ npm manifest:
       },
       "homepage": "https://github.com/blateral/b.kit-modx#readme",
       "devDependencies": {
-          "@blateral/b.kit": "2.0.0-beta.0",
+          "@blateral/b.kit": "2.0.0-beta.2.2",
           "@rollup/plugin-commonjs": "^17.1.0",
           "@rollup/plugin-node-resolve": "^11.1.1",
           "@types/react": "^17.0.1",
@@ -84,7 +84,7 @@ npm manifest:
           "typescript": "^4.1.2"
       },
       "peerDependencies": {
-          "@blateral/b.kit": "2.0.0-beta.0",
+          "@blateral/b.kit": "2.0.0-beta.2.1",
           "react": "^17.0.1",
           "react-dom": "^17.0.1",
           "styled-components": "^5.2.1"
@@ -204,10 +204,10 @@ Lockfile:
       lodash "^4.17.19"
       to-fast-properties "^2.0.0"
   
-  "@blateral/b.kit@2.0.0-beta.0":
-    version "2.0.0-beta.0"
-    resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.0.0-beta.0.tgz#f8ec2cf243194b49e38f20ac033342e5c404e7f7"
-    integrity sha512-O+oDKAzSwxIsHJeMNlQ5DomPN3kSIdfzZKNoF04IjJvkJiCuBWGCMytt1VO6krWMxndOzWGjDGFWjnXKccPxoQ==
+  "@blateral/b.kit@2.0.0-beta.2.2":
+    version "2.0.0-beta.2.2"
+    resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.0.0-beta.2.2.tgz#767654ba09c23ef2dce621081f6c88621ff4d80e"
+    integrity sha512-2WJGZyk8Hw0eDYoPfbMmRjapwAqW2NIxlSyWzP2pEaU7nFm9UjMLylAdhE1Tg1QIZGUjIQLo0vMnuRnqN1BTRQ==
   
   "@emotion/is-prop-valid@^0.8.8":
     version "0.8.8"
