@@ -79,7 +79,7 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
                     return {
                         title: item.title || '',
                         text: item.description,
-                        tags: item.tags?.split(',') || [],
+                        tags: (item.tags && item.tags?.split(',')) || undefined,
                         image: item.image || undefined,
                         date: createDateObjectFromModxDatestring(item.date),
                         action:
