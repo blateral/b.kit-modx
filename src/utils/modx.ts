@@ -44,6 +44,7 @@ import { AlertListSliceType } from 'slices/AlertList';
 import { NavListSliceType } from 'slices/NavList';
 import { CardListSliceType } from 'slices/CardList';
 import { IndexListSliceType } from 'slices/IndexList';
+import { EventListSliceType } from 'slices/EventList';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -112,6 +113,7 @@ export type PageContent =
     | ComparisonSliderSliceType
     | CrossPromotionListSliceType
     | DynamicFormSliceType
+    | EventListSliceType
     | FactGridSliceType
     | FactListSliceType
     | FeatureListSliceType
@@ -573,6 +575,7 @@ export const injectNewsData = async (
 
     return slice;
 };
+
 
 export const getNewsCollectors = (slice: PageContent) =>
     slice.slice_type === 'NewsOverview' || slice.slice_type === 'NewsList';
