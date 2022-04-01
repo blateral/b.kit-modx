@@ -1,4 +1,6 @@
 import { Accordion, assignTo, ThemeMods } from '@blateral/b.kit';
+import { LinkListProps } from '@blateral/b.kit/lib/components/blocks/LinkList';
+import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
 import { BgMode, ModxSlice } from 'utils/modx';
 
@@ -6,9 +8,12 @@ interface AccordionItem {
     label: string;
     text?: string;
     aside?: string;
+    linkList?: LinkListProps;
+    linkListAside?: LinkListProps;
 }
 
-export interface AccordionSliceType extends ModxSlice<'Accordion', AccordionItem> {
+export interface AccordionSliceType
+    extends ModxSlice<'Accordion', AccordionItem> {
     isActive?: boolean;
     anchor?: {
         id?: string;
@@ -43,10 +48,22 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
             theme={sliceTheme}
             anchorId={anchor?.id || ''}
             items={items.map((item) => {
+                const filteredLinkList = {
+                    items: item.linkList?.items?.filter(filterWithLabelAndHref),
+                };
+
+                const filteredAsideLinkList = {
+                    items: item.linkListAside?.items?.filter(
+                        filterWithLabelAndHref
+                    ),
+                };
+
                 return {
                     label: item.label,
                     text: item.text,
                     aside: item.aside,
+                    linkList: filteredLinkList,
+                    linkListAside: filteredAsideLinkList,
                 };
             })}
             bgMode={
@@ -56,4 +73,11 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
             }
         />
     );
+};
+
+const filterWithLabelAndHref = (item: {
+    label?: string | undefined;
+    link?: LinkProps | undefined;
+}) => {
+    return item.label && item.link?.href;
 };
