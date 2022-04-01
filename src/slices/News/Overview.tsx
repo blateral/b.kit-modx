@@ -1,10 +1,15 @@
 import { assignTo, NewsOverview, ThemeMods } from '@blateral/b.kit';
+import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsOverview';
 import React from 'react';
 import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
 export interface NewsOverviewSliceType
     extends ModxSlice<'NewsOverview', ModxNewsTeaser> {
     isActive?: boolean;
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     bgMode?: BgMode;
     showMoreText?: string;
     collectionId?: number;
@@ -22,11 +27,11 @@ export interface NewsOverviewSliceType
 
 export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     bgMode,
+    anchor,
     showMoreText,
     bgColor,
     theme,
     cardAction,
-    queryParams,
     items,
 }) => {
     const sliceTheme = assignTo(
@@ -42,6 +47,7 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     return (
         <NewsOverview
             theme={sliceTheme}
+            anchorId={anchor?.id || ''}
             tags={generateUniqueTag(items)}
             news={mapNewsListData(items, cardAction) || []}
             bgMode={
@@ -75,38 +81,42 @@ function mapNewsListData(
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode
-) {
-    return newsCollection?.map((news) => {
-        const publicationDate = generatePublicationDate(news.publishedOn || '');
+): NewsItem[] {
+    return newsCollection
+        ? newsCollection.map((news) => {
+              const publicationDate = generatePublicationDate(
+                  news.publishedOn || ''
+              );
 
-        const mappedImage = {
-            ...news.intro?.image_preview,
-            small: news.intro?.image_preview?.small || '',
-            alt: news.intro?.image_preview?.meta?.altText || '',
-        };
+              const mappedImage = {
+                  ...news.intro?.image_preview,
+                  small: news.intro?.image_preview?.small || '',
+                  alt: news.intro?.image_preview?.meta?.altText || '',
+              };
 
-        const newsData = {
-            image: mappedImage,
-            tag: news?.tags?.split(',')[0] || '',
-            publishDate: publicationDate,
-            title: news?.label || '',
-            text: news.intro?.text,
-            link: { href: news.link, isExternal: false },
+              const newsData = {
+                  image: mappedImage,
+                  tag: news?.tags?.split(',')[0] || '',
+                  publishDate: publicationDate,
+                  title: news?.label || '',
+                  text: news.intro?.text,
+                  link: { href: news.link, isExternal: false },
 
-            secondaryAction:
-                cardAction && news.link
-                    ? (isInverted: boolean) =>
-                          cardAction({
-                              isInverted,
-                              label: news.readMeLabel || 'Beitrag lesen',
-                              href: news.link,
-                              isExternal: false,
-                          })
-                    : undefined,
-        };
+                  action:
+                      cardAction && news.link
+                          ? (isInverted: boolean) =>
+                                cardAction({
+                                    isInverted,
+                                    label: news.readMeLabel || 'Beitrag lesen',
+                                    href: news.link,
+                                    isExternal: false,
+                                })
+                          : undefined,
+              };
 
-        return newsData;
-    });
+              return newsData;
+          })
+        : [];
 }
 
 const generatePublicationDate = (

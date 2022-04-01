@@ -1,9 +1,14 @@
 import { assignTo, NewsList, ThemeMods } from '@blateral/b.kit';
+import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsList';
 import React from 'react';
 import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
 export interface NewsListSliceType
     extends ModxSlice<'NewsList', ModxNewsTeaser> {
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     isActive?: boolean;
     bgMode?: BgMode;
     collectionId?: number;
@@ -28,6 +33,7 @@ export interface NewsListSliceType
 export const NewsListSlice: React.FC<NewsListSliceType> = ({
     bgMode,
     items,
+    anchor,
     mode,
     customTag,
     cardAction,
@@ -54,6 +60,7 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     return (
         <NewsList
             theme={sliceTheme}
+            anchorId={anchor?.id || ''}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
@@ -76,7 +83,7 @@ function mapNewsListData({
         isExternal?: boolean;
     }) => React.ReactNode;
     onTagClick?: (name?: string) => void;
-}) {
+}): NewsItem[] {
     if (!newsCollection) return [];
 
     return newsCollection.map((news) => {
@@ -102,7 +109,7 @@ function mapNewsListData({
             text: news.intro?.text,
             link: { href: news.link, isExternal: false },
 
-            secondaryAction:
+            action:
                 cardAction && news.link
                     ? (isInverted: boolean) =>
                           cardAction({
