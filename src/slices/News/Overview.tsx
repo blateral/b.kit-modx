@@ -20,6 +20,7 @@ export interface NewsOverviewSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    onTagClick?: (name: string) => void;
 
     bgColor?: string;
     theme?: ThemeMods;
@@ -32,6 +33,7 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     bgColor,
     theme,
     cardAction,
+    onTagClick,
     items,
 }) => {
     const sliceTheme = assignTo(
@@ -49,6 +51,7 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
             theme={sliceTheme}
             anchorId={anchor?.id || ''}
             tags={generateUniqueTag(items)}
+            onTagClick={onTagClick}
             news={mapNewsListData(items, cardAction) || []}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
