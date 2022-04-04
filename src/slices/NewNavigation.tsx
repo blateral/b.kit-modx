@@ -48,9 +48,9 @@ export const NewNavigationSlice: React.FC<NewNavigationSliceType> = ({
             clampWidth={clampWidth}
             navBar={{
                 ...navbar,
-                topBar: navbar?.topBar || undefined,
-                mainBar: navbar?.mainBar || undefined,
-                bottomBar: navbar?.bottomBar || undefined,
+                topBar: navbar?.topBar,
+                mainBar: navbar?.mainBar,
+                bottomBar: navbar?.bottomBar,
             }}
             menu={menu}
         />
