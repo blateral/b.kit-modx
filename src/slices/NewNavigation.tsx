@@ -21,9 +21,9 @@ export interface NewNavigationSliceType extends ModxSlice<'Navigation'> {
         mainBg?: string;
         bottomBg?: string;
         onContentBg?: string;
-        topBar?: (props: NavBarStates) => React.ReactNode | null;
-        mainBar?: (props: NavBarStates) => React.ReactNode | null;
-        bottomBar?: (props: NavBarStates) => React.ReactNode | null;
+        topBar?: ((props: NavBarStates) => React.ReactNode) | null;
+        mainBar?: ((props: NavBarStates) => React.ReactNode) | null;
+        bottomBar?: ((props: NavBarStates) => React.ReactNode) | null;
         theme?: ThemeMods;
     };
 
@@ -44,7 +44,16 @@ export const NewNavigationSlice: React.FC<NewNavigationSliceType> = ({
     clampWidth,
 }) => {
     return (
-        <NewNavigation clampWidth={clampWidth} navBar={navbar} menu={menu} />
+        <NewNavigation
+            clampWidth={clampWidth}
+            navBar={{
+                ...navbar,
+                topBar: navbar?.topBar || undefined,
+                mainBar: navbar?.mainBar || undefined,
+                bottomBar: navbar?.bottomBar || undefined,
+            }}
+            menu={menu}
+        />
     );
 };
 
