@@ -21,9 +21,9 @@ export interface NewNavigationSliceType extends ModxSlice<'Navigation'> {
         mainBg?: string;
         bottomBg?: string;
         onContentBg?: string;
-        topBar?: (props: NavBarStates) => React.ReactNode;
-        mainBar?: (props: NavBarStates) => React.ReactNode;
-        bottomBar?: (props: NavBarStates) => React.ReactNode;
+        topBar?: (props: NavBarStates) => React.ReactNode | null;
+        mainBar?: (props: NavBarStates) => React.ReactNode | null;
+        bottomBar?: (props: NavBarStates) => React.ReactNode | null;
         theme?: ThemeMods;
     };
 
