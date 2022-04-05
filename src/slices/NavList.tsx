@@ -6,6 +6,8 @@ import React from 'react';
 type BgMode = 'full' | 'inverted';
 
 interface NavListItems {
+    icon?: string;
+
     title?: string;
     text?: string;
     link?: {
@@ -22,12 +24,14 @@ export interface NavListSliceType extends ModxSlice<'NavList', NavListItems> {
     };
     bgMode?: BgMode;
     bgColor?: string;
-
     customTitleIcon?:
         | ((props: { isInverted?: boolean | undefined }) => React.ReactNode)
         | undefined;
     customIcon?:
-        | ((props: { isInverted?: boolean | undefined }) => React.ReactNode)
+        | ((props: {
+              isInverted?: boolean | undefined;
+              icon?: string;
+          }) => React.ReactNode)
         | undefined;
 
     theme?: ThemeMods;
@@ -59,7 +63,6 @@ export const NavListSlice: React.FC<NavListSliceType> = ({
             theme={sliceTheme}
             anchorId={anchor?.id || ''}
             bgMode={bgMode}
-            customIcon={customIcon}
             customTitleIcon={customTitleIcon}
             items={items
                 .filter((navitem) => navitem.title && navitem.link?.href)
@@ -68,6 +71,14 @@ export const NavListSlice: React.FC<NavListSliceType> = ({
                         title: navitem.title,
                         text: navitem.text,
                         link: navitem.link,
+                        customIcon:
+                            customIcon && navitem.icon
+                                ? (isInverted: boolean) =>
+                                      customIcon({
+                                          isInverted: isInverted,
+                                          icon: navitem.icon,
+                                      })
+                                : undefined,
                     };
                 })}
         />
