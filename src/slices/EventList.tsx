@@ -139,10 +139,14 @@ const createDateObjectFromModxDatestring = (modxDateString?: string) => {
         }
         const hasTimeSnippets = timeSnippets.length > 0;
 
+        const year = +dateSnippets[0];
+        const month = +dateSnippets[1] - 1 < 0 ? 0 : +dateSnippets[1] - 1;
+        const day = +dateSnippets[2];
+
         return new Date(
-            +dateSnippets[0],
-            +dateSnippets[1],
-            +dateSnippets[2],
+            year,
+            month,
+            day,
             hasTimeSnippets ? +timeSnippets[0] : undefined,
             hasTimeSnippets ? +timeSnippets[1] : undefined,
             hasTimeSnippets ? +timeSnippets[2] : undefined
