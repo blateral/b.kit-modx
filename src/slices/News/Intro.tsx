@@ -16,7 +16,14 @@ export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
     primary_label?: string;
     secondary_label?: string;
     tags?: string;
-
+    customTag?: (props: {
+        name: string;
+        isInverted?: boolean;
+        isActive?: boolean;
+        clickHandler?: (
+            ev?: React.SyntheticEvent<HTMLButtonElement, Event>
+        ) => void;
+    }) => React.ReactNode;
     bgColor?: string;
     theme?: ThemeMods;
 }
@@ -29,6 +36,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     newsIntro,
     newsHeading,
     bgColor,
+    customTag,
     theme,
     tags,
 }) => {
@@ -67,6 +75,8 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
             onTagClick={(tag) => {
                 window.location.href = `?selected=${encodeURI(tag)}`;
             }}
+            // FIXME:
+            //    customTag={customTag}
             meta={{
                 author: authorName || '',
                 date: preppedPubDate,
