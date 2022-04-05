@@ -13,6 +13,7 @@ export interface NewsListSliceType
     bgMode?: BgMode;
     collectionId?: number;
     bgColor?: string;
+    hasImages?: boolean;
     mode?: 'short' | 'expanded';
     theme?: ThemeMods;
     customTag?: (props: {
@@ -35,6 +36,7 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     items,
     anchor,
     mode,
+    hasImages,
     customTag,
     cardAction,
     onTagClick,
@@ -44,6 +46,7 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     // get background mode
     const newsListMap = mapNewsListData({
         newsCollection: items,
+        hasImages,
         cardAction,
         onTagClick,
     });
@@ -72,10 +75,12 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
 };
 function mapNewsListData({
     newsCollection,
+    hasImages,
     cardAction,
     onTagClick,
 }: {
     newsCollection: ModxNewsTeaser[] | undefined;
+    hasImages?: boolean;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -102,7 +107,7 @@ function mapNewsListData({
             alt: news.intro?.image_preview?.meta?.altText || '',
         };
         return {
-            image: mappedImage,
+            image: hasImages ? mappedImage : undefined,
             tag: news?.tags?.split(',')[0] || '',
             publishDate: publicationDate,
             title: news?.label || '',
