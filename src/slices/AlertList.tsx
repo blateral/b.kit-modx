@@ -58,15 +58,16 @@ export const AlertListSlice: React.FC<AlertListSliceType> = ({
 
                     let date = undefined;
                     if (dateParts?.length > 0) {
-                        date = new Date(
-                            +dateParts[0],
-                            +dateParts[1],
-                            +dateParts[2]
-                        );
+                        const year = +dateParts[2];
+                        const month =
+                            +dateParts[1] - 1 < 0 ? 0 : +dateParts[1] - 1;
+                        const day = +dateParts[0];
+
+                        date = new Date(year, month, day);
                     }
                     return {
                         title: alert.label,
-                        date: date,
+                        date: isValidDate(date) ? date : undefined,
                         description: alert.description,
                         link: alert.link,
                     };
@@ -74,3 +75,9 @@ export const AlertListSlice: React.FC<AlertListSliceType> = ({
         />
     );
 };
+
+function isValidDate(dateInstance?: Date) {
+    if (!dateInstance) return undefined;
+    return dateInstance instanceof Date && !isNaN(dateInstance as any);
+}
+  

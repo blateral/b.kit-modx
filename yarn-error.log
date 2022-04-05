@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js publish --tag beta
+  /usr/local/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js publish
 
 PATH: 
-  /Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin
+  /var/folders/k9/g1kzzn2d5sqc2xfn60s13qlc0000gn/T/yarn--1649162044362-0.9380837709685057:/Users/falco/Documents/b.kit-modx/node_modules/.bin:/Users/falco/.config/yarn/link/node_modules/.bin:/usr/local/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/bin/node_modules/npm/bin/node-gyp-bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin
 
 Yarn version: 
   1.22.5
@@ -29,7 +29,7 @@ Trace:
 npm manifest: 
   {
       "name": "@blateral/b.kit-modx",
-      "version": "2.0.0-beta.5.2",
+      "version": "2.0.0-beta.5.9",
       "description": "",
       "main": "lib/index.js",
       "module": "lib/index.es.js",
@@ -43,6 +43,8 @@ npm manifest:
           "tc": "tsc --noEmit",
           "check-publish": "yarn pack && tar -xvzf *.tgz && rm -rf package *.tgz",
           "deploy": "yarn tc && yarn build && yarn publish",
+          "deploy-patch": "yarn tc && yarn build && yarn publish --tag patch",
+          "deploy-beta": "yarn tc && yarn build && yarn publish --tag beta",
           "check-yalc": "if yalc --version; then yalc check; else echo Skipping yalc check; fi",
           "lookup": "yarn --check-files",
           "publish-yalc": "rm -rf lib && yalc update && yarn build && yalc publish",
@@ -60,7 +62,7 @@ npm manifest:
       },
       "homepage": "https://github.com/blateral/b.kit-modx#readme",
       "devDependencies": {
-          "@blateral/b.kit": "2.0.0-beta.2.2",
+          "@blateral/b.kit": "2.0.0-beta.2.10",
           "@rollup/plugin-commonjs": "^17.1.0",
           "@rollup/plugin-node-resolve": "^11.1.1",
           "@types/react": "^17.0.1",
@@ -84,7 +86,7 @@ npm manifest:
           "typescript": "^4.1.2"
       },
       "peerDependencies": {
-          "@blateral/b.kit": "2.0.0-beta.2.1",
+          "@blateral/b.kit": "2.0.0-beta.2.8",
           "react": "^17.0.1",
           "react-dom": "^17.0.1",
           "styled-components": "^5.2.1"
@@ -204,10 +206,10 @@ Lockfile:
       lodash "^4.17.19"
       to-fast-properties "^2.0.0"
   
-  "@blateral/b.kit@2.0.0-beta.2.2":
-    version "2.0.0-beta.2.2"
-    resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.0.0-beta.2.2.tgz#767654ba09c23ef2dce621081f6c88621ff4d80e"
-    integrity sha512-2WJGZyk8Hw0eDYoPfbMmRjapwAqW2NIxlSyWzP2pEaU7nFm9UjMLylAdhE1Tg1QIZGUjIQLo0vMnuRnqN1BTRQ==
+  "@blateral/b.kit@2.0.0-beta.2.10":
+    version "2.0.0-beta.2.10"
+    resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.0.0-beta.2.10.tgz#45cf83a0c285199936fc0994f8cf0f9d0055b0f1"
+    integrity sha512-oovP6bBahRVDKS1N9Gkov2lhfCrk8cB/PLXfde6k811NeWj45Vcr6Gj5kg1Ruvrx1/HEWZE60snfqKukLI9B1Q==
   
   "@emotion/is-prop-valid@^0.8.8":
     version "0.8.8"
