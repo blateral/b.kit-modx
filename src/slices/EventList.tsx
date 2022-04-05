@@ -1,4 +1,4 @@
-import { EventList } from '@blateral/b.kit';
+import { assignTo, EventList, ThemeMods } from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import React from 'react';
 import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
@@ -35,6 +35,7 @@ interface EventCollection {
 export interface EventListSliceType extends ModxSlice<'EventList'> {
     isActive?: boolean;
     bgMode?: 'full' | 'inverted';
+    bgColor?: string;
     anchor?: {
         id?: string;
         label?: string;
@@ -54,21 +55,35 @@ export interface EventListSliceType extends ModxSlice<'EventList'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
+    theme?: ThemeMods;
 }
 
 export const EventListSlice: React.FC<EventListSliceType> = ({
     anchor,
     bgMode,
+    bgColor,
     primary_label,
     collection,
     onTagClick,
     customTag,
     action,
+    theme,
 }) => {
     // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                mono: {
+                    light: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
 
     return (
         <EventList
+            theme={sliceTheme}
             anchorId={anchor?.id || ''}
             bgMode={bgMode}
             customTag={customTag}
