@@ -12,7 +12,6 @@ interface EventCollection {
         date?: string;
         image?: ImageProps;
         intro?: string;
-        description?: string;
         duration?: string;
         price?: string;
         priceInfo?: string;
@@ -40,6 +39,7 @@ export interface EventListSliceType extends ModxSlice<'EventList'> {
         id?: string;
         label?: string;
     };
+    hasImages?: boolean;
     primary_label?: string;
     collection?: EventCollection;
     onTagClick?: (tag: string) => void;
@@ -62,6 +62,7 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
     anchor,
     bgMode,
     bgColor,
+    hasImages,
     primary_label,
     collection,
     onTagClick,
@@ -93,9 +94,9 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
                 collection.events.map((item) => {
                     return {
                         title: item.title || '',
-                        text: item.description,
+                        text: item.intro || '',
                         tags: (item.tags && item.tags?.split(',')) || undefined,
-                        image: item.image || undefined,
+                        image: item.image && hasImages ? item.image : undefined,
                         date: createDateObjectFromModxDatestring(item.date),
                         action:
                             action &&
