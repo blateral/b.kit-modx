@@ -9,6 +9,7 @@ interface CardListItems {
     icon?: { src?: string; meta?: ModxImageMetaData };
     link?: { href?: string; isExternal?: boolean };
     image?: ImageProps & ModxImageMetaData;
+    cardColor?: string;
 }
 
 export interface CardListSliceType extends ModxSlice<'CardList', CardListItems> {
