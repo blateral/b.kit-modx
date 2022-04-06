@@ -9,6 +9,7 @@ import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
 import { assignTo, Intro, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
 
@@ -20,6 +21,7 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
     };
     bgMode?: BgMode;
     bgColor?: string;
+    image?: ImageProps;
     title?: string;
     titleAs?: string;
     superTitle?: string;
@@ -55,6 +57,7 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
     isStackable,
     bgMode,
     bgColor,
+    image,
     title,
     titleAs,
     superTitle,
@@ -88,6 +91,7 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
             bgMode={bgMode}
             isStackable={isStackable}
             isCentered={isCentered}
+            image={image}
             title={title || ''}
             superTitle={superTitle}
             superTitleAs={
