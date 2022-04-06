@@ -10,6 +10,7 @@ export interface NewsOverviewSliceType
         id?: string;
         label?: string;
     };
+    newsCollectionUrl?: string;
     bgMode?: BgMode;
     showMoreText?: string;
     collectionId?: number;
