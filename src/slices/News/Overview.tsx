@@ -11,6 +11,7 @@ export interface NewsOverviewSliceType
         label?: string;
     };
     newsCollectionUrl?: string;
+    hasImages?: boolean;
     bgMode?: BgMode;
     showMoreText?: string;
     collectionId?: number;
@@ -36,6 +37,7 @@ export interface NewsOverviewSliceType
 
 export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     bgMode,
+    hasImages,
     anchor,
     showMoreText,
     bgColor,
@@ -62,7 +64,7 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
             customTag={customTag}
             tags={generateUniqueTag(items)}
             onTagClick={onTagClick}
-            news={mapNewsListData(items, cardAction) || []}
+            news={mapNewsListData(items, cardAction, hasImages) || []}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
@@ -93,7 +95,8 @@ function mapNewsListData(
         label?: string;
         href?: string;
         isExternal?: boolean;
-    }) => React.ReactNode
+    }) => React.ReactNode,
+    hasImages?: boolean
 ): NewsItem[] {
     return newsCollection
         ? newsCollection.map((news) => {
@@ -101,11 +104,13 @@ function mapNewsListData(
                   news.publishedOn || ''
               );
 
-              const mappedImage = {
-                  ...news.intro?.image_preview,
-                  small: news.intro?.image_preview?.small || '',
-                  alt: news.intro?.image_preview?.meta?.altText || '',
-              };
+              const mappedImage = hasImages
+                  ? {
+                        ...news.intro?.image_preview,
+                        small: news.intro?.image_preview?.small || '',
+                        alt: news.intro?.image_preview?.meta?.altText || '',
+                    }
+                  : undefined;
 
               const newsData = {
                   image: mappedImage,
