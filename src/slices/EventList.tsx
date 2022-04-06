@@ -91,7 +91,7 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
             onTagClick={onTagClick}
             events={
                 collection?.events &&
-                collection.events.map((item) => {
+                collection.events.slice(0, 3).map((item) => {
                     return {
                         title: item.title || '',
                         text: item.intro || '',
