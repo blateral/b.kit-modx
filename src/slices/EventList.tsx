@@ -93,26 +93,27 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
                 collection?.events &&
                 collection.events.slice(0, 3).map((item) => {
                     return {
+                        link: {
+                            href: item.alias || '',
+                        },
                         title: item.title || '',
                         text: item.intro || '',
                         tags: (item.tags && item.tags?.split(',')) || undefined,
                         image: item.image && hasImages ? item.image : undefined,
                         date: createDateObjectFromModxDatestring(item.date),
                         action:
-                            action &&
-                            isValidAction(
-                                primary_label,
-                                item.booking.ticketUrl || item.booking.website
-                            )
+                            action && isValidAction(primary_label, item.alias)
                                 ? ({ isInverted }) =>
                                       action({
                                           isInverted,
                                           label: primary_label,
                                           href:
+                                              item.alias ||
                                               item.booking.ticketUrl ||
                                               item.booking.website,
                                           isExternal: isExternalLink(
-                                              item.booking.ticketUrl ||
+                                              item.alias ||
+                                                  item.booking.ticketUrl ||
                                                   item.booking.website
                                           ),
                                       })
