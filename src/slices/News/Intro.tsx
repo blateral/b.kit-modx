@@ -71,7 +71,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
-            tags={tagsArray && tagsArray.length > 0 ? [tagsArray[0]] : []}
+            tags={tagsArray}
             onTagClick={(tag) => {
                 window.location.href = `?selected=${encodeURI(tag)}`;
             }}
