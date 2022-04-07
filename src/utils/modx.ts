@@ -311,6 +311,7 @@ export interface ModxNewsPage extends ModxDocument {
     newsImage?: ModxImageProps;
     newsImagePreview?: ModxImageProps;
 
+    newsItems?: Array<ModxNewsTeaser>;
     newsHeading?: string;
     newsIntro?: string;
     news_footer_inverted?: boolean;

@@ -102,7 +102,7 @@ function mapNewsListData({
             publishDate: publicationDate,
             title: news?.label || '',
             text: news.intro?.text,
-            link: { href: 'news/' + news.link, isExternal: false },
+            link: { href: news.link, isExternal: false },
 
             secondaryAction:
                 cardAction && news.link
