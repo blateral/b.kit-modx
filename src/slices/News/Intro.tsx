@@ -4,6 +4,10 @@ import { assignTo, NewsIntro, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
 export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
+    anchor?: {
+        id?: string;
+        label?: string;
+    };
     isActive?: boolean;
     newsHeading?: string;
     newsIntro?: string;
@@ -29,6 +33,7 @@ export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
 }
 
 export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
+    anchor,
     bgMode,
     authorName,
     publicationDate,
@@ -65,6 +70,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     return (
         <NewsIntro
             theme={sliceTheme}
+            anchorId={anchor?.id || ''}
             title={newsHeading}
             text={newsIntro}
             image={mappedImage}
@@ -75,8 +81,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
             onTagClick={(tag) => {
                 window.location.href = `?selected=${encodeURI(tag)}`;
             }}
-            // FIXME:
-            //    customTag={customTag}
+            customTag={customTag}
             meta={{
                 author: authorName || '',
                 date: preppedPubDate,

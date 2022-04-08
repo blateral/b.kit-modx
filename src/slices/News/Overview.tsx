@@ -112,9 +112,14 @@ function mapNewsListData(
                     }
                   : undefined;
 
+              const tagsArray =
+                  news?.tags && news.tags.length > 0
+                      ? news.tags?.split(',')
+                      : [];
+
               const newsData = {
                   image: mappedImage,
-                  tag: news?.tags?.split(',')[0] || '',
+                  tag: tagsArray,
                   publishDate: publicationDate,
                   title: news?.label || '',
                   text: news.intro?.text,

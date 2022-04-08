@@ -106,9 +106,13 @@ function mapNewsListData({
             small: news.intro?.image_preview?.small || '',
             alt: news.intro?.image_preview?.meta?.altText || '',
         };
+
+        const tagsArray =
+            news?.tags && news.tags.length > 0 ? news.tags?.split(',') : [];
+
         return {
             image: hasImages ? mappedImage : undefined,
-            tag: news?.tags?.split(',')[0] || '',
+            tag: tagsArray,
             publishDate: publicationDate,
             title: news?.label || '',
             text: news.intro?.text,
