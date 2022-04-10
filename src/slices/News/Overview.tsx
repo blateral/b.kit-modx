@@ -112,6 +112,7 @@ function mapNewsListData(
                     }
                   : undefined;
 
+
               const tagsArray =
                   news?.tags && news.tags.length > 0
                       ? news.tags?.split(',')
@@ -119,7 +120,7 @@ function mapNewsListData(
 
               const newsData = {
                   image: mappedImage,
-                  tag: tagsArray,
+                  tags: tagsArray,
                   publishDate: publicationDate,
                   title: news?.label || '',
                   text: news.intro?.text,

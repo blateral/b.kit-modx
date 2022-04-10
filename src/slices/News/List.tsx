@@ -112,7 +112,7 @@ function mapNewsListData({
 
         return {
             image: hasImages ? mappedImage : undefined,
-            tag: tagsArray,
+            tags: tagsArray,
             publishDate: publicationDate,
             title: news?.label || '',
             text: news.intro?.text,
