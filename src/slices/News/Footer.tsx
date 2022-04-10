@@ -90,7 +90,6 @@ function mapNewsListData({
         } catch {
             publicationDate = undefined;
         }
-
         const mappedImage = {
             ...news.intro?.image_preview,
             small: news.intro?.image_preview?.small || '',
@@ -98,7 +97,7 @@ function mapNewsListData({
         };
         return {
             image: mappedImage,
-            tag: news?.tags?.split(',')[0] || '',
+            tags: news?.tags ? news.tags.split(',') : undefined,
             publishDate: publicationDate,
             title: news?.label || '',
             text: news.intro?.text,
