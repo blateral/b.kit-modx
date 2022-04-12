@@ -1,7 +1,8 @@
 import { assignTo, NewsList, ThemeMods } from '@blateral/b.kit';
+import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsList';
 import React from 'react';
-import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { BgMode, endpoint, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
 export interface NewsListSliceType
     extends ModxSlice<'NewsList', ModxNewsTeaser> {
@@ -12,6 +13,7 @@ export interface NewsListSliceType
     isActive?: boolean;
     bgMode?: BgMode;
     collectionId?: number;
+    newsOverviewUrl?: string;
     bgColor?: string;
     hasImages?: boolean;
     mode?: 'short' | 'expanded';
@@ -37,6 +39,7 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     anchor,
     mode,
     hasImages,
+    newsOverviewUrl,
     customTag,
     cardAction,
     onTagClick,
@@ -49,6 +52,7 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
         hasImages,
         cardAction,
         onTagClick,
+        newsCollectionUrl: newsOverviewUrl,
     });
     const sliceTheme = assignTo(
         {
@@ -78,6 +82,7 @@ function mapNewsListData({
     hasImages,
     cardAction,
     onTagClick,
+    newsCollectionUrl,
 }: {
     newsCollection: ModxNewsTeaser[] | undefined;
     hasImages?: boolean;
@@ -88,6 +93,7 @@ function mapNewsListData({
         isExternal?: boolean;
     }) => React.ReactNode;
     onTagClick?: (name?: string) => void;
+    newsCollectionUrl?: string;
 }): NewsItem[] {
     if (!newsCollection) return [];
 
@@ -110,9 +116,18 @@ function mapNewsListData({
         const tagsArray =
             news?.tags && news.tags.length > 0 ? news.tags?.split(',') : [];
 
+        const tagPropsArray = tagsArray.map((tag): TagProps => {
+            return {
+                name: tag,
+                link: {
+                    href: `${endpoint}${newsCollectionUrl}?newsFilter=${tag}`,
+                },
+            };
+        });
+
         return {
             image: hasImages ? mappedImage : undefined,
-            tags: tagsArray,
+            tags: tagPropsArray,
             publishDate: publicationDate,
             title: news?.label || '',
             text: news.intro?.text,

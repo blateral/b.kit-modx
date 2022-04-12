@@ -1,7 +1,8 @@
 import { assignTo, EventList, ThemeMods } from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
+import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import React from 'react';
-import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
+import { endpoint, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
 interface EventCollection {
     alias?: string;
@@ -82,6 +83,8 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
         theme
     );
 
+    const collectionUrl = collection?.alias;
+
     return (
         <EventList
             theme={sliceTheme}
@@ -92,13 +95,29 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
             events={
                 collection?.events &&
                 collection.events.slice(0, 3).map((item) => {
+                    const tagsArray =
+                        item?.tags && item.tags.length > 0
+                            ? item.tags?.split(',')
+                            : [];
+
+                    const tagPropsArray = tagsArray.map((tag): TagProps => {
+                        return {
+                            name: tag,
+                            link: {
+                                href: collectionUrl
+                                    ? `${endpoint}${collectionUrl}?eventsFilter=${tag}`
+                                    : undefined,
+                            },
+                        };
+                    });
+
                     return {
                         link: {
                             href: item.alias || '',
                         },
                         title: item.title || '',
                         text: item.intro || '',
-                        tags: (item.tags && item.tags?.split(',')) || undefined,
+                        tags: tagPropsArray,
                         image: item.image && hasImages ? item.image : undefined,
                         date: createDateObjectFromModxDatestring(item.date),
                         action:

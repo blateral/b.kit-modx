@@ -1,12 +1,14 @@
 import { assignTo, NewsFooter, ThemeMods } from '@blateral/b.kit';
+import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import React from 'react';
-import { ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { endpoint, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
 export interface NewsFooterSliceType
     extends ModxSlice<'NewsFooter', ModxNewsTeaser> {
     isActive?: boolean;
     isInverted?: boolean;
     newsFooterBackground?: boolean;
+    newsCollectionUrl?: string;
     pageAlias?: string;
     bgColor?: string;
     theme?: ThemeMods;
@@ -25,6 +27,7 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     isInverted,
     pageAlias,
     newsFooterBackground,
+    newsCollectionUrl,
     items,
     secondaryAction,
     onTagClick,
@@ -37,6 +40,7 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
         newsCollection: newsWithoutSelf,
         cardAction: secondaryAction,
         onTagClick,
+        newsCollectionUrl,
     });
 
     const sliceTheme = assignTo(
@@ -61,16 +65,17 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
                     ? 'full'
                     : undefined
             }
-            showMoreText={'mehr anzeigen'}
         />
     );
 };
 function mapNewsListData({
     newsCollection,
+    newsCollectionUrl,
     cardAction,
     onTagClick,
 }: {
     newsCollection: ModxNewsTeaser[] | undefined;
+    newsCollectionUrl?: string;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -95,9 +100,21 @@ function mapNewsListData({
             small: news.intro?.image_preview?.small || '',
             alt: news.intro?.image_preview?.meta?.altText || '',
         };
+
+        const tagsArray =
+            news?.tags && news.tags.length > 0 ? news.tags?.split(',') : [];
+
+        const tagPropsArray = tagsArray.map((tag): TagProps => {
+            return {
+                name: tag,
+                link: {
+                    href: `${endpoint}${newsCollectionUrl}?newsFilter=${tag}`,
+                },
+            };
+        });
         return {
             image: mappedImage,
-            tags: news?.tags ? news.tags.split(',') : undefined,
+            tags: tagPropsArray,
             publishDate: publicationDate,
             title: news?.label || '',
             text: news.intro?.text,
