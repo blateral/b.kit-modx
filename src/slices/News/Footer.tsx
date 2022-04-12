@@ -19,8 +19,6 @@ export interface NewsFooterSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-
-    onTagClick?: (name?: string) => void;
 }
 
 export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
@@ -30,7 +28,6 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     newsCollectionUrl,
     items,
     secondaryAction,
-    onTagClick,
     bgColor,
     theme,
 }) => {
@@ -39,7 +36,6 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     const newsListMap = mapNewsListData({
         newsCollection: newsWithoutSelf,
         cardAction: secondaryAction,
-        onTagClick,
         newsCollectionUrl,
     });
 

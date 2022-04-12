@@ -23,14 +23,12 @@ export interface NewsOverviewSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    onTagClick?: (name: string) => void;
+    onTagClick?: (tag: TagProps) => void;
     customTag?: (props: {
         name: string;
         isInverted?: boolean;
         isActive?: boolean;
-        clickHandler?: (
-            ev?: React.SyntheticEvent<HTMLButtonElement, Event>
-        ) => void;
+        clickHandler?: (ev?: React.SyntheticEvent<HTMLElement, Event>) => void;
     }) => React.ReactNode;
     bgColor?: string;
     theme?: ThemeMods;
@@ -147,7 +145,7 @@ function mapNewsListData({
                   title: news?.label || '',
                   text: news.intro?.text,
                   link: { href: news.link, isExternal: false },
-                    tags: tagPropsArray,
+                  tags: tagPropsArray,
                   action:
                       cardAction && news.link
                           ? (isInverted: boolean) =>
