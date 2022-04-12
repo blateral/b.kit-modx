@@ -2,13 +2,15 @@ import { BgMode, endpoint, ModxSlice } from '../utils/modx';
 
 import React from 'react';
 import { assignTo, SocialNav, ThemeMods } from '@blateral/b.kit';
+import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 
 interface SocialNavItem {
-    href?: string;
+    link: LinkProps;
     icon?: string;
 }
 
-export interface SocialNavSliceType extends ModxSlice<'SocialNav', SocialNavItem> {
+export interface SocialNavSliceType
+    extends ModxSlice<'SocialNav', SocialNavItem> {
     isActive?: boolean;
     anchor?: {
         id?: string;
@@ -47,15 +49,14 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
             socials={
                 items
                     ? items
-                          .filter((item) => item?.icon)
+                          .filter((item) => item?.icon && item?.link?.href)
                           .map((item) => {
                               const iconpath = item?.icon?.match(svgRegex)
                                   ? `${endpoint}${item.icon}`
                                   : item.icon;
 
-                              console.log(iconpath);
                               return {
-                                  href: item.href || '',
+                                  link: item.link,
                                   icon: <img src={iconpath}></img>,
                               };
                           })
