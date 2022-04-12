@@ -434,7 +434,7 @@ export type ModxNavGroup = {
     label?: string;
     isFeatured?: boolean;
     isCurrent?: boolean;
-    items: Array<ModxNavSubItem>;
+    subItems: Array<ModxNavSubItem>;
 };
 
 // NEW

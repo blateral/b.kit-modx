@@ -1,15 +1,15 @@
 import { NewNavigation, ThemeMods } from '@blateral/b.kit';
 import {
     MenuTypeProps,
-    NavGroup,
     NavItem,
 } from '@blateral/b.kit/lib/components/sections/navigation/remastered/menu/Menu';
+
 import {
     NavBarStates,
     NavMenuStates,
 } from '@blateral/b.kit/lib/components/sections/navigation/remastered/Navigation';
 import React from 'react';
-import { ModxSlice } from 'utils/modx';
+import { ModxNavGroup, ModxSlice } from 'utils/modx';
 
 export interface NewNavigationSliceType extends ModxSlice<'Navigation'> {
     clampWidth?: 'content' | 'full';
@@ -29,8 +29,8 @@ export interface NewNavigationSliceType extends ModxSlice<'Navigation'> {
 
     menu?: {
         isIndexPage?: boolean;
-        mainNavigation?: Array<NavGroup>;
-        subNavigation?: Array<NavItem>;
+        mainNavigation?: Array<ModxNavGroup>;
+        subNavigation?: Array<ModxNavGroup>;
         header?: (props: NavMenuStates) => React.ReactNode;
         footer?: (props: NavMenuStates) => React.ReactNode;
         typeSettings: MenuTypeProps;
@@ -52,18 +52,38 @@ export const NewNavigationSlice: React.FC<NewNavigationSliceType> = ({
                 mainBar: navbar?.mainBar,
                 bottomBar: navbar?.bottomBar,
             }}
-            menu={menu}
+            // FIXME:
+            menu={{
+                ...menu,
+                mainNavigation: menu?.mainNavigation
+                    ?.filter(filterNoLabelNoLink)
+                    ?.map(mapToValidNavGroup),
+                subNavigation: menu?.subNavigation
+                    ?.filter(filterNoLabelNoLink)
+                    ?.map(mapToValidNavGroup),
+                typeSettings: {
+                    ...menu?.typeSettings,
+                    type: menu?.typeSettings.type || 'flyout',
+                },
+            }}
         />
     );
 };
 
-// export interface NavItem {
-//     label: string;
-//     link: LinkProps;
-//     isCurrent?: boolean;
-// }
-// export interface NavGroup extends NavItem {
-//     isFeatured?: boolean;
-//     icon?: React.ReactNode;
-//     subItems?: NavItem[];
-// }
+const filterNoLabelNoLink = (item: ModxNavGroup) => {
+    return item.label && item?.link?.href;
+};
+
+const mapToValidNavGroup = (item: ModxNavGroup): NavItem => {
+    return {
+        link: {
+            href: item?.link?.href === '/' ? '/' : '/' + item?.link?.href,
+        },
+        label: item.label || '',
+        isCurrent: item?.isCurrent,
+        subItems:
+            item?.subItems && item.subItems.length > 0
+                ? item.subItems.map(mapToValidNavGroup)
+                : [],
+    };
+};
