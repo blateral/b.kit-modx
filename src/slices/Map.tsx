@@ -159,7 +159,6 @@ export const MapSlice: React.FC<MapSliceType> = ({
             locations={items?.map((location, i): MapLocation => {
                 const posLat = location.latitude ? +location.latitude : 0;
                 const posLng = location.longitude ? +location.longitude : 0;
-                console.log('Location: ', location);
 
                 return {
                     id: `location-${i}`,
