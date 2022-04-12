@@ -52,5 +52,4 @@ export * from 'slices/Teaser';
 export * from 'slices/Timeline';
 export * from 'slices/Video';
 export * from 'utils/modx';
-export * from 'utils/robotsGenerator';
 export * from 'utils/sitemapGenerator';
