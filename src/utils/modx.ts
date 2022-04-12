@@ -434,19 +434,7 @@ export type ModxNavGroup = {
     label?: string;
     isFeatured?: boolean;
     isCurrent?: boolean;
-    subItems: Array<ModxNavSubItem>;
-};
-
-// NEW
-export type ModxNavSubItem = {
-    id: string;
-    alias?: string;
-    label?: string;
-    link?: {
-        href: string;
-    };
-    isCurrent?: boolean;
-    items?: Array<ModxNavSubItem>;
+    subItems: Array<ModxNavGroup>;
 };
 
 export type ModxMenuItemData = {
@@ -454,8 +442,8 @@ export type ModxMenuItemData = {
     // NEW
     primaryMenu: Array<ModxNavGroup>;
     // NEW
-    secondaryMenu: Array<ModxNavSubItem>;
-    navBarTopMenu: Array<ModxNavSubItem>;
+    secondaryMenu: Array<ModxNavGroup>;
+    navBarTopMenu: Array<ModxNavGroup>;
 
     footerMenuPrimary: Array<Omit<ModxNavItem, 'items'>>;
     menuPrimary: Array<ModxNavItem>;
