@@ -2,7 +2,7 @@ Arguments:
   /usr/local/bin/node /usr/local/Cellar/yarn/1.22.5/libexec/bin/yarn.js publish
 
 PATH: 
-  /var/folders/k9/g1kzzn2d5sqc2xfn60s13qlc0000gn/T/yarn--1649232712941-0.4834482325947631:/Users/falco/Documents/b.kit-modx/node_modules/.bin:/Users/falco/.config/yarn/link/node_modules/.bin:/usr/local/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/bin/node_modules/npm/bin/node-gyp-bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin
+  /var/folders/k9/g1kzzn2d5sqc2xfn60s13qlc0000gn/T/yarn--1649607337186-0.16156951117254947:/Users/falco/Documents/b.kit-modx/node_modules/.bin:/Users/falco/.config/yarn/link/node_modules/.bin:/usr/local/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/lib/node_modules/npm/bin/node-gyp-bin:/usr/local/bin/node_modules/npm/bin/node-gyp-bin:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Library/Frameworks/Mono.framework/Versions/Current/Commands:/Library/Frameworks/Python.framework/Versions/3.9/bin:/Library/Frameworks/Python.framework/Versions/3.8/bin
 
 Yarn version: 
   1.22.5
@@ -29,7 +29,7 @@ Trace:
 npm manifest: 
   {
       "name": "@blateral/b.kit-modx",
-      "version": "2.0.0-beta.6.0",
+      "version": "2.0.0-beta.7.2",
       "description": "",
       "main": "lib/index.js",
       "module": "lib/index.es.js",
@@ -62,7 +62,7 @@ npm manifest:
       },
       "homepage": "https://github.com/blateral/b.kit-modx#readme",
       "devDependencies": {
-          "@blateral/b.kit": "2.0.0-beta.4.0",
+          "@blateral/b.kit": "2.0.0-beta.6.0",
           "@rollup/plugin-commonjs": "^17.1.0",
           "@rollup/plugin-node-resolve": "^11.1.1",
           "@types/react": "^17.0.1",
@@ -86,7 +86,7 @@ npm manifest:
           "typescript": "^4.1.2"
       },
       "peerDependencies": {
-          "@blateral/b.kit": "2.0.0-beta.4.0",
+          "@blateral/b.kit": "2.0.0-beta.6.0",
           "react": "^17.0.1",
           "react-dom": "^17.0.1",
           "styled-components": "^5.2.1"
@@ -206,10 +206,10 @@ Lockfile:
       lodash "^4.17.19"
       to-fast-properties "^2.0.0"
   
-  "@blateral/b.kit@2.0.0-beta.4.0":
-    version "2.0.0-beta.4.0"
-    resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.0.0-beta.4.0.tgz#1b80acbd58a4a26de86891e301884dfcb275d8a7"
-    integrity sha512-Yk3hJ/LnxRB1zgacREqAVYPn5lgizsJ44sSABQDj/aH7Av8vUArTF/VLSEThTvPqscl2YA8Ldq1xQoD55/9r9A==
+  "@blateral/b.kit@2.0.0-beta.6.0":
+    version "2.0.0-beta.6.0"
+    resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.0.0-beta.6.0.tgz#b88080e5ec95f9b0c99532eb68b7b1d789514c4a"
+    integrity sha512-pLfz67QdTmhw81t/ryB4PVdwEryVXzzE36JZKknFcgCa3z6jTqN6KuKFY6TAqkdBSZkClA7cSXzTG25DBd3Dlg==
   
   "@emotion/is-prop-valid@^0.8.8":
     version "0.8.8"
