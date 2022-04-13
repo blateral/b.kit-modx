@@ -435,6 +435,7 @@ export type ModxNavGroup = {
     isFeatured?: boolean;
     isCurrent?: boolean;
     subItems: Array<ModxNavGroup>;
+    icon?: string;
 };
 
 export type ModxMenuItemData = {

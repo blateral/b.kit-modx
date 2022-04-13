@@ -2,7 +2,7 @@ import { assignTo, NewsOverview, ThemeMods } from '@blateral/b.kit';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsOverview';
 import React from 'react';
-import { BgMode, endpoint, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
 export interface NewsOverviewSliceType
     extends ModxSlice<'NewsOverview', ModxNewsTeaser> {
@@ -136,7 +136,7 @@ function mapNewsListData({
                   return {
                       name: tag,
                       link: {
-                          href: `${endpoint}${newsCollectionUrl}?newsFilter=${tag}`,
+                          href: `/${newsCollectionUrl}?newsFilter=${tag}`,
                       },
                   };
               });
@@ -147,7 +147,7 @@ function mapNewsListData({
                   title: news?.label || '',
                   text: news.intro?.text,
                   link: { href: news.link, isExternal: false },
-                    tags: tagPropsArray,
+                  tags: tagPropsArray,
                   action:
                       cardAction && news.link
                           ? (isInverted: boolean) =>

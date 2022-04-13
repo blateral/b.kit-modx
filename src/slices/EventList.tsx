@@ -2,7 +2,7 @@ import { assignTo, EventList, ThemeMods } from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import React from 'react';
-import { endpoint, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
+import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
 interface EventCollection {
     alias?: string;
@@ -105,7 +105,7 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
                             name: tag,
                             link: {
                                 href: collectionUrl
-                                    ? `${endpoint}${collectionUrl}?eventsFilter=${tag}`
+                                    ? `/${collectionUrl}?eventsFilter=${tag}`
                                     : undefined,
                             },
                         };
