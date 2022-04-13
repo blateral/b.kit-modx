@@ -1,6 +1,7 @@
 import { assignTo, NewsList, ThemeMods } from '@blateral/b.kit';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsList';
+import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
 import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
@@ -19,10 +20,11 @@ export interface NewsListSliceType
     mode?: 'short' | 'expanded';
     theme?: ThemeMods;
     customTag?: (props: {
+        key: React.Key;
         name: string;
         isInverted?: boolean;
         isActive?: boolean;
-        clickHandler?: (ev?: React.SyntheticEvent<HTMLElement>) => void;
+        link?: LinkProps;
     }) => React.ReactNode;
     cardAction?: (props: {
         isInverted?: boolean;
@@ -117,7 +119,9 @@ function mapNewsListData({
             return {
                 name: tag,
                 link: {
-                    href: `/${newsCollectionUrl}?newsFilter=${tag}`,
+                    href: `/${newsCollectionUrl}?newsFilter=${encodeURIComponent(
+                        tag
+                    )}`,
                 },
             };
         });

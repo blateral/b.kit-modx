@@ -18,12 +18,13 @@ export interface NewsOverviewSliceType
     collectionId?: number;
     queryParams?: Record<string, any>;
     cardAction?: (props: {
+        key: React.Key;
         isInverted?: boolean;
         label?: string;
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    onTagClick?: (tag: string, insideList?: boolean | undefined) => void;
+    onTagClick?: (tag: TagProps, insideList?: boolean | undefined) => void;
     customTag?: (props: {
         name: string;
         isInverted?: boolean;

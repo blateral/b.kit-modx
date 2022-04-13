@@ -1,7 +1,8 @@
 import { assignTo, NewsFooter, ThemeMods } from '@blateral/b.kit';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
+import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
-import { endpoint, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
 export interface NewsFooterSliceType
     extends ModxSlice<'NewsFooter', ModxNewsTeaser> {
@@ -14,10 +15,11 @@ export interface NewsFooterSliceType
     theme?: ThemeMods;
 
     customTag?: (props: {
+        key: React.Key;
         name: string;
         isInverted?: boolean;
         isActive?: boolean;
-        clickHandler?: (ev?: React.SyntheticEvent<HTMLElement>) => void;
+        link?: LinkProps;
     }) => React.ReactNode;
 
     // helpers to define component elements outside of slice
@@ -114,8 +116,12 @@ function mapNewsListData({
             return {
                 name: tag,
                 link: {
-                    href: `/${newsCollectionUrl}?newsFilter=${tag}`,
+                    href: `/${newsCollectionUrl}?newsFilter=${encodeURIComponent(
+                        tag
+                    )}`,
                 },
+
+              
             };
         });
         return {
