@@ -1,6 +1,7 @@
 import { assignTo, EventList, ThemeMods } from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
+import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
 import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
@@ -43,12 +44,11 @@ export interface EventListSliceType extends ModxSlice<'EventList'> {
     hasImages?: boolean;
     primary_label?: string;
     collection?: EventCollection;
-    onTagClick?: (tag: string) => void;
     customTag?: (props: {
         name: string;
         isInverted?: boolean;
         isActive?: boolean;
-        clickHandler?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void;
+        link?: LinkProps;
     }) => React.ReactNode;
     action?: (props: {
         isInverted?: boolean;
@@ -66,7 +66,6 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
     hasImages,
     primary_label,
     collection,
-    onTagClick,
     customTag,
     action,
     theme,
@@ -91,7 +90,6 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
             anchorId={anchor?.id || ''}
             bgMode={bgMode}
             customTag={customTag}
-            onTagClick={onTagClick}
             events={
                 collection?.events &&
                 collection.events.slice(0, 3).map((item) => {
