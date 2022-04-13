@@ -23,7 +23,7 @@ export interface NewsOverviewSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    onTagClick?: (tag: TagProps) => void;
+    onTagClick?: (tag: string, insideList?: boolean | undefined) => void;
     customTag?: (props: {
         name: string;
         isInverted?: boolean;
