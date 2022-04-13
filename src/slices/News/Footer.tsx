@@ -114,7 +114,7 @@ function mapNewsListData({
             return {
                 name: tag,
                 link: {
-                    href: `${endpoint}${newsCollectionUrl}?newsFilter=${tag}`,
+                    href: `/${newsCollectionUrl}?newsFilter=${tag}`,
                 },
             };
         });
