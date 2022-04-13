@@ -18,6 +18,7 @@ export interface NewsOverviewSliceType
     collectionId?: number;
     queryParams?: Record<string, any>;
     cardAction?: (props: {
+        key: React.Key;
         isInverted?: boolean;
         label?: string;
         href?: string;
