@@ -12,6 +12,14 @@ export interface NewsFooterSliceType
     pageAlias?: string;
     bgColor?: string;
     theme?: ThemeMods;
+
+    customTag?: (props: {
+        name: string;
+        isInverted?: boolean;
+        isActive?: boolean;
+        clickHandler?: (ev?: React.SyntheticEvent<HTMLElement>) => void;
+    }) => React.ReactNode;
+
     // helpers to define component elements outside of slice
     secondaryAction?: (props: {
         isInverted?: boolean;
@@ -27,6 +35,7 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     newsFooterBackground,
     newsCollectionUrl,
     items,
+    customTag,
     secondaryAction,
     bgColor,
     theme,
@@ -61,6 +70,7 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
                     ? 'full'
                     : undefined
             }
+            customTag={customTag}
         />
     );
 };
