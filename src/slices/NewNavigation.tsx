@@ -36,12 +36,15 @@ export interface NewNavigationSliceType extends ModxSlice<'Navigation'> {
         typeSettings: MenuTypeProps;
         theme?: ThemeMods;
     };
+
+    customIcon?: (props: { icon?: string }) => React.ReactNode;
 }
 
 export const NewNavigationSlice: React.FC<NewNavigationSliceType> = ({
     navbar,
     menu,
     clampWidth,
+    customIcon,
 }) => {
     return (
         <NewNavigation
@@ -57,10 +60,10 @@ export const NewNavigationSlice: React.FC<NewNavigationSliceType> = ({
                 ...menu,
                 mainNavigation: menu?.mainNavigation
                     ?.filter(filterNoLabelNoLink)
-                    ?.map(mapToValidNavGroup),
+                    ?.map((item) => mapToValidNavGroup(item, customIcon)),
                 subNavigation: menu?.subNavigation
                     ?.filter(filterNoLabelNoLink)
-                    ?.map(mapToValidNavGroup),
+                    ?.map((item) => mapToValidNavGroup(item, customIcon)),
                 typeSettings: {
                     ...menu?.typeSettings,
                     type: menu?.typeSettings.type || 'flyout',
@@ -74,16 +77,30 @@ const filterNoLabelNoLink = (item: ModxNavGroup) => {
     return item.label && item?.link?.href;
 };
 
-const mapToValidNavGroup = (item: ModxNavGroup): NavItem => {
+const mapToValidNavGroup = (
+    item: ModxNavGroup,
+    customIcon?: (props: {
+        isInverted?: boolean | undefined;
+        icon?: string;
+    }) => React.ReactNode
+): NavItem => {
     return {
+        ...item,
         link: {
             href: item?.link?.href === '/' ? '/' : '/' + item?.link?.href,
         },
         label: item.label || '',
-        isCurrent: item?.isCurrent,
         subItems:
             item?.subItems && item.subItems.length > 0
-                ? item.subItems.map(mapToValidNavGroup)
+                ? item.subItems.map((item) =>
+                      mapToValidNavGroup(item, customIcon)
+                  )
                 : [],
+        icon:
+            customIcon && item.icon
+                ? customIcon({
+                      icon: item.icon,
+                  })
+                : undefined,
     };
 };

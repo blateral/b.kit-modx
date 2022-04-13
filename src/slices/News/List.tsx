@@ -3,7 +3,7 @@ import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsList';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
-import { BgMode, endpoint, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
 export interface NewsListSliceType
     extends ModxSlice<'NewsList', ModxNewsTeaser> {
@@ -119,7 +119,7 @@ function mapNewsListData({
             return {
                 name: tag,
                 link: {
-                    href: `${endpoint}${newsCollectionUrl}?newsFilter=${encodeURIComponent(
+                    href: `/${newsCollectionUrl}?newsFilter=${encodeURIComponent(
                         tag
                     )}`,
                 },
