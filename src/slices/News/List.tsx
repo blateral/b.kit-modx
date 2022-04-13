@@ -22,7 +22,7 @@ export interface NewsListSliceType
         name: string;
         isInverted?: boolean;
         isActive?: boolean;
-        clickHandler?: (ev?: React.SyntheticEvent<HTMLButtonElement>) => void;
+        clickHandler?: (ev?: React.SyntheticEvent<HTMLElement>) => void;
     }) => React.ReactNode;
     cardAction?: (props: {
         isInverted?: boolean;
@@ -30,7 +30,6 @@ export interface NewsListSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    onTagClick?: (name: string) => void;
 }
 
 export const NewsListSlice: React.FC<NewsListSliceType> = ({
@@ -42,7 +41,6 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     newsOverviewUrl,
     customTag,
     cardAction,
-    onTagClick,
     bgColor,
     theme,
 }) => {
@@ -51,7 +49,6 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
         newsCollection: items,
         hasImages,
         cardAction,
-        onTagClick,
         newsCollectionUrl: newsOverviewUrl,
     });
     const sliceTheme = assignTo(
