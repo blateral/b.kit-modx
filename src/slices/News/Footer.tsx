@@ -2,8 +2,16 @@ import { assignTo, NewsFooter, ThemeMods } from '@blateral/b.kit';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
-import { ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { ModxImageProps, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
+export interface MappedNewsItem {
+    image?: ModxImageProps;
+    tags: TagProps[];
+    publishDate?: Date;
+    title: string;
+    text?: string;
+    link: LinkProps;
+}
 export interface NewsFooterSliceType
     extends ModxSlice<'NewsFooter', ModxNewsTeaser> {
     isActive?: boolean;
@@ -49,6 +57,8 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
         cardAction: secondaryAction,
         newsCollectionUrl,
     });
+    const filteredNews = removeFirstImagesIfMissingAtLeastOne(newsListMap);
+    console.log(filteredNews);
 
     const sliceTheme = assignTo(
         {
@@ -64,7 +74,7 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     return (
         <NewsFooter
             theme={sliceTheme}
-            news={newsListMap || []}
+            news={filteredNews || []}
             bgMode={
                 isInverted
                     ? 'inverted'
@@ -76,6 +86,24 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
         />
     );
 };
+
+function removeFirstImagesIfMissingAtLeastOne(
+    mappedNews: MappedNewsItem[],
+    countToCheck = 2
+) {
+    const firstTwoItems = mappedNews.slice(0, countToCheck);
+    const enableFirstImages =
+        !!firstTwoItems[0]?.image?.small && !!firstTwoItems[1]?.image?.small;
+
+    if (enableFirstImages) {
+        return mappedNews;
+    } else {
+        return mappedNews.map((news) => {
+            return { ...news, image: undefined };
+        });
+    }
+}
+
 function mapNewsListData({
     newsCollection,
     newsCollectionUrl,
