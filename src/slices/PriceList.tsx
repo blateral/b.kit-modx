@@ -4,6 +4,7 @@ import { ModxSlice } from '../utils/modx';
 
 interface PriceListItem {
     text?: string;
+    title?: string;
     price?: string;
 }
 
