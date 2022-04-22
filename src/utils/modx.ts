@@ -45,6 +45,7 @@ import { NavListSliceType } from 'slices/NavList';
 import { CardListSliceType } from 'slices/CardList';
 import { IndexListSliceType } from 'slices/IndexList';
 import { EventListSliceType } from 'slices/EventList';
+import { EventOverviewSliceType } from 'slices/Events/EventOverview';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -114,6 +115,7 @@ export type PageContent =
     | CrossPromotionListSliceType
     | DynamicFormSliceType
     | EventListSliceType
+    | EventOverviewSliceType
     | FactGridSliceType
     | FactListSliceType
     | FeatureListSliceType

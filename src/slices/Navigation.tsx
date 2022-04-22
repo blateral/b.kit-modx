@@ -17,6 +17,7 @@ import {
 
 import { Navigation, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { SocialItem } from '@blateral/b.kit/lib/components/blocks/SocialList';
 
 export interface NavigationSliceType {
     nav_primaryAction?: (props: {
@@ -54,10 +55,7 @@ export interface NavigationProps {
     socialMapper?: (
         socials?: SocialMediaItem[],
         isInverted?: boolean
-    ) => {
-        href: string;
-        icon: JSX.Element;
-    }[];
+    ) => SocialItem[];
     logo?: LogoProps;
     background?: FlyoutBackgroundSettings;
 
@@ -171,10 +169,7 @@ interface MenuSliceType {
         isExternal?: boolean;
     }) => React.ReactNode;
 
-    socials?: Array<{
-        icon: React.ReactNode;
-        href: string;
-    }>;
+    socials?: Array<SocialItem>;
     // inject logo icon into slice
     logo?: LogoProps;
 
