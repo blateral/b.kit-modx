@@ -14,7 +14,8 @@ interface FactGridEntryItems {
     image?: Omit<ModxImagePropsWithFormat, 'portrait' | 'square'>;
 }
 
-export interface FactGridSliceType extends ModxSlice<'FactGrid', FactGridEntryItems> {
+export interface FactGridSliceType
+    extends ModxSlice<'FactGrid', FactGridEntryItems> {
     isActive?: boolean;
     anchor?: {
         id?: string;
@@ -43,8 +44,8 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

@@ -115,16 +115,19 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
 }) => {
     // map header images
     const headerImageMap = items?.map(toComponentImageFormat) || undefined;
+
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <Header
             theme={sliceTheme}

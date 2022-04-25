@@ -8,7 +8,8 @@ interface FactListEntryItems {
     text?: string;
 }
 
-export interface FactListSliceType extends ModxSlice<'FactList', FactListEntryItems> {
+export interface FactListSliceType
+    extends ModxSlice<'FactList', FactListEntryItems> {
     isActive?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
@@ -47,8 +48,8 @@ export const FactListSlice: React.FC<FactListSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

@@ -8,7 +8,8 @@ import {
     ModxSlice,
 } from 'utils/modx';
 
-export interface ComparisonSliderSliceType extends ModxSlice<'ComparisonSlider'> {
+export interface ComparisonSliderSliceType
+    extends ModxSlice<'ComparisonSlider'> {
     isActive?: boolean;
     anchor?: {
         id?: string;
@@ -60,8 +61,8 @@ export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

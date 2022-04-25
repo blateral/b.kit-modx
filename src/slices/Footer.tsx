@@ -7,6 +7,7 @@ import {
 
 import { assignTo, Footer, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { SocialItem } from '@blateral/b.kit/lib/components/blocks/SocialList';
 
 export interface FooterSliceType {
     settings?: ModxSettingsPage;
@@ -18,10 +19,7 @@ export interface FooterSliceType {
     mapSocials?: (
         socials: SocialMediaItem[],
         isInverted?: boolean
-    ) => Array<{
-        href: string;
-        icon: JSX.Element;
-    }>;
+    ) => Array<SocialItem>;
     theme?: ThemeMods;
     bgColor?: string;
 }
@@ -49,16 +47,19 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
             : logoLinkParsed
             ? logoLinkParsed
             : '';
+
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <Footer
             theme={sliceTheme}

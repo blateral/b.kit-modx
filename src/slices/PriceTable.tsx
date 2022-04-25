@@ -13,7 +13,8 @@ interface PriceTableItem {
     isHighlighted?: boolean;
 }
 
-export interface PriceTableSliceType extends ModxSlice<'PriceTable', PriceTableItem> {
+export interface PriceTableSliceType
+    extends ModxSlice<'PriceTable', PriceTableItem> {
     isActive?: boolean;
     anchor?: {
         id?: string;
@@ -43,11 +44,12 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
     const filteredItems = items.filter(filterEmptyItems);
     if (filteredItems.length < 1) return null;
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

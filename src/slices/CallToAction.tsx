@@ -92,13 +92,14 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <CallToAction
             theme={sliceTheme}

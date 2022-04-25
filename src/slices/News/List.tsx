@@ -55,18 +55,17 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     });
     const filteredNews = removeFirstImagesIfMissingAtLeastOne(newsListMap);
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
-
-    console.log('NEWESLIST');
 
     return (
         <NewsList
@@ -102,7 +101,6 @@ function removeFirstImagesIfMissingAtLeastOne(
         return mappedNewsCopy;
     }
 }
-
 
 function mapNewsListData({
     newsCollection,

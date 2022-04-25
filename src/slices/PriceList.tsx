@@ -7,7 +7,8 @@ interface PriceListItem {
     price?: string;
 }
 
-export interface PriceListSliceType extends ModxSlice<'PriceList', PriceListItem> {
+export interface PriceListSliceType
+    extends ModxSlice<'PriceList', PriceListItem> {
     isActive?: boolean;
     anchor?: {
         id?: string;
@@ -28,11 +29,12 @@ export const PriceListSlice: React.FC<PriceListSliceType> = ({
     const filteredItems = items.filter(filterEmptyItems);
     if (filteredItems.length < 1) return null;
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

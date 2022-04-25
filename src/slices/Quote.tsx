@@ -30,11 +30,12 @@ export const QuoteSlice: React.FC<QuoteSliceType> = ({
 }) => {
     if (!text) return null;
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

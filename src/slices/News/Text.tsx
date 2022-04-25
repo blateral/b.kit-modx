@@ -38,16 +38,18 @@ export const NewsTextSlice: React.FC<NewsTextSliceType> = ({
     bgColor,
     theme,
 }) => {
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <NewsText
             theme={sliceTheme}

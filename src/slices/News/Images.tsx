@@ -50,16 +50,19 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
     secondaryAction,
 }) => {
     const images = full?.small ? [full] : half[0]?.small ? half : [];
+
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <NewsImages
             theme={sliceTheme}
