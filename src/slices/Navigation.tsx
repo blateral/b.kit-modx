@@ -1,10 +1,10 @@
-import { ThemeMods } from '@blateral/b.kit';
+import { Navigation, ThemeMods } from '@blateral/b.kit';
 import {
     MenuTypeProps,
     NavItem,
 } from '@blateral/b.kit/lib/components/sections/navigation/remastered/menu/Menu';
 
-import Navigation, {
+import {
     NavBarStates,
     NavMenuStates,
 } from '@blateral/b.kit/lib/components/sections/navigation/remastered/Navigation';
