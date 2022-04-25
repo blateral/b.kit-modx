@@ -74,8 +74,8 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

@@ -48,16 +48,18 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     customTag,
     items,
 }) => {
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <NewsOverview
             theme={sliceTheme}

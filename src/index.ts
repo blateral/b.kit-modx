@@ -1,4 +1,4 @@
-/***** Version: 2.0.0-beta.7.7 *****/
+/***** Version: 2.0.0-beta.7.9 *****/
 // export util types and functions
 // slice exports
 export { endpoint } from 'utils/modx';
@@ -24,9 +24,8 @@ export * from 'slices/IconList';
 export * from 'slices/IndexList';
 export * from 'slices/Intro';
 export * from 'slices/Map';
-export * from 'slices/Navigation';
 export * from 'slices/NavList';
-export * from 'slices/NewNavigation';
+export * from 'slices/Navigation';
 export * from 'slices/News/AuthorCard';
 export * from 'slices/News/Footer';
 export * from 'slices/News/Images';

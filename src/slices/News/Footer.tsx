@@ -60,11 +60,12 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     const filteredNews = removeFirstImagesIfMissingAtLeastOne(newsListMap);
     console.log(filteredNews);
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -148,8 +149,6 @@ function mapNewsListData({
                         tag
                     )}`,
                 },
-
-              
             };
         });
         return {

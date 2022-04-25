@@ -8,7 +8,8 @@ interface IndexListItem {
     label?: string;
 }
 
-export interface IndexListSliceType extends ModxSlice<'IndexList', IndexListItem> {
+export interface IndexListSliceType
+    extends ModxSlice<'IndexList', IndexListItem> {
     isActive?: boolean;
     anchor?: {
         id?: string;
@@ -30,11 +31,12 @@ export const IndexListSlice: React.FC<IndexListSliceType> = ({
     items,
     theme,
 }) => {
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

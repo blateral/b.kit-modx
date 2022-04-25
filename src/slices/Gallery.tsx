@@ -82,8 +82,8 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

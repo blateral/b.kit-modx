@@ -15,7 +15,8 @@ interface AlertListItems {
     };
 }
 
-export interface AlertListSliceType extends ModxSlice<'AlertList', AlertListItems> {
+export interface AlertListSliceType
+    extends ModxSlice<'AlertList', AlertListItems> {
     isActive?: boolean;
     anchor?: {
         id?: string;
@@ -38,8 +39,8 @@ export const AlertListSlice: React.FC<AlertListSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -80,4 +81,3 @@ function isValidDate(dateInstance?: Date) {
     if (!dateInstance) return undefined;
     return dateInstance instanceof Date && !isNaN(dateInstance as any);
 }
-  

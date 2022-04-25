@@ -47,16 +47,18 @@ export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
     bgColor,
     theme,
 }) => {
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <NewsVideo
             theme={sliceTheme}

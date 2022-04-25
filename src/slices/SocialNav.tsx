@@ -32,8 +32,8 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

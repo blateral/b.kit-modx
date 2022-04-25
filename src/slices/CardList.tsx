@@ -47,13 +47,14 @@ export const CardListSlice: React.FC<CardListSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <CardList
             theme={sliceTheme}

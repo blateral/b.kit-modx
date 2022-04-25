@@ -47,16 +47,19 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
             : logoLinkParsed
             ? logoLinkParsed
             : '';
+
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <Footer
             theme={sliceTheme}

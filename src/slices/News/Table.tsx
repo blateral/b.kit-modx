@@ -23,16 +23,18 @@ export const NewsTableSlice: React.FC<NewsTableSliceType> = ({
     bgColor,
     theme,
 }) => {
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <NewsTable
             theme={sliceTheme}

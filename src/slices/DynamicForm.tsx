@@ -142,7 +142,8 @@ export interface DatepickerDeleteActionProps {
         | ((ev: React.SyntheticEvent<HTMLButtonElement>) => void)
         | undefined;
 }
-export interface DynamicFormSliceType extends ModxSlice<'DynamicForm', FormField> {
+export interface DynamicFormSliceType
+    extends ModxSlice<'DynamicForm', FormField> {
     isActive?: boolean;
     anchor?: {
         id?: string;
@@ -202,8 +203,8 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

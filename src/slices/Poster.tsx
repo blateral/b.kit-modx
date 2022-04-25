@@ -64,16 +64,18 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
     theme,
     bgColor,
 }) => {
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <Poster
             anchorId={anchor?.id || ''}

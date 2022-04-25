@@ -28,16 +28,18 @@ export const QuickNavSlice: React.FC<QuickNavSliceType> = ({
     bgMode,
     bgColor,
 }) => {
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <QuickNav
             anchorId={anchor?.id || ''}
