@@ -226,6 +226,32 @@ export interface ModxPage extends ModxDocument {
     content: Array<PageContent>;
 }
 
+export interface ModxEventPage extends ModxPage {
+    eventData?: ModxEventData;
+}
+
+export interface ModxEventData {
+    title?: string;
+    date?: string;
+    image: ModxImageProps;
+    intro?: string;
+    duration?: string;
+    price?: string;
+    priceInfo?: string;
+    address: {
+        locationName?: string;
+        adress?: string;
+        email?: string;
+        phone?: string;
+        website?: string;
+    };
+    booking: {
+        email?: string;
+        phone?: string;
+        ticketUrl?: string;
+        website?: string;
+    };
+}
 export interface SocialMediaItem {
     link?: string;
     icon?: Pick<ModxImageProps, 'small'>;
@@ -560,6 +586,14 @@ export const isModxPage = (pageToCheck: any): pageToCheck is ModxPage => {
     return pageToCheck?.type === 'page';
 };
 
-export const isNewsPage = (pageToCheck: any): pageToCheck is ModxNewsPage => {
+export const isModxNewsPage = (
+    pageToCheck: any
+): pageToCheck is ModxNewsPage => {
     return pageToCheck?.type === 'news_page';
+};
+
+export const isModxEventPage = (
+    pageToCheck: any
+): pageToCheck is ModxEventPage => {
+    return pageToCheck?.type === 'event_page';
 };
