@@ -2,12 +2,12 @@ import { Navigation, ThemeMods } from '@blateral/b.kit';
 import {
     MenuTypeProps,
     NavItem,
-} from '@blateral/b.kit/lib/components/sections/navigation/remastered/menu/Menu';
+} from '@blateral/b.kit/lib/components/sections/navigation/menu/Menu';
 
 import {
     NavBarStates,
     NavMenuStates,
-} from '@blateral/b.kit/lib/components/sections/navigation/remastered/Navigation';
+} from '@blateral/b.kit/lib/components/sections/navigation/Navigation';
 import React from 'react';
 import { ModxNavGroup, ModxSlice } from 'utils/modx';
 
@@ -85,6 +85,7 @@ const mapToValidNavGroup = (
 ): NavItem => {
     return {
         ...item,
+        uid: item.id || '',
         link: {
             href: item?.link?.href === '/' ? '/' : '/' + item?.link?.href,
         },
