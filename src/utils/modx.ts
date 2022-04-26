@@ -228,6 +228,9 @@ export interface ModxPage extends ModxDocument {
 
 export interface ModxEventPage extends ModxPage {
     eventData?: ModxEventData;
+    tags?: string;
+    eventCollectionUrl?: string;
+    eventOverviewUrl?: string;
 }
 
 export interface ModxEventData {
