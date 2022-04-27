@@ -1,6 +1,6 @@
 {
     "name": "@blateral/b.kit-modx",
-    "version": "2.0.0-beta.7.11",
+    "version": "2.0.0-beta.7.12",
     "description": "",
     "main": "lib/index.js",
     "module": "lib/index.es.js",
