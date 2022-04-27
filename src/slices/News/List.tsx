@@ -95,6 +95,10 @@ function removeFirstImagesIfMissingAtLeastOne(
     } else {
         const mappedNewsCopy = [...mappedNews];
         for (let i = 0; i < countToCheck; i++) {
+            if (!mappedNewsCopy?.[i]?.image) {
+                continue;
+            }
+            
             mappedNewsCopy[i].image = undefined;
         }
 
