@@ -4,6 +4,7 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import typescript from 'rollup-plugin-typescript2';
 import ttypescript from 'ttypescript';
 import { terser } from 'rollup-plugin-terser';
+import del from 'rollup-plugin-delete';
 
 import packageJson from './package.json';
 
@@ -22,6 +23,7 @@ export default {
         },
     ],
     plugins: [
+        del({ targets: 'lib' }),
         peerDepsExternal(),
         resolve(),
         commonjs(),
