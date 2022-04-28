@@ -17,7 +17,6 @@ export * from 'slices/Events/EventOverview';
 export * from 'slices/FactList';
 export * from 'slices/FeatureList';
 export * from 'slices/Footer';
-export * from 'slices/Form';
 export * from 'slices/Gallery';
 export * from 'slices/Header';
 export * from 'slices/IconList';

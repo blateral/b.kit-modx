@@ -18,7 +18,6 @@ import { CrossPromotionListSliceType } from '../slices/CrossPromotionList';
 import { FactGridSliceType } from '../slices/FactGrid';
 import { FactListSliceType } from '../slices/FactList';
 import { FeatureListSliceType } from '../slices/FeatureList';
-import { FormSliceType } from '../slices/Form';
 import { GallerySliceType } from '../slices/Gallery';
 import { HeaderSliceType } from 'slices/Header';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
@@ -121,7 +120,6 @@ export type PageContent =
     | FactGridSliceType
     | FactListSliceType
     | FeatureListSliceType
-    | FormSliceType
     | GallerySliceType
     | HeaderSliceType
     | IconListSliceType
