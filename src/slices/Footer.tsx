@@ -1,5 +1,5 @@
 import {
-    ModxSettingsPage,
+    ModxSettings,
     SocialMediaItem,
     isExternalLink,
     endpoint,
@@ -10,7 +10,7 @@ import React from 'react';
 import { SocialItem } from '@blateral/b.kit/lib/components/blocks/SocialList';
 
 export interface FooterSliceType {
-    settings?: ModxSettingsPage;
+    settings?: ModxSettings;
     injectForm?: (props: {
         isInverted?: boolean;
         placeholder?: string;
