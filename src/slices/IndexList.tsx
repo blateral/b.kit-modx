@@ -42,7 +42,7 @@ export const IndexListSlice: React.FC<IndexListSliceType> = ({
 
     return (
         <IndexList
-            anchorId={anchor?.id}
+            anchorId={anchorId || ''}
             bgMode={bgMode}
             theme={sliceTheme}
             items={items
