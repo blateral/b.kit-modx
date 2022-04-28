@@ -37,10 +37,7 @@ export interface EventListSliceType extends ModxSlice<'EventList'> {
     isActive?: boolean;
     bgMode?: 'full' | 'inverted';
     bgColor?: string;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     hasImages?: boolean;
     primary_label?: string;
     collection?: EventCollection;
@@ -60,7 +57,7 @@ export interface EventListSliceType extends ModxSlice<'EventList'> {
 }
 
 export const EventListSlice: React.FC<EventListSliceType> = ({
-    anchor,
+    anchorId,
     bgMode,
     bgColor,
     hasImages,
@@ -87,7 +84,7 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
     return (
         <EventList
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={bgMode}
             customTag={customTag}
             events={

@@ -13,13 +13,9 @@ interface CardListItems {
     cardColor?: string;
 }
 
-export interface CardListSliceType
-    extends ModxSlice<'CardList', CardListItems> {
+export interface CardListSliceType extends ModxSlice<'CardList', CardListItems> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     bgMode?: Omit<BgMode, 'splitted'>;
     bgColor?: string;
     decorator?: (props: {
@@ -37,7 +33,7 @@ export interface CardListSliceType
 export const CardListSlice: React.FC<CardListSliceType> = ({
     bgMode,
     bgColor,
-    anchor,
+    anchorId,
     items,
     decorator,
     customIcon,
@@ -58,7 +54,7 @@ export const CardListSlice: React.FC<CardListSliceType> = ({
     return (
         <CardList
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={bgMode as 'full' | 'inverted' | undefined}
             items={items.map(
                 (item): Omit<CardProps, 'decorator' | 'isInverted'> => {

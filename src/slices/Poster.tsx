@@ -13,10 +13,7 @@ import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
 export interface PosterSliceType extends ModxSlice<'Poster'> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     isInverted?: boolean;
     image?: ModxImageProps;
     hasWrapper?: boolean;
@@ -48,7 +45,7 @@ export interface PosterSliceType extends ModxSlice<'Poster'> {
 
 export const PosterSlice: React.FC<PosterSliceType> = ({
     image,
-    anchor,
+    anchorId,
     superTitle,
     superTitleAs,
     title,
@@ -78,7 +75,7 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
 
     return (
         <Poster
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             theme={sliceTheme}
             width={hasWrapper ? 'content' : 'full'}
             image={mapImageToComponentData(image)}

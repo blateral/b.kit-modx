@@ -6,10 +6,7 @@ import { BgMode, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
 export interface ArticleSliceType extends ModxSlice<'Article'> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     superTitle?: string;
     superTitleAs?: HeadlineTag;
     title?: string;
@@ -41,7 +38,7 @@ export interface ArticleSliceType extends ModxSlice<'Article'> {
 }
 
 export const ArticleSlice: React.FC<ArticleSliceType> = ({
-    anchor,
+    anchorId,
     superTitle,
     superTitleAs,
     title,
@@ -76,7 +73,7 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
     return (
         <Article
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={bgMode}
             title={title}
             titleAs={titleAs}

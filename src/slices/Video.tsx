@@ -11,10 +11,7 @@ export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
     isActive?: boolean;
     bgMode?: string;
     bgColor?: string;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     controlNext?: (props: {
         isInverted?: boolean;
         isActive?: boolean;
@@ -44,7 +41,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
     bgMode,
     bgColor,
     items,
-    anchor,
+    anchorId,
     controlNext,
     controlPrev,
     dot,
@@ -73,7 +70,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
     if (items && items.length > 1) {
         return (
             <VideoCarousel
-                anchorId={anchor?.id || ''}
+                anchorId={anchorId || ''}
                 theme={sliceTheme}
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
                 videos={items.map((item) => {
@@ -100,7 +97,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
 
         return (
             <Video
-                anchorId={anchor?.id || ''}
+                anchorId={anchorId || ''}
                 theme={sliceTheme}
                 bgMode={
                     isBgModeString(bgMode)

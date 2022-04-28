@@ -5,10 +5,7 @@ import { ModxSlice } from '../utils/modx';
 
 export interface QuoteSliceType extends ModxSlice<'Quote'> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     active_link?: string;
     bgMode?: 'full' | 'inverted';
     bgColor?: string;
@@ -21,7 +18,7 @@ export interface QuoteSliceType extends ModxSlice<'Quote'> {
 
 export const QuoteSlice: React.FC<QuoteSliceType> = ({
     theme,
-    anchor,
+    anchorId,
     bgMode,
     bgColor,
     text,
@@ -45,7 +42,7 @@ export const QuoteSlice: React.FC<QuoteSliceType> = ({
     return (
         <Quote
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={bgMode}
             text={text}
             source={source}

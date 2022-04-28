@@ -15,10 +15,7 @@ type BgMode = 'full' | 'splitted' | 'inverted';
 
 export interface IntroSliceType extends ModxSlice<'Intro'> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
     image?: ImageProps;
@@ -52,7 +49,7 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
 }
 
 export const IntroSlice: React.FC<IntroSliceType> = ({
-    anchor,
+    anchorId,
     isCentered,
     isStackable,
     bgMode,
@@ -87,7 +84,7 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
     return (
         <Intro
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={bgMode}
             isStackable={isStackable}
             isCentered={isCentered}

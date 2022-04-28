@@ -7,10 +7,7 @@ import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 export interface NewsOverviewSliceType
     extends ModxSlice<'NewsOverview', ModxNewsTeaser> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     newsCollectionUrl?: string;
     hasImages?: boolean;
     bgMode?: BgMode;
@@ -38,7 +35,7 @@ export interface NewsOverviewSliceType
 export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     bgMode,
     hasImages,
-    anchor,
+    anchorId,
     showMoreText,
     bgColor,
     theme,
@@ -63,7 +60,7 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     return (
         <NewsOverview
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             customTag={customTag}
             tags={generateUniqueTag(items)}
             onTagClick={onTagClick}

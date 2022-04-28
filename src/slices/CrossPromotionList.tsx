@@ -42,10 +42,7 @@ type ImageFormats =
 export interface CrossPromotionListSliceType
     extends ModxSlice<'CrossPromotionList', CrossPromotionItems> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     isCarousel?: boolean;
     isMirrored?: boolean;
     bgMode?: BgMode;
@@ -96,7 +93,7 @@ const createCPromoList = ({
     externalLinkIcon,
     items,
     theme,
-    anchor,
+    anchorId,
 }: CrossPromotionListSliceType) => {
     const promoItems: Array<CrossPromotionItems> = items;
     const isImagesMirrored =
@@ -139,7 +136,7 @@ const createCPromoList = ({
 
     return (
         <CrossPromotion
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             externalLinkIcon={externalLinkIcon}
             theme={sliceTheme}
             isMirrored={isImagesMirrored}
@@ -154,7 +151,7 @@ const createCPromoCarousel = ({
     bgMode,
     bgColor,
     imageFormat,
-    anchor,
+    anchorId,
     items,
     controlNext,
     controlPrev,
@@ -182,7 +179,7 @@ const createCPromoCarousel = ({
     const mappedImageFormat = mapCarouselImageFormat(imageFormat);
     return (
         <PromotionCarousel
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             theme={sliceTheme}
             bgMode={bgMode}
             promotions={items.map(({ image, superTitle, title, link }) => {

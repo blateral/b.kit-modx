@@ -5,10 +5,7 @@ import { SimpleImage } from '@blateral/b.kit';
 import { ModxImageProps, ModxSlice } from 'utils/modx';
 export interface SimpleImageSliceType extends ModxSlice<'SimpleImage'> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     hAlign?: 'left' | 'center' | 'right';
     image?: ModxImageProps;
 }
@@ -16,12 +13,12 @@ export interface SimpleImageSliceType extends ModxSlice<'SimpleImage'> {
 export const SimpleImageSlice: React.FC<SimpleImageSliceType> = ({
     image,
     hAlign,
-    anchor,
+    anchorId,
 }) => {
     return (
         <SimpleImage
             hAlign={hAlign}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             image={image?.small ? image : undefined}
         />
     );

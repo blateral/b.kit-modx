@@ -18,10 +18,7 @@ interface NavListItems {
 
 export interface NavListSliceType extends ModxSlice<'NavList', NavListItems> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
     customTitleIcon?: (props: {
@@ -37,7 +34,7 @@ export interface NavListSliceType extends ModxSlice<'NavList', NavListItems> {
 
 export const NavListSlice: React.FC<NavListSliceType> = ({
     bgMode,
-    anchor,
+    anchorId,
     bgColor,
     customTitleIcon,
     customIcon,
@@ -59,7 +56,7 @@ export const NavListSlice: React.FC<NavListSliceType> = ({
     return (
         <NavList
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={bgMode}
             customTitleIcon={customTitleIcon}
             items={items

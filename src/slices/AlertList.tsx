@@ -15,13 +15,9 @@ interface AlertListItems {
     };
 }
 
-export interface AlertListSliceType
-    extends ModxSlice<'AlertList', AlertListItems> {
+export interface AlertListSliceType extends ModxSlice<'AlertList', AlertListItems> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
 
@@ -31,7 +27,7 @@ export interface AlertListSliceType
 export const AlertListSlice: React.FC<AlertListSliceType> = ({
     bgMode,
     bgColor,
-    anchor,
+    anchorId,
     items,
     theme,
 }) => {
@@ -50,7 +46,7 @@ export const AlertListSlice: React.FC<AlertListSliceType> = ({
     return (
         <AlertList
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={bgMode}
             items={items
                 .filter((alert) => alert.label && alert.link?.href)

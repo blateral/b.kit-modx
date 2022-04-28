@@ -7,10 +7,7 @@ export interface TableSliceType extends ModxSlice<'Table'> {
     isActive?: boolean;
     bgMode?: string;
     bgColor?: string;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     tableTitle?: string;
     sliceRows?: Array<{ cols: string[] }>;
     hasFirstRowTitle?: boolean;
@@ -26,7 +23,7 @@ export interface TableSliceType extends ModxSlice<'Table'> {
 export const TableSlice: React.FC<TableSliceType> = ({
     bgMode,
     bgColor,
-    anchor,
+    anchorId,
     theme,
     tableTitle,
     sliceRows,
@@ -55,7 +52,7 @@ export const TableSlice: React.FC<TableSliceType> = ({
     return (
         <Table
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }

@@ -10,10 +10,7 @@ interface QuickNavItem {
 
 export interface QuickNavSliceType extends ModxSlice<'QuickNav', QuickNavItem> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     active_link?: string;
     bgMode?: 'inverted';
     bgColor?: string;
@@ -22,7 +19,7 @@ export interface QuickNavSliceType extends ModxSlice<'QuickNav', QuickNavItem> {
 
 export const QuickNavSlice: React.FC<QuickNavSliceType> = ({
     active_link,
-    anchor,
+    anchorId,
     items,
     theme,
     bgMode,
@@ -42,7 +39,7 @@ export const QuickNavSlice: React.FC<QuickNavSliceType> = ({
 
     return (
         <QuickNav
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={bgMode}
             theme={sliceTheme}
             navItems={items?.map((item) => {

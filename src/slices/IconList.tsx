@@ -25,14 +25,10 @@ interface IconListImages {
     };
 }
 
-export interface IconListSliceType
-    extends ModxSlice<'IconList', IconListImages> {
+export interface IconListSliceType extends ModxSlice<'IconList', IconListImages> {
     isActive?: boolean;
 
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
 
     isCentered?: boolean;
     showMoreText?: string;
@@ -62,7 +58,7 @@ export interface IconListSliceType
 
 export const IconListSlice: React.FC<IconListSliceType> = ({
     bgMode,
-    anchor,
+    anchorId,
     bgColor,
     isCentered,
     enableToggle,
@@ -91,7 +87,7 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
 
     return (
         <IconList
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             theme={sliceTheme}
             enableToggle={enableToggle}
             isCentered={isCentered}

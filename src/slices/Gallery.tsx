@@ -29,10 +29,7 @@ interface GalleryItems {
 
 export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     isCarousel?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
@@ -62,7 +59,7 @@ export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
 }
 
 export const GallerySlice: React.FC<GallerySliceType> = ({
-    anchor,
+    anchorId,
     isCarousel,
     bgMode,
     bgColor,
@@ -91,7 +88,7 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
     );
 
     const sharedProps = {
-        anchorId: anchor?.id || '',
+        anchorId: anchorId || '',
         images: items?.map((item) => {
             const theImage: ModxImageProps =
                 item[item?.imageFormat || 'small-square'];

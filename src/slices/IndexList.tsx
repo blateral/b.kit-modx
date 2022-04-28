@@ -11,10 +11,7 @@ interface IndexListItem {
 export interface IndexListSliceType
     extends ModxSlice<'IndexList', IndexListItem> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     bgMode?: 'full' | 'inverted';
     bgColor?: string;
     customIcon?: (props: {
@@ -25,7 +22,7 @@ export interface IndexListSliceType
 
 export const IndexListSlice: React.FC<IndexListSliceType> = ({
     bgMode,
-    anchor,
+    anchorId,
     bgColor,
     customIcon,
     items,

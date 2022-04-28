@@ -12,13 +12,9 @@ interface AccordionItem {
     linkListAside?: LinkListProps;
 }
 
-export interface AccordionSliceType
-    extends ModxSlice<'Accordion', AccordionItem> {
+export interface AccordionSliceType extends ModxSlice<'Accordion', AccordionItem> {
     isActive?: boolean;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     bgMode?: Omit<BgMode, 'splitted'>;
     bgColor?: string;
     theme?: ThemeMods;
@@ -26,7 +22,7 @@ export interface AccordionSliceType
 
 export const AccordionSlice: React.FC<AccordionSliceType> = ({
     bgMode,
-    anchor,
+    anchorId,
     items,
     bgColor,
     theme,
@@ -46,7 +42,7 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
     return (
         <Accordion
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             items={items.map((item) => {
                 const filteredLinkList = {
                     items: item.linkList?.items?.filter(filterWithLabelAndHref),

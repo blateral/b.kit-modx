@@ -40,10 +40,7 @@ export interface EventOverviewSliceType extends ModxSlice<'EventOverview'> {
     isActive?: boolean;
     bgMode?: 'full' | 'inverted';
     bgColor?: string;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     hasImages?: boolean;
     primary_label?: string;
     collection?: EventCollection;
@@ -63,7 +60,7 @@ export interface EventOverviewSliceType extends ModxSlice<'EventOverview'> {
 }
 
 export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
-    anchor,
+    anchorId,
     bgMode,
     hasImages,
     primary_label,
@@ -127,7 +124,7 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
 
     return (
         <EventOverview
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             bgMode={bgMode}
             tags={collection ? createUniqueTagsFromItems(collection) : []}
             customTag={customTag}

@@ -25,10 +25,7 @@ interface BadgeData {
 export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
     isActive?: boolean;
     theme?: ThemeMods;
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
     isMirrored?: boolean;
@@ -70,7 +67,7 @@ export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
 
 export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     theme,
-    anchor,
+    anchorId,
     bgMode,
     bgColor,
     title,
@@ -103,7 +100,7 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     return (
         <CallToAction
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             // newsFormMain={
             //     newsForm
             //         ? (isInverted) =>

@@ -6,10 +6,7 @@ import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 
 export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
-    anchor?: {
-        id?: string;
-        label?: string;
-    };
+    anchorId?: string;
     isActive?: boolean;
     newsCollectionUrl?: string;
     newsHeading?: string;
@@ -35,7 +32,7 @@ export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
 }
 
 export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
-    anchor,
+    anchorId,
     bgMode,
     newsCollectionUrl,
     authorName,
@@ -84,7 +81,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     return (
         <NewsIntro
             theme={sliceTheme}
-            anchorId={anchor?.id || ''}
+            anchorId={anchorId || ''}
             title={newsHeading}
             text={newsIntro}
             image={mappedImage}
