@@ -7,6 +7,7 @@ import {
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface IconListImages {
     image: ModxImageProps & {
@@ -25,7 +26,8 @@ interface IconListImages {
     };
 }
 
-export interface IconListSliceType extends ModxSlice<'IconList', IconListImages> {
+export interface IconListSliceType
+    extends ModxSlice<'IconList', IconListImages> {
     isActive?: boolean;
 
     anchorId?: string;
@@ -87,7 +89,7 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
 
     return (
         <IconList
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             theme={sliceTheme}
             enableToggle={enableToggle}
             isCentered={isCentered}

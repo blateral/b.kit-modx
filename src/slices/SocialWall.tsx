@@ -2,6 +2,7 @@ import { ModxSlice, ModxImageProps } from 'utils/modx';
 
 import { assignTo, SocialWall, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { normalizeAnchorId } from 'utils/mapping';
 
 type BgMode = 'full' | 'inverted';
 
@@ -10,7 +11,8 @@ interface WallItems {
     image?: ModxImageProps;
 }
 
-export interface SocialWallSliceType extends ModxSlice<'SocialWall', WallItems> {
+export interface SocialWallSliceType
+    extends ModxSlice<'SocialWall', WallItems> {
     isActive?: boolean;
     anchorId?: string;
     bgMode?: BgMode;
@@ -46,7 +48,7 @@ export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
     return (
         <SocialWall
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             hashTag={hashTag}
             followUs={followUs}

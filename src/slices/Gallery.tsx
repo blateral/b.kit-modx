@@ -3,6 +3,7 @@ import React from 'react';
 import { assignTo, Gallery, ImageCarousel, ThemeMods } from '@blateral/b.kit';
 import { ResponsiveObject } from 'slices/slick';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 type ImageFormats =
     | 'small-square'
@@ -88,7 +89,7 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
     );
 
     const sharedProps = {
-        anchorId: anchorId || '',
+        anchorId: normalizeAnchorId(anchorId),
         images: items?.map((item) => {
             const theImage: ModxImageProps =
                 item[item?.imageFormat || 'small-square'];

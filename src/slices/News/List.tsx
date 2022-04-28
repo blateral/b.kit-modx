@@ -4,8 +4,10 @@ import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsList'
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
 import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
-export interface NewsListSliceType extends ModxSlice<'NewsList', ModxNewsTeaser> {
+export interface NewsListSliceType
+    extends ModxSlice<'NewsList', ModxNewsTeaser> {
     anchorId?: string;
     isActive?: boolean;
     bgMode?: BgMode;
@@ -66,7 +68,7 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     return (
         <NewsList
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }

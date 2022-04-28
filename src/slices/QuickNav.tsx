@@ -2,6 +2,7 @@ import { assignTo, QuickNav, ThemeMods } from '@blateral/b.kit';
 
 import React from 'react';
 import { ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface QuickNavItem {
     link: string;
@@ -39,7 +40,7 @@ export const QuickNavSlice: React.FC<QuickNavSliceType> = ({
 
     return (
         <QuickNav
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             theme={sliceTheme}
             navItems={items?.map((item) => {

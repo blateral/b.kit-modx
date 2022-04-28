@@ -3,6 +3,7 @@ import { LinkListProps } from '@blateral/b.kit/lib/components/blocks/LinkList';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
 import { BgMode, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface AccordionItem {
     label: string;
@@ -12,7 +13,8 @@ interface AccordionItem {
     linkListAside?: LinkListProps;
 }
 
-export interface AccordionSliceType extends ModxSlice<'Accordion', AccordionItem> {
+export interface AccordionSliceType
+    extends ModxSlice<'Accordion', AccordionItem> {
     isActive?: boolean;
     anchorId?: string;
     bgMode?: Omit<BgMode, 'splitted'>;
@@ -42,7 +44,7 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
     return (
         <Accordion
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             items={items.map((item) => {
                 const filteredLinkList = {
                     items: item.linkList?.items?.filter(filterWithLabelAndHref),

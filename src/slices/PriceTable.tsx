@@ -1,6 +1,7 @@
 import { assignTo, PriceTable, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { ModxSlice } from '../utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface PriceTableItem {
     title?: string;
@@ -13,7 +14,8 @@ interface PriceTableItem {
     isHighlighted?: boolean;
 }
 
-export interface PriceTableSliceType extends ModxSlice<'PriceTable', PriceTableItem> {
+export interface PriceTableSliceType
+    extends ModxSlice<'PriceTable', PriceTableItem> {
     isActive?: boolean;
     anchorId?: string;
     bgMode?: 'full' | 'inverted';
@@ -55,7 +57,7 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
     return (
         <PriceTable
             bgMode={bgMode}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             items={filteredItems.map((item) => {
                 return {
                     title: item.title,

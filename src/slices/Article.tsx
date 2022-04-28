@@ -2,6 +2,7 @@ import { Article, assignTo, ThemeMods } from '@blateral/b.kit';
 import { LinkListProps } from '@blateral/b.kit/lib/components/blocks/LinkList';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
+import { normalizeAnchorId } from 'utils/mapping';
 import { BgMode, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
 export interface ArticleSliceType extends ModxSlice<'Article'> {
@@ -73,7 +74,7 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
     return (
         <Article
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             title={title}
             titleAs={titleAs}

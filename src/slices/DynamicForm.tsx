@@ -13,6 +13,7 @@ import {
     FileUpload as BkitFileUpload,
 } from '@blateral/b.kit/lib/components/sections/DynamicForm';
 import { ModxSlice } from '../utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 type FormFieldTypes =
     | 'Field'
@@ -142,7 +143,8 @@ export interface DatepickerDeleteActionProps {
         | ((ev: React.SyntheticEvent<HTMLButtonElement>) => void)
         | undefined;
 }
-export interface DynamicFormSliceType extends ModxSlice<'DynamicForm', FormField> {
+export interface DynamicFormSliceType
+    extends ModxSlice<'DynamicForm', FormField> {
     isActive?: boolean;
     anchorId?: string;
     theme?: ThemeMods;
@@ -210,7 +212,7 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     return (
         <DynamicForm
             bgMode={bgMode}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             onSubmit={onSubmit}
             submitAction={createLabeledSubmitAction(submitAction, submitLabel)}
             fields={itemsToFormFields({

@@ -2,6 +2,7 @@ import { ModxSlice } from 'utils/modx';
 
 import { assignTo, NavList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { normalizeAnchorId } from 'utils/mapping';
 
 type BgMode = 'full' | 'inverted';
 
@@ -56,7 +57,7 @@ export const NavListSlice: React.FC<NavListSliceType> = ({
     return (
         <NavList
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             customTitleIcon={customTitleIcon}
             items={items

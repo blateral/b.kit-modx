@@ -5,6 +5,7 @@ import { EventItem } from '@blateral/b.kit/lib/components/sections/events/EventO
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
 import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface Event {
     alias?: string;
@@ -124,7 +125,7 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
 
     return (
         <EventOverview
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             tags={collection ? createUniqueTagsFromItems(collection) : []}
             customTag={customTag}

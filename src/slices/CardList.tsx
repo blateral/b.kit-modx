@@ -3,6 +3,7 @@ import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { CardProps } from '@blateral/b.kit/lib/components/sections/CardList';
 import React from 'react';
 import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface CardListItems {
     title?: string;
@@ -13,7 +14,8 @@ interface CardListItems {
     cardColor?: string;
 }
 
-export interface CardListSliceType extends ModxSlice<'CardList', CardListItems> {
+export interface CardListSliceType
+    extends ModxSlice<'CardList', CardListItems> {
     isActive?: boolean;
     anchorId?: string;
     bgMode?: Omit<BgMode, 'splitted'>;
@@ -54,7 +56,7 @@ export const CardListSlice: React.FC<CardListSliceType> = ({
     return (
         <CardList
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode as 'full' | 'inverted' | undefined}
             items={items.map(
                 (item): Omit<CardProps, 'decorator' | 'isInverted'> => {

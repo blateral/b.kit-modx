@@ -8,6 +8,7 @@ import {
     isValidAction,
     ModxImageMetaData,
 } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface ContactData {
     avatar?: {
@@ -100,7 +101,7 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     return (
         <CallToAction
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             // newsFormMain={
             //     newsForm
             //         ? (isInverted) =>

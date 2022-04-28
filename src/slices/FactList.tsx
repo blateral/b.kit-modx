@@ -2,13 +2,15 @@
 import React from 'react';
 import { assignTo, FactList, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface FactListEntryItems {
     title?: string;
     text?: string;
 }
 
-export interface FactListSliceType extends ModxSlice<'FactList', FactListEntryItems> {
+export interface FactListSliceType
+    extends ModxSlice<'FactList', FactListEntryItems> {
     isActive?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
@@ -55,7 +57,7 @@ export const FactListSlice: React.FC<FactListSliceType> = ({
     return (
         <FactList
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }

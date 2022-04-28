@@ -4,6 +4,7 @@ import { assignTo, NewsIntro, ThemeMods } from '@blateral/b.kit';
 import { BgMode, endpoint, ModxImageProps, ModxSlice } from 'utils/modx';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
     anchorId?: string;
@@ -81,7 +82,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     return (
         <NewsIntro
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             title={newsHeading}
             text={newsIntro}
             image={mappedImage}

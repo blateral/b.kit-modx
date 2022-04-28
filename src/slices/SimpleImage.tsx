@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { SimpleImage } from '@blateral/b.kit';
+import { normalizeAnchorId } from 'utils/mapping';
 
 import { ModxImageProps, ModxSlice } from 'utils/modx';
 export interface SimpleImageSliceType extends ModxSlice<'SimpleImage'> {
@@ -18,7 +19,7 @@ export const SimpleImageSlice: React.FC<SimpleImageSliceType> = ({
     return (
         <SimpleImage
             hAlign={hAlign}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             image={image?.small ? image : undefined}
         />
     );

@@ -15,6 +15,7 @@ import {
     ModxSlice,
 } from 'utils/modx';
 import { ResponsiveObject } from './slick';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface CrossPromotionItems {
     isMain?: boolean;
@@ -136,7 +137,7 @@ const createCPromoList = ({
 
     return (
         <CrossPromotion
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             externalLinkIcon={externalLinkIcon}
             theme={sliceTheme}
             isMirrored={isImagesMirrored}
@@ -179,7 +180,7 @@ const createCPromoCarousel = ({
     const mappedImageFormat = mapCarouselImageFormat(imageFormat);
     return (
         <PromotionCarousel
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             theme={sliceTheme}
             bgMode={bgMode}
             promotions={items.map(({ image, superTitle, title, link }) => {

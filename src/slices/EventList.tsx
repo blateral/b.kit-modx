@@ -4,6 +4,7 @@ import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
 import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface EventCollection {
     alias?: string;
@@ -84,7 +85,7 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
     return (
         <EventList
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             customTag={customTag}
             events={

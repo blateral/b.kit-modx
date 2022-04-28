@@ -2,6 +2,7 @@
 import React from 'react';
 import { assignTo, JobList, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface JobListItems {
     jobTitle?: string;
@@ -45,7 +46,7 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
     return (
         <JobList
             theme={sliceTheme}
-            anchorId={anchorId}
+            anchorId={normalizeAnchorId(anchorId)}
             locationIcon={locationIcon}
             modelIcon={modelIcon}
             bgMode={bgMode}

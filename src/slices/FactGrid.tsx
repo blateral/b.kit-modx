@@ -7,6 +7,8 @@ import {
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
+
 import { isSVG } from 'utils/mapping';
 interface FactGridEntryItems {
     title?: string;
@@ -14,7 +16,8 @@ interface FactGridEntryItems {
     image?: Omit<ModxImagePropsWithFormat, 'portrait' | 'square'>;
 }
 
-export interface FactGridSliceType extends ModxSlice<'FactGrid', FactGridEntryItems> {
+export interface FactGridSliceType
+    extends ModxSlice<'FactGrid', FactGridEntryItems> {
     isActive?: boolean;
     anchorId?: string;
     isCentered?: boolean;
@@ -51,7 +54,7 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
     return (
         <FactGrid
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             isCentered={isCentered}
             bgMode={bgMode}
             columns={

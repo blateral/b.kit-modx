@@ -2,6 +2,7 @@ import { ModxSlice } from 'utils/modx';
 
 import { AlertList, assignTo, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { normalizeAnchorId } from 'utils/mapping';
 
 type BgMode = 'full' | 'inverted';
 
@@ -15,7 +16,8 @@ interface AlertListItems {
     };
 }
 
-export interface AlertListSliceType extends ModxSlice<'AlertList', AlertListItems> {
+export interface AlertListSliceType
+    extends ModxSlice<'AlertList', AlertListItems> {
     isActive?: boolean;
     anchorId?: string;
     bgMode?: BgMode;
@@ -46,7 +48,7 @@ export const AlertListSlice: React.FC<AlertListSliceType> = ({
     return (
         <AlertList
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             items={items
                 .filter((alert) => alert.label && alert.link?.href)

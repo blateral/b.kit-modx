@@ -9,6 +9,7 @@ import {
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface TeaserVideo {
     urls?: Array<string>;
@@ -110,7 +111,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     };
 
     const sharedProps = {
-        anchorId: anchorId || '',
+        anchorId: normalizeAnchorId(anchorId),
         isMirrored,
         title,
         titleAs,

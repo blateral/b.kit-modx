@@ -1,13 +1,15 @@
 import React from 'react';
 import { assignTo, PriceList, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from '../utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface PriceListItem {
     text?: string;
     price?: string;
 }
 
-export interface PriceListSliceType extends ModxSlice<'PriceList', PriceListItem> {
+export interface PriceListSliceType
+    extends ModxSlice<'PriceList', PriceListItem> {
     isActive?: boolean;
     anchorId?: string;
     bgMode?: 'full' | 'inverted';
@@ -40,7 +42,7 @@ export const PriceListSlice: React.FC<PriceListSliceType> = ({
     return (
         <PriceList
             bgMode={bgMode}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             items={filteredItems}
             theme={sliceTheme}
         />

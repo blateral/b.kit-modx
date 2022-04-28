@@ -3,13 +3,15 @@ import { BgMode, endpoint, ModxSlice } from '../utils/modx';
 import React from 'react';
 import { assignTo, SocialNav, ThemeMods } from '@blateral/b.kit';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface SocialNavItem {
     link: LinkProps;
     icon?: string;
 }
 
-export interface SocialNavSliceType extends ModxSlice<'SocialNav', SocialNavItem> {
+export interface SocialNavSliceType
+    extends ModxSlice<'SocialNav', SocialNavItem> {
     isActive?: boolean;
     anchorId?: string;
     bgMode?: Omit<BgMode, 'splitted'>;
@@ -40,7 +42,7 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
     return (
         <SocialNav
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode as 'inverted' | 'full' | undefined}
             socials={
                 items

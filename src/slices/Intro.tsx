@@ -10,6 +10,7 @@ import { HeadlineTagDefault } from 'utils/stringLexicon';
 import { assignTo, Intro, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
+import { normalizeAnchorId } from 'utils/mapping';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
 
@@ -84,7 +85,7 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
     return (
         <Intro
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             isStackable={isStackable}
             isCentered={isCentered}

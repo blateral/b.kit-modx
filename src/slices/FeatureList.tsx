@@ -16,6 +16,7 @@ import {
     ModxSlice,
 } from 'utils/modx';
 import { isSVG } from 'utils/mapping';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface FeatureItemType {
     title?: string;
@@ -110,7 +111,7 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
     // get image format for all images
     const sharedProps = {
         isCentered,
-        anchorId: anchorId || '',
+        anchorId: normalizeAnchorId(anchorId),
         features: items
             .filter(filterMissingSmallFormat)
             .map(

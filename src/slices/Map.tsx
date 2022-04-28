@@ -9,6 +9,7 @@ import {
 } from 'utils/modx';
 import { MapLocation } from '@blateral/b.kit/lib/components/sections/Map';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface MapLocationItems {
     marker?: string;
@@ -143,7 +144,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
     return (
         <Map
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode === 'inverted' ? 'inverted' : 'full'}
             isMirrored={isMirrored}
             initialLocation={items?.length > 0 ? `location-0` : undefined}

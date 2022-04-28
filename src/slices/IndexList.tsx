@@ -1,11 +1,13 @@
 import { IndexList, assignTo, ThemeMods } from '@blateral/b.kit';
+import { LinkProps } from '@blateral/b.kit/lib/components/buttons/Button';
 
 import React from 'react';
+import { normalizeAnchorId } from 'utils/mapping';
 import { ModxSlice } from 'utils/modx';
 
-interface IndexListItem {
-    id?: string;
+export interface IndexListItem {
     label?: string;
+    link?: LinkProps;
 }
 
 export interface IndexListSliceType
@@ -42,25 +44,24 @@ export const IndexListSlice: React.FC<IndexListSliceType> = ({
 
     return (
         <IndexList
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             theme={sliceTheme}
-            items={items
-                .filter(isValidIndexItem)
-                .map(mapModxItemToComponentItem)}
+            items={items.filter(isValidIndexItem)}
             customIcon={customIcon}
         />
     );
 };
 
 const isValidIndexItem = (item: IndexListItem) =>
-    Boolean(item) && item.id && item.label;
+    Boolean(item) && item.label && item.link?.href;
 
-const mapModxItemToComponentItem = (item: IndexListItem) => {
+export const createIndexListAnchor = (anchorId?: string) => {
+    if (!anchorId) return {};
     return {
-        label: item.label || '',
+        label: anchorId,
         link: {
-            href: `#${item.id}`,
+            href: `#${normalizeAnchorId(anchorId)}`,
         },
     };
 };

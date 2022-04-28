@@ -7,8 +7,10 @@ import {
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
-export interface ComparisonSliderSliceType extends ModxSlice<'ComparisonSlider'> {
+export interface ComparisonSliderSliceType
+    extends ModxSlice<'ComparisonSlider'> {
     isActive?: boolean;
     anchorId?: string;
     bgMode?: BgMode;
@@ -68,7 +70,7 @@ export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({
     return (
         <ComparisonSlider
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             initialValue={initalValue}
             foregroundImg={mappedForegroundImage}

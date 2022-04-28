@@ -2,6 +2,7 @@ import { assignTo, Quote, ThemeMods } from '@blateral/b.kit';
 
 import React from 'react';
 import { ModxSlice } from '../utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface QuoteSliceType extends ModxSlice<'Quote'> {
     isActive?: boolean;
@@ -42,7 +43,7 @@ export const QuoteSlice: React.FC<QuoteSliceType> = ({
     return (
         <Quote
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             text={text}
             source={source}

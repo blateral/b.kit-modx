@@ -11,6 +11,8 @@ import {
 } from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
+import { normalizeAnchorId } from 'utils/mapping';
+
 export interface PosterSliceType extends ModxSlice<'Poster'> {
     isActive?: boolean;
     anchorId?: string;
@@ -75,7 +77,7 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
 
     return (
         <Poster
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             theme={sliceTheme}
             width={hasWrapper ? 'content' : 'full'}
             image={mapImageToComponentData(image)}

@@ -2,6 +2,7 @@ import React from 'react';
 import { assignTo, ThemeMods, Video, VideoCarousel } from '@blateral/b.kit';
 import { ResponsiveObject } from './slick';
 import { isBgModeString, ModxImageProps, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface VideoCardItem {
     bgImage: ModxImageProps;
@@ -70,7 +71,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
     if (items && items.length > 1) {
         return (
             <VideoCarousel
-                anchorId={anchorId || ''}
+                anchorId={normalizeAnchorId(anchorId)}
                 theme={sliceTheme}
                 bgMode={isBgModeString(bgMode) ? bgMode : undefined}
                 videos={items.map((item) => {
@@ -97,7 +98,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
 
         return (
             <Video
-                anchorId={anchorId || ''}
+                anchorId={normalizeAnchorId(anchorId)}
                 theme={sliceTheme}
                 bgMode={
                     isBgModeString(bgMode)

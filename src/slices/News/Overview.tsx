@@ -3,6 +3,7 @@ import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsOverview';
 import React from 'react';
 import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface NewsOverviewSliceType
     extends ModxSlice<'NewsOverview', ModxNewsTeaser> {
@@ -60,7 +61,7 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     return (
         <NewsOverview
             theme={sliceTheme}
-            anchorId={anchorId || ''}
+            anchorId={normalizeAnchorId(anchorId)}
             customTag={customTag}
             tags={generateUniqueTag(items)}
             onTagClick={onTagClick}
