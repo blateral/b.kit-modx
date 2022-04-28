@@ -6,6 +6,7 @@ import { normalizeAnchorId } from 'utils/mapping';
 interface PriceListItem {
     text?: string;
     price?: string;
+    title?: string;
 }
 
 export interface PriceListSliceType
