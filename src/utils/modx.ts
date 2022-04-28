@@ -46,6 +46,8 @@ import { CardListSliceType } from 'slices/CardList';
 import { IndexListSliceType } from 'slices/IndexList';
 import { EventListSliceType } from 'slices/EventList';
 import { EventOverviewSliceType } from 'slices/Events/EventOverview';
+import { LinkProps } from '@blateral/b.kit/lib/components/buttons/Button';
+import { JobListSliceType } from 'slices/JobList';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -125,6 +127,7 @@ export type PageContent =
     | IconListSliceType
     | IndexListSliceType
     | IntroSliceType
+    | JobListSliceType
     | MapSliceType
     | NavListSliceType
     | NewsListSliceType
@@ -157,8 +160,9 @@ export type NewsPageContent =
 
 export type ModxDocument = {
     id: string;
-    type: 'page' | 'settings' | 'news_page';
+    type: 'page' | 'event_page' | 'news_page';
     alias: string;
+    breadcrumbTrail?: Array<BreadCrumb>;
 
     pagetitle?: string;
     ogImage?: ModxImageProps;
@@ -184,7 +188,7 @@ export type ModxDocument = {
     menuBreadcrumbs?: { link?: string; label: string }[];
     gTag?: string;
 
-    settings?: ModxSettingsPage;
+    settings?: ModxSettings;
     strucOrganization: StructuredOrganizationData;
 };
 
@@ -266,8 +270,14 @@ export interface NavBarProperties {
     isCollapsible?: boolean;
     pageFlow?: 'beforeContent' | 'overContent';
 }
-export interface ModxSettingsPage extends ModxPage {
-    type: 'settings';
+
+export interface BreadCrumb {
+    link?: LinkProps;
+    label?: string;
+    uid?: string;
+    isCurrent?: boolean;
+}
+export interface ModxSettings extends ModxPage {
     menu: ModxMenuItemData;
     navBar: NavBarProperties;
     navTopBar: ModxNavBarData;
