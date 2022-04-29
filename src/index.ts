@@ -1,4 +1,3 @@
-/***** Version: 2.0.0-beta.8.5 *****/
 // export util types and functions
 // slice exports
 export { endpoint } from 'utils/modx';
