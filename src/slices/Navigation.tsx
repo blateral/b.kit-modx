@@ -9,6 +9,7 @@ import {
     NavMenuStates,
 } from '@blateral/b.kit/lib/components/sections/navigation/Navigation';
 import React from 'react';
+import styled from 'styled-components';
 import { ModxNavGroup, ModxSlice } from 'utils/modx';
 
 export interface NavigationSliceType extends ModxSlice<'Navigation'> {
@@ -37,14 +38,18 @@ export interface NavigationSliceType extends ModxSlice<'Navigation'> {
         theme?: ThemeMods;
     };
 
-    customIcon?: (props: { icon?: string }) => React.ReactNode;
+    customNavItemIcon?: (props: { icon?: string }) => React.ReactNode;
 }
+
+const IconContainer = styled.span`
+    display: block;
+`;
 
 export const NavigationSlice: React.FC<NavigationSliceType> = ({
     navbar,
     menu,
     clampWidth,
-    customIcon,
+    customNavItemIcon,
 }) => {
     return (
         <Navigation
@@ -59,10 +64,14 @@ export const NavigationSlice: React.FC<NavigationSliceType> = ({
                 ...menu,
                 mainNavigation: menu?.mainNavigation
                     ?.filter(filterNoLabelNoLink)
-                    ?.map((item) => mapToValidNavGroup(item, customIcon)),
+                    ?.map((item) =>
+                        mapToValidNavGroup(item, customNavItemIcon)
+                    ),
                 subNavigation: menu?.subNavigation
                     ?.filter(filterNoLabelNoLink)
-                    ?.map((item) => mapToValidNavGroup(item, customIcon)),
+                    ?.map((item) =>
+                        mapToValidNavGroup(item, customNavItemIcon)
+                    ),
                 typeSettings: {
                     ...menu?.typeSettings,
                     type: menu?.typeSettings.type || 'flyout',
@@ -78,10 +87,7 @@ const filterNoLabelNoLink = (item: ModxNavGroup) => {
 
 const mapToValidNavGroup = (
     item: ModxNavGroup,
-    customIcon?: (props: {
-        isInverted?: boolean | undefined;
-        icon?: string;
-    }) => React.ReactNode
+    customNavToggleIcon?: (props: { icon?: string }) => React.ReactNode
 ): NavItem => {
     return {
         ...item,
@@ -93,14 +99,13 @@ const mapToValidNavGroup = (
         subItems:
             item?.subItems && item.subItems.length > 0
                 ? item.subItems.map((item) =>
-                      mapToValidNavGroup(item, customIcon)
+                      mapToValidNavGroup(item, customNavToggleIcon)
                   )
                 : [],
-        icon:
-            customIcon && item.icon
-                ? customIcon({
-                      icon: item.icon,
-                  })
-                : undefined,
+        icon: customNavToggleIcon ? (
+            customNavToggleIcon({ icon: item.icon })
+        ) : item.icon ? (
+            <IconContainer dangerouslySetInnerHTML={{ __html: item.icon }} />
+        ) : undefined,
     };
 };

@@ -1,13 +1,17 @@
-// import { FactList } from '@blateral/b.kit';
 import React from 'react';
 import { assignTo, JobList, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+import { JobItem } from '@blateral/b.kit/lib/components/sections/JobList';
 
 interface JobListItems {
     jobTitle?: string;
     jobTimeModel?: string;
     jobLocation?: string;
+    link?: {
+        href?: string;
+        isExternal?: boolean;
+    };
 }
 
 export interface JobListSliceType extends ModxSlice<'JobList', JobListItems> {
@@ -52,11 +56,12 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
             bgMode={bgMode}
             jobs={items
                 .filter((job) => job.jobTitle)
-                .map((job) => {
+                .map<JobItem>((job) => {
                     return {
                         jobTitle: job.jobTitle || '',
                         location: job.jobLocation || '',
                         timeModel: job.jobTimeModel || '',
+                        link: job.link || undefined,
                     };
                 })}
         />
