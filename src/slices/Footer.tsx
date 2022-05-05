@@ -66,9 +66,7 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
             isInverted={settingsData?.footer?.isInverted}
             socials={mappedSocials || undefined}
             logo={{
-                img: settingsData?.logo?.footerLogo
-                    ? `${endpoint}/${settingsData.logo.footerLogo}`
-                    : '',
+                img: settingsData?.logo?.footerLogo,
                 link: logoLinkCleaned,
             }}
             contactData={settingsData?.footer?.address}
