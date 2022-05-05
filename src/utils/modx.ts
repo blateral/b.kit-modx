@@ -47,6 +47,10 @@ import { EventListSliceType } from 'slices/EventList';
 import { EventOverviewSliceType } from 'slices/Events/EventOverview';
 import { LinkProps } from '@blateral/b.kit/lib/components/buttons/Button';
 import { JobListSliceType } from 'slices/JobList';
+import {
+    BottomLink,
+    SiteLinkGroup,
+} from '@blateral/b.kit/lib/components/sections/footer/Footer';
 
 if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
     console.error(
@@ -328,7 +332,7 @@ export interface ModxSettings extends ModxPage {
     };
 
     footer?: {
-        address?: string;
+        note?: string;
         isInverted?: boolean;
     };
 
@@ -479,22 +483,13 @@ export type ModxNavGroup = {
 
 export type ModxMenuItemData = {
     type?: 'flyout' | 'large';
-    // NEW
     primaryMenu: Array<ModxNavGroup>;
-    // NEW
     secondaryMenu: Array<ModxNavGroup>;
+
     navBarTopMenu: Array<ModxNavGroup>;
 
-    footerMenuPrimary: Array<Omit<ModxNavItem, 'items'>>;
-    menuPrimary: Array<ModxNavItem>;
-    menuSecondary: Array<{
-        id: string;
-        link: string;
-        label: string;
-        active?: boolean;
-    }>;
-
-    footerBottomLinks: Array<Omit<ModxNavItem, 'items'>>;
+    footerMenus: Array<SiteLinkGroup>;
+    footerBottomLinks: Array<BottomLink>;
 
     menuCompanyTitle: string;
     menuCompany: Array<{
