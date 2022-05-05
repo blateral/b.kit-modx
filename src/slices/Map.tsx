@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { assignTo, FlyToIcon, Map, ThemeMods } from '@blateral/b.kit/lib';
+import { assignTo, Map, ThemeMods } from '@blateral/b.kit/lib';
 import {
     isExternalLink,
     isHeadlineTag,
@@ -10,7 +10,7 @@ import {
 import { MapLocation } from '@blateral/b.kit/lib/components/sections/Map';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { normalizeAnchorId } from 'utils/mapping';
-
+import { Icons } from '@blateral/b.kit';
 interface MapLocationItems {
     marker?: string;
     longitude?: string;
@@ -151,7 +151,9 @@ export const MapSlice: React.FC<MapSliceType> = ({
             center={center}
             zoom={zoom}
             flyToZoom={flyToZoom || 12}
-            flyToControl={withFlyTo ? flyToControl || <FlyToIcon /> : undefined}
+            flyToControl={
+                withFlyTo ? flyToControl || <Icons.FlyTo /> : undefined
+            }
             allMarkersOnInit={allMarkersOnInit}
             fitBoundsPadding={fitBoundsPadding || [30, 30]}
             locations={items?.map((location, i): MapLocation => {
