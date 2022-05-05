@@ -3,7 +3,7 @@ import { LinkListProps } from '@blateral/b.kit/lib/components/blocks/LinkList';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
 import { BgMode, ModxSlice } from 'utils/modx';
-import { normalizeAnchorId } from 'utils/mapping';
+import { normalizeAnchorId, parseLinkListFromHtml } from 'utils/mapping';
 
 interface AccordionItem {
     label: string;
@@ -58,7 +58,9 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
 
                 return {
                     label: item.label,
-                    text: item.text,
+                    text: item.text
+                        ? parseLinkListFromHtml(item.text)
+                        : item.text,
                     aside: item.aside,
                     linkList: filteredLinkList,
                     linkListAside: filteredAsideLinkList,
