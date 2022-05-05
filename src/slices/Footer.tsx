@@ -1,53 +1,27 @@
-import {
-    ModxSettings,
-    SocialMediaItem,
-    isExternalLink,
-    endpoint,
-} from 'utils/modx';
+import { ModxSettings } from 'utils/modx';
 
 import { assignTo, Footer, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
-import { SocialItem } from '@blateral/b.kit/lib/components/blocks/SocialList';
+
+import { FooterState } from '@blateral/b.kit/lib/components/sections/footer/Footer';
+import { Language } from '@blateral/b.kit/lib/components/blocks/LanguageSwitcher';
 
 export interface FooterSliceType {
     settings?: ModxSettings;
-    injectForm?: (props: {
-        isInverted?: boolean;
-        placeholder?: string;
-        buttonLabel?: string;
-    }) => React.ReactNode;
-    mapSocials?: (
-        socials: SocialMediaItem[],
-        isInverted?: boolean
-    ) => Array<SocialItem>;
+    languages?: Array<Language>;
+    customColumn?: ((props: FooterState) => React.ReactNode) | undefined;
+
     theme?: ThemeMods;
     bgColor?: string;
 }
 
 export const FooterSlice: React.FC<FooterSliceType> = ({
     settings,
-    injectForm,
-    mapSocials,
+    customColumn,
     theme,
     bgColor,
+    languages,
 }) => {
-    const settingsData = settings;
-
-    const mappedSocials =
-        mapSocials &&
-        settingsData &&
-        settingsData.socials &&
-        mapSocials(settingsData.socials, settingsData.footer?.isInverted);
-
-    const logoLinkParsed = settingsData?.logo?.link;
-
-    const logoLinkCleaned =
-        logoLinkParsed && /index|start/.test(logoLinkParsed)
-            ? logoLinkParsed.replace(/index|start/, '')
-            : logoLinkParsed
-            ? logoLinkParsed
-            : '';
-
     // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
@@ -63,44 +37,14 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
     return (
         <Footer
             theme={sliceTheme}
-            isInverted={settingsData?.footer?.isInverted}
-            socials={mappedSocials || undefined}
-            logo={{
-                img: settingsData?.logo?.footerLogo,
-                link: logoLinkCleaned,
-            }}
-            contactData={settingsData?.footer?.address}
-            newsTitle={settingsData?.newsletter?.title}
-            newsText={settingsData?.newsletter?.text}
-            newsForm={
-                injectForm
-                    ? (isInverted?: boolean) =>
-                          injectForm({
-                              isInverted,
-                              buttonLabel: settingsData?.newsletter?.label,
-                              placeholder:
-                                  settingsData?.newsletter?.placeholder,
-                          })
-                    : undefined
-            }
-            siteLinks={settingsData?.menu?.footerMenuPrimary.map(
-                (linkSlice) => {
-                    return {
-                        href: linkSlice.link || '',
-                        label: linkSlice.label || '',
-                        isExternal: isExternalLink(linkSlice.link),
-                    };
-                }
+            siteLinks={settings?.menu?.footerMenus.filter(
+                (menu) => menu?.links && menu.links.length > 0
             )}
-            bottomLinks={settingsData?.menu.footerBottomLinks?.map(
-                (bottomLink) => {
-                    const result = {
-                        href: bottomLink.link || '',
-                        label: bottomLink.label || '',
-                        isExternal: isExternalLink(bottomLink.link),
-                    };
-                    return result;
-                }
+            customColumn={customColumn}
+            footNote={settings?.footer?.note || ''}
+            bottomLinks={settings?.menu.footerBottomLinks}
+            languages={languages?.filter(
+                (language) => language?.label && language?.link?.href
             )}
         />
     );
