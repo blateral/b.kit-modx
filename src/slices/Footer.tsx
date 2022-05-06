@@ -5,14 +5,16 @@ import React from 'react';
 
 import { FooterState } from '@blateral/b.kit/lib/components/sections/footer/Footer';
 import { Language } from '@blateral/b.kit/lib/components/blocks/LanguageSwitcher';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface FooterSliceType {
     settings?: ModxSettings;
     languages?: Array<Language>;
     customColumn?: ((props: FooterState) => React.ReactNode) | undefined;
-
+    bottomBar?: (props: FooterState) => React.ReactNode;
     theme?: ThemeMods;
     bgColor?: string;
+    anchorId?: string;
 }
 
 export const FooterSlice: React.FC<FooterSliceType> = ({
@@ -21,6 +23,8 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
     theme,
     bgColor,
     languages,
+    bottomBar,
+    anchorId,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -36,10 +40,13 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
 
     return (
         <Footer
+            bgMode={settings?.footer?.bgMode}
+            anchorId={normalizeAnchorId(anchorId)}
             theme={sliceTheme}
             siteLinks={settings?.menu?.footerMenus.filter(
                 (menu) => menu?.links && menu.links.length > 0
             )}
+            bottomBar={bottomBar}
             customColumn={customColumn}
             footNote={settings?.footer?.note || ''}
             bottomLinks={settings?.menu.footerBottomLinks}

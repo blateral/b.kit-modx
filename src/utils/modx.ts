@@ -333,6 +333,7 @@ export interface ModxSettings extends ModxPage {
 
     footer?: {
         note?: string;
+        bgMode?: 'full' | 'inverted';
         isInverted?: boolean;
     };
 
