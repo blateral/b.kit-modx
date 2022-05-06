@@ -51,3 +51,4 @@ export * from 'slices/Timeline';
 export * from 'slices/Video';
 export * from 'utils/modx';
 export * from 'utils/sitemapGenerator';
+export * from 'utils/mapping';
