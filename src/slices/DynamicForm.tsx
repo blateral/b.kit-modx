@@ -78,6 +78,10 @@ export interface Datepicker extends FormField {
     multiDateError?: string;
     nextCtrlUrl?: string;
     prevCtrlUrl?: string;
+    customIcon?: (props: {
+        isInverted?: boolean;
+        singleSelect?: boolean;
+    }) => React.ReactNode;
     validate?: (
         value: [Date | null, Date | null],
         config: Datepicker
@@ -111,6 +115,8 @@ export interface FileUploadField extends FormField {
     info?: string;
     acceptedFormats?: string;
     validate?: (value: Array<File>, config: FileUpload) => Promise<string>;
+    customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
+    customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
     errorMsg?: string;
 }
 
@@ -174,6 +180,12 @@ export interface DynamicFormSliceType
         radio?: (props: FieldGenerationProps<FieldGroup>) => React.ReactNode;
         upload?: (props: FieldGenerationProps<FieldGroup>) => React.ReactNode;
     };
+    customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
+    customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
+    customIcon?: (props: {
+        isInverted?: boolean;
+        singleSelect?: boolean;
+    }) => React.ReactNode;
     onValidate?: (
         key: string,
         value: unknown,
@@ -194,6 +206,9 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     submitAction,
     datepickerSubmitAction,
     datepickerDeleteAction,
+    customDeleteIcon,
+    customUploadIcon,
+    customIcon,
     items,
     onValidate,
 }) => {
@@ -220,6 +235,9 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
                 onValidate,
                 datepickerSubmitAction,
                 datepickerDeleteAction,
+                customDeleteIcon,
+                customUploadIcon,
+                customIcon,
             })}
             targetEmails={targetEmails}
             subjectLine={subjectLine}
@@ -249,6 +267,9 @@ const itemsToFormFields = ({
     onValidate,
     datepickerSubmitAction,
     datepickerDeleteAction,
+    customUploadIcon,
+    customDeleteIcon,
+    customIcon,
 }: {
     formFields?: FormField[];
     onValidate?: (
@@ -262,6 +283,12 @@ const itemsToFormFields = ({
     datepickerDeleteAction?: (
         props: DatepickerDeleteActionProps
     ) => React.ReactNode;
+    customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
+    customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
+    customIcon?: (props: {
+        isInverted?: boolean;
+        singleSelect?: boolean;
+    }) => React.ReactNode;
 }) => {
     if (!formFields) return {};
 
@@ -270,6 +297,9 @@ const itemsToFormFields = ({
             onValidate,
             datepickerSubmitAction,
             datepickerDeleteAction,
+            customDeleteIcon,
+            customUploadIcon,
+            customIcon,
         }),
         {}
     );
@@ -280,6 +310,9 @@ const generateFormFieldMap =
         onValidate,
         datepickerSubmitAction,
         datepickerDeleteAction,
+        customUploadIcon,
+        customDeleteIcon,
+        customIcon,
     }: {
         onValidate?: (
             key: string,
@@ -292,6 +325,12 @@ const generateFormFieldMap =
         datepickerDeleteAction?: (
             props: DatepickerDeleteActionProps
         ) => React.ReactNode;
+        customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
+        customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
+        customIcon?: (props: {
+            isInverted?: boolean;
+            singleSelect?: boolean;
+        }) => React.ReactNode;
     }) =>
     (accumulator: Record<string, any>, formfield: FormField) => {
         if (isField(formfield)) {
@@ -313,6 +352,7 @@ const generateFormFieldMap =
                 onValidate,
                 datepickerSubmitAction,
                 datepickerDeleteAction,
+                customIcon,
             });
             return { ...accumulator, ...fieldGroup };
         }
@@ -321,7 +361,12 @@ const generateFormFieldMap =
             return { ...accumulator, ...fieldGroup };
         }
         if (isUpload(formfield)) {
-            const upload = createUpload(formfield, onValidate);
+            const upload = createUpload({
+                formfield,
+                onValidate,
+                customUploadIcon,
+                customDeleteIcon,
+            });
             return { ...accumulator, ...upload };
         }
         return accumulator;
@@ -457,6 +502,7 @@ function createDatePicker({
     onValidate,
     datepickerSubmitAction,
     datepickerDeleteAction,
+    customIcon,
 }: {
     formfield: Datepicker;
     onValidate?: (
@@ -470,6 +516,10 @@ function createDatePicker({
     datepickerDeleteAction?: (
         props: DatepickerDeleteActionProps
     ) => React.ReactNode;
+    customIcon?: (props: {
+        isInverted?: boolean;
+        singleSelect?: boolean;
+    }) => React.ReactNode;
 }): Record<string, BkitDatepicker> | undefined {
     if (!formfield.label) return undefined;
     const formFieldData = {};
@@ -497,6 +547,7 @@ function createDatePicker({
         nextCtrlUrl: formfield.nextCtrlUrl,
         prevCtrlUrl: formfield.prevCtrlUrl,
         singleSelect: formfield.singleSelect,
+        customIcon: customIcon,
         submitAction:
             datepickerSubmitAction && formfield.dateSubmitLabel
                 ? (handleClick) =>
@@ -537,14 +588,21 @@ function createDateFromDateString(datestring?: string) {
     }
 }
 
-function createUpload(
-    formfield: FileUploadField,
+function createUpload({
+    formfield,
+    onValidate,
+    customDeleteIcon,
+    customUploadIcon,
+}: {
+    formfield: FileUploadField;
     onValidate?: (
         key: string,
         value: unknown,
         config: FormField
-    ) => Promise<string>
-): Record<string, BkitFileUpload> {
+    ) => Promise<string>;
+    customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
+    customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
+}): Record<string, BkitFileUpload> {
     if (!formfield.label) return {};
     const formFieldData = {};
 
@@ -554,6 +612,8 @@ function createUpload(
         info: formfield.info,
         column: formfield.column,
         validate: onValidate,
+        customUploadIcon,
+        customDeleteIcon,
         addBtnLabel: formfield.addBtnLabel,
         removeBtnLabel: formfield.removeBtnLabel,
         acceptedFormats: formfield.acceptedFormats,
