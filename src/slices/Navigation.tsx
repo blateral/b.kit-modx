@@ -9,7 +9,6 @@ import {
     NavMenuStates,
 } from '@blateral/b.kit/lib/components/sections/navigation/Navigation';
 import React from 'react';
-import styled from 'styled-components';
 import { ModxNavGroup, ModxSlice } from 'utils/modx';
 
 export interface NavigationSliceType extends ModxSlice<'Navigation'> {
@@ -40,10 +39,6 @@ export interface NavigationSliceType extends ModxSlice<'Navigation'> {
 
     customNavItemIcon?: (props: { icon?: string }) => React.ReactNode;
 }
-
-const IconContainer = styled.span`
-    display: block;
-`;
 
 export const NavigationSlice: React.FC<NavigationSliceType> = ({
     navbar,
@@ -102,10 +97,14 @@ const mapToValidNavGroup = (
                       mapToValidNavGroup(item, customNavToggleIcon)
                   )
                 : [],
+
         icon: customNavToggleIcon ? (
             customNavToggleIcon({ icon: item.icon })
         ) : item.icon ? (
-            <IconContainer dangerouslySetInnerHTML={{ __html: item.icon }} />
+            <span
+                style={{ display: 'block' }}
+                dangerouslySetInnerHTML={{ __html: item.icon }}
+            />
         ) : undefined,
     };
 };
