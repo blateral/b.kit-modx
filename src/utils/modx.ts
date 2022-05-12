@@ -271,6 +271,18 @@ export interface NavBarProperties {
     isStickable?: boolean;
     isCollapsible?: boolean;
     pageFlow?: 'beforeContent' | 'overContent';
+    navbarPrimary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
+    navbarSecondary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
 }
 
 export interface BreadCrumb {
@@ -282,7 +294,6 @@ export interface BreadCrumb {
 export interface ModxSettings extends ModxPage {
     menu: ModxMenuItemData;
     navBar: NavBarProperties;
-    navTopBar: ModxNavBarData;
     flyoutMenu: ModxFlyoutMenu;
 
     cookie: {
@@ -434,26 +445,6 @@ export type ModxFlyoutMenu = {
     isInverted?: boolean;
     isLarge?: boolean;
     isMirrored?: boolean;
-};
-
-export type ModxNavBarData = {
-    navbarInverted?: boolean;
-    navbarOffset?: boolean;
-    hideTopBarUnderMenu?: boolean;
-
-    buttonStyle?: string;
-    navbarPrimary: {
-        label?: string;
-        labelShort?: string;
-        link?: string;
-        newTab?: boolean;
-    };
-    navbarSecondary: {
-        label?: string;
-        labelShort?: string;
-        link?: string;
-        newTab?: boolean;
-    };
 };
 
 export type ModxNavItem = {

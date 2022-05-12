@@ -1,16 +1,12 @@
 import React from 'react';
 
 import { assignTo, Map, ThemeMods } from '@blateral/b.kit/lib';
-import {
-    isExternalLink,
-    isHeadlineTag,
-    isValidAction,
-    ModxSlice,
-} from 'utils/modx';
+import { isHeadlineTag, ModxSlice } from 'utils/modx';
 import { MapLocation } from '@blateral/b.kit/lib/components/sections/Map';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { normalizeAnchorId } from 'utils/mapping';
 import { Icons } from '@blateral/b.kit';
+
 interface MapLocationItems {
     marker?: string;
     longitude?: string;
@@ -28,9 +24,6 @@ interface MapLocationItems {
         city?: string;
         country: string;
     };
-    //**Deprecated */
-    contact?: string;
-
     telephone?: {
         link?: string;
         label?: string;
@@ -41,14 +34,10 @@ interface MapLocationItems {
         label?: string;
         icon?: (props: { isInverted?: boolean }) => React.ReactNode;
     };
+
     // JSON-LD only prop
     image?: string[];
     description?: string;
-
-    primary_link?: string;
-    primary_label?: string;
-    secondary_link?: string;
-    secondary_label?: string;
 }
 
 export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
@@ -58,7 +47,6 @@ export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
     bgColor?: string;
     isMirrored?: boolean;
     withFlyTo?: boolean;
-    // helpers to define component elements outside of slice
     center?: [number, number];
     zoom?: number;
     flyToZoom?: number;
@@ -73,27 +61,23 @@ export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
         anchorActive: [number, number];
     };
     flyToControl?: React.ReactNode;
-    primaryAction?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
-    secondaryAction?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
     controlNext?: (props: {
         isInverted?: boolean;
+        disabled?: boolean;
         isActive?: boolean;
         name?: string;
+        clickHandler?: (
+            ev: React.SyntheticEvent<HTMLButtonElement, Event>
+        ) => void;
     }) => React.ReactNode;
     controlPrev?: (props: {
         isInverted?: boolean;
+        disabled?: boolean;
         isActive?: boolean;
         name?: string;
+        clickHandler?: (
+            ev: React.SyntheticEvent<HTMLButtonElement, Event>
+        ) => void;
     }) => React.ReactNode;
     dot?: (props: {
         isInverted?: boolean;
@@ -120,8 +104,6 @@ export const MapSlice: React.FC<MapSliceType> = ({
     flyToControl,
     fitBoundsPadding,
     allMarkersOnInit,
-    primaryAction,
-    secondaryAction,
     controlNext,
     controlPrev,
     dot,
@@ -141,11 +123,13 @@ export const MapSlice: React.FC<MapSliceType> = ({
         theme
     );
 
+    const isInverted = bgMode === 'inverted';
+
     return (
         <Map
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
-            bgMode={bgMode === 'inverted' ? 'inverted' : 'full'}
+            bgMode={isInverted ? 'inverted' : 'full'}
             isMirrored={isMirrored}
             initialLocation={items?.length > 0 ? `location-0` : undefined}
             center={center}
@@ -156,7 +140,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
             }
             allMarkersOnInit={allMarkersOnInit}
             fitBoundsPadding={fitBoundsPadding || [30, 30]}
-            locations={items?.map((location, i): MapLocation => {
+            locations={items?.map<MapLocation>((location, i) => {
                 const posLat = location.latitude ? +location.latitude : 0;
                 const posLng = location.longitude ? +location.longitude : 0;
 
@@ -179,7 +163,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
                             icon: mailIcon
                                 ? () =>
                                       mailIcon({
-                                          isInverted: bgMode === 'inverted',
+                                          isInverted,
                                       })
                                 : undefined,
                         },
@@ -188,89 +172,16 @@ export const MapSlice: React.FC<MapSliceType> = ({
                             icon: phoneIcon
                                 ? () =>
                                       phoneIcon({
-                                          isInverted: bgMode === 'inverted',
+                                          isInverted,
                                       })
                                 : undefined,
                         },
                     },
-
                     description: location.description,
                     image:
                         location?.image && location.image.length > 0
                             ? location.image
                             : undefined,
-
-                    primaryAction:
-                        primaryAction &&
-                        isValidAction(
-                            location.primary_label,
-                            location.primary_link
-                        )
-                            ? ({ isInverted }) =>
-                                  primaryAction({
-                                      isInverted,
-                                      label: location.primary_label,
-                                      href: location.primary_link || '',
-                                      isExternal: isExternalLink(
-                                          location.primary_link
-                                      ),
-                                  })
-                            : undefined,
-                    secondaryAction:
-                        secondaryAction &&
-                        isValidAction(
-                            location.secondary_label,
-                            location.secondary_link
-                        )
-                            ? ({ isInverted }) =>
-                                  secondaryAction({
-                                      isInverted,
-                                      label: location.secondary_label,
-                                      href: location.secondary_link || '',
-                                      isExternal: isExternalLink(
-                                          location.secondary_link
-                                      ),
-                                  })
-                            : undefined,
-
-                    //**DEPRECATED: Only used if new props aren't available */
-                    meta: {
-                        title: location.title,
-                        contact: location.contact,
-
-                        primaryAction:
-                            primaryAction &&
-                            isValidAction(
-                                location.primary_label,
-                                location.primary_link
-                            )
-                                ? (isInverted?: boolean) =>
-                                      primaryAction({
-                                          isInverted,
-                                          label: location.primary_label,
-                                          href: location.primary_link || '',
-                                          isExternal: isExternalLink(
-                                              location.primary_link
-                                          ),
-                                      })
-                                : undefined,
-                        secondaryAction:
-                            secondaryAction &&
-                            isValidAction(
-                                location.secondary_label,
-                                location.secondary_link
-                            )
-                                ? (isInverted?: boolean) =>
-                                      secondaryAction({
-                                          isInverted,
-                                          label: location.secondary_label,
-                                          href: location.secondary_link || '',
-                                          isExternal: isExternalLink(
-                                              location.secondary_link
-                                          ),
-                                      })
-                                : undefined,
-                    },
                     icon: {
                         size: iconSettings?.size || [20, 28],
                         anchor: iconSettings?.anchor || [10, 28],
