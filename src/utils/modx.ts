@@ -265,8 +265,14 @@ export interface ModxEventData {
     booking: {
         email?: string;
         phone?: string;
-        ticketUrl?: string;
+        info?: string;
         website?: string;
+    };
+    organizer: {
+        phone?: string;
+        email?: string;
+        website?: string;
+        info?: string;
     };
 }
 
