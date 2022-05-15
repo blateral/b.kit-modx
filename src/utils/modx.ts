@@ -242,14 +242,22 @@ export interface ModxEventPage extends ModxPage {
 export interface ModxEventData {
     title?: string;
     date?: string;
-    image: ModxImageProps;
-    intro?: string;
+    image: ModxImageProps & {
+        ratios: {
+            small: { w?: number; h?: number };
+            medium: { w?: number; h?: number };
+            large: { w?: number; h?: number };
+        };
+    };
+    text?: string;
     duration?: string;
     price?: string;
     priceInfo?: string;
     address: {
         locationName?: string;
-        adress?: string;
+        street?: string;
+        city?: string;
+        zipcode?: string;
         email?: string;
         phone?: string;
         website?: string;
@@ -261,6 +269,9 @@ export interface ModxEventData {
         website?: string;
     };
 }
+
+
+
 export interface SocialMediaItem {
     link?: string;
     icon?: Pick<ModxImageProps, 'small'>;
