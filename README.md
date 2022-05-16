@@ -1,5 +1,13 @@
 ![b.kit logo](./public/bkit-prismic-logo_small.png)
 
+# b.kit MODX
+
+This package provides an interface to connect b.kit components with the MODX CMS. To do so it defines slices that can be imported and used inside e.g. in a react nextjs project.
+
+Our ModxCloud is based on **ContentBlocks** that create JSON-Data that then is consumed by our kit-server template, sliced into perfect data then used to render components from b.kit. We use a lot of **Snippets** to adjust data in the CMS so we have to slice less. Additionally, we use **Chunks** to capsule data.
+
+How a Page is structured is typically set in **Templates**. Those **Templates** use **Chunks** and **Snippets** to form and structure the JSON data.
+
 
 
 ## Local Testing
@@ -22,13 +30,7 @@ Inside project that should use the library:
 
 
 
-# b.kit MODX
 
-This package provides an interface to connect b.kit components with the MODX CMS. To do so it defines slices that can be imported and used inside e.g. in a react nextjs project.
-
-Our ModxCloud is based on **ContentBlocks** that create JSON-Data that then is consumed by our kit-server template, sliced into perfect data then used to render components from b.kit. We use a lot of **Snippets** to adjust data in the CMS so we have to slice less. Additionally, we use **Chunks** to capsule data.
-
-How a Page is structured is typically set in **Templates**. Those **Templates** use **Chunks** and **Snippets** to form and structure the JSON data.
 
 ## ModxCloud
 ### Setup
@@ -67,7 +69,7 @@ Anschließend muss die URL innerhalb von Modx (mit der die jewiligen Kontexte er
    6. `Clear Cache` -> `Refresh Urls` -> `Rebuild Contentblocks`
 
 
-## Deployment to LIVE
+### Deployment to LIVE
 Zuerst muss eine neue Domain vergeben werden (z.b. meine-modx-cloud.de, Absprache Markus). Anschließend müssen sämtliche Cloud-URLs auf diese neue URL umgestellt werden, siehe Setup Punkt 7. Anschließend muss die neue Adresse im kit-server Projekt eingetragen werden, dann ist das Project ***live***
 
 1. `Cloud öffnen` -> `Domains` -> `Domain vergeben` -> `Auswählen` -> `Create Subdomain` -> `cms` (Vorlage www)
