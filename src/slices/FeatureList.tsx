@@ -124,30 +124,28 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
                     title: title,
                     text: text,
                     description: description,
-                    image: {
-                        small: `${isSvgImage ? endpoint : ''}${
-                            image[imageFormat]?.small
-                        }`,
-                        medium:
-                            `${isSvgImage ? endpoint : ''}${
-                                image[imageFormat]?.medium
-                            }` || '',
-                        semilarge:
-                            `${isSvgImage ? endpoint : ''}${
-                                image[imageFormat]?.semilarge
-                            }` || '',
-                        large:
-                            `${isSvgImage ? endpoint : ''}${
-                                image[imageFormat]?.large
-                            }` || '',
-                        xlarge:
-                            `${isSvgImage ? endpoint : ''}${
-                                image[imageFormat]?.xlarge
-                            }` || '',
+                    image: image[imageFormat]?.small
+                        ? {
+                              small: `${isSvgImage ? endpoint : ''}${
+                                  image[imageFormat]?.small
+                              }`,
+                              medium:
+                                  `${isSvgImage ? endpoint : ''}${
+                                      image[imageFormat]?.medium
+                                  }` || '',
+                              large:
+                                  `${isSvgImage ? endpoint : ''}${
+                                      image[imageFormat]?.large
+                                  }` || '',
+                              xlarge:
+                                  `${isSvgImage ? endpoint : ''}${
+                                      image[imageFormat]?.xlarge
+                                  }` || '',
 
-                        alt: image.meta?.altText || '',
-                        coverSpace: !isSvgImage,
-                    },
+                              alt: image.meta?.altText || '',
+                              coverSpace: !isSvgImage,
+                          }
+                        : undefined,
                     primaryAction:
                         primaryAction &&
                         isValidAction(primary_label, primary_link)
