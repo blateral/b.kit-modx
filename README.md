@@ -84,4 +84,10 @@ Zuerst muss eine neue Domain vergeben werden (z.b. meine-modx-cloud.de, Absprach
 
 
 
+## Modx
+
+### ToggleTv Set - Template Variablen die Auswahlabhängig angezeigt werden
+
+
+
 
