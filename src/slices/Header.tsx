@@ -12,6 +12,7 @@ import React from 'react';
 import { normalizeAnchorId } from 'utils/mapping';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { HeaderFocus } from '@blateral/b.kit/lib/components/sections/header/Header';
 
 type BgMode = 'full' | 'inverted';
 
@@ -54,6 +55,7 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
         zoom?: number;
         zoomPoint?: [number, number];
     };
+    focusPoint?: HeaderFocus;
 
     theme?: ThemeMods;
 }
@@ -75,6 +77,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     items,
     onImageChange,
     kenBurnsSettings,
+    focusPoint,
     primaryAction,
     secondaryAction,
     theme,
@@ -104,6 +107,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             isCentered={isCentered}
             videoUrl={videoUrl ? `${endpoint}${videoUrl}` : ''}
             images={headerImageMap}
+            focusPoint={focusPoint}
             onImageChange={onImageChange}
             title={title || ''}
             titleAs={titleAs}
