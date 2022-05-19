@@ -58,12 +58,12 @@ export const NavigationSlice: React.FC<NavigationSliceType> = ({
             menu={{
                 ...menu,
                 mainNavigation: menu?.mainNavigation
-                    ?.filter(filterNoLabelNoLink)
+                    ?.filter(filterNoLabel)
                     ?.map((item) =>
                         mapToValidNavGroup(item, customNavItemIcon)
                     ),
                 subNavigation: menu?.subNavigation
-                    ?.filter(filterNoLabelNoLink)
+                    ?.filter(filterNoLabel)
                     ?.map((item) =>
                         mapToValidNavGroup(item, customNavItemIcon)
                     ),
@@ -76,8 +76,8 @@ export const NavigationSlice: React.FC<NavigationSliceType> = ({
     );
 };
 
-const filterNoLabelNoLink = (item: ModxNavGroup) => {
-    return item.label && item?.link?.href;
+const filterNoLabel = (item: ModxNavGroup) => {
+    return !!item.label;
 };
 
 const mapToValidNavGroup = (
@@ -87,9 +87,11 @@ const mapToValidNavGroup = (
     return {
         ...item,
         uid: item.id || '',
-        link: {
-            href: item?.link?.href === '/' ? '/' : '/' + item?.link?.href,
-        },
+        link: item.link?.href
+            ? {
+                  href: item.link.href === '/' ? '/' : '/' + item.link.href,
+              }
+            : undefined,
         label: item.label || '',
         subItems:
             item?.subItems && item.subItems.length > 0
