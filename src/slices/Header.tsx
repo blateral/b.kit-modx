@@ -55,7 +55,8 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
         zoom?: number;
         zoomPoint?: [number, number];
     };
-    focusPoint?: HeaderFocus;
+    focusPointX?: 'left' | 'center' | 'right';
+    focusPointY?: 'top' | 'center' | 'bottom';
 
     theme?: ThemeMods;
 }
@@ -77,7 +78,8 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     items,
     onImageChange,
     kenBurnsSettings,
-    focusPoint,
+    focusPointX,
+    focusPointY,
     primaryAction,
     secondaryAction,
     theme,
@@ -97,6 +99,11 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
         },
         theme
     );
+
+    const focusPoint: HeaderFocus = [
+        focusPointX || 'center',
+        focusPointY || 'center',
+    ];
 
     return (
         <Header
