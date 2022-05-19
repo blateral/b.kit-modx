@@ -497,7 +497,8 @@ export type ModxMenuItemData = {
     navBarTopMenu: Array<ModxNavGroup>;
 
     footerMenus: Array<SiteLinkGroup>;
-    footerBottomLinks: Array<BottomLink>;
+    bottomLinksLeft: Array<BottomLink>;
+    bottomLinksRight: Array<BottomLink>;
 
     menuCompanyTitle: string;
     menuCompany: Array<{
