@@ -1,5 +1,4 @@
 import { Article, assignTo, ThemeMods } from '@blateral/b.kit';
-import { LinkListProps } from '@blateral/b.kit/lib/components/blocks/LinkList';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
 import { normalizeAnchorId } from 'utils/mapping';
@@ -15,8 +14,6 @@ export interface ArticleSliceType extends ModxSlice<'Article'> {
     halfAside?: boolean;
     text?: string;
     asideText?: string;
-    linkList?: LinkListProps;
-    linkListAside?: LinkListProps;
     bgMode?: BgMode;
     bgColor?: string;
     primary_link?: string;
@@ -46,8 +43,6 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
     titleAs,
     halfAside,
     text,
-    linkList,
-    linkListAside,
     asideText,
     bgMode,
     bgColor,
@@ -83,8 +78,6 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
             superTitleAs={superTitleAs}
             text={text}
             asideText={asideText}
-            linkList={linkList}
-            linkListAside={linkListAside}
             primaryAction={
                 primaryAction && isValidAction(primary_label, primary_link)
                     ? (isInverted) =>
