@@ -56,12 +56,12 @@ Anschließend muss die URL innerhalb von Modx (mit der die jewiligen Kontexte er
       2. Password beliebig
       3. Email leer
 
-5. Sobald der Adminuser erstellt wurde, kann sich damit in der Cloud eingeloggt werden
 
-6. Urls aus der neuen Cloud kopieren (Reiter `Summary`)
+5. Urls aus der neuen Cloud kopieren (Reiter `Summary`)
 
-7. In der neuen Cloud mit dem Admin einloggen
-   1.  `Systemeinstellungen` -> `site_name` -> Projektname eintragen
+6. In der neuen Cloud mit dem **Modx Master Admin** einloggen
+   1. `Manage` -> `Users` -> `b.kit-admin` duplizieren -> Sudo aktivieren, Username und Password anpassen
+   1. `Systemeinstellungen` -> `site_name` -> Projektname eintragen
    1. `Systemeinstellungen` -> `phpthumbof.cache_url` suchen (oder nach `url`) -> neue Cloudurl eintragen (MIT Trailing / )
    2. `Medien` -> `Medienquellen` -> `MediaManager` -> `baseUrl` => `https://neueCloudUrl/mediamanager/`
    3. `WebDefault rechtsklick` -> `Kontext bearbeiten` -> `http_host` => `url.ohneprotocol.ohnetrailing.de`
@@ -78,7 +78,7 @@ Zuerst muss eine neue Domain vergeben werden (z.b. meine-modx-cloud.de, Absprach
 2. In der neuen Cloud mit dem Admin einloggen
    1. `Systemeinstellungen` -> `phpthumbof.cache_url` suchen (oder nach `url`) -> neue Cloudurl eintragen (MIT Trailing / )
    2. `Medien` -> `Medienquellen` -> `MediaManager` -> `baseUrl` => `https://neueCloudUrl/mediamanager/`
-   3. `WebDefault rechtsklick` -> `Kontext bearbeiten` -> `http_host` => `url.ohneprotocol.ohnetrailing.de`
+   3. `WebDefault rechtsklick` -> `Kontext bearbeiten` -> `http_host` => `Url eintragen (ohne Protokoll / Trailing Slash)`
    4. Für alle Kontexte wiederholen falls `http_host` vorhanden
    5. `next_url` auf Vercel Url oder anderes Deployment pointen
    6. `Clear Cache` -> `Refresh Urls` -> `Rebuild Contentblocks`
