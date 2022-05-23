@@ -61,6 +61,7 @@ Anschließend muss die URL innerhalb von Modx (mit der die jewiligen Kontexte er
 6. Urls aus der neuen Cloud kopieren (Reiter `Summary`)
 
 7. In der neuen Cloud mit dem Admin einloggen
+   1.  `Systemeinstellungen` -> `site_name` -> Projektname eintragen
    1. `Systemeinstellungen` -> `phpthumbof.cache_url` suchen (oder nach `url`) -> neue Cloudurl eintragen (MIT Trailing / )
    2. `Medien` -> `Medienquellen` -> `MediaManager` -> `baseUrl` => `https://neueCloudUrl/mediamanager/`
    3. `WebDefault rechtsklick` -> `Kontext bearbeiten` -> `http_host` => `url.ohneprotocol.ohnetrailing.de`
