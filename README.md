@@ -126,10 +126,15 @@ Beispiel: [[+value:encode]] -> json_encode auf den +value anwenden
 
 #### Wichtige Packages
 [**GetRessources**](https://docs.modx.com/3.x/en/extras/getresources), generiere eine Liste aus vorgegebenen Daten mit Filtern aus Ressourcen(Siehe Kit Master)
+
 [**RenderRessources**](https://docs.modx.com/current/en/extras/renderresources/index), siehe GetRessources allerdings werden die Seiten komplett gerendert wie im Template vorgegeben(Siehe Kit Master)
+
 [**Collections**](https://docs.modx.com/current/en/extras/collections/index), spezielle Darstellung von Ressourcenlisten mit eigener Darstellung (Siehe Kit Master)
+
 [**Migx**](https://docs.modx.com/current/en/extras/migx/index), Repeater für Template Variablen mit spezieller Syntax, (Siehe ÜMT)
+
 [**MediaManager**](https://github.com/Sterc/mediamanager), Bildverwaltungstool mit spezieller Oberflöche, eigenen Snippets und eigener Datenbanktabelle. Momentan in Beta, immer die Augen nach **Updates** aufhalten! Neue Packages einfach runterladen und über den Package Manager installieren (Cache Clean, Relog, Hard-Refresh eventuell nötig)
+
 [**ToggleTVSet**](https://jako.github.io/ToggleTVSet/), Erlaubt die bedingte Darstellung von TVs anhand des Werts einer anderen TV (Wenn in Footermenü, dann zeige Indexfeld, siehe KitMaster Footermenu TVs)
 
 
