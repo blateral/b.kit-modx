@@ -1,3 +1,4 @@
+
 ![b.kit logo](./public/bkit-prismic-logo_small.png)
 
 # b.kit MODX
@@ -87,7 +88,80 @@ Zuerst muss eine neue Domain vergeben werden (z.b. meine-modx-cloud.de, Absprach
 
 ## Modx
 
-### ToggleTv Set - Template Variablen die Auswahlabhängig angezeigt werden
+! = Ungecached, das Ergebnis von Chunk / Snippet wird nicht gecached
+\# = Fastfield, spezielle Methode um schnell Daten abzufragen z.b. [[#123.pageTitle]] frägt Pagetitle von Ressource 123 ab
+\$ = Chunk Aufruf
+[[+value:snippetName]] = Outputfilter, bearbeitet Input bevor ausgegeben wird
+
+
+#### Templates
+Stellen die Struktur für Ressourcen dar und bestimmen wie und welche Daten ausgegeben werden (ContentBlocks mit [[*content]]
+
+Haben Template Variablen zugordnet, welche das sind kannim Template aufgelistet werden
+Haben eine (id) mit welcher sie z.b. für GetRessources gefiltert werden können
+
+#### Template Variablen
+Datenfelder die einem Template zugewiesen werden können. Die Daten können in Templates, Snippets und Chunks abgerufen werden
+Syntax: [[*TVName]] [(Ausnahme: GetRessource / RenderRessources)](https://docs.modx.com/3.x/en/extras/getresources)
+
+#### Chunks
+Funktional ähnlich wie Templates. Die Syntax für Datenabfragen und Snippets ist gleich. Chunks können keinen Ressourcen zugewiesen werden, stattdessen werden sie in Templates aufgerufen und bieten wiederverwendbare Datenstrukturen. (Ähnlich Javascript Klassen)
+Syntax: [[\$ChunkName]] oder [[\!$ChunkName]]
+
+#### Snippets
+Syntax: [[SnippetName]] oder [[!SnippetName]]
+Geschrieben in *PHP*
+
+Kann in Chunks und Templates mit obriger Syntax aufgerufen werden.  Ein Snippet in einem Snippet aufzurufen erfolgt über :
+[modx->runSnippet('Snippetname',\[Parameter\]);](https://docs.modx.com/3.x/en/extending-modx/modx-class/reference/modx.runsnippet)
+
+#### Output Filter
+Sonderform eines Snippets
+Syntax: [[+wertEinesFelds:snippetName]] oder [[*wertEinerTV:snippetName]]
+Verarbeitet den Input eines Feldes und verändert den Output.
+Beispiel: [[+value:encode]] -> json_encode auf den +value anwenden
+
+[**OUTPUT FILTER DOCUMENTATION** ](https://docs.modx.com/3.x/en/building-sites/tag-syntax/output-filters)
+
+
+#### Wichtige Packages
+[**GetRessources**](https://docs.modx.com/3.x/en/extras/getresources), generiere eine Liste aus vorgegebenen Daten mit Filtern aus Ressourcen(Siehe Kit Master)
+[**RenderRessources**](https://docs.modx.com/current/en/extras/renderresources/index), siehe GetRessources allerdings werden die Seiten komplett gerendert wie im Template vorgegeben(Siehe Kit Master)
+[**Collections**](https://docs.modx.com/current/en/extras/collections/index), spezielle Darstellung von Ressourcenlisten mit eigener Darstellung (Siehe Kit Master)
+[**Migx**](https://docs.modx.com/current/en/extras/migx/index), Repeater für Template Variablen mit spezieller Syntax, (Siehe ÜMT)
+[**MediaManager**](https://github.com/Sterc/mediamanager), Bildverwaltungstool mit spezieller Oberflöche, eigenen Snippets und eigener Datenbanktabelle. Momentan in Beta, immer die Augen nach **Updates** aufhalten! Neue Packages einfach runterladen und über den Package Manager installieren (Cache Clean, Relog, Hard-Refresh eventuell nötig)
+[**ToggleTVSet**](https://jako.github.io/ToggleTVSet/), Erlaubt die bedingte Darstellung von TVs anhand des Werts einer anderen TV (Wenn in Footermenü, dann zeige Indexfeld, siehe KitMaster Footermenu TVs)
+
+
+### ContentBlocks
+Zu finden unter `Extras -> ContentBlocks`
+Bieten vorgefertigte Dateneingabemasken für Templates. Dadurch kann eine feste Struktur für unser JSON hergestellt werden. Bietet viele verschiedene Datenfelder die vom User ausgefüllt werden können.
+
+#### Fields
+Dateneingabefelder, ähnlich Input-Feldern in HTML. Je nach Auswahl stehen verschiedene Optionen der Datenabfrage zur Verfügung (Hover über Template Feld in Properties)
+z.b. Link -> [[+link]] / [[+LinkType]]
+#### Layouts
+Stellen Struktur für die Anordnung von Fields bereit. Kann theoretisch viele Spalten besitzen in die Felder eingetragen werden können. (Kit benutzt ein einspaltiges Layout mit main als Hauptspalte)
+Können Eigenschaften erhalten die fixe Datenfelder für den User zur Verfügung stellen die nicht ausgeblendet werden können. Nützlich für z.b. Sichtbarkeitsmodus
+#### Templates
+Vorlage die dem User bereitgestellt wird. Hier kann aus Layouts und Feldern eine vorgefertigte Maske erstellt werden. Diese kann bei Benutzung vom User weiter verändert werden, dient aber als Ausgangspunkt. 
+
+Templates werden nach 'Template' (Modx) gefiltert, so können z.b. Templates für Newsseiten, Eventseiten und normale Seiten getrennt werden. Zu finden unter *Availability*
+
+
+
+### FAQ
+#### View wirft falsches JSON aus
+JSON in jsonlint einfügen, zuletzt bearbeitetes Etwas prüfen:
+1. Kommasetzung, oftmals zu wenige oder zuviele
+2. Anführungszeichen bei Keys und Values
+3. Korrekte Field-Bezeichnung für die Daten (z.b. nicht [[+value]] benutzen wenn [[+link]] nötig)
+4. Checken ob  [[+value:encode]] verwendet werden sollte
+
+#### Feld wirft keine Anfürhungszeichen trotz :encode aus
+1. Prüfen ob der Fieldvalue korrekt abgefragt wurde (Über Props hovern und lesen! Manchmal braucht es nicht [[+value]]. Wird der Wert falsch abgefragt wird kein Outputsnippet ausgeführt
+
+
 
 
 
