@@ -153,6 +153,18 @@ Vorlage die dem User bereitgestellt wird. Hier kann aus Layouts und Feldern eine
 
 Templates werden nach 'Template' (Modx) gefiltert, so können z.b. Templates für Newsseiten, Eventseiten und normale Seiten getrennt werden. Zu finden unter *Availability*
 
+## Redactor Icons
+Wrden als **Clips** hinterlegt. .svg Icons sind dabei im Filesystem hinterlegt. Clips werden mit einem redactorIcon Snippet aus dem HTML geparsed und anschließend durch ein Inline SVG ersetzt.
+
+Redactor -> OutputFilter -> Einträge durch inline SVG ersetzen (switch case)
+
+## Global Headscripts
+
+Erlaubt es benötigte Scripte für den <head> Bereich eines HTML Documents zu hinterlegen. Wird per HTML Parser im Projekt eingebaut
+    
+## Kontext Settings
+Settings die für den Kontext der Ressourcen von Relevanz sind. Je nach Kontext können so unterschiedliche Daten hinterlegt werden (z.b. verschiedene Sprachversionen). 
+Kontextdaten können jederzeit per **[[++kontext_setting_name]]** abgerufen werden
 
 
 ### FAQ
