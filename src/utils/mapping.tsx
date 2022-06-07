@@ -53,7 +53,8 @@ export const mapSocials = (
                 href: social.link || '',
                 icon: ({ title }) => (
                     <img
-                        alt={title}
+                        alt={title || ''}
+                        title={title}
                         src={isInverted ? invertedIconUrl : iconUrl}
                     />
                 ),
