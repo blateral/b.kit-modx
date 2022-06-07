@@ -38,8 +38,6 @@ export const mapSocials = (
 ): SocialItem[] => {
     if (!socials) return [];
 
-    console.log(socials);
-
     const mappedSocials = socials
         .filter((social) => {
             return social.icon?.small && social.link;
