@@ -9,9 +9,9 @@ import {
 import { ResponsiveObject } from './slick';
 import {
     BgMode,
-    endpoint,
     isExternalLink,
     isValidAction,
+    ModxImageProps,
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
@@ -39,7 +39,7 @@ export interface FeatureListSliceType
     isCentered?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
-    imageFormat: 'square' | 'portrait' | 'landscape';
+    imageFormat: string;
 
     primaryAction?: (props: {
         isInverted?: boolean;
@@ -108,6 +108,12 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
         theme
     );
 
+    const aspectRatios = {
+        square: { small: { w: 1, h: 1 } },
+        landscape: { small: { w: 4, h: 3 } },
+        portrait: { small: { w: 3, h: 4 } },
+    };
+
     // get image format for all images
     const sharedProps = {
         isCentered,
@@ -126,36 +132,30 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
                     secondary_link,
                 }) => {
                     // check if image urls are path to SVG image
-                    const isSvgImage =
-                        isSVG(image.landscape?.small) ||
-                        isSVG(image.landscape?.small);
+                    const isSvgImage = isSVG(image.landscape?.small);
+                    const selectedAspect: {
+                        small: { w: number; h: number };
+                        semilarge: { w: number; h: number };
+                    } = aspectRatios[imageFormat || 'square'];
+
+                    const completeImage: ModxImageProps & {
+                        ratios?: {
+                            small: {
+                                w: number;
+                                h: number;
+                            };
+                        };
+                    } = image && {
+                        ...image[imageFormat || 'square'],
+                        ratios: selectedAspect,
+                        coverSpace: !isSvgImage,
+                    };
 
                     return {
                         title: title,
                         text: text,
                         description: description,
-                        image: image[imageFormat]?.small
-                            ? {
-                                  small: `${isSvgImage ? endpoint : ''}${
-                                      image[imageFormat]?.small
-                                  }`,
-                                  medium:
-                                      `${isSvgImage ? endpoint : ''}${
-                                          image[imageFormat]?.medium
-                                      }` || '',
-                                  large:
-                                      `${isSvgImage ? endpoint : ''}${
-                                          image[imageFormat]?.large
-                                      }` || '',
-                                  xlarge:
-                                      `${isSvgImage ? endpoint : ''}${
-                                          image[imageFormat]?.xlarge
-                                      }` || '',
-
-                                  alt: image.meta?.altText || '',
-                                  coverSpace: !isSvgImage,
-                              }
-                            : undefined,
+                        image: completeImage,
                         primaryAction:
                             primaryAction &&
                             isValidAction(primary_label, primary_link)
