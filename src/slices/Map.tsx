@@ -79,11 +79,6 @@ export interface MapSliceType extends ModxSlice<'Map', MapLocationItems> {
             ev: React.SyntheticEvent<HTMLButtonElement, Event>
         ) => void;
     }) => React.ReactNode;
-    dot?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        index?: number;
-    }) => React.ReactNode;
     phoneIcon?: (props: { isInverted?: boolean }) => React.ReactNode;
     mailIcon?: (props: { isInverted?: boolean }) => React.ReactNode;
     routingIcon?: (props: { isInverted?: boolean }) => React.ReactNode;
@@ -106,7 +101,6 @@ export const MapSlice: React.FC<MapSliceType> = ({
     allMarkersOnInit,
     controlNext,
     controlPrev,
-    dot,
     mailIcon,
     phoneIcon,
     theme,
@@ -193,7 +187,6 @@ export const MapSlice: React.FC<MapSliceType> = ({
             })}
             controlNext={controlNext}
             controlPrev={controlPrev}
-            dot={dot}
         />
     );
 };

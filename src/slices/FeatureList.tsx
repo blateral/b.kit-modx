@@ -11,12 +11,12 @@ import {
     BgMode,
     isExternalLink,
     isValidAction,
-    ModxImageProps,
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
 import { isSVG } from 'utils/mapping';
 import { normalizeAnchorId } from 'utils/mapping';
+import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 
 interface FeatureItemType {
     title?: string;
@@ -138,7 +138,7 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
                         semilarge: { w: number; h: number };
                     } = aspectRatios[imageFormat || 'square'];
 
-                    const completeImage: ModxImageProps & {
+                    const completeImage: ImageProps & {
                         ratios?: {
                             small: {
                                 w: number;
@@ -147,7 +147,7 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
                         };
                     } = image && {
                         ...image[imageFormat || 'square'],
-                        ratios: selectedAspect,
+                        ratios: !isSvgImage ? selectedAspect : undefined,
                         coverSpace: !isSvgImage,
                     };
 

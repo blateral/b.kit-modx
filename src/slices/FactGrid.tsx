@@ -87,7 +87,7 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
                     };
                 } = image && {
                     ...image[imageFormat || 'square'],
-                    ratios: selectedAspect,
+                    ratios: !isSvgImage ? selectedAspect : undefined,
                     coverSpace: !isSvgImage,
                 };
 
