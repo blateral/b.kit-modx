@@ -3,6 +3,7 @@ import React from 'react';
 import { assignTo, FactGrid, ThemeMods } from '@blateral/b.kit';
 import {
     BgMode,
+    ModxImageProps,
     // endpoint,
     ModxImagePropsWithFormat,
     ModxSlice,
@@ -51,6 +52,11 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
         theme
     );
 
+    const aspectRatios = {
+        landscape: { small: { w: 620, h: 465 } },
+        'landscape-wide': { small: { w: 620, h: 310 } },
+    };
+
     return (
         <FactGrid
             theme={sliceTheme}
@@ -63,13 +69,25 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
                     : (parseInt(columns || '3') as 3 | 4 | 6)
             }
             facts={items?.map(({ title, text, image }) => {
+                // check if image urls are path to SVG image
                 const isSvgImage =
                     isSVG(image?.landscape?.small) ||
                     isSVG(image?.['landscape-wide']?.xlarge);
 
-                const completeImage = image && {
-                    ...image[imageFormat || 'landscape-wide'],
-                    small: image[imageFormat || 'landscape-wide']?.small || '',
+                const selectedAspect: {
+                    small: { w: number; h: number };
+                } = aspectRatios[imageFormat || 'landscape'];
+
+                const completeImage: ModxImageProps & {
+                    ratios?: {
+                        small: {
+                            w: number;
+                            h: number;
+                        };
+                    };
+                } = image && {
+                    ...image[imageFormat || 'square'],
+                    ratios: selectedAspect,
                     coverSpace: !isSvgImage,
                 };
 
