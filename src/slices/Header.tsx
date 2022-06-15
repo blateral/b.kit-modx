@@ -4,7 +4,6 @@ import {
     SizeSelect,
     isExternalLink,
     isValidAction,
-    endpoint,
 } from 'utils/modx';
 
 import { assignTo, Header, ThemeMods } from '@blateral/b.kit';
@@ -84,6 +83,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     secondaryAction,
     theme,
     bgColor,
+    config,
 }) => {
     // map header images
     const headerImageMap = items?.map(toComponentImageFormat) || undefined;
@@ -112,7 +112,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             bgMode={bgMode}
             size={size || 'full'}
             isCentered={isCentered}
-            videoUrl={videoUrl ? `${endpoint}${videoUrl}` : ''}
+            videoUrl={videoUrl ? `${config?.endpoint}${videoUrl}` : ''}
             images={headerImageMap}
             focusPoint={focusPoint}
             onImageChange={onImageChange}

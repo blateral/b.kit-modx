@@ -1,6 +1,10 @@
 import React from 'react';
 import { ParallaxBackground } from '@blateral/b.kit';
-import { endpoint, ModxImagePropsWithFormat, ModxSlice } from 'utils/modx';
+import {
+    ModxConnectorConfig,
+    ModxImagePropsWithFormat,
+    ModxSlice,
+} from 'utils/modx';
 import { isSVG } from 'utils/mapping';
 import { ParallaxWidth } from '@blateral/b.kit/lib/components/sections/ParallaxBackground';
 
@@ -18,6 +22,7 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
     hAlign,
     format,
     contentWidth,
+    config,
 }) => {
     return (
         <ParallaxBackground
@@ -29,7 +34,7 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
                         ? {
                               small: image,
                           }
-                        : imageToImageProps(image, format)
+                        : imageToImageProps(image, format, config)
                     : undefined
             }
         />
@@ -38,11 +43,12 @@ export const ParallaxBackgroundSlice: React.FC<ParallaxBackgroundSliceType> = ({
 
 const imageToImageProps = (
     image: ModxImagePropsWithFormat | string,
-    format = 'square'
+    format = 'square',
+    config: ModxConnectorConfig
 ) => {
     const imageProps = isSVG(image[format || 'square']?.small)
         ? {
-              small: `${endpoint + image[format || 'square']?.small}`,
+              small: `${config?.endpoint + image[format || 'square']?.small}`,
           }
         : image[format || 'square'];
 

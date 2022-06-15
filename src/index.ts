@@ -1,6 +1,5 @@
 // export util types and functions
 // slice exports
-export { endpoint } from 'utils/modx';
 export * from 'slices/Accordion';
 export * from 'slices/AlertList';
 export * from 'slices/Article';

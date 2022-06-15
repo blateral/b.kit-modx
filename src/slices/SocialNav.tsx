@@ -1,4 +1,4 @@
-import { BgMode, endpoint, ModxSlice } from '../utils/modx';
+import { BgMode, ModxSlice } from '../utils/modx';
 
 import React from 'react';
 import { assignTo, SocialNav, ThemeMods } from '@blateral/b.kit';
@@ -25,6 +25,7 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
     items,
     anchorId,
     theme,
+    config,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -50,7 +51,7 @@ export const SocialNavSlice: React.FC<SocialNavSliceType> = ({
                           .filter((item) => item?.icon && item?.link?.href)
                           .map((item) => {
                               const iconpath = item?.icon?.match(svgRegex)
-                                  ? `${endpoint}${item.icon}`
+                                  ? `${config?.endpoint}${item.icon}`
                                   : item.icon;
 
                               return {

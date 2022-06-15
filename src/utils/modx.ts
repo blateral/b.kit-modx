@@ -52,30 +52,30 @@ import {
     SiteLinkGroup,
 } from '@blateral/b.kit/lib/components/sections/footer/Footer';
 
-if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
-    console.error(
-        'Missing env: NEXT_PUBLIC_API_ENDPOINT is not defined. Error thrown in bkit-modx -> modx.ts'
-    );
+export interface ModxConnectorConfig {
+    endpoint: string;
 }
-export const endpoint = process.env.NEXT_PUBLIC_API_ENDPOINT || '';
-export const initApi = (alias: string) => {
-    return `${endpoint}${alias}`;
+
+export const initApi = (alias: string, config: ModxConnectorConfig) => {
+    if (!config?.endpoint) throw new Error('No MODX endpoint defined!');
+    return `${config.endpoint}${alias}`;
 };
 
-export const getPageData = async (query: string) => {
-    const { pageData, statusCode } = await fetch(initApi(query as string)).then(
-        async (res) => {
-            const pageData = await res.json();
+export const getPageData = async (
+    query: string,
+    config: ModxConnectorConfig
+) => {
+    const { pageData, statusCode } = await fetch(
+        initApi(query as string, config)
+    ).then(async (res) => {
+        const pageData = await res.json();
 
-            return {
-                pageData: pageData,
-                statusCode:
-                    res.redirected && query !== pageData.alias
-                        ? 301
-                        : res.status,
-            };
-        }
-    );
+        return {
+            pageData: pageData,
+            statusCode:
+                res.redirected && query !== pageData.alias ? 301 : res.status,
+        };
+    });
 
     return {
         page: pageData,
@@ -89,10 +89,11 @@ export interface ModxSlice<S, I = any> {
     slice_type: S;
     primary?: Record<string, unknown>;
     items: I[];
+    config: ModxConnectorConfig;
 }
 
-export const getSettingsData = async () => {
-    const settingsData = await fetch(initApi('settings')).then((res) =>
+export const getSettingsData = async (config: ModxConnectorConfig) => {
+    const settingsData = await fetch(initApi('settings', config)).then((res) =>
         res.json()
     );
     return {
@@ -275,8 +276,6 @@ export interface ModxEventData {
         info?: string;
     };
 }
-
-
 
 export interface SocialMediaItem {
     link?: string;

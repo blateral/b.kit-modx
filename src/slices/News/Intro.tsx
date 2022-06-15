@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { assignTo, NewsIntro, ThemeMods } from '@blateral/b.kit';
-import { BgMode, endpoint, ModxImageProps, ModxSlice } from 'utils/modx';
+import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { normalizeAnchorId } from 'utils/mapping';
@@ -45,6 +45,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     customTag,
     theme,
     tags,
+    config,
 }) => {
     const preppedPubDate = generatePublicationDateObject(publicationDate);
     const mappedImage = newsImage
@@ -60,9 +61,9 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
         return {
             name: tag,
             link: {
-                href: `${endpoint}${newsCollectionUrl}?newsFilter=${encodeURIComponent(
-                    tag
-                )}`,
+                href: `${
+                    config?.endpoint
+                }${newsCollectionUrl}?newsFilter=${encodeURIComponent(tag)}`,
             },
         };
     });
