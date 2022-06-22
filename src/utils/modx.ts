@@ -1,15 +1,3 @@
-import {
-    NewsAuthorCardSliceType,
-    NewsFooterSliceType,
-    NumberListSliceType,
-    ParallaxBackgroundSliceType,
-    PriceListSliceType,
-    PriceTableSliceType,
-    SimpleImageSliceType,
-    SocialNavSliceType,
-    TimelineSliceType,
-} from 'index';
-
 import { AccordionSliceType } from '../slices/Accordion';
 import { ArticleSliceType } from '../slices/Article';
 import { CallToActionSliceType } from '../slices/CallToAction';
@@ -51,6 +39,16 @@ import {
     BottomLink,
     SiteLinkGroup,
 } from '@blateral/b.kit/lib/components/sections/footer/Footer';
+import { NavListAutoSliceType } from 'slices/NavListAuto';
+import { NumberListSliceType } from 'slices/NumberList';
+import { ParallaxBackgroundSliceType } from 'slices/ParallaxBackground';
+import { PriceListSliceType } from 'slices/PriceList';
+import { PriceTableSliceType } from 'slices/PriceTable';
+import { SimpleImageSliceType } from 'slices/SimpleImage';
+import { SocialNavSliceType } from 'slices/SocialNav';
+import { TimelineSliceType } from 'slices/Timeline';
+import { NewsAuthorCardSliceType } from 'slices/News/AuthorCard';
+import { NewsFooterSliceType } from 'slices/News/Footer';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -133,6 +131,7 @@ export type PageContent =
     | JobListSliceType
     | MapSliceType
     | NavListSliceType
+    | NavListAutoSliceType
     | NewsListSliceType
     | NewsOverviewSliceType
     | NumberListSliceType

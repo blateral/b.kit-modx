@@ -23,6 +23,7 @@ export * from 'slices/Intro';
 export * from 'slices/JobList';
 export * from 'slices/Map';
 export * from 'slices/NavList';
+export * from 'slices/NavListAuto';
 export * from 'slices/Navigation';
 export * from 'slices/News/AuthorCard';
 export * from 'slices/News/Footer';
