@@ -33,6 +33,7 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     text?: string;
     image?: ModxImagePropsWithFormat & { ratios: { w: number; h: number } };
     video?: TeaserVideo;
+    description?: string;
     primary_link?: string;
     secondary_link?: string;
     primary_label?: string;
@@ -65,6 +66,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     text,
     image,
     video,
+    description,
 
     primary_link,
     primary_label,
@@ -118,6 +120,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
         superTitle,
         superTitleAs,
         text: text,
+        description: description,
 
         primaryAction:
             primaryAction && isValidAction(primary_label, primary_link)
@@ -164,9 +167,9 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                         ? {
                               ...theImage,
                               small: theImage?.small || '',
-                              alt: theImage?.meta?.altText || '',
+                              alt: theImage?.meta?.altText || description || '',
+                              copyright: theImage?.meta?.copyright || '',
                               ratios: theImage.ratios,
-                              //   description: description,
                           }
                         : undefined
                 }
@@ -208,7 +211,8 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                 image={{
                     ...theImage,
                     small: theImage?.small || '',
-                    alt: image?.meta?.altText || '',
+                    alt: image?.meta?.altText || description || '',
+                    copyright: image?.meta?.copyright || '',
                 }}
                 video={
                     Array.isArray(theVideo.urls) && theVideo.urls.length > 0
