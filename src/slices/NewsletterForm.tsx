@@ -78,7 +78,7 @@ export const NewsletterFormSlice: React.FC<NewsletterFormSliceType> = ({
             errorMsg: 'Bitte geben Sie Ihren Nachnamen an!',
         },
         EMAIL: {
-            inputType: 'text',
+            inputType: 'email',
             label: 'E-Mail',
             placeholder: 'E-Mail Adresse..',
             isRequired: true,
