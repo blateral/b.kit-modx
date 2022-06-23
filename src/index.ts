@@ -9,6 +9,7 @@ export * from 'slices/ComparisonSlider';
 export * from 'slices/CookieConsent';
 export * from 'slices/CrossPromotionList';
 export * from 'slices/DynamicForm';
+export * from 'slices/NewsletterForm';
 export * from 'slices/FactGrid';
 export * from 'slices/EventList';
 export * from 'slices/Events/EventOverview';
