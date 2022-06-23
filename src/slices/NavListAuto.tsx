@@ -21,14 +21,12 @@ export interface NavListAutoSliceType extends ModxSlice<'NavListAuto'> {
     bgMode?: BgMode;
     bgColor?: string;
     subNavItems?: AutoNavItem[];
-    icon?: string;
 
     customTitleIcon?: (props: {
         isInverted?: boolean | undefined;
     }) => React.ReactNode;
     customIcon?: (props: {
         isInverted?: boolean | undefined;
-        icon?: string;
     }) => React.ReactNode;
 
     theme?: ThemeMods;
@@ -39,7 +37,6 @@ export const NavListAutoSlice: React.FC<NavListAutoSliceType> = ({
     anchorId,
     bgColor,
     subNavItems,
-    icon,
     customTitleIcon,
     customIcon,
     theme,
@@ -66,14 +63,7 @@ export const NavListAutoSlice: React.FC<NavListAutoSliceType> = ({
                 title: navItem.label,
                 link: navItem.link,
                 text: navItem.description,
-                customIcon:
-                    customIcon && icon
-                        ? ({ isInverted }) =>
-                              customIcon({
-                                  isInverted,
-                                  icon,
-                              })
-                        : undefined,
+                customIcon,
             }))}
         />
     );
