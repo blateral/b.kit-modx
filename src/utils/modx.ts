@@ -49,6 +49,7 @@ import { SocialNavSliceType } from 'slices/SocialNav';
 import { TimelineSliceType } from 'slices/Timeline';
 import { NewsAuthorCardSliceType } from 'slices/News/AuthorCard';
 import { NewsFooterSliceType } from 'slices/News/Footer';
+import { NewsletterFormSliceType } from 'index';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -118,6 +119,7 @@ export type PageContent =
     | ComparisonSliderSliceType
     | CrossPromotionListSliceType
     | DynamicFormSliceType
+    | NewsletterFormSliceType
     | EventListSliceType
     | EventOverviewSliceType
     | FactGridSliceType
