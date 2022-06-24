@@ -87,10 +87,12 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
                 return {
                     src: item?.image?.small || '',
                     alt: item?.image?.meta?.altText || '',
-                    link: {
-                        href: item.link,
-                        isExternal: true,
-                    },
+                    link: item.link
+                        ? {
+                              href: item.link,
+                              isExternal: true,
+                          }
+                        : undefined,
                 };
             })}
             primaryAction={
