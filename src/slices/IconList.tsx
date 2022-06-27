@@ -16,10 +16,6 @@ interface IconListImages {
             h?: number;
         };
     };
-    sizes?: {
-        w?: string;
-        h?: string;
-    };
     link: {
         href?: string;
         isExternal?: boolean;
@@ -101,20 +97,18 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
             showMoreText={showMoreText}
             showLessText={showLessText}
             items={items.map((item) => {
+                const originalSize = item?.image?.originals;
+                const aspectRatio =
+                    originalSize?.w && originalSize?.h
+                        ? {
+                              w: originalSize.w,
+                              h: originalSize.h,
+                          }
+                        : undefined;
+
                 return {
                     src: item?.image?.small || '',
-                    ratio:
-                        item?.sizes?.w && item.sizes.h
-                            ? {
-                                  w: +item.sizes.w,
-                                  h: +item.sizes.h,
-                              }
-                            : item.image.originals?.w && item.image.originals.h
-                            ? {
-                                  w: +item.image.originals.w,
-                                  h: +item.image.originals.h,
-                              }
-                            : undefined,
+                    ratio: aspectRatio,
                     alt: item?.image?.meta?.altText || '',
                     link: item?.link?.href ? item.link : undefined,
                 };

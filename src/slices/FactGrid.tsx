@@ -91,28 +91,6 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
                     coverSpace: !isSvgImage,
                 };
 
-                // if (isSvgImage) {
-                //     completeImage = image && {
-                //         small: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.small || ''
-                //         }`,
-                //         medium: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.medium || ''
-                //         }`,
-                //         semilarge: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.semilarge ||
-                //             ''
-                //         }`,
-                //         large: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.large || ''
-                //         }`,
-                //         xlarge: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.xlarge || ''
-                //         }`,
-                //         coverSpace: !isSvgImage,
-                //     };
-                // }
-
                 return {
                     title: title,
                     text: text,
