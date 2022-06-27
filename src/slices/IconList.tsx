@@ -7,7 +7,7 @@ import {
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
-import { normalizeAnchorId } from 'utils/mapping';
+import { isSVG, normalizeAnchorId } from 'utils/mapping';
 
 interface IconListImages {
     image: ModxImageProps & {
@@ -111,6 +111,7 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
                     ratio: aspectRatio,
                     alt: item?.image?.meta?.altText || '',
                     link: item?.link?.href ? item.link : undefined,
+                    showPlaceholder: !isSVG(item?.image?.small),
                 };
             })}
             primaryAction={
