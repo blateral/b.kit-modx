@@ -2,7 +2,7 @@ import React from 'react';
 import { assignTo, JobList, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
-import { JobItem } from '@blateral/b.kit/lib/components/sections/JobList';
+import { JobItem } from '@blateral/b.kit/lib/components/sections/jobs/JobList';
 
 interface JobListItems {
     jobTitle?: string;

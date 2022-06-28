@@ -34,7 +34,7 @@ import { IndexListSliceType } from 'slices/IndexList';
 import { EventListSliceType } from 'slices/EventList';
 import { EventOverviewSliceType } from 'slices/Events/EventOverview';
 import { LinkProps } from '@blateral/b.kit/lib/components/buttons/Button';
-import { JobListSliceType } from 'slices/JobList';
+import { JobListSliceType } from 'slices/Jobs/JobList';
 import {
     BottomLink,
     SiteLinkGroup,
@@ -49,7 +49,7 @@ import { SocialNavSliceType } from 'slices/SocialNav';
 import { TimelineSliceType } from 'slices/Timeline';
 import { NewsAuthorCardSliceType } from 'slices/News/AuthorCard';
 import { NewsFooterSliceType } from 'slices/News/Footer';
-import { NewsletterFormSliceType } from 'index';
+import { NewsletterFormSliceType } from 'slices/NewsletterForm';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -221,6 +221,7 @@ export interface StructuredOrganizationData {
     telephone: string;
     email: string;
     sameAs: string[];
+    logo: string;
     address: {
         '@type': 'PostalAddress';
         streetAddress: string;
@@ -374,6 +375,22 @@ export interface ModxSettings extends ModxPage {
         link: string;
         newTab: boolean;
     };
+}
+
+export interface ModxJobPage extends ModxDocument {
+    jobCollectionUrl?: string;
+    jobOverviewUrl?: string;
+    jobData?: ModxJobData;
+    publishedOn?: string;
+}
+
+export interface ModxJobData {
+    location?: string;
+    timeModel?: string;
+    title?: string;
+    description?: string;
+    actionLabel?: string;
+    actionLink?: string;
 }
 
 export interface ModxNewsPage extends ModxDocument {
@@ -611,4 +628,10 @@ export const isModxEventPage = (
     pageToCheck: any
 ): pageToCheck is ModxEventPage => {
     return pageToCheck?.type === 'event_page';
+};
+
+export const isModxJobPage = (
+    pageToCheck: any
+): pageToCheck is ModxEventPage => {
+    return pageToCheck?.type === 'job_page';
 };

@@ -21,7 +21,7 @@ export * from 'slices/Header';
 export * from 'slices/IconList';
 export * from 'slices/IndexList';
 export * from 'slices/Intro';
-export * from 'slices/JobList';
+export * from 'slices/Jobs/JobList';
 export * from 'slices/Map';
 export * from 'slices/NavList';
 export * from 'slices/NavListAuto';
