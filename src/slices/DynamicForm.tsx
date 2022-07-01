@@ -2,7 +2,7 @@ import { assignTo, DynamicForm, ThemeMods } from '@blateral/b.kit';
 import {
     FieldGenerationProps,
     FileUpload,
-} from '@blateral/b.kit/lib/components/sections/DynamicForm';
+} from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
 import React from 'react';
 import {
     Field as BkitField,
@@ -11,9 +11,11 @@ import {
     Datepicker as BkitDatepicker,
     FieldGroup as BkitFieldGroup,
     FileUpload as BkitFileUpload,
-} from '@blateral/b.kit/lib/components/sections/DynamicForm';
+    Location as BkitLocation,
+} from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
 import { ModxSlice } from '../utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+import { LocationData } from '@blateral/b.kit/lib/components/fields/LocationField';
 
 type FormFieldTypes =
     | 'Field'
@@ -21,13 +23,13 @@ type FormFieldTypes =
     | 'Select'
     | 'Datepicker'
     | 'FieldGroup'
-    | 'Upload';
+    | 'Upload'
+    | 'Location';
 
 export interface FormField {
     isRequired?: boolean;
     type: FormFieldTypes;
     label?: string;
-    column?: 'left' | 'right';
 }
 
 export interface Field extends FormField {
@@ -106,6 +108,7 @@ export interface FieldGroup extends FormField {
         config: FieldGroup
     ) => Promise<string>;
     errorMsg?: string;
+    info?: string;
 }
 
 export interface FileUploadField extends FormField {
@@ -125,7 +128,8 @@ export interface FormData {
         | string
         | boolean
         | Array<string>
-        | [Date | null, Date | null];
+        | [Date | null, Date | null]
+        | LocationData;
 }
 
 export interface SubmitActionProps {
@@ -174,11 +178,20 @@ export interface DynamicFormSliceType
         area?: (props: FieldGenerationProps<BkitArea>) => React.ReactNode;
         select?: (props: FieldGenerationProps<BkitSelect>) => React.ReactNode;
         datepicker?: (
-            props: FieldGenerationProps<Datepicker>
+            props: FieldGenerationProps<BkitDatepicker>
         ) => React.ReactNode;
-        checkbox?: (props: FieldGenerationProps<FieldGroup>) => React.ReactNode;
-        radio?: (props: FieldGenerationProps<FieldGroup>) => React.ReactNode;
-        upload?: (props: FieldGenerationProps<FieldGroup>) => React.ReactNode;
+        checkbox?: (
+            props: FieldGenerationProps<BkitFieldGroup>
+        ) => React.ReactNode;
+        radio?: (
+            props: FieldGenerationProps<BkitFieldGroup>
+        ) => React.ReactNode;
+        upload?: (
+            props: FieldGenerationProps<BkitFieldGroup>
+        ) => React.ReactNode;
+        location?: (
+            props: FieldGenerationProps<BkitLocation>
+        ) => React.ReactNode;
     };
     customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
     customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
@@ -390,7 +403,6 @@ function createField(
         info: formfield.info,
         icon: formfield.icon?.src ? { src: formfield.icon?.src } : undefined,
         validate: onValidate,
-        column: formfield.column,
         initialValue: formfield.initialValue,
         inputType: formfield.inputType,
         errorMsg: formfield.errorMsg,
@@ -418,7 +430,6 @@ function createArea(
         isRequired: formfield.isRequired,
         info: formfield.info,
         validate: onValidate,
-        column: formfield.column,
         initialValue: formfield.initialValue,
         errorMsg: formfield.errorMsg,
     };
@@ -450,7 +461,6 @@ function createSelect(
         dropdownItems: dropdownValues.map((value) => {
             return { label: value, value };
         }),
-        column: formfield.column,
         validate: onValidate,
         errorMsg: formfield.errorMsg,
         icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
@@ -485,7 +495,6 @@ function createFieldGroup(
         type: 'FieldGroup',
         isRequired: formfield.isRequired,
         validate: onValidate,
-        column: formfield.column,
         errorMsg: formfield.errorMsg,
         groupType: formfield.groupType,
         fields: fields,
@@ -529,7 +538,6 @@ function createDatePicker({
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        column: formfield.column,
         validate: onValidate,
         singleDateError: formfield.singleDateError,
         multiDateError: formfield.multiDateError,
@@ -610,7 +618,6 @@ function createUpload({
         type: 'Upload',
         isRequired: formfield.isRequired,
         info: formfield.info,
-        column: formfield.column,
         validate: onValidate,
         customUploadIcon,
         customDeleteIcon,
