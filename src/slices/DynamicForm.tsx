@@ -1,8 +1,5 @@
 import { assignTo, DynamicForm, ThemeMods } from '@blateral/b.kit';
-import {
-    FieldGenerationProps,
-    FileUpload,
-} from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
+import { FieldGenerationProps } from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
 import React from 'react';
 import {
     Field as BkitField,
@@ -32,38 +29,33 @@ export interface FormField {
     label?: string;
 }
 
-export interface Field extends FormField {
+export interface ModxField extends FormField {
     type: 'Field';
     inputType?: 'text' | 'number' | 'email' | 'password' | 'tel';
     initialValue?: string;
     placeholder?: string;
     info?: string;
-    icon?: { src: string; alt?: string };
-    validate?: (value: string, config: Field) => Promise<string>;
     errorMsg?: string;
 }
 
-export interface Area extends FormField {
+export interface ModxArea extends FormField {
     type: 'Area';
     initialValue?: string;
     placeholder?: string;
     info?: string;
-    validate?: (value: string, config: Area) => Promise<string>;
     errorMsg?: string;
 }
 
-export interface Select extends FormField {
+export interface ModxSelect extends FormField {
     type: 'Select';
     initialValue?: string;
     placeholder?: string;
     dropdownItems: string;
     info?: string;
-    icon?: { src: string; alt?: string };
-    validate?: (value: string, config: Select) => Promise<string>;
     errorMsg?: string;
 }
 
-export interface Datepicker extends FormField {
+export interface ModxDatepicker extends FormField {
     type: 'Datepicker';
     initialDate?: string;
     initialEndDate?: string;
@@ -72,7 +64,6 @@ export interface Datepicker extends FormField {
     maxDate?: string;
     singleSelect?: boolean;
     info?: string;
-    icon?: { src: string; alt?: string };
 
     dateSubmitLabel?: string;
     dateDeleteLabel?: string;
@@ -80,46 +71,33 @@ export interface Datepicker extends FormField {
     multiDateError?: string;
     nextCtrlUrl?: string;
     prevCtrlUrl?: string;
-    customIcon?: (props: {
-        isInverted?: boolean;
-        singleSelect?: boolean;
-    }) => React.ReactNode;
-    validate?: (
-        value: [Date | null, Date | null],
-        config: Datepicker
-    ) => Promise<string>;
-    deleteAction?: (
-        handleClick: (e: React.SyntheticEvent<HTMLButtonElement, Event>) => void
-    ) => React.ReactNode;
-    submitAction?: (
-        handleClick?: (
-            e: React.SyntheticEvent<HTMLButtonElement, Event>
-        ) => void
-    ) => React.ReactNode;
 }
 
-export interface FieldGroup extends FormField {
+export interface ModxLocation extends FormField {
+    type: 'Location';
+    initialPosition?: string;
+    placeholder?: string;
+    info?: string;
+    errorMsg?: string;
+    toggleBtnLabelToLocation?: string;
+    toggleBtnLabelToDescription?: string;
+}
+
+export interface ModxFieldGroup extends FormField {
     type: 'FieldGroup';
     groupType: 'Radio' | 'Checkbox';
     fields: Array<{ initialChecked?: boolean; text?: string }>;
     fieldString?: string;
-    validate?: (
-        value: Array<string> | string,
-        config: FieldGroup
-    ) => Promise<string>;
     errorMsg?: string;
     info?: string;
 }
 
-export interface FileUploadField extends FormField {
+export interface ModxFileUploadField extends FormField {
     type: 'Upload';
     addBtnLabel?: string;
     removeBtnLabel?: string;
     info?: string;
     acceptedFormats?: string;
-    validate?: (value: Array<File>, config: FileUpload) => Promise<string>;
-    customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
-    customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
     errorMsg?: string;
 }
 
@@ -153,6 +131,33 @@ export interface DatepickerDeleteActionProps {
         | ((ev: React.SyntheticEvent<HTMLButtonElement>) => void)
         | undefined;
 }
+
+export interface LocationToggleActionProps {
+    label?: string;
+    handleToggle?:
+        | ((ev: React.SyntheticEvent<HTMLButtonElement>) => void)
+        | undefined;
+    isInverted?: boolean;
+    asGeolocation?: boolean;
+}
+
+export interface FieldSettings {
+    field?: Pick<BkitField, 'validate'>;
+    area?: Pick<BkitArea, 'validate'>;
+    select?: Pick<BkitSelect, 'validate' | 'indicator'>;
+    datepicker?: Pick<BkitDatepicker, 'validate' | 'customIcon'> & {
+        submitAction?: (props: DatepickerSubmitActionProps) => React.ReactNode;
+        deleteAction?: (props: DatepickerDeleteActionProps) => React.ReactNode;
+    };
+    checkbox?: Pick<BkitFieldGroup, 'validate'>;
+    radio?: Pick<BkitFieldGroup, 'validate'>;
+    upload?: Pick<
+        BkitFileUpload,
+        'validate' | 'customUploadIcon' | 'customDeleteIcon'
+    >;
+    location?: Pick<BkitLocation, 'validate' | 'customLocationIcon'>;
+}
+
 export interface DynamicFormSliceType
     extends ModxSlice<'DynamicForm', FormField> {
     isActive?: boolean;
@@ -167,12 +172,6 @@ export interface DynamicFormSliceType
     successPage?: string;
     onSubmit?: (values: FormData) => Promise<void>;
     submitAction?: (props: SubmitActionProps) => React.ReactNode;
-    datepickerSubmitAction?: (
-        props?: DatepickerSubmitActionProps
-    ) => React.ReactNode;
-    datepickerDeleteAction?: (
-        props: DatepickerDeleteActionProps
-    ) => React.ReactNode;
     definitions?: {
         field?: (props: FieldGenerationProps<BkitField>) => React.ReactNode;
         area?: (props: FieldGenerationProps<BkitArea>) => React.ReactNode;
@@ -193,17 +192,7 @@ export interface DynamicFormSliceType
             props: FieldGenerationProps<BkitLocation>
         ) => React.ReactNode;
     };
-    customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
-    customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
-    customIcon?: (props: {
-        isInverted?: boolean;
-        singleSelect?: boolean;
-    }) => React.ReactNode;
-    onValidate?: (
-        key: string,
-        value: unknown,
-        config: FormField
-    ) => Promise<string>;
+    settings: FieldSettings;
 }
 
 export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
@@ -212,18 +201,13 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     bgColor,
     bgMode,
     definitions,
+    settings,
     subjectLine,
     submitLabel,
     targetEmails,
     onSubmit,
     submitAction,
-    datepickerSubmitAction,
-    datepickerDeleteAction,
-    customDeleteIcon,
-    customUploadIcon,
-    customIcon,
     items,
-    onValidate,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -245,12 +229,7 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
             submitAction={createLabeledSubmitAction(submitAction, submitLabel)}
             fields={itemsToFormFields({
                 formFields: items,
-                onValidate,
-                datepickerSubmitAction,
-                datepickerDeleteAction,
-                customDeleteIcon,
-                customUploadIcon,
-                customIcon,
+                fieldSettings: settings,
             })}
             targetEmails={targetEmails}
             subjectLine={subjectLine}
@@ -277,122 +256,74 @@ const createLabeledSubmitAction = (
 
 const itemsToFormFields = ({
     formFields,
-    onValidate,
-    datepickerSubmitAction,
-    datepickerDeleteAction,
-    customUploadIcon,
-    customDeleteIcon,
-    customIcon,
+    fieldSettings,
 }: {
     formFields?: FormField[];
-    onValidate?: (
-        key: string,
-        value: unknown,
-        config: FormField
-    ) => Promise<string>;
-    datepickerSubmitAction?: (
-        props: DatepickerSubmitActionProps
-    ) => React.ReactNode;
-    datepickerDeleteAction?: (
-        props: DatepickerDeleteActionProps
-    ) => React.ReactNode;
-    customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
-    customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
-    customIcon?: (props: {
-        isInverted?: boolean;
-        singleSelect?: boolean;
-    }) => React.ReactNode;
+    fieldSettings?: FieldSettings;
 }) => {
     if (!formFields) return {};
 
     return formFields.reduce(
         generateFormFieldMap({
-            onValidate,
-            datepickerSubmitAction,
-            datepickerDeleteAction,
-            customDeleteIcon,
-            customUploadIcon,
-            customIcon,
+            fieldSettings,
         }),
         {}
     );
 };
 
 const generateFormFieldMap =
-    ({
-        onValidate,
-        datepickerSubmitAction,
-        datepickerDeleteAction,
-        customUploadIcon,
-        customDeleteIcon,
-        customIcon,
-    }: {
-        onValidate?: (
-            key: string,
-            value: unknown,
-            config: FormField
-        ) => Promise<string>;
-        datepickerSubmitAction?: (
-            props: DatepickerSubmitActionProps
-        ) => React.ReactNode;
-        datepickerDeleteAction?: (
-            props: DatepickerDeleteActionProps
-        ) => React.ReactNode;
-        customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
-        customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
-        customIcon?: (props: {
-            isInverted?: boolean;
-            singleSelect?: boolean;
-        }) => React.ReactNode;
-    }) =>
+    ({ fieldSettings }: { fieldSettings?: FieldSettings }) =>
     (accumulator: Record<string, any>, formfield: FormField) => {
         if (isField(formfield)) {
-            const field = createField(formfield, onValidate);
+            const field = createField(formfield, fieldSettings);
             return { ...accumulator, ...field };
         }
+
         if (isArea(formfield)) {
-            const area = createArea(formfield, onValidate);
+            const area = createArea(formfield, fieldSettings);
             return { ...accumulator, ...area };
         }
+
         if (isSelect(formfield)) {
-            const select = createSelect(formfield, onValidate);
+            const select = createSelect(formfield, fieldSettings);
             return { ...accumulator, ...select };
         }
 
         if (isDatepicker(formfield)) {
             const fieldGroup = createDatePicker({
                 formfield,
-                onValidate,
-                datepickerSubmitAction,
-                datepickerDeleteAction,
-                customIcon,
+                settings: fieldSettings,
             });
             return { ...accumulator, ...fieldGroup };
         }
+
         if (isFieldGroup(formfield)) {
-            const fieldGroup = createFieldGroup(formfield, onValidate);
+            const fieldGroup = createFieldGroup(formfield, fieldSettings);
             return { ...accumulator, ...fieldGroup };
         }
+
         if (isUpload(formfield)) {
             const upload = createUpload({
                 formfield,
-                onValidate,
-                customUploadIcon,
-                customDeleteIcon,
+                settings: fieldSettings,
             });
             return { ...accumulator, ...upload };
+        }
+
+        if (isLocation(formfield)) {
+            const location = createLocation({
+                formfield,
+                settings: fieldSettings,
+            });
+            return { ...accumulator, ...location };
         }
         return accumulator;
     };
 
-function createField(
-    formfield: Field,
-    onValidate?: (
-        key: string,
-        value: unknown,
-        config: FormField
-    ) => Promise<string>
-): Record<string, BkitField> | undefined {
+const createField = (
+    formfield: ModxField,
+    settings?: FieldSettings
+): Record<string, BkitField> | undefined => {
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
@@ -401,8 +332,7 @@ function createField(
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        icon: formfield.icon?.src ? { src: formfield.icon?.src } : undefined,
-        validate: onValidate,
+        validate: settings?.field?.validate,
         initialValue: formfield.initialValue,
         inputType: formfield.inputType,
         errorMsg: formfield.errorMsg,
@@ -411,16 +341,12 @@ function createField(
     formFieldData[formfield.label] = formFieldValues;
 
     return formFieldData;
-}
+};
 
-function createArea(
-    formfield: Area,
-    onValidate?: (
-        key: string,
-        value: unknown,
-        config: FormField
-    ) => Promise<string>
-): Record<string, BkitArea> | undefined {
+const createArea = (
+    formfield: ModxArea,
+    settings?: FieldSettings
+): Record<string, BkitArea> | undefined => {
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
@@ -429,7 +355,7 @@ function createArea(
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        validate: onValidate,
+        validate: settings?.area?.validate,
         initialValue: formfield.initialValue,
         errorMsg: formfield.errorMsg,
     };
@@ -437,16 +363,12 @@ function createArea(
     formFieldData[formfield.label] = formFieldValues;
 
     return formFieldData;
-}
+};
 
-function createSelect(
-    formfield: Select,
-    onValidate?: (
-        key: string,
-        value: unknown,
-        config: FormField
-    ) => Promise<string>
-): Record<string, BkitSelect> | undefined {
+const createSelect = (
+    formfield: ModxSelect,
+    settings?: FieldSettings
+): Record<string, BkitSelect> | undefined => {
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
@@ -461,24 +383,20 @@ function createSelect(
         dropdownItems: dropdownValues.map((value) => {
             return { label: value, value };
         }),
-        validate: onValidate,
+        validate: settings?.select?.validate,
+        indicator: settings?.select?.indicator,
         errorMsg: formfield.errorMsg,
-        icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
     };
 
     formFieldData[formfield.label] = formFieldValues;
 
     return formFieldData;
-}
+};
 
-function createFieldGroup(
-    formfield: FieldGroup,
-    onValidate?: (
-        key: string,
-        value: unknown,
-        config: FormField
-    ) => Promise<string>
-): Record<string, BkitFieldGroup> | undefined {
+const createFieldGroup = (
+    formfield: ModxFieldGroup,
+    settings?: FieldSettings
+): Record<string, BkitFieldGroup> | undefined => {
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
@@ -491,10 +409,15 @@ function createFieldGroup(
                 return { initialChecked: false, text: value };
             }) || [];
 
+    const type = formfield.groupType;
+
     const formFieldValues: BkitFieldGroup = {
         type: 'FieldGroup',
         isRequired: formfield.isRequired,
-        validate: onValidate,
+        validate:
+            type === 'Checkbox'
+                ? settings?.checkbox?.validate
+                : settings?.radio?.validate,
         errorMsg: formfield.errorMsg,
         groupType: formfield.groupType,
         fields: fields,
@@ -503,45 +426,29 @@ function createFieldGroup(
     formFieldData[formfield.label] = formFieldValues;
 
     return formFieldData;
-}
+};
 
-// FIXME:
-function createDatePicker({
+const createDatePicker = ({
     formfield,
-    onValidate,
-    datepickerSubmitAction,
-    datepickerDeleteAction,
-    customIcon,
+    settings,
 }: {
-    formfield: Datepicker;
-    onValidate?: (
-        key: string,
-        value: unknown,
-        config: FormField
-    ) => Promise<string>;
-    datepickerSubmitAction?: (
-        props: DatepickerSubmitActionProps
-    ) => React.ReactNode;
-    datepickerDeleteAction?: (
-        props: DatepickerDeleteActionProps
-    ) => React.ReactNode;
-    customIcon?: (props: {
-        isInverted?: boolean;
-        singleSelect?: boolean;
-    }) => React.ReactNode;
-}): Record<string, BkitDatepicker> | undefined {
+    formfield: ModxDatepicker;
+    settings?: FieldSettings;
+}): Record<string, BkitDatepicker> | undefined => {
     if (!formfield.label) return undefined;
     const formFieldData = {};
+
+    const submitAction = settings?.datepicker?.submitAction;
+    const deleteAction = settings?.datepicker?.deleteAction;
 
     const formFieldValues: BkitDatepicker = {
         type: 'Datepicker',
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        validate: onValidate,
+        validate: settings?.datepicker?.validate,
         singleDateError: formfield.singleDateError,
         multiDateError: formfield.multiDateError,
-        icon: formfield.icon?.src ? { src: formfield.icon.src } : undefined,
         initialDates: !formfield.singleSelect
             ? [
                   createDateFromDateString(formfield.initialDate),
@@ -555,21 +462,20 @@ function createDatePicker({
         nextCtrlUrl: formfield.nextCtrlUrl,
         prevCtrlUrl: formfield.prevCtrlUrl,
         singleSelect: formfield.singleSelect,
-        customIcon: customIcon,
+        customIcon: settings?.datepicker?.customIcon,
         submitAction:
-            datepickerSubmitAction && formfield.dateSubmitLabel
+            submitAction && formfield.dateSubmitLabel
                 ? (handleClick) =>
-                      datepickerSubmitAction &&
-                      datepickerSubmitAction({
+                      submitAction({
                           handleSubmit: handleClick,
                           label: formfield.dateSubmitLabel,
                       })
                 : undefined,
         deleteAction:
-            datepickerDeleteAction && formfield.dateDeleteLabel
+            deleteAction && formfield.dateDeleteLabel
                 ? (handleReset) =>
-                      datepickerDeleteAction &&
-                      datepickerDeleteAction({
+                      deleteAction &&
+                      deleteAction({
                           handleReset,
                           label: formfield.dateDeleteLabel,
                       })
@@ -579,9 +485,9 @@ function createDatePicker({
     formFieldData[formfield.label] = formFieldValues;
 
     return formFieldData;
-}
+};
 
-function createDateFromDateString(datestring?: string) {
+const createDateFromDateString = (datestring?: string) => {
     if (!datestring) return new Date();
 
     const dateparts = datestring
@@ -594,23 +500,15 @@ function createDateFromDateString(datestring?: string) {
         console.error(e);
         return new Date();
     }
-}
+};
 
-function createUpload({
+const createUpload = ({
     formfield,
-    onValidate,
-    customDeleteIcon,
-    customUploadIcon,
+    settings,
 }: {
-    formfield: FileUploadField;
-    onValidate?: (
-        key: string,
-        value: unknown,
-        config: FormField
-    ) => Promise<string>;
-    customUploadIcon?: (isInverted?: boolean) => React.ReactNode;
-    customDeleteIcon?: (isInverted?: boolean) => React.ReactNode;
-}): Record<string, BkitFileUpload> {
+    formfield: ModxFileUploadField;
+    settings?: FieldSettings;
+}): Record<string, BkitFileUpload> => {
     if (!formfield.label) return {};
     const formFieldData = {};
 
@@ -618,9 +516,9 @@ function createUpload({
         type: 'Upload',
         isRequired: formfield.isRequired,
         info: formfield.info,
-        validate: onValidate,
-        customUploadIcon,
-        customDeleteIcon,
+        validate: settings?.upload?.validate,
+        customUploadIcon: settings?.upload?.customUploadIcon,
+        customDeleteIcon: settings?.upload?.customDeleteIcon,
         addBtnLabel: formfield.addBtnLabel,
         removeBtnLabel: formfield.removeBtnLabel,
         acceptedFormats: formfield.acceptedFormats,
@@ -630,28 +528,65 @@ function createUpload({
     formFieldData[formfield.label] = formFieldValues;
 
     return formFieldData;
-}
+};
 
-const isField = (formfield: FormField): formfield is Field => {
+const createLocation = ({
+    formfield,
+    settings,
+}: {
+    formfield: ModxLocation;
+    settings?: FieldSettings;
+}): Record<string, BkitLocation> | undefined => {
+    if (!formfield.label) return undefined;
+    const formFieldData = {};
+
+    const initialPos = formfield.initialPosition?.split(',');
+
+    const formFieldValues: BkitLocation = {
+        type: 'Location',
+        isRequired: formfield.isRequired,
+        info: formfield.info,
+        errorMsg: formfield.errorMsg,
+        placeholder: formfield.placeholder,
+        initialPosition:
+            initialPos && initialPos.length > 1
+                ? [+initialPos[0], +initialPos[1]]
+                : undefined,
+        descriptionTabLabel: formfield.toggleBtnLabelToDescription,
+        mapTabLabel: formfield.toggleBtnLabelToLocation,
+        validate: settings?.location?.validate,
+        customLocationIcon: settings?.location?.customLocationIcon,
+    };
+
+    formFieldData[formfield.label] = formFieldValues;
+
+    return formFieldData;
+};
+
+const isField = (formfield: FormField): formfield is ModxField => {
     return formfield.type === 'Field';
 };
 
-const isArea = (formfield: FormField): formfield is Area => {
+const isArea = (formfield: FormField): formfield is ModxArea => {
     return formfield.type === 'Area';
 };
 
-const isSelect = (formfield: FormField): formfield is Select => {
+const isSelect = (formfield: FormField): formfield is ModxSelect => {
     return formfield.type === 'Select';
 };
 
-const isDatepicker = (formfield: FormField): formfield is Datepicker => {
+const isDatepicker = (formfield: FormField): formfield is ModxDatepicker => {
     return formfield.type === 'Datepicker';
 };
 
-const isFieldGroup = (formfield: FormField): formfield is FieldGroup => {
+const isFieldGroup = (formfield: FormField): formfield is ModxFieldGroup => {
     return formfield.type === 'FieldGroup';
 };
 
-const isUpload = (formfield: FormField): formfield is FileUploadField => {
+const isUpload = (formfield: FormField): formfield is ModxFileUploadField => {
     return formfield.type === 'Upload';
+};
+
+const isLocation = (formfield: FormField): formfield is ModxLocation => {
+    return formfield.type === 'Location';
 };
