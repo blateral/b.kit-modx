@@ -41,7 +41,7 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
         <Accordion
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
-            items={items.map((item) => {
+            items={items?.map((item) => {
                 return {
                     label: item.label,
                     text: item.text
