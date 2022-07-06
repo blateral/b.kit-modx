@@ -69,7 +69,7 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
                             ? job.jobLocations
                                   ?.map((loc) => loc.title)
                                   ?.join(', ')
-                            : undefined,
+                            : 'Alle Niederlassungen',
                         timeModel: isValidArray(job.jobTimeModels, false)
                             ? job.jobTimeModels
                                   ?.map((model) => model.title)
