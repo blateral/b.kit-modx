@@ -1,13 +1,19 @@
 import React from 'react';
-import { assignTo, JobList, ThemeMods } from '@blateral/b.kit';
+import { assignTo, isValidArray, JobList, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { JobItem } from '@blateral/b.kit/lib/components/sections/jobs/JobList';
 
 interface JobListItems {
     jobTitle?: string;
-    jobTimeModel?: string;
-    jobLocation?: string;
+    jobTimeModels?: Array<{
+        id: string;
+        title: string;
+    }>;
+    jobLocations?: Array<{
+        id: string;
+        title: string;
+    }>;
     link?: {
         href?: string;
         isExternal?: boolean;
@@ -59,8 +65,16 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
                 .map<JobItem>((job) => {
                     return {
                         jobTitle: job.jobTitle || '',
-                        location: job.jobLocation || '',
-                        timeModel: job.jobTimeModel || '',
+                        location: isValidArray(job.jobLocations, false)
+                            ? job.jobLocations
+                                  ?.map((loc) => loc.title)
+                                  ?.join(', ')
+                            : undefined,
+                        timeModel: isValidArray(job.jobTimeModels, false)
+                            ? job.jobTimeModels
+                                  ?.map((model) => model.title)
+                                  ?.join(', ')
+                            : undefined,
                         link: job.link || undefined,
                     };
                 })}

@@ -385,8 +385,14 @@ export interface ModxJobPage extends ModxDocument {
 }
 
 export interface ModxJobData {
-    location?: string;
-    timeModel?: string;
+    locations?: Array<{
+        id: number;
+        title: string;
+    }>;
+    timeModels?: Array<{
+        id: number;
+        title: string;
+    }>;
     title?: string;
     description?: string;
     actionLabel?: string;
