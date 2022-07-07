@@ -384,14 +384,24 @@ export interface ModxJobPage extends ModxDocument {
     publishedOn?: string;
 }
 
+export interface ModxJobLocation {
+    id?: number;
+    title?: string;
+    description?: string;
+    addressLocality?: string;
+    streetAddress?: string;
+    addressRegion?: string;
+    postalCode?: string;
+    addressCountry?: string;
+}
+
 export interface ModxJobData {
-    locations?: Array<{
-        id: number;
-        title: string;
-    }>;
+    locations?: Array<ModxJobLocation>;
+    totalLocations?: number;
+    allLocationsLabel?: string;
     timeModels?: Array<{
-        id: number;
-        title: string;
+        name: string;
+        type: string;
     }>;
     title?: string;
     description?: string;
