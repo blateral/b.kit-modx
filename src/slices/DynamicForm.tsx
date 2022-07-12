@@ -75,7 +75,8 @@ export interface ModxDatepicker extends FormField {
 
 export interface ModxLocation extends FormField {
     type: 'Location';
-    initialPosition?: string;
+    mapZoom?: string;
+    initialMapCenter?: string;
     placeholder?: string;
     info?: string;
     errorMsg?: string;
@@ -540,7 +541,7 @@ const createLocation = ({
     if (!formfield.label) return undefined;
     const formFieldData = {};
 
-    const initialPos = formfield.initialPosition?.split(',');
+    const center = formfield.initialMapCenter?.split(',');
 
     const formFieldValues: BkitLocation = {
         type: 'Location',
@@ -548,10 +549,9 @@ const createLocation = ({
         info: formfield.info,
         errorMsg: formfield.errorMsg,
         placeholder: formfield.placeholder,
-        initialPosition:
-            initialPos && initialPos.length > 1
-                ? [+initialPos[0], +initialPos[1]]
-                : undefined,
+        initialMapCenter:
+            center && center.length > 1 ? [+center[0], +center[1]] : undefined,
+        zoom: formfield.mapZoom ? +formfield.mapZoom : undefined,
         descriptionTabLabel: formfield.toggleBtnLabelToDescription,
         mapTabLabel: formfield.toggleBtnLabelToLocation,
         validate: settings?.location?.validate,
