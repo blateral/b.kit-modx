@@ -50,6 +50,7 @@ import { TimelineSliceType } from 'slices/Timeline';
 import { NewsAuthorCardSliceType } from 'slices/News/AuthorCard';
 import { NewsFooterSliceType } from 'slices/News/Footer';
 import { NewsletterFormSliceType } from 'slices/NewsletterForm';
+import { PointOfInterestOverviewSliceType } from 'slices/POIs/PointOfInterestOverview';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -150,6 +151,7 @@ export type PageContent =
     | TableSliceType
     | TeaserSliceType
     | TimelineSliceType
+    | PointOfInterestOverviewSliceType
     | VideoSliceType;
 
 export type NewsPageContent =
@@ -233,6 +235,53 @@ export interface StructuredOrganizationData {
 export interface ModxPage extends ModxDocument {
     header: HeaderSliceType;
     content: Array<PageContent>;
+}
+
+export interface ModxPoiPage extends ModxPage {
+    poiData?: ModxPoiData;
+}
+
+export interface ModxPoiDataFact {
+    MIGX_id?: string;
+    name?: string;
+}
+
+export interface ModxPoiData {
+    name?: string;
+    description?: string;
+    shortDescription?: string;
+    image?: ModxImageProps & {
+        ratios: {
+            small: { w?: number; h?: number };
+            medium: { w?: number; h?: number };
+            large: { w?: number; h?: number };
+        };
+    };
+    position?: {
+        street?: string;
+        housenumber?: string;
+        postalCode?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+        latitude?: number;
+        longitude?: number;
+        mail?: string;
+        phone?: string;
+        website?: string;
+    };
+    contact?: {
+        name?: string;
+        jobPosition?: string;
+        street?: string;
+        postalCode?: string;
+        city?: string;
+        phone?: string;
+        mail?: string;
+    };
+    openingHours?: string;
+    prices?: string;
+    facts?: ModxPoiDataFact[];
 }
 
 export interface ModxEventPage extends ModxPage {
@@ -650,4 +699,8 @@ export const isModxJobPage = (
     pageToCheck: any
 ): pageToCheck is ModxEventPage => {
     return pageToCheck?.type === 'job_page';
+};
+
+export const isModxPoiPage = (pageToCheck: any): pageToCheck is ModxPoiPage => {
+    return pageToCheck?.type === 'poi_page';
 };

@@ -50,6 +50,7 @@ export * from 'slices/Table';
 export * from 'slices/Teaser';
 export * from 'slices/Timeline';
 export * from 'slices/Video';
+export * from 'slices/POIs/PointOfInterestOverview';
 export * from 'utils/modx';
 export * from 'utils/sitemapGenerator';
 export * from 'utils/mapping';
