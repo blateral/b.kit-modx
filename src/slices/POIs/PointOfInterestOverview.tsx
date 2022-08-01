@@ -131,9 +131,7 @@ export const PointOfInterestOverviewSlice: React.FC<
                             locationIcon ? (
                                 locationIcon(isInverted)
                             ) : (
-                                <div style={{ paddingTop: '3px' }}>
-                                    <Icons.LocationPin />
-                                </div>
+                                <Icons.LocationPin />
                             ),
                     });
                 }
@@ -148,13 +146,7 @@ export const PointOfInterestOverviewSlice: React.FC<
                 if (searchQuery) {
                     infos.push({
                         icon: (isInverted) =>
-                            mapIcon ? (
-                                mapIcon(isInverted)
-                            ) : (
-                                <div style={{ paddingTop: '6px' }}>
-                                    <Icons.Map />
-                                </div>
-                            ),
+                            mapIcon ? mapIcon(isInverted) : <Icons.Map />,
                         text: printAnchorTag({
                             href: getGoogleMapsURL(searchQuery) || '',
                             isExternal: true,
@@ -166,13 +158,7 @@ export const PointOfInterestOverviewSlice: React.FC<
                 if (poi.position?.phone) {
                     infos.push({
                         icon: (isInverted) =>
-                            phoneIcon ? (
-                                phoneIcon(isInverted)
-                            ) : (
-                                <div style={{ paddingTop: '6px' }}>
-                                    <Icons.Phone />
-                                </div>
-                            ),
+                            phoneIcon ? phoneIcon(isInverted) : <Icons.Phone />,
                         text: printAnchorTag({
                             href: poi?.position?.phone,
                             label: poi?.position?.phone,
@@ -184,13 +170,7 @@ export const PointOfInterestOverviewSlice: React.FC<
                 if (poi.position?.mail) {
                     infos.push({
                         icon: (isInverted) =>
-                            mailIcon ? (
-                                mailIcon(isInverted)
-                            ) : (
-                                <div style={{ paddingTop: '3px' }}>
-                                    <Icons.Mail />
-                                </div>
-                            ),
+                            mailIcon ? mailIcon(isInverted) : <Icons.Mail />,
                         text: printAnchorTag({
                             href: poi?.position?.mail,
                             label: poi?.position?.mail,
@@ -202,13 +182,7 @@ export const PointOfInterestOverviewSlice: React.FC<
                 if (poi.position?.website) {
                     infos.push({
                         icon: (isInverted) =>
-                            webIcon ? (
-                                webIcon(isInverted)
-                            ) : (
-                                <div style={{ paddingTop: '6px' }}>
-                                    <Icons.Computer />
-                                </div>
-                            ),
+                            webIcon ? webIcon(isInverted) : <Icons.Computer />,
                         text: printAnchorTag({
                             href: poi?.position?.website,
                             label: poi?.position?.website,
