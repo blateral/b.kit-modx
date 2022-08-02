@@ -24,6 +24,7 @@ interface POIMigxFact {
 }
 
 interface PointOfInterest {
+    id: number;
     alias?: string;
     link?: {
         href?: string;
@@ -51,6 +52,7 @@ export interface PointOfInterestOverviewSliceType
     isActive?: boolean;
     anchorId?: string;
     bgMode?: 'full' | 'inverted';
+    enableFiltering?: boolean;
     bgColor?: string;
     primary_label?: string;
     collection?: POICollection;
@@ -80,6 +82,7 @@ export const PointOfInterestOverviewSlice: React.FC<
 > = ({
     bgMode,
     anchorId,
+    enableFiltering,
     primary_label,
     collection,
     bgColor,
@@ -109,8 +112,10 @@ export const PointOfInterestOverviewSlice: React.FC<
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
-            pois={collection?.pois?.map((poi) => {
+            enableFiltering={enableFiltering}
+            pois={collection?.pois?.map((poi, i) => {
                 const infos: Info[] = [];
+                const id = poi.id !== undefined ? poi.id : i;
 
                 // mapping address
                 const street = poi.position?.street;
@@ -192,6 +197,7 @@ export const PointOfInterestOverviewSlice: React.FC<
                 }
 
                 return {
+                    id: id.toString(),
                     name: poi.name || '',
                     shortDescription: poi.shortDescription,
                     facts: poi.facts

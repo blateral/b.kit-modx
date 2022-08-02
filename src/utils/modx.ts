@@ -247,6 +247,7 @@ export interface ModxPoiDataFact {
 }
 
 export interface ModxPoiData {
+    id: number;
     name?: string;
     description?: string;
     shortDescription?: string;
