@@ -6,7 +6,7 @@ import {
     printAnchorTag,
     PointOfInterestMap,
 } from '@blateral/b.kit';
-import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
+import { isValidAction, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { getGoogleMapsURL } from 'utils/googleMaps';
 import { Info } from '@blateral/b.kit/lib/components/blocks/InfoList';
@@ -238,7 +238,7 @@ export const PointOfInterestMapSlice: React.FC<PointOfInterestMapSliceType> = ({
                                 ? action({
                                       label: primary_label,
                                       href: poi.alias,
-                                      isExternal: isExternalLink(poi.alias),
+                                      isExternal: true,
                                   })
                                 : undefined,
                         infos: infos,
