@@ -51,6 +51,7 @@ import { NewsAuthorCardSliceType } from 'slices/News/AuthorCard';
 import { NewsFooterSliceType } from 'slices/News/Footer';
 import { NewsletterFormSliceType } from 'slices/NewsletterForm';
 import { PointOfInterestOverviewSliceType } from 'slices/POIs/PointOfInterestOverview';
+import { PointOfInterestMapSliceType } from 'slices/POIs/PointOfInterestMap';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -152,6 +153,7 @@ export type PageContent =
     | TeaserSliceType
     | TimelineSliceType
     | PointOfInterestOverviewSliceType
+    | PointOfInterestMapSliceType
     | VideoSliceType;
 
 export type NewsPageContent =

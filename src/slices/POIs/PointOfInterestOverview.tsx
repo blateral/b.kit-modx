@@ -53,6 +53,7 @@ export interface PointOfInterestOverviewSliceType
     anchorId?: string;
     bgMode?: 'full' | 'inverted';
     enableFiltering?: boolean;
+    filterPlaceholder?: string;
     bgColor?: string;
     primary_label?: string;
     collection?: POICollection;
@@ -85,6 +86,7 @@ export const PointOfInterestOverviewSlice: React.FC<
     enableFiltering,
     primary_label,
     collection,
+    filterPlaceholder,
     bgColor,
     theme,
     customFact,
@@ -113,6 +115,7 @@ export const PointOfInterestOverviewSlice: React.FC<
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             enableFiltering={enableFiltering}
+            filterPlaceholder={filterPlaceholder}
             pois={collection?.pois?.map((poi, i) => {
                 const infos: Info[] = [];
                 const id = poi.id !== undefined ? poi.id : i;
