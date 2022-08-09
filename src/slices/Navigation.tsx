@@ -82,7 +82,7 @@ const filterNoLabel = (item: ModxNavGroup) => {
 
 const mapToValidNavGroup = (
     item: ModxNavGroup,
-    customNavToggleIcon?: (props: { icon?: string }) => React.ReactNode
+    customNavItemIcon?: (props: { icon?: string }) => React.ReactNode
 ): NavItem => {
     return {
         ...item,
@@ -96,15 +96,19 @@ const mapToValidNavGroup = (
         subItems:
             item?.subItems && item.subItems.length > 0
                 ? item.subItems.map((item) =>
-                      mapToValidNavGroup(item, customNavToggleIcon)
+                      mapToValidNavGroup(item, customNavItemIcon)
                   )
                 : [],
 
-        icon: customNavToggleIcon ? (
-            customNavToggleIcon({ icon: item.icon })
+        icon: customNavItemIcon ? (
+            customNavItemIcon({ icon: item.icon })
         ) : item.icon ? (
             <span
-                style={{ display: 'block' }}
+                style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}
                 dangerouslySetInnerHTML={{ __html: item.icon }}
             />
         ) : undefined,
