@@ -4,6 +4,7 @@ import { assignTo, Gallery, ImageCarousel, ThemeMods } from '@blateral/b.kit';
 import { ResponsiveObject } from 'slices/slick';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+import { ImageAspectRatios } from '@blateral/b.kit/lib/components/blocks/Image';
 
 type ImageFormats =
     | 'small-square'
@@ -88,17 +89,28 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
         theme
     );
 
+    const aspectRatios = {
+        square: { small: { w: 1, h: 1 } },
+        landscape: { small: { w: 4, h: 3 } },
+        portrait: { small: { w: 3, h: 4 } },
+        'landscape-wide': { small: { w: 1440, h: 710 } },
+    };
+
     const sharedProps = {
         anchorId: normalizeAnchorId(anchorId),
         images: items?.map((item) => {
+            const isFull = item?.imageFormat?.includes('-wide');
+            const format = item?.imageFormat || 'square';
             const theImage: ModxImageProps =
-                item[item?.imageFormat || 'small-square'];
+                item[isFull ? format : `small-${format}`];
+            const ratios: ImageAspectRatios = aspectRatios[format];
 
             return {
                 ...theImage,
                 small: theImage?.small || '',
                 alt: theImage?.meta?.altText || '',
-                isFull: item?.imageFormat?.includes('wide-'),
+                isFull: isFull,
+                ratios: ratios || undefined,
             };
         }),
     };
