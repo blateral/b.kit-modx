@@ -45,13 +45,12 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     theme,
 }) => {
     // get background mode
-    const newsListMap = mapNewsListData({
+    const news = mapNewsListData({
         newsCollection: items,
         hasImages,
         cardAction,
         newsCollectionUrl: newsOverviewUrl,
     });
-    const filteredNews = removeFirstImagesIfMissingAtLeastOne(newsListMap);
 
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -74,35 +73,10 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
             }
             mode={mode}
             customTag={customTag}
-            news={filteredNews}
+            news={news}
         />
     );
 };
-
-function removeFirstImagesIfMissingAtLeastOne(
-    mappedNews: NewsItem[],
-    countToCheck = 2
-) {
-    const firstTwoItems = mappedNews.slice(0, countToCheck);
-    const disableFirstImages = firstTwoItems.every(
-        (news) => news?.image?.small
-    );
-
-    if (!disableFirstImages) {
-        return mappedNews;
-    } else {
-        const mappedNewsCopy = [...mappedNews];
-        for (let i = 0; i < countToCheck; i++) {
-            if (!mappedNewsCopy?.[i]?.image) {
-                continue;
-            }
-            
-            mappedNewsCopy[i].image = undefined;
-        }
-
-        return mappedNewsCopy;
-    }
-}
 
 function mapNewsListData({
     newsCollection,
