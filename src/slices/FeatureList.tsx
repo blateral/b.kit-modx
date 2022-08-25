@@ -109,9 +109,9 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
     );
 
     const aspectRatios = {
-        square: { small: { w: 4, h: 3 }, medium: { w: 1, h: 1 } },
+        square: { small: { w: 1, h: 1 } },
         landscape: { small: { w: 4, h: 3 } },
-        portrait: { small: { w: 4, h: 3 }, medium: { w: 3, h: 4 } },
+        portrait: { small: { w: 3, h: 4 } },
     };
 
     // get image format for all images
