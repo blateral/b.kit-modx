@@ -18,6 +18,7 @@ type FormFieldTypes =
     | 'Field'
     | 'Area'
     | 'Select'
+    | 'RecipientSelect'
     | 'Datepicker'
     | 'FieldGroup'
     | 'Upload'
@@ -47,7 +48,7 @@ export interface ModxArea extends FormField {
 }
 
 export interface ModxSelect extends FormField {
-    type: 'Select';
+    type: 'Select' | 'RecipientSelect';
     initialValue?: string;
     placeholder?: string;
     dropdownItems: string;
@@ -171,7 +172,7 @@ export interface DynamicFormSliceType
     targetEmails?: string;
     subjectLine?: string;
     successPage?: string;
-    onSubmit?: (values: FormData) => Promise<void>;
+    onSubmit?: (values: FormData, recipient?: string) => Promise<void>;
     submitAction?: (props: SubmitActionProps) => React.ReactNode;
     definitions?: {
         field?: (props: FieldGenerationProps<BkitField>) => React.ReactNode;
@@ -226,7 +227,17 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
         <DynamicForm
             bgMode={bgMode}
             anchorId={normalizeAnchorId(anchorId)}
-            onSubmit={onSubmit}
+            onSubmit={async (values) => {
+                // find recipient mail select field
+                const recipientField = items.find(
+                    (field) => field.type === 'RecipientSelect'
+                ) as ModxSelect;
+                const recipient = recipientField?.label
+                    ? values[recipientField.label] || ''
+                    : '';
+
+                await onSubmit?.(values as FormData, recipient as string);
+            }}
             submitAction={createLabeledSubmitAction(submitAction, submitLabel)}
             fields={itemsToFormFields({
                 formFields: items,
@@ -287,6 +298,11 @@ const generateFormFieldMap =
 
         if (isSelect(formfield)) {
             const select = createSelect(formfield, fieldSettings);
+            return { ...accumulator, ...select };
+        }
+
+        if (isRecipientSelect(formfield)) {
+            const select = createRecipientSelect(formfield, fieldSettings);
             return { ...accumulator, ...select };
         }
 
@@ -383,6 +399,38 @@ const createSelect = (
         initialValue: formfield.initialValue,
         dropdownItems: dropdownValues.map((value) => {
             return { label: value, value };
+        }),
+        validate: settings?.select?.validate,
+        indicator: settings?.select?.indicator,
+        errorMsg: formfield.errorMsg,
+    };
+
+    formFieldData[formfield.label] = formFieldValues;
+
+    return formFieldData;
+};
+
+const createRecipientSelect = (
+    formfield: ModxSelect,
+    settings?: FieldSettings
+): Record<string, BkitSelect> | undefined => {
+    if (!formfield.label) return undefined;
+    const formFieldData = {};
+
+    const options = formfield.dropdownItems.split(/\r?\n/);
+
+    const formFieldValues: BkitSelect = {
+        type: 'Select',
+        placeholder: formfield.placeholder,
+        isRequired: formfield.isRequired,
+        info: formfield.info,
+        initialValue: formfield.initialValue,
+        dropdownItems: options.map((option) => {
+            const keyValues = option.replace(/\s/g, '').split(/\r?==/);
+            const key = keyValues?.[0] || option;
+            const value = keyValues?.[1] || '';
+
+            return { label: key, value: value };
         }),
         validate: settings?.select?.validate,
         indicator: settings?.select?.indicator,
@@ -573,6 +621,10 @@ const isArea = (formfield: FormField): formfield is ModxArea => {
 
 const isSelect = (formfield: FormField): formfield is ModxSelect => {
     return formfield.type === 'Select';
+};
+
+const isRecipientSelect = (formfield: FormField): formfield is ModxSelect => {
+    return formfield.type === 'RecipientSelect';
 };
 
 const isDatepicker = (formfield: FormField): formfield is ModxDatepicker => {
