@@ -59,7 +59,9 @@ export interface ModxConnectorConfig {
 
 export const initApi = (alias: string, config: ModxConnectorConfig) => {
     if (!config?.endpoint) throw new Error('No MODX endpoint defined!');
-    return `${config.endpoint}${alias}`;
+    const endpoint = new URL(alias, config.endpoint);
+
+    return endpoint.href;
 };
 
 export const getPageData = async (
