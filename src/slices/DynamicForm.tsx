@@ -188,7 +188,7 @@ export interface DynamicFormSliceType
             props: FieldGenerationProps<BkitFieldGroup>
         ) => React.ReactNode;
         upload?: (
-            props: FieldGenerationProps<BkitFieldGroup>
+            props: FieldGenerationProps<BkitFileUpload>
         ) => React.ReactNode;
         location?: (
             props: FieldGenerationProps<BkitLocation>
