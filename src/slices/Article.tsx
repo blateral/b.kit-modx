@@ -104,3 +104,11 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
         />
     );
 };
+
+export const getArticleSearchData = (slice: ArticleSliceType): string[] => {
+    const data: string[] = [];
+    if (slice?.title) data.push(slice.title);
+    if (slice?.text) data.push(slice.text);
+    if (slice?.asideText) data.push(slice.asideText);
+    return data;
+};

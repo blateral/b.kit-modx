@@ -157,3 +157,10 @@ const toComponentImageFormat = (item: ModxImageProps) => {
         alt: item?.meta?.altText,
     };
 };
+
+export const getHeaderSearchData = (slice: HeaderSliceType): string[] => {
+    const data: string[] = [];
+    if (slice?.title) data.push(slice.title);
+    if (slice?.text) data.push(slice.text);
+    return data;
+};

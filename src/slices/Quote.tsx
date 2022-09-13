@@ -51,3 +51,9 @@ export const QuoteSlice: React.FC<QuoteSliceType> = ({
         />
     );
 };
+
+export const getQuoteSearchData = (slice: QuoteSliceType): string[] => {
+    const data: string[] = [];
+    if (slice?.text) data.push(slice.text);
+    return data;
+};

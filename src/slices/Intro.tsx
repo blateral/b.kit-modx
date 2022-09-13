@@ -141,3 +141,10 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
         />
     );
 };
+
+export const getIntroSearchData = (slice: IntroSliceType): string[] => {
+    const data: string[] = [];
+    if (slice?.title) data.push(slice.title);
+    if (slice?.text) data.push(slice.text);
+    return data;
+};

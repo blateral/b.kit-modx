@@ -30,12 +30,6 @@ export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
     bgMode?: BgMode;
     bgColor?: string;
     isMirrored?: boolean;
-    newsForm?: (props: {
-        isInverted?: boolean;
-        placeholder?: string;
-        buttonIcon?: React.ReactNode;
-        backgroundStyle?: 'white' | 'gray';
-    }) => React.ReactNode;
 
     superTitle?: string;
     superTitleAs?: string;
@@ -82,7 +76,6 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     primary_link,
     secondary_label,
     secondary_link,
-    newsForm,
     primaryAction,
     secondaryAction,
 }) => {
@@ -102,16 +95,6 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
         <CallToAction
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
-            // newsFormMain={
-            //     newsForm
-            //         ? (isInverted) =>
-            //               newsForm({
-            //                   isInverted,
-            //                   placeholder: mainColumn?.newsPlaceholder,
-            //               })
-            //         : undefined
-            // }
-
             superTitleAs={(superTitleAs as HeadlineTag) || 'div'}
             titleAs={(titleAs as HeadlineTag) || 'div'}
             bgMode={
@@ -164,4 +147,14 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
             }
         />
     );
+};
+
+export const getCallToActionSearchData = (
+    slice: CallToActionSliceType
+): string[] => {
+    const data: string[] = [];
+    if (slice?.title) data.push(slice.title);
+    if (slice?.text) data.push(slice.text);
+    if (slice?.contact?.description) data.push(slice.contact.description);
+    return data;
 };

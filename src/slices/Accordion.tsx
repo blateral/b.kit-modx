@@ -1,4 +1,4 @@
-import { Accordion, assignTo, ThemeMods } from '@blateral/b.kit';
+import { Accordion, assignTo, isValidArray, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { BgMode, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId, parseLinkListFromHtml } from 'utils/mapping';
@@ -57,4 +57,16 @@ export const AccordionSlice: React.FC<AccordionSliceType> = ({
             }
         />
     );
+};
+
+export const getAccordionSearchData = (slice: AccordionSliceType): string[] => {
+    const data: string[] = [];
+    if (isValidArray(slice?.items, false)) {
+        for (const item of slice.items) {
+            if (item.label) data.push(item.label);
+            if (item.text) data.push(item.text);
+            if (item.aside) data.push(item.aside);
+        }
+    }
+    return data;
 };

@@ -99,6 +99,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
         />
     );
 };
+
 function generatePublicationDateObject(publicationDate?: string) {
     if (!publicationDate) return undefined;
 
@@ -118,3 +119,11 @@ function generatePublicationDateObject(publicationDate?: string) {
         return undefined;
     }
 }
+
+export const getNewsIntroSearchData = (slice: NewsIntroSliceType) => {
+    const data: string[] = [];
+    if (slice?.newsHeading) data.push(slice.newsHeading);
+    if (slice?.authorName) data.push(slice.authorName);
+    if (slice?.newsIntro) data.push(slice.newsIntro);
+    return data;
+};

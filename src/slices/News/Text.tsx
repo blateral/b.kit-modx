@@ -80,3 +80,9 @@ export const NewsTextSlice: React.FC<NewsTextSliceType> = ({
         />
     );
 };
+
+export const getNewsTextSearchData = (slice: NewsTextSliceType) => {
+    const data: string[] = [];
+    if (slice?.text) data.push(slice.text);
+    return data;
+};

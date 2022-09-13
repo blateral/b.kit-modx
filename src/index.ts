@@ -55,3 +55,5 @@ export * from 'slices/POIs/PointOfInterestMap';
 export * from 'utils/modx';
 export * from 'utils/sitemapGenerator';
 export * from 'utils/mapping';
+
+export * from 'utils/search';

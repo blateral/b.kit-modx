@@ -1,6 +1,6 @@
 import { ModxSlice } from 'utils/modx';
 
-import { AlertList, assignTo, ThemeMods } from '@blateral/b.kit';
+import { AlertList, assignTo, isValidArray, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { normalizeAnchorId } from 'utils/mapping';
 
@@ -79,3 +79,14 @@ function isValidDate(dateInstance?: Date) {
     if (!dateInstance) return undefined;
     return dateInstance instanceof Date && !isNaN(dateInstance as any);
 }
+
+export const getAlertListSearchData = (slice: AlertListSliceType): string[] => {
+    const data: string[] = [];
+    if (isValidArray(slice?.items, false)) {
+        for (const item of slice.items) {
+            if (item.label) data.push(item.label);
+            if (item.description) data.push(item.description);
+        }
+    }
+    return data;
+};
