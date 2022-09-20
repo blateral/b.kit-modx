@@ -33,6 +33,7 @@ export interface NavigationSliceType extends ModxSlice<'Navigation'> {
         subNavigation?: Array<ModxNavGroup>;
         header?: (props: NavMenuStates) => React.ReactNode;
         footer?: (props: NavMenuStates) => React.ReactNode;
+        navItemsHeader?: (props: NavMenuStates) => React.ReactNode;
         typeSettings: MenuTypeProps;
         theme?: ThemeMods;
     };
