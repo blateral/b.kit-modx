@@ -1,4 +1,4 @@
-import { EventOverview, ThemeMods } from '@blateral/b.kit';
+import { EventOverview, isValidArray, ThemeMods } from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { EventItem } from '@blateral/b.kit/lib/components/sections/events/EventOverview';
@@ -72,79 +72,95 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
     const collectionUrl = collection?.alias;
 
     const mapEventItemsToOverviewItems = () => {
-        return (
-            collection?.events &&
-            collection.events.map((item): EventItem => {
-                console.log(item);
-                const tagsArray =
-                    item?.tags && item.tags.length > 0
-                        ? item.tags?.split(',')
-                        : [];
+        return collection?.events?.map((item): EventItem => {
+            const tagsArray =
+                item.tags?.split(',')?.map((tag) => tag.trim()) || [];
 
-                const tagPropsArray = tagsArray.map((tag): TagProps => {
-                    return {
-                        name: tag,
-                        link: {
-                            href: collectionUrl
-                                ? `/${collectionUrl}?eventsFilter=${tag}`
-                                : undefined,
-                        },
-                    };
-                });
-
+            const tagPropsArray = tagsArray.map((tag): TagProps => {
                 return {
+                    name: tag,
                     link: {
-                        href: item.alias || '',
-                    },
-                    title: item.title || '',
-                    text: item.intro || '',
-                    tags: tagPropsArray,
-                    image: item.image && hasImages ? item.image : undefined,
-                    date: createDateObjectFromModxDatestring(item.date),
-                    action:
-                        action && isValidAction(primary_label, item.alias)
-                            ? ({ isInverted }: { isInverted: any }) =>
-                                  action({
-                                      isInverted,
-                                      label: primary_label,
-                                      href:
-                                          item.alias ||
-                                          item.booking.ticketUrl ||
-                                          item.booking.website,
-                                      isExternal: isExternalLink(
-                                          item.alias ||
-                                              item.booking.ticketUrl ||
-                                              item.booking.website
-                                      ),
-                                  })
+                        href: collectionUrl
+                            ? `/${collectionUrl}?eventsFilter=${tag}`
                             : undefined,
+                    },
                 };
-            })
-        );
+            });
+
+            return {
+                link: {
+                    href: item.alias || '',
+                },
+                title: item.title || '',
+                text: item.intro || '',
+                tags: tagPropsArray,
+                image: item.image && hasImages ? item.image : undefined,
+                date: createDateObjectFromModxDatestring(item.date),
+                action:
+                    action && isValidAction(primary_label, item.alias)
+                        ? ({ isInverted }: { isInverted: any }) =>
+                              action({
+                                  isInverted,
+                                  label: primary_label,
+                                  href:
+                                      item.alias ||
+                                      item.booking.ticketUrl ||
+                                      item.booking.website,
+                                  isExternal: isExternalLink(
+                                      item.alias ||
+                                          item.booking.ticketUrl ||
+                                          item.booking.website
+                                  ),
+                              })
+                        : undefined,
+            };
+        });
     };
 
     return (
         <EventOverview
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
-            tags={collection ? createUniqueTagsFromItems(collection) : []}
+            tags={collection ? getUniqueTags(collection) : []}
             customTag={customTag}
             events={mapEventItemsToOverviewItems()}
         />
     );
 };
 
-const createUniqueTagsFromItems = (collection: EventCollection): string[] => {
-    const tags = collection.events
-        ?.map((event) => {
-            return event.tags?.split(',');
-        })
-        .flat(99)
-        .filter(Boolean);
+const removePastFilterFn = (item: Event) => {
+    if (!item.date) return false;
+    const date = createDateObjectFromModxDatestring(item.date);
+    if (!date) return false;
 
-    const uniqueTags = Array.from(new Set(tags));
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-    return uniqueTags as string[];
+    return date >= today;
+};
+
+const getUniqueTags = (collection: EventCollection): string[] => {
+    const tags: string[] = [];
+    const events = collection?.events?.filter(removePastFilterFn);
+
+    const newTags = events?.reduce<string[]>((acc, current) => {
+        const eventTags = current.tags?.split(',')?.map((tag) => tag.trim());
+        if (!isValidArray(eventTags, false)) return acc;
+
+        const tagsToAdd: string[] = [];
+        for (const tag of eventTags) {
+            if (acc.includes(tag) || tagsToAdd.includes(tag)) continue;
+            tagsToAdd.push(tag);
+        }
+
+        return [...acc, ...tagsToAdd];
+    }, []);
+
+    if (isValidArray(newTags, false)) {
+        tags.push(...newTags);
+    }
+
+    return tags;
 };
 
 const createDateObjectFromModxDatestring = (modxDateString?: string) => {
