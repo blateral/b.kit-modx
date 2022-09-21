@@ -31,7 +31,7 @@ import { AlertListSliceType } from 'slices/AlertList';
 import { NavListSliceType } from 'slices/NavList';
 import { CardListSliceType } from 'slices/CardList';
 import { IndexListSliceType } from 'slices/IndexList';
-import { EventListSliceType } from 'slices/EventList';
+import { EventListSliceType } from 'slices/Events/EventList';
 import { EventOverviewSliceType } from 'slices/Events/EventOverview';
 import { LinkProps } from '@blateral/b.kit/lib/components/buttons/Button';
 import { JobListSliceType } from 'slices/Jobs/JobList';
@@ -642,6 +642,40 @@ export const mapImageToComponentData = (
         small: image?.small || '',
         alt: image?.meta?.altText || '',
     };
+};
+
+export const parseModxDateString = (modxDateString?: string) => {
+    if (!modxDateString) return undefined;
+
+    // "2022-04-21 14:15:00"
+    try {
+        const dateParts = modxDateString.split(' ');
+
+        const dateSnippets = dateParts[0].split('-');
+
+        let timeSnippets: string[] = [];
+        if (dateParts.length > 1) {
+            timeSnippets = dateParts[1].split(':');
+        }
+        const hasTimeSnippets = timeSnippets.length > 0;
+
+        const year = +dateSnippets[0];
+        const month = +dateSnippets[1] - 1 < 0 ? 0 : +dateSnippets[1] - 1;
+        const day = +dateSnippets[2];
+
+        return new Date(
+            year,
+            month,
+            day,
+            hasTimeSnippets ? +timeSnippets[0] : undefined,
+            hasTimeSnippets ? +timeSnippets[1] : undefined,
+            hasTimeSnippets ? +timeSnippets[2] : undefined
+        );
+    } catch (e) {
+        console.error('Error: Generating date for eventlist item failed');
+
+        return new Date(1970, 1, 1);
+    }
 };
 
 export type SizeSelect = 'full' | 'small' | undefined;

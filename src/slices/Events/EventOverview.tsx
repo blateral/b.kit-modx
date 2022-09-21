@@ -4,7 +4,12 @@ import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { EventItem } from '@blateral/b.kit/lib/components/sections/events/EventOverview';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
-import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
+import {
+    isExternalLink,
+    isValidAction,
+    ModxSlice,
+    parseModxDateString,
+} from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 
 interface Event {
@@ -70,9 +75,12 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
     action,
 }) => {
     const collectionUrl = collection?.alias;
+    const events = collection?.events
+        ?.filter(removePastFilterFn)
+        ?.sort(sortFilterFn);
 
     const mapEventItemsToOverviewItems = () => {
-        return collection?.events?.map((item): EventItem => {
+        return events?.map((item): EventItem => {
             const tagsArray =
                 item.tags?.split(',')?.map((tag) => tag.trim()) || [];
 
@@ -95,7 +103,7 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
                 text: item.intro || '',
                 tags: tagPropsArray,
                 image: item.image && hasImages ? item.image : undefined,
-                date: createDateObjectFromModxDatestring(item.date),
+                date: parseModxDateString(item.date),
                 action:
                     action && isValidAction(primary_label, item.alias)
                         ? ({ isInverted }: { isInverted: any }) =>
@@ -130,13 +138,22 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
 
 const removePastFilterFn = (item: Event) => {
     if (!item.date) return false;
-    const date = createDateObjectFromModxDatestring(item.date);
+    const date = parseModxDateString(item.date);
     if (!date) return false;
 
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
     return date >= today;
+};
+
+const sortFilterFn = (a: Event, b: Event) => {
+    const dateA = parseModxDateString(a.date);
+    const dateB = parseModxDateString(b.date);
+
+    if (dateA && dateB) {
+        return dateA.getTime() - dateB.getTime();
+    } else return 0;
 };
 
 const getUniqueTags = (collection: EventCollection): string[] => {
@@ -161,38 +178,4 @@ const getUniqueTags = (collection: EventCollection): string[] => {
     }
 
     return tags;
-};
-
-const createDateObjectFromModxDatestring = (modxDateString?: string) => {
-    if (!modxDateString) return undefined;
-
-    // "2022-04-21 14:15:00"
-    try {
-        const dateParts = modxDateString.split(' ');
-
-        const dateSnippets = dateParts[0].split('-');
-
-        let timeSnippets: string[] = [];
-        if (dateParts.length > 1) {
-            timeSnippets = dateParts[1].split(':');
-        }
-        const hasTimeSnippets = timeSnippets.length > 0;
-
-        const year = +dateSnippets[0];
-        const month = +dateSnippets[1] - 1 < 0 ? 0 : +dateSnippets[1] - 1;
-        const day = +dateSnippets[2];
-
-        return new Date(
-            year,
-            month,
-            day,
-            hasTimeSnippets ? +timeSnippets[0] : undefined,
-            hasTimeSnippets ? +timeSnippets[1] : undefined,
-            hasTimeSnippets ? +timeSnippets[2] : undefined
-        );
-    } catch (e) {
-        console.error('Error: Generating date for eventlist item failed');
-
-        return new Date(1970, 1, 1);
-    }
 };
