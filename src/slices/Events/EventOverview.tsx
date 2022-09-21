@@ -18,7 +18,7 @@ interface Event {
     title?: string;
     date?: string;
     image?: ImageProps;
-    text?: string;
+    intro?: string;
     duration?: string;
     price?: string;
     priceInfo?: string;
@@ -100,7 +100,7 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
                     href: item.alias || '',
                 },
                 title: item.title || '',
-                text: item.text || '',
+                text: item.intro || '',
                 tags: tagPropsArray,
                 image: item.image && hasImages ? item.image : undefined,
                 date: parseModxDateString(item.date),
