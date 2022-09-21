@@ -3,7 +3,12 @@ import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsList';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
-import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import {
+    BgMode,
+    ModxNewsTeaser,
+    ModxSlice,
+    parseModxDateString,
+} from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 
 export interface NewsListSliceType
@@ -78,6 +83,15 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     );
 };
 
+const sortFilterFn = (a: ModxNewsTeaser, b: ModxNewsTeaser) => {
+    const dateA = generatePublicationDate(a.publishedOn || '');
+    const dateB = generatePublicationDate(b.publishedOn || '');
+
+    if (dateA && dateB) {
+        return dateB.getTime() - dateA.getTime();
+    } else return 0;
+};
+
 function mapNewsListData({
     newsCollection,
     hasImages,
@@ -98,7 +112,7 @@ function mapNewsListData({
 }): NewsItem[] {
     if (!newsCollection) return [];
 
-    return newsCollection.map((news) => {
+    return newsCollection.sort(sortFilterFn).map((news) => {
         let publicationDate = undefined;
         try {
             publicationDate = news.publishedOn
@@ -115,7 +129,7 @@ function mapNewsListData({
         };
 
         const tagsArray =
-            news?.tags && news.tags.length > 0 ? news.tags?.split(',') : [];
+            news?.tags?.split(',')?.map((tag) => tag.trim()) || [];
 
         const tagPropsArray = tagsArray.map((tag): TagProps => {
             return {
@@ -133,7 +147,7 @@ function mapNewsListData({
             tags: tagPropsArray,
             publishDate: publicationDate,
             title: news?.label || '',
-            text: news.intro?.text,
+            text: stripLinks(news.intro?.text),
             link: { href: news.link, isExternal: false },
 
             action:
@@ -150,6 +164,11 @@ function mapNewsListData({
         };
     });
 }
+
+const stripLinks = (text?: string) => {
+    return text?.replace(/<a\b[^>]*>/i, '').replace(/<\/a>/i, '');
+};
+
 const generatePublicationDate = (
     publication_date?: string,
     first_publication_date?: string
@@ -157,32 +176,12 @@ const generatePublicationDate = (
     if (!publication_date && !first_publication_date) return undefined;
     try {
         return publication_date
-            ? generatePublicationDateObject(publication_date)
+            ? parseModxDateString(publication_date)
             : first_publication_date
-            ? new Date(first_publication_date)
+            ? parseModxDateString(first_publication_date)
             : undefined;
     } catch {
         console.error('Error whlie generating publication date for news');
         return undefined;
     }
 };
-
-function generatePublicationDateObject(publication_date?: string) {
-    if (!publication_date) return undefined;
-
-    const parts = publication_date?.split(' ').filter(Boolean);
-    try {
-        const dateParts = parts[0].split('-').filter(Boolean);
-
-        const publicationDate = new Date(
-            +dateParts[0],
-            +dateParts[1] - 1,
-            +dateParts[2]
-        );
-
-        return publicationDate;
-    } catch (e) {
-        console.error('Error in NewsIntro date generation. \n', e);
-        return undefined;
-    }
-}

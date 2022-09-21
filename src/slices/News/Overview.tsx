@@ -1,8 +1,18 @@
-import { assignTo, NewsOverview, ThemeMods } from '@blateral/b.kit';
+import {
+    assignTo,
+    isValidArray,
+    NewsOverview,
+    ThemeMods,
+} from '@blateral/b.kit';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsOverview';
 import React from 'react';
-import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import {
+    BgMode,
+    ModxNewsTeaser,
+    ModxSlice,
+    parseModxDateString,
+} from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 
 export interface NewsOverviewSliceType
@@ -63,7 +73,7 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
             customTag={customTag}
-            tags={generateUniqueTag(items)}
+            tags={getUniqueTags(items)}
             onTagClick={onTagClick}
             news={
                 mapNewsListData({
@@ -81,20 +91,37 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     );
 };
 
-function generateUniqueTag(newsCollection?: ModxNewsTeaser[]) {
-    if (!newsCollection || newsCollection.length === 0) return [];
+const getUniqueTags = (collection: ModxNewsTeaser[]): string[] => {
+    const tags: string[] = [];
 
-    let tagsString = '';
+    const newTags = collection?.reduce<string[]>((acc, current) => {
+        const newsTags = current.tags?.split(',')?.map((tag) => tag.trim());
+        if (!isValidArray(newsTags, false)) return acc;
 
-    newsCollection.map((news) => {
-        tagsString += ',' + news.tags;
-    });
-    const tagsArray = tagsString.split(',').filter(Boolean);
+        const tagsToAdd: string[] = [];
+        for (const tag of newsTags) {
+            if (acc.includes(tag) || tagsToAdd.includes(tag)) continue;
+            tagsToAdd.push(tag);
+        }
 
-    const uniqueTags = Array.from(new Set(tagsArray));
+        return [...acc, ...tagsToAdd];
+    }, []);
 
-    return uniqueTags;
-}
+    if (isValidArray(newTags, false)) {
+        tags.push(...newTags);
+    }
+
+    return tags;
+};
+
+const sortFilterFn = (a: ModxNewsTeaser, b: ModxNewsTeaser) => {
+    const dateA = generatePublicationDate(a.publishedOn || '');
+    const dateB = generatePublicationDate(b.publishedOn || '');
+
+    if (dateA && dateB) {
+        return dateB.getTime() - dateA.getTime();
+    } else return 0;
+};
 
 function mapNewsListData({
     newsCollection,
@@ -113,7 +140,7 @@ function mapNewsListData({
     newsCollectionUrl?: string;
 }): NewsItem[] {
     return newsCollection
-        ? newsCollection.map((news) => {
+        ? newsCollection.sort(sortFilterFn).map((news) => {
               const publicationDate = generatePublicationDate(
                   news.publishedOn || ''
               );
@@ -127,9 +154,7 @@ function mapNewsListData({
                   : undefined;
 
               const tagsArray =
-                  news?.tags && news.tags.length > 0
-                      ? news.tags?.split(',')
-                      : [];
+                  news?.tags?.split(',')?.map((tag) => tag.trim()) || [];
 
               const tagPropsArray = tagsArray.map((tag): TagProps => {
                   return {
@@ -146,7 +171,7 @@ function mapNewsListData({
                   image: mappedImage,
                   publishDate: publicationDate,
                   title: news?.label || '',
-                  text: news.intro?.text,
+                  text: stripLinks(news.intro?.text),
                   link: { href: news.link, isExternal: false },
                   tags: tagPropsArray,
                   action:
@@ -166,6 +191,10 @@ function mapNewsListData({
         : [];
 }
 
+const stripLinks = (text?: string) => {
+    return text?.replace(/<a\b[^>]*>/i, '').replace(/<\/a>/i, '');
+};
+
 const generatePublicationDate = (
     publication_date?: string,
     first_publication_date?: string
@@ -173,32 +202,12 @@ const generatePublicationDate = (
     if (!publication_date && !first_publication_date) return undefined;
     try {
         return publication_date
-            ? generatePublicationDateObject(publication_date)
+            ? parseModxDateString(publication_date)
             : first_publication_date
-            ? new Date(first_publication_date)
+            ? parseModxDateString(first_publication_date)
             : undefined;
     } catch {
         console.error('Error whlie generating publication date for news');
         return undefined;
     }
 };
-
-function generatePublicationDateObject(publication_date?: string) {
-    if (!publication_date) return undefined;
-
-    const parts = publication_date?.split(' ').filter(Boolean);
-    try {
-        const dateParts = parts[0].split('-').filter(Boolean);
-
-        const publicationDate = new Date(
-            +dateParts[0],
-            +dateParts[1] - 1,
-            +dateParts[2]
-        );
-
-        return publicationDate;
-    } catch (e) {
-        console.error('Error in NewsIntro date generation. \n', e);
-        return undefined;
-    }
-}

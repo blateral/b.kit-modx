@@ -672,7 +672,7 @@ export const parseModxDateString = (modxDateString?: string) => {
             hasTimeSnippets ? +timeSnippets[2] : undefined
         );
     } catch (e) {
-        console.error('Error: Generating date for eventlist item failed');
+        console.error('Error: Generating date item failed');
 
         return new Date(1970, 1, 1);
     }
