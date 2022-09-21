@@ -22,7 +22,7 @@ interface Event {
     title?: string;
     date?: string;
     image?: ImageProps;
-    intro?: string;
+    text?: string;
     duration?: string;
     price?: string;
     priceInfo?: string;
@@ -116,7 +116,7 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
                         href: item.alias || '',
                     },
                     title: item.title || '',
-                    text: item.intro || '',
+                    text: item.text || '',
                     tags: tagPropsArray,
                     image: item.image && hasImages ? item.image : undefined,
                     date: parseModxDateString(item.date),
