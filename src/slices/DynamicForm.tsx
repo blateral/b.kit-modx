@@ -49,7 +49,7 @@ export interface ModxArea extends FormField {
 
 export interface ModxSelect extends FormField {
     type: 'Select' | 'RecipientSelect';
-    initialValue?: string;
+    initial?: string;
     placeholder?: string;
     dropdownItems: string;
     info?: string;
@@ -396,7 +396,7 @@ const createSelect = (
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        initialValue: formfield.initialValue,
+        initialValue: formfield.initial,
         dropdownItems: dropdownValues.map((value) => {
             return { label: value, value };
         }),
@@ -424,9 +424,9 @@ const createRecipientSelect = (
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        initialValue: formfield.initialValue,
+        initialValue: formfield.initial,
         dropdownItems: options.map((option) => {
-            const keyValues = option.replace(/\s/g, '').split(/\r?==/);
+            const keyValues = option.trim().split(/\r?==/);
             const key = keyValues?.[0] || option;
             const value = keyValues?.[1] || '';
 
