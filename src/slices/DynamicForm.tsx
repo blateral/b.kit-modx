@@ -1,6 +1,16 @@
-import { assignTo, DynamicForm, ThemeMods } from '@blateral/b.kit';
-import { FieldGenerationProps } from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
-import React from 'react';
+import {
+    assignTo,
+    DynamicForm,
+    isValidArray,
+    ThemeMods,
+} from '@blateral/b.kit';
+import {
+    FieldGenerationProps,
+    FormStructure,
+    FormValues,
+    Select,
+} from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
+import React, { useMemo } from 'react';
 import {
     Field as BkitField,
     Area as BkitArea,
@@ -172,7 +182,7 @@ export interface DynamicFormSliceType
     targetEmails?: string;
     subjectLine?: string;
     successPage?: string;
-    onSubmit?: (values: FormData, recipient?: string) => Promise<void>;
+    onSubmit?: (values: FormData) => Promise<void>;
     submitAction?: (props: SubmitActionProps) => React.ReactNode;
     definitions?: {
         field?: (props: FieldGenerationProps<BkitField>) => React.ReactNode;
@@ -223,32 +233,83 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
         theme
     );
 
+    const formFields: FormStructure = useMemo(
+        () =>
+            itemsToFormFields({
+                formFields: items,
+                fieldSettings: settings,
+            }),
+        [items, settings]
+    );
+
     return (
         <DynamicForm
             bgMode={bgMode}
             anchorId={normalizeAnchorId(anchorId)}
             onSubmit={async (values) => {
-                // find recipient mail select field
-                const recipientField = items.find(
-                    (field) => field.type === 'RecipientSelect'
-                ) as ModxSelect;
-                const recipient = recipientField?.label
-                    ? values[recipientField.label] || ''
-                    : '';
+                // adding target mails from recipient field
+                const recipientTargetMails = getTargetMailsFromField(
+                    items,
+                    formFields,
+                    values
+                );
 
-                await onSubmit?.(values as FormData, recipient as string);
+                if (isValidArray(recipientTargetMails, false)) {
+                    const targetMails = recipientTargetMails?.filter(
+                        (v, i, a) => a.indexOf(v) === i
+                    );
+                    values.targetEmails = targetMails;
+                }
+
+                await onSubmit?.(values as FormData);
             }}
             submitAction={createLabeledSubmitAction(submitAction, submitLabel)}
-            fields={itemsToFormFields({
-                formFields: items,
-                fieldSettings: settings,
-            })}
-            targetEmails={targetEmails}
+            fields={formFields}
+            targetEmails={targetEmails?.split(',')}
             subjectLine={subjectLine}
             theme={sliceTheme}
             definitions={definitions as any}
         />
     );
+};
+
+const getTargetMailsFromField = (
+    items: FormField[],
+    formFields: FormStructure,
+    values: FormValues
+) => {
+    const targetMails: string[] = [];
+
+    // find recipient mail select field
+    const recipientField = items.find(
+        (field) => field.type === 'RecipientSelect'
+    ) as ModxSelect;
+
+    // get current value
+    if (recipientField?.label) {
+        const definition: Select = formFields[recipientField?.label];
+        const value = values[recipientField?.label];
+
+        // find selected option defintion
+        const data = definition.dropdownItems.find(
+            (item) => item.label === value
+        );
+
+        if (
+            data?.value?.recipients &&
+            typeof data?.value?.recipients === 'string'
+        ) {
+            const mails = data?.value?.recipients
+                ?.split(',')
+                ?.map((mail) => mail.replace(/\s/g, ''));
+
+            if (isValidArray(mails, false)) {
+                targetMails.push(...mails);
+            }
+        }
+    }
+
+    return targetMails;
 };
 
 const createLabeledSubmitAction = (
@@ -396,9 +457,9 @@ const createSelect = (
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        initialValue: formfield.initial,
+        initialOption: formfield.initial,
         dropdownItems: dropdownValues.map((value) => {
-            return { label: value, value };
+            return { label: value, value: { text: value } };
         }),
         validate: settings?.select?.validate,
         indicator: settings?.select?.indicator,
@@ -424,13 +485,13 @@ const createRecipientSelect = (
         placeholder: formfield.placeholder,
         isRequired: formfield.isRequired,
         info: formfield.info,
-        initialValue: formfield.initial,
+        initialOption: formfield.initial,
         dropdownItems: options.map((option) => {
             const keyValues = option.trim().split(/\r?==/);
             const key = keyValues?.[0] || option;
             const value = keyValues?.[1] || '';
 
-            return { label: key, value: value };
+            return { label: key, value: { text: key, recipients: value } };
         }),
         validate: settings?.select?.validate,
         indicator: settings?.select?.indicator,
