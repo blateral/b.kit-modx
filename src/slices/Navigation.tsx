@@ -9,14 +9,17 @@ import {
     NavMenuStates,
 } from '@blateral/b.kit/lib/components/sections/navigation/Navigation';
 import React from 'react';
-import { ModxNavGroup, ModxSlice } from 'utils/modx';
+import { ModxNavGroup, ModxSlice, PageContent } from 'utils/modx';
 
 export interface NavigationSliceType extends ModxSlice<'Navigation'> {
+    pageContent: PageContent[];
     clampWidth?: 'content' | 'full';
     navbar?: {
         isStickable?: boolean;
         isCollapsible?: boolean;
+        /** @deprecated */
         pageFlow?: 'overContent' | 'beforeContent';
+        allowNavbarHeaderOverflow?: boolean;
         topBg?: string;
         mainBg?: string;
         bottomBg?: string;
@@ -42,11 +45,24 @@ export interface NavigationSliceType extends ModxSlice<'Navigation'> {
 }
 
 export const NavigationSlice: React.FC<NavigationSliceType> = ({
+    pageContent,
     navbar,
     menu,
     clampWidth,
     customNavItemIcon,
 }) => {
+    // handle page flow behaviour
+    const hasHeader = !!pageContent?.find(
+        (slice) => slice.slice_type === 'Header'
+    );
+    let pageFlow: 'overContent' | 'beforeContent' = 'beforeContent';
+    if (navbar?.pageFlow) {
+        // if deprecated prop is used
+        pageFlow = navbar.pageFlow;
+    } else if (navbar?.allowNavbarHeaderOverflow && hasHeader) {
+        pageFlow = 'overContent';
+    }
+
     return (
         <Navigation
             clampWidth={clampWidth}
@@ -55,6 +71,7 @@ export const NavigationSlice: React.FC<NavigationSliceType> = ({
                 topBar: navbar?.topBar,
                 mainBar: navbar?.mainBar,
                 bottomBar: navbar?.bottomBar,
+                pageFlow: pageFlow,
             }}
             menu={{
                 ...menu,

@@ -342,7 +342,9 @@ export interface SocialMediaItem {
 export interface NavBarProperties {
     isStickable?: boolean;
     isCollapsible?: boolean;
+    /** @deprecated */
     pageFlow?: 'beforeContent' | 'overContent';
+    allowNavbarHeaderOverflow?: boolean;
     navbarPrimary: {
         label?: string;
         labelShort?: string;
