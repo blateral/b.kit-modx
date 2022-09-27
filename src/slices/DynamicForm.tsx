@@ -91,8 +91,7 @@ export interface ModxLocation extends FormField {
     placeholder?: string;
     info?: string;
     errorMsg?: string;
-    toggleBtnLabelToLocation?: string;
-    toggleBtnLabelToDescription?: string;
+    toggleLabel?: string;
     trackLocationBtnLabel?: string;
 }
 
@@ -147,8 +146,7 @@ export interface DatepickerDeleteActionProps {
 }
 
 export interface LocationToggleProps {
-    toMapLabel?: string;
-    toDescLabel?: string;
+    toggleLabel?: string;
     handleToggle?:
         | ((ev: React.SyntheticEvent<HTMLButtonElement>) => void)
         | undefined;
@@ -680,21 +678,17 @@ const createLocation = ({
         initialMapCenter:
             center && center.length > 1 ? [+center[0], +center[1]] : undefined,
         zoom: formfield.mapZoom ? +formfield.mapZoom : undefined,
-        descriptionTabLabel: formfield.toggleBtnLabelToDescription,
-        mapTabLabel: formfield.toggleBtnLabelToLocation,
+        toggleLabel: formfield.toggleLabel,
         trackLocationLabel: formfield.trackLocationBtnLabel,
         validate: settings?.location?.validate,
         customToggle:
-            customToggle &&
-            formfield.toggleBtnLabelToDescription &&
-            formfield.toggleBtnLabelToLocation
+            customToggle && formfield.toggleLabel
                 ? ({ isInverted, viewState, handleClick }) =>
                       customToggle({
                           isInverted,
                           viewState,
                           handleToggle: handleClick,
-                          toMapLabel: formfield.toggleBtnLabelToLocation,
-                          toDescLabel: formfield.toggleBtnLabelToDescription,
+                          toggleLabel: formfield.toggleLabel,
                       })
                 : undefined,
         customResetControl: customResetControl
