@@ -93,6 +93,7 @@ export interface ModxLocation extends FormField {
     errorMsg?: string;
     toggleBtnLabelToLocation?: string;
     toggleBtnLabelToDescription?: string;
+    trackLocationBtnLabel?: string;
 }
 
 export interface ModxFieldGroup extends FormField {
@@ -145,13 +146,22 @@ export interface DatepickerDeleteActionProps {
         | undefined;
 }
 
-export interface LocationToggleActionProps {
+export interface LocationToggleProps {
+    toMapLabel?: string;
+    toDescLabel?: string;
+    handleToggle?:
+        | ((ev: React.SyntheticEvent<HTMLButtonElement>) => void)
+        | undefined;
+    isInverted?: boolean;
+    viewState?: 'desc' | 'map';
+}
+
+export interface LocationTrackingProps {
     label?: string;
     handleToggle?:
         | ((ev: React.SyntheticEvent<HTMLButtonElement>) => void)
         | undefined;
     isInverted?: boolean;
-    asGeolocation?: boolean;
 }
 
 export interface FieldSettings {
@@ -168,7 +178,12 @@ export interface FieldSettings {
         BkitFileUpload,
         'validate' | 'customUploadIcon' | 'customDeleteIcon'
     >;
-    location?: Pick<BkitLocation, 'validate' | 'customLocationIcon'>;
+    location?: Pick<BkitLocation, 'validate' | 'customResetControl'> & {
+        customToggle?: (props: LocationToggleProps) => React.ReactNode;
+        customLocationControl?: (
+            props: LocationTrackingProps
+        ) => React.ReactNode;
+    };
 }
 
 export interface DynamicFormSliceType
@@ -652,6 +667,9 @@ const createLocation = ({
     const formFieldData = {};
 
     const center = formfield.initialMapCenter?.split(',');
+    const customToggle = settings?.location?.customToggle;
+    const customResetControl = settings?.location?.customResetControl;
+    const customLocationControl = settings?.location?.customLocationControl;
 
     const formFieldValues: BkitLocation = {
         type: 'Location',
@@ -664,8 +682,37 @@ const createLocation = ({
         zoom: formfield.mapZoom ? +formfield.mapZoom : undefined,
         descriptionTabLabel: formfield.toggleBtnLabelToDescription,
         mapTabLabel: formfield.toggleBtnLabelToLocation,
+        trackLocationLabel: formfield.trackLocationBtnLabel,
         validate: settings?.location?.validate,
-        customLocationIcon: settings?.location?.customLocationIcon,
+        customToggle:
+            customToggle &&
+            formfield.toggleBtnLabelToDescription &&
+            formfield.toggleBtnLabelToLocation
+                ? ({ isInverted, viewState, handleClick }) =>
+                      customToggle({
+                          isInverted,
+                          viewState,
+                          handleToggle: handleClick,
+                          toMapLabel: formfield.toggleBtnLabelToLocation,
+                          toDescLabel: formfield.toggleBtnLabelToDescription,
+                      })
+                : undefined,
+        customResetControl: customResetControl
+            ? ({ isInverted, handleClick }) =>
+                  customResetControl({
+                      isInverted,
+                      handleClick,
+                  })
+            : undefined,
+        customLocationControl:
+            customLocationControl && formfield.trackLocationBtnLabel
+                ? ({ isInverted, handleClick }) =>
+                      customLocationControl({
+                          isInverted,
+                          handleToggle: handleClick,
+                          label: formfield.trackLocationBtnLabel,
+                      })
+                : undefined,
     };
 
     formFieldData[formfield.label] = formFieldValues;
