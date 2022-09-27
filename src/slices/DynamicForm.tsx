@@ -119,6 +119,7 @@ export interface FormData {
         | boolean
         | Array<string>
         | [Date | null, Date | null]
+        | File[]
         | LocationData;
 }
 
