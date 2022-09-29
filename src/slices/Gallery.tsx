@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { assignTo, Gallery, ImageCarousel, ThemeMods } from '@blateral/b.kit';
-import { ResponsiveObject } from 'slices/slick';
+import { assignTo, Gallery, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { ImageAspectRatios } from '@blateral/b.kit/lib/components/blocks/Image';
@@ -32,49 +31,17 @@ interface GalleryItems {
 export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
     isActive?: boolean;
     anchorId?: string;
-    isCarousel?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
 
-    // helpers to define component elements outside of slice
-    controlNext?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
-    }) => React.ReactNode;
-    controlPrev?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
-    }) => React.ReactNode;
-    dot?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        index?: number;
-    }) => React.ReactNode;
-    beforeChange?: (props: { currentStep: number; nextStep: number }) => void;
-    afterChange?: (currentStep: number) => void;
-    onInit?: (steps: number) => void;
-    slidesToShow?: number;
-    responsive?: ResponsiveObject[];
     theme?: ThemeMods;
 }
 
 export const GallerySlice: React.FC<GallerySliceType> = ({
     anchorId,
-    isCarousel,
     bgMode,
     bgColor,
     items,
-
-    controlNext,
-    controlPrev,
-    dot,
-    beforeChange,
-    afterChange,
-    onInit,
-    slidesToShow,
-    responsive,
     theme,
 }) => {
     // merging cms and component theme settings
@@ -96,42 +63,26 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
         'landscape-wide': { small: { w: 1440, h: 710 } },
     };
 
-    const sharedProps = {
-        anchorId: normalizeAnchorId(anchorId),
-        images: items?.map((item) => {
-            const isFull = item?.imageFormat?.includes('-wide');
-            const format = item?.imageFormat || 'square';
-            const theImage: ModxImageProps =
-                item[isFull ? format : `small-${format}`];
-            const ratios: ImageAspectRatios = aspectRatios[format];
+    return (
+        <Gallery
+            theme={sliceTheme}
+            bgMode={bgMode}
+            anchorId={normalizeAnchorId(anchorId)}
+            images={items?.map((item) => {
+                const isFull = item?.imageFormat?.includes('-wide');
+                const format = item?.imageFormat || 'square';
+                const theImage: ModxImageProps =
+                    item[isFull ? format : `small-${format}`];
+                const ratios: ImageAspectRatios = aspectRatios[format];
 
-            return {
-                ...theImage,
-                small: theImage?.small || '',
-                alt: theImage?.meta?.altText || '',
-                isFull: isFull,
-                ratios: ratios || undefined,
-            };
-        }),
-    };
-
-    if (isCarousel) {
-        return (
-            <ImageCarousel
-                {...sharedProps}
-                theme={sliceTheme}
-                bgMode={bgMode}
-                controlNext={controlNext}
-                controlPrev={controlPrev}
-                beforeChange={beforeChange}
-                afterChange={afterChange}
-                onInit={onInit}
-                dot={dot}
-                slidesToShow={slidesToShow}
-                responsive={responsive}
-            />
-        );
-    } else {
-        return <Gallery {...sharedProps} theme={sliceTheme} bgMode={bgMode} />;
-    }
+                return {
+                    ...theImage,
+                    small: theImage?.small || '',
+                    alt: theImage?.meta?.altText || '',
+                    isFull: isFull,
+                    ratios: ratios || undefined,
+                };
+            })}
+        />
+    );
 };

@@ -1,9 +1,4 @@
-import {
-    assignTo,
-    CrossPromotion,
-    PromotionCarousel,
-    ThemeMods,
-} from '@blateral/b.kit';
+import { assignTo, CrossPromotion, ThemeMods } from '@blateral/b.kit';
 
 import { PromotionCardProps } from '@blateral/b.kit/lib/components/blocks/PromotionCard';
 import React from 'react';
@@ -14,13 +9,11 @@ import {
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
-import { ResponsiveObject } from './slick';
 import { normalizeAnchorId } from 'utils/mapping';
 
 interface CrossPromotionItems {
     isMain?: boolean;
     image?: {
-        carousel: ModxImagePropsWithFormat;
         list: ModxImagePropsWithFormat;
         meta: ModxImageMetaData;
     };
@@ -44,58 +37,25 @@ export interface CrossPromotionListSliceType
     extends ModxSlice<'CrossPromotionList', CrossPromotionItems> {
     isActive?: boolean;
     anchorId?: string;
-    isCarousel?: boolean;
     isMirrored?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
     externalLinkIcon?: React.ReactNode;
     imageFormat: ImageFormats;
-    controlNext?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
-    }) => React.ReactNode;
-    controlPrev?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
-    }) => React.ReactNode;
-    dot?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        index?: number;
-    }) => React.ReactNode;
-    beforeChange?: (props: { currentStep: number; nextStep: number }) => void;
-    afterChange?: (currentStep: number) => void;
-    onInit?: (steps: number) => void;
-    slidesToShow?: number;
-    responsive?: ResponsiveObject[];
 
     theme?: ThemeMods;
 }
 
-export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = (
-    props
-) => {
-    const { isCarousel } = props;
-
-    if (isCarousel) {
-        return createCPromoCarousel(props);
-    } else {
-        return createCPromoList(props);
-    }
-};
-
-const createCPromoList = ({
-    bgMode,
-    bgColor,
-    imageFormat,
-    isMirrored,
-    externalLinkIcon,
+export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = ({
     items,
+    isMirrored,
+    imageFormat,
+    bgColor,
     theme,
     anchorId,
-}: CrossPromotionListSliceType) => {
+    externalLinkIcon,
+    bgMode,
+}) => {
     const promoItems: Array<CrossPromotionItems> = items;
     const isImagesMirrored =
         isMirrored || imageFormat === 'gallery-triple-right' ? true : false;
@@ -148,86 +108,6 @@ const createCPromoList = ({
     );
 };
 
-const createCPromoCarousel = ({
-    bgMode,
-    bgColor,
-    imageFormat,
-    anchorId,
-    items,
-    controlNext,
-    controlPrev,
-    dot,
-    beforeChange,
-    afterChange,
-    onInit,
-    externalLinkIcon,
-    slidesToShow,
-    responsive,
-    theme,
-}: CrossPromotionListSliceType) => {
-    // merging cms and component theme settings
-    const sliceTheme = assignTo(
-        {
-            colors: {
-                sectionBg: {
-                    medium: bgColor || '',
-                },
-            },
-        },
-        theme
-    );
-
-    const mappedImageFormat = mapCarouselImageFormat(imageFormat);
-    return (
-        <PromotionCarousel
-            anchorId={normalizeAnchorId(anchorId)}
-            theme={sliceTheme}
-            bgMode={bgMode}
-            promotions={items.map(({ image, superTitle, title, link }) => {
-                const mappedImage = {
-                    small: image?.carousel?.landscape?.small || '',
-                    medium: image?.carousel[mappedImageFormat || 'square']
-                        ?.medium,
-                    semilarge:
-                        image?.carousel[mappedImageFormat || 'square']
-                            ?.semilarge,
-                    large: image?.carousel[mappedImageFormat || 'square']
-                        ?.large,
-                    xlarge: image?.carousel[mappedImageFormat || 'square']
-                        ?.xlarge,
-                };
-
-                return {
-                    // href: link || undefined,
-                    link: link
-                        ? {
-                              href: link,
-                              isExternal: isExternalLink(link),
-                          }
-                        : undefined,
-                    superTitle: superTitle,
-                    title: title,
-                    image: {
-                        ...mappedImage,
-                        alt: image?.meta.altText || '',
-                        title: title,
-                        href: link || undefined,
-                    },
-                };
-            })}
-            controlNext={controlNext}
-            controlPrev={controlPrev}
-            beforeChange={beforeChange}
-            afterChange={afterChange}
-            onInit={onInit}
-            dot={dot}
-            externalLinkIcon={externalLinkIcon}
-            slidesToShow={slidesToShow}
-            responsive={responsive}
-        />
-    );
-};
-
 function mapGalleryImageFormat(imageFormat: ImageFormats) {
     switch (imageFormat) {
         case 'gallery-square':
@@ -236,21 +116,6 @@ function mapGalleryImageFormat(imageFormat: ImageFormats) {
             return 'portrait';
         case 'gallery-landscape':
             return 'landscape';
-        default:
-            return 'square';
-    }
-}
-
-function mapCarouselImageFormat(imageFormat: ImageFormats) {
-    switch (imageFormat) {
-        case 'carousel-square':
-            return 'square';
-        case 'carousel-portrait':
-            return 'portrait';
-        case 'carousel-landscape':
-            return 'landscape';
-        case 'carousel-big-portrait':
-            return 'portrait';
         default:
             return 'square';
     }
