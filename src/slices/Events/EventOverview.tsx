@@ -1,4 +1,9 @@
-import { EventOverview, isValidArray, ThemeMods } from '@blateral/b.kit';
+import {
+    concat,
+    EventOverview,
+    isValidArray,
+    ThemeMods,
+} from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { EventItem } from '@blateral/b.kit/lib/components/sections/events/EventOverview';
@@ -95,21 +100,18 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
                 };
             });
 
-            const overviewText =
-                item.duration || item.address
-                    ? `${
-                          item.duration && !item.address
-                              ? item.duration
-                              : `${item.duration} || `
-                      }${item.address}`
-                    : item.intro;
+            const address = concat(
+                [item.address?.locationName, item.address?.adress],
+                ' | '
+            );
 
             return {
                 link: {
                     href: item.alias || '',
                 },
                 title: item.title || '',
-                text: overviewText || '',
+                address: address,
+                duration: +(item.duration || 0) * 60,
                 tags: tagPropsArray,
                 image: item.image && hasImages ? item.image : undefined,
                 date: parseModxDateString(item.date),

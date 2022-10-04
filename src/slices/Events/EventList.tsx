@@ -1,4 +1,4 @@
-import { assignTo, EventList, ThemeMods } from '@blateral/b.kit';
+import { assignTo, concat, EventList, ThemeMods } from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
@@ -22,7 +22,6 @@ interface Event {
     title?: string;
     date?: string;
     image?: ImageProps;
-    intro?: string;
     duration?: string;
     price?: string;
     priceInfo?: string;
@@ -111,12 +110,18 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
                     };
                 });
 
+                const address = concat(
+                    [item.address?.locationName, item.address?.adress],
+                    ' | '
+                );
+
                 return {
                     link: {
                         href: item.alias || '',
                     },
                     title: item.title || '',
-                    text: item.intro || '',
+                    address: address,
+                    duration: +(item.duration || 0) * 60,
                     tags: tagPropsArray,
                     image: item.image && hasImages ? item.image : undefined,
                     date: parseModxDateString(item.date),
