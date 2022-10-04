@@ -95,12 +95,21 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
                 };
             });
 
+            const overviewText =
+                item.duration || item.address
+                    ? `${
+                          item.duration && !item.address
+                              ? item.duration
+                              : `${item.duration} || `
+                      }${item.address}`
+                    : item.intro;
+
             return {
                 link: {
                     href: item.alias || '',
                 },
                 title: item.title || '',
-                text: item.intro || '',
+                text: overviewText || '',
                 tags: tagPropsArray,
                 image: item.image && hasImages ? item.image : undefined,
                 date: parseModxDateString(item.date),
