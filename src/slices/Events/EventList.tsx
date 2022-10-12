@@ -87,7 +87,9 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
     );
 
     const collectionUrl = collection?.alias;
-    const events = collection?.events?.sort(sortFilterFn);
+    const events = collection?.events
+        ?.filter(removePastFilterFn)
+        ?.sort(sortFilterFn);
 
     return (
         <EventList
@@ -146,6 +148,17 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
             })}
         />
     );
+};
+
+const removePastFilterFn = (item: Event) => {
+    if (!item.date) return false;
+    const date = parseModxDateString(item.date);
+    if (!date) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return date >= today;
 };
 
 const sortFilterFn = (a: Event, b: Event) => {
