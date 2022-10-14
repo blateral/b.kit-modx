@@ -9,6 +9,7 @@ import {
     FormStructure,
     FormValues,
     Select,
+    SubmitResponse,
 } from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
 import React, { useMemo } from 'react';
 import {
@@ -196,7 +197,7 @@ export interface DynamicFormSliceType
     targetEmails?: string;
     subjectLine?: string;
     successPage?: string;
-    onSubmit?: (values: FormData) => Promise<void>;
+    onSubmit?: (values: FormData) => Promise<SubmitResponse>;
     submitAction?: (props: SubmitActionProps) => React.ReactNode;
     definitions?: {
         field?: (props: FieldGenerationProps<BkitField>) => React.ReactNode;
@@ -275,7 +276,7 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
                     values.targetEmails = targetMails;
                 }
 
-                await onSubmit?.(values as FormData);
+                return (await onSubmit?.(values as FormData)) || {};
             }}
             submitAction={createLabeledSubmitAction(submitAction, submitLabel)}
             fields={formFields}
