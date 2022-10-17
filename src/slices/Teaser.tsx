@@ -2,7 +2,6 @@ import { assignTo, Teaser, TeaserWide, ThemeMods } from '@blateral/b.kit';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
 import {
-    isBgModeString,
     isExternalLink,
     isValidAction,
     ModxImageProps,
@@ -22,7 +21,7 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     anchorId?: string;
     theme?: ThemeMods;
     isMirrored?: boolean;
-    bgMode?: string;
+    bgMode?: 'full' | 'inverted' | 'splitted' | 'inverted-splitted';
     bgColor?: string;
     isWide?: boolean;
     format?: string;
@@ -161,7 +160,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
             <TeaserWide
                 {...sharedProps}
                 theme={sliceTheme}
-                bgMode={isBgModeString(bgMode) ? bgMode : undefined}
+                bgMode={bgMode as 'full' | 'inverted' | undefined}
                 image={
                     theImage?.small
                         ? {
@@ -219,7 +218,7 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                         ? theVideo
                         : undefined
                 }
-                bgMode={isBgModeString(bgMode) ? bgMode : undefined}
+                bgMode={bgMode}
                 primaryAction={
                     primaryAction && isValidAction(primary_label, primary_link)
                         ? (isInverted: boolean) =>
