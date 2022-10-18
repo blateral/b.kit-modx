@@ -1,10 +1,11 @@
 import React from 'react';
 import { assignTo, ThemeMods, RawVideo } from '@blateral/b.kit';
-import { ModxSlice } from 'utils/modx';
+import { ModxSlice, ModxImageProps } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 
 export interface RawVideoCardItem {
     videos: string[];
+    placeholderImg: ModxImageProps;
 }
 
 export interface RawVideoSliceType
@@ -41,6 +42,7 @@ export const RawVideoSlice: React.FC<RawVideoSliceType> = ({
     );
 
     let videoUrl = items?.[0]?.videos?.[0];
+    const placeholderImg = items?.[0]?.placeholderImg;
     if (videoUrl) {
         videoUrl = new URL(videoUrl, config.endpoint).href;
     }
@@ -51,6 +53,7 @@ export const RawVideoSlice: React.FC<RawVideoSliceType> = ({
             theme={sliceTheme}
             bgMode={bgMode}
             videoUrls={videoUrl ? [videoUrl] : []}
+            placeholderImg={placeholderImg}
             playIcon={playIcon}
         />
     );
