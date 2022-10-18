@@ -52,6 +52,7 @@ import { NewsFooterSliceType } from 'slices/News/Footer';
 import { NewsletterFormSliceType } from 'slices/NewsletterForm';
 import { PointOfInterestOverviewSliceType } from 'slices/POIs/PointOfInterestOverview';
 import { PointOfInterestMapSliceType } from 'slices/POIs/PointOfInterestMap';
+import { RawVideoSliceType } from 'slices/RawVideo';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -156,7 +157,8 @@ export type PageContent =
     | TimelineSliceType
     | PointOfInterestOverviewSliceType
     | PointOfInterestMapSliceType
-    | VideoSliceType;
+    | VideoSliceType
+    | RawVideoSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType
@@ -181,11 +183,6 @@ export type ModxDocument = {
     robots?: string;
     seoContentGroup?: string;
     seoRedirection?: string;
-
-    // nav_isinverted?: boolean;
-    // nav_withtopoffset?: boolean;
-    // nav_menuicon?: string;
-    // navbarAllowOverflow?: boolean;
     publication_date?: string;
 
     headScripts?: string;

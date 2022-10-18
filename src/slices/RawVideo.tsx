@@ -1,14 +1,14 @@
 import React from 'react';
-import { assignTo, ThemeMods, Video } from '@blateral/b.kit';
-import { ModxImageProps, ModxSlice } from 'utils/modx';
+import { assignTo, ThemeMods, RawVideo } from '@blateral/b.kit';
+import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 
-export interface VideoCardItem {
-    bgImage: ModxImageProps;
-    embedId: string;
+export interface RawVideoCardItem {
+    videos: string[];
 }
 
-export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
+export interface RawVideoSliceType
+    extends ModxSlice<'RawVideo', RawVideoCardItem> {
     isActive?: boolean;
     bgMode?: 'full' | 'inverted' | 'splitted';
     bgColor?: string;
@@ -18,14 +18,15 @@ export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
     theme?: ThemeMods;
 }
 
-export const VideoSlice: React.FC<VideoSliceType> = ({
+export const RawVideoSlice: React.FC<RawVideoSliceType> = ({
     bgMode,
     bgColor,
-    items,
     anchorId,
     playIcon,
+    items,
 
     theme,
+    config,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -39,16 +40,17 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
         theme
     );
 
-    const embedId = items?.[0]?.embedId;
-    const bgImage = items?.[0]?.bgImage;
+    let videoUrl = items?.[0]?.videos?.[0];
+    if (videoUrl) {
+        videoUrl = new URL(videoUrl, config.endpoint).href;
+    }
 
     return (
-        <Video
+        <RawVideo
             anchorId={normalizeAnchorId(anchorId)}
             theme={sliceTheme}
             bgMode={bgMode}
-            bgImage={bgImage}
-            embedId={embedId}
+            videoUrls={videoUrl ? [videoUrl] : []}
             playIcon={playIcon}
         />
     );
