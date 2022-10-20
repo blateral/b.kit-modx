@@ -11,11 +11,16 @@ import React from 'react';
 import { normalizeAnchorId } from 'utils/mapping';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
-import { HeaderFocus } from '@blateral/b.kit/lib/components/sections/header/Header';
+import {
+    HeaderFocus,
+    HeaderImage,
+} from '@blateral/b.kit/lib/components/sections/header/Header';
 
 type BgMode = 'full' | 'inverted';
 
-export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
+export type HeaderSliceItem = ModxImageProps & { mobileImage?: string };
+
+export interface HeaderSliceType extends ModxSlice<'Header', HeaderSliceItem> {
     isActive?: boolean;
     anchorId?: string;
     bgMode?: BgMode;
@@ -86,7 +91,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     config,
 }) => {
     // map header images
-    const headerImageMap = items?.map(toComponentImageFormat) || undefined;
+    const headerImages = items?.map(toComponentImageFormat) || undefined;
 
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -113,7 +118,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             size={size || 'full'}
             isCentered={isCentered}
             videoUrl={videoUrl ? `${config?.endpoint}${videoUrl}` : ''}
-            images={headerImageMap}
+            images={headerImages}
             focusPoint={focusPoint}
             onImageChange={onImageChange}
             title={title || ''}
@@ -150,10 +155,10 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     );
 };
 
-const toComponentImageFormat = (item: ModxImageProps) => {
+const toComponentImageFormat = (item: HeaderSliceItem): HeaderImage => {
     return {
         ...item,
-        small: item?.small || '',
+        small: item.mobileImage || item?.small || '',
         alt: item?.meta?.altText,
     };
 };
