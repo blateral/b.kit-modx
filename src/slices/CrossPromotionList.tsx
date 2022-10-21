@@ -28,10 +28,6 @@ type ImageFormats =
     | 'gallery-landscape'
     | 'gallery-triple-left'
     | 'gallery-triple-right'
-    | 'carousel-square'
-    | 'carousel-portrait'
-    | 'carousel-big-portrait'
-    | 'carousel-landscape'
     | 'landscape-wide';
 export interface CrossPromotionListSliceType
     extends ModxSlice<'CrossPromotionList', CrossPromotionItems> {
