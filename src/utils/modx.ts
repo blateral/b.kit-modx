@@ -20,7 +20,6 @@ import { NewsTableSliceType } from '../slices/News/Table';
 import { NewsTextSliceType } from '../slices/News/Text';
 import { NewsVideoSliceType } from '../slices/News/Video';
 import { PosterSliceType } from '../slices/Poster';
-import { QuickNavSliceType } from '../slices/QuickNav';
 import { TableSliceType } from '../slices/Table';
 import { TeaserSliceType } from '../slices/Teaser';
 import { VideoSliceType } from '../slices/Video';
@@ -146,8 +145,6 @@ export type PageContent =
     | PosterSliceType
     | PriceListSliceType
     | PriceTableSliceType
-    | QuickNavSliceType
-    | QuickNavSliceType
     | QuoteSliceType
     | SimpleImageSliceType
     | SocialNavSliceType
@@ -370,6 +367,7 @@ export interface ModxSettings extends ModxPage {
     cookie: {
         title?: string;
         text?: string;
+        footNote?: string;
         acceptanceLabel?: string;
         declineLabel?: string;
         icon?: ModxImageProps;

@@ -11,6 +11,7 @@ import { HeadlineTagDefault } from 'utils/stringLexicon';
 import { assignTo, Intro, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { normalizeAnchorId } from 'utils/mapping';
+import { ImageAspectRatios } from '@blateral/b.kit/lib/components/blocks/Image';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
 
@@ -19,7 +20,12 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
     anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
-    image?: ModxImageProps;
+    image?: ModxImageProps & {
+        originals?: {
+            w?: number;
+            h?: number;
+        };
+    };
     title?: string;
     titleAs?: string;
     superTitle?: string;
@@ -82,6 +88,15 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
         theme
     );
 
+    const originalSize = image?.originals;
+    let imgRatios: ImageAspectRatios | undefined = undefined;
+
+    if (originalSize?.w && originalSize?.h) {
+        imgRatios = {
+            small: { w: originalSize.w, h: originalSize.h },
+        };
+    }
+
     return (
         <Intro
             theme={sliceTheme}
@@ -99,6 +114,7 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
                           xlarge: image.xlarge,
                           copyright: image.meta?.copyright || '',
                           alt: image.meta?.altText || '',
+                          ratios: imgRatios,
                       }
                     : undefined
             }
