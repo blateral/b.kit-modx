@@ -30,6 +30,14 @@ export interface NewsVideoSliceType extends ModxSlice<'NewsVideo'> {
         isExternal?: boolean;
     }) => React.ReactNode;
 
+    consentText?: string;
+    consentActionLabel?: string;
+    consentAction?: (props: {
+        label: string;
+        handleClick?: () => void;
+        consentProps: Record<string, string>;
+    }) => React.ReactNode;
+
     bgColor?: string;
     theme?: ThemeMods;
 }
@@ -44,6 +52,9 @@ export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
     secondary_label,
     primaryAction,
     secondaryAction,
+    consentText,
+    consentActionLabel,
+    consentAction,
     bgColor,
     theme,
 }) => {
@@ -87,6 +98,17 @@ export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
                               label: secondary_label,
                               href: secondary_link || '',
                               isExternal: isExternalLink(secondary_link),
+                          })
+                    : undefined
+            }
+            consentText={consentText}
+            consentAction={
+                consentAction && consentActionLabel
+                    ? ({ consentProps, handleClick }) =>
+                          consentAction({
+                              consentProps,
+                              handleClick,
+                              label: consentActionLabel,
                           })
                     : undefined
             }

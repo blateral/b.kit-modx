@@ -15,6 +15,14 @@ export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
     anchorId?: string;
     playIcon?: React.ReactNode;
 
+    consentText?: string;
+    consentActionLabel?: string;
+    consentAction?: (props: {
+        label: string;
+        handleClick?: () => void;
+        consentProps: Record<string, string>;
+    }) => React.ReactNode;
+
     theme?: ThemeMods;
 }
 
@@ -24,6 +32,10 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
     items,
     anchorId,
     playIcon,
+
+    consentText,
+    consentActionLabel,
+    consentAction,
 
     theme,
 }) => {
@@ -50,6 +62,17 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
             bgImage={bgImage}
             embedId={embedId}
             playIcon={playIcon}
+            consentText={consentText}
+            consentAction={
+                consentAction && consentActionLabel
+                    ? ({ consentProps, handleClick }) =>
+                          consentAction({
+                              consentProps,
+                              handleClick,
+                              label: consentActionLabel,
+                          })
+                    : undefined
+            }
         />
     );
 };
