@@ -371,6 +371,7 @@ export interface ModxSettings extends ModxPage {
         acceptanceLabel?: string;
         declineLabel?: string;
         icon?: ModxImageProps;
+        whitelist?: string[];
     };
 
     notification?: {
