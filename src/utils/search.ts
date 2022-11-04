@@ -64,6 +64,8 @@ export const getModxPageSearchData = (
     };
 
     for (const slice of page.content) {
+        if (!slice.isActive) continue;
+
         const renderData = sliceConfig[slice.slice_type];
         if (!renderData) continue;
 
@@ -105,6 +107,8 @@ export const getModxNewsPageSearchData = (
     };
 
     for (const slice of page.content) {
+        if (!slice.isActive) continue;
+
         const renderData = sliceConfig[slice.slice_type];
         if (!renderData) continue;
 
@@ -167,6 +171,8 @@ export const getModxEventPageSearchData = (
     };
 
     for (const slice of page.content) {
+        if (!slice.isActive) continue;
+
         const renderData = sliceConfig[slice.slice_type];
         if (!renderData) continue;
 
@@ -228,6 +234,8 @@ export const getModxPoiPageSearchData = (
     };
 
     for (const slice of page.content) {
+        if (!slice.isActive) continue;
+
         const renderData = sliceConfig[slice.slice_type];
         if (!renderData) continue;
 
