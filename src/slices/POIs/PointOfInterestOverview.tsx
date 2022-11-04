@@ -47,6 +47,12 @@ interface PointOfInterest {
     facts: POIMigxFact[];
 }
 
+const poiSortFn = (a: PointOfInterest, b: PointOfInterest) => {
+    if (!a.name || !b.name) return 0;
+
+    return a.name.localeCompare(b.name);
+};
+
 export interface PointOfInterestOverviewSliceType
     extends ModxSlice<'POIOverview'> {
     isActive?: boolean;
@@ -116,7 +122,7 @@ export const PointOfInterestOverviewSlice: React.FC<
             bgMode={bgMode}
             enableFiltering={enableFiltering}
             filterPlaceholder={filterPlaceholder}
-            pois={collection?.pois?.map((poi, i) => {
+            pois={collection?.pois?.sort(poiSortFn).map((poi, i) => {
                 const infos: Info[] = [];
                 const id = poi.id !== undefined ? poi.id : i;
 
