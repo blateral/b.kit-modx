@@ -63,7 +63,6 @@ export interface PointOfInterestMapSliceType extends ModxSlice<'POIMap'> {
     fitBoundsPadding?: [number, number];
     showOwnPosition?: boolean;
     restrictToMarkersArea?: boolean;
-    markerAreaBufferRatio?: number;
     attribution?: string;
     provider?: string;
     minZoom?: number;
@@ -103,7 +102,6 @@ export const PointOfInterestMapSlice: React.FC<PointOfInterestMapSliceType> = ({
     fitBoundsPadding = [30, 30],
     showOwnPosition = true,
     restrictToMarkersArea = true,
-    markerAreaBufferRatio = 0.4,
     attribution,
     provider,
     minZoom,
@@ -133,7 +131,6 @@ export const PointOfInterestMapSlice: React.FC<PointOfInterestMapSliceType> = ({
             fitBoundsPadding={fitBoundsPadding}
             showOwnPosition={showOwnPosition}
             restrictToMarkersArea={restrictToMarkersArea}
-            markerAreaBufferRatio={markerAreaBufferRatio}
             provider={provider}
             attribution={attribution}
             pois={collection?.pois

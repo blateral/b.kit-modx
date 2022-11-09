@@ -129,7 +129,7 @@ export interface SubmitActionProps {
     label?: string;
     additionalProps?: { type: 'submit'; as: 'button' | 'a' };
     handleSubmit?: (() => Promise<any>) | undefined;
-    isDisabled?: boolean | undefined;
+    isSubmitting?: boolean | undefined;
 }
 
 export interface DatepickerSubmitActionProps {
@@ -332,11 +332,11 @@ const createLabeledSubmitAction = (
     label?: string
 ) => {
     return submitAction
-        ? ({ isInverted, isDisabled, handleSubmit }: SubmitActionProps) =>
+        ? ({ isInverted, isSubmitting, handleSubmit }: SubmitActionProps) =>
               submitAction({
                   label: label || 'Submit',
                   handleSubmit,
-                  isDisabled,
+                  isSubmitting,
                   isInverted,
               })
         : undefined;
