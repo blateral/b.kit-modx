@@ -3,6 +3,7 @@ import {
     EventOverview,
     isValidArray,
     ThemeMods,
+    getEventFilterParams,
 } from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
@@ -94,7 +95,7 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
                     name: tag,
                     link: {
                         href: collectionUrl
-                            ? `/${collectionUrl}?eventsFilter=${tag}`
+                            ? getEventFilterParams(`/${collectionUrl}`, [tag])
                             : undefined,
                     },
                 };

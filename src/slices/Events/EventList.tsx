@@ -1,4 +1,10 @@
-import { assignTo, concat, EventList, ThemeMods } from '@blateral/b.kit';
+import {
+    assignTo,
+    concat,
+    EventList,
+    getEventFilterParams,
+    ThemeMods,
+} from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
@@ -106,7 +112,9 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
                         name: tag,
                         link: {
                             href: collectionUrl
-                                ? `/${collectionUrl}?eventsFilter=${tag}`
+                                ? getEventFilterParams(`/${collectionUrl}`, [
+                                      tag,
+                                  ])
                                 : undefined,
                         },
                     };

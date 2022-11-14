@@ -113,10 +113,10 @@
     "@babel/helper-validator-identifier" "^7.16.7"
     to-fast-properties "^2.0.0"
 
-"@blateral/b.kit@2.0.0-beta.24.3":
-  version "2.0.0-beta.24.3"
-  resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.0.0-beta.24.3.tgz#28c7ec6e2dbd281ab0c5582ca190d1ee7c5c8108"
-  integrity sha512-RD7NvasksX+Ri5bIgYd4Jr9wy4f2KdHRmb8h5mMLpf8R6QPmKCvLW9ZpyFmV3ybNjO60H5WXx1FL3FmDoK+KZw==
+"@blateral/b.kit@2.0.0-beta.24.6":
+  version "2.0.0-beta.24.6"
+  resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.0.0-beta.24.6.tgz#82359b5a43293e06d79dbe7a2c3c6aa1ff7d34e3"
+  integrity sha512-J4b//i6OSleque0vSCUneUCE9DjzdVn3y56Ctx2JFFbJb4fPw39jFe8J3lu6HwXyhiCSAwQo2j9Z5Vj3FZoCpg==
 
 "@emotion/is-prop-valid@^1.1.0":
   version "1.1.2"
