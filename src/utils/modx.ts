@@ -363,6 +363,7 @@ export interface ModxSettings extends ModxPage {
     menu: ModxMenuItemData;
     navBar: NavBarProperties;
     flyoutMenu: ModxFlyoutMenu;
+    siteName: string;
 
     cookie: {
         title?: string;
@@ -465,6 +466,7 @@ export interface ModxNewsPage extends ModxDocument {
     newsCollectionUrl?: string;
     newsOverviewUrl?: string;
     tags?: string;
+    name?: string;
     newsImage?: ModxImageProps;
     newsImagePreview?: ModxImageProps;
 
