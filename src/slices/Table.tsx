@@ -1,12 +1,12 @@
 import React from 'react';
 import { assignTo, Table, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
-import { TableProps } from '@blateral/b.kit/lib/components/sections/Table';
 import { normalizeAnchorId } from 'utils/mapping';
+import { TableProps } from '@blateral/b.kit/lib/components/blocks/TableBlock';
 
 export interface TableSliceType extends ModxSlice<'Table'> {
     isActive?: boolean;
-    bgMode?: string;
+    bgMode?: 'full' | 'inverted';
     bgColor?: string;
     anchorId?: string;
     tableTitle?: string;
@@ -54,9 +54,7 @@ export const TableSlice: React.FC<TableSliceType> = ({
         <Table
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
-            bgMode={
-                bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
-            }
+            bgMode={bgMode}
             tableItems={tableItems}
         />
     );

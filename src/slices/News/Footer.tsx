@@ -17,7 +17,7 @@ export interface NewsFooterSliceType
     isActive?: boolean;
     isInverted?: boolean;
     newsFooterBackground?: boolean;
-    newsCollectionUrl?: string;
+    newsOverviewUrl?: string;
     pageAlias?: string;
     bgColor?: string;
     theme?: ThemeMods;
@@ -43,7 +43,7 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     isInverted,
     pageAlias,
     newsFooterBackground,
-    newsCollectionUrl,
+    newsOverviewUrl,
     items,
     customTag,
     secondaryAction,
@@ -55,10 +55,9 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     const newsListMap = mapNewsListData({
         newsCollection: newsWithoutSelf,
         cardAction: secondaryAction,
-        newsCollectionUrl,
+        newsOverviewUrl,
     });
     const filteredNews = removeFirstImagesIfMissingAtLeastOne(newsListMap);
-    console.log(filteredNews);
 
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -107,12 +106,12 @@ function removeFirstImagesIfMissingAtLeastOne(
 
 function mapNewsListData({
     newsCollection,
-    newsCollectionUrl,
+    newsOverviewUrl,
     cardAction,
     onTagClick,
 }: {
     newsCollection: ModxNewsTeaser[] | undefined;
-    newsCollectionUrl?: string;
+    newsOverviewUrl?: string;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -136,6 +135,9 @@ function mapNewsListData({
             ...news.intro?.image_preview,
             small: news.intro?.image_preview?.small || '',
             alt: news.intro?.image_preview?.meta?.altText || '',
+            ratios: {
+                small: { w: 4, h: 3 },
+            },
         };
 
         const tagsArray =
@@ -145,9 +147,7 @@ function mapNewsListData({
             return {
                 name: tag,
                 link: {
-                    href: `/${newsCollectionUrl}?newsFilter=${encodeURIComponent(
-                        tag
-                    )}`,
+                    href: newsOverviewUrl ? `/${newsOverviewUrl}` : undefined,
                 },
             };
         });

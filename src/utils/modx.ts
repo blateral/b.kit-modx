@@ -463,6 +463,7 @@ export interface ModxJobData {
 
 export interface ModxNewsPage extends ModxDocument {
     newsCollectionUrl?: string;
+    newsOverviewUrl?: string;
     tags?: string;
     newsImage?: ModxImageProps;
     newsImagePreview?: ModxImageProps;

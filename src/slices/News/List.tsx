@@ -3,19 +3,14 @@ import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsList';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
-import {
-    BgMode,
-    ModxNewsTeaser,
-    ModxSlice,
-    parseModxDateString,
-} from 'utils/modx';
+import { ModxNewsTeaser, ModxSlice, parseModxDateString } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 
 export interface NewsListSliceType
     extends ModxSlice<'NewsList', ModxNewsTeaser> {
     anchorId?: string;
     isActive?: boolean;
-    bgMode?: BgMode;
+    bgMode?: 'full' | 'inverted';
     collectionId?: number;
     newsOverviewUrl?: string;
     bgColor?: string;
@@ -73,9 +68,7 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
         <NewsList
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
-            bgMode={
-                bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
-            }
+            bgMode={bgMode}
             mode={mode}
             customTag={customTag}
             news={news}
@@ -126,6 +119,9 @@ function mapNewsListData({
             ...news.intro?.image_preview,
             small: news.intro?.image_preview?.small || '',
             alt: news.intro?.image_preview?.meta?.altText || '',
+            ratios: {
+                small: { w: 4, h: 3 },
+            },
         };
 
         const tagsArray =
@@ -135,9 +131,9 @@ function mapNewsListData({
             return {
                 name: tag,
                 link: {
-                    href: `/${newsCollectionUrl}?newsFilter=${encodeURIComponent(
-                        tag
-                    )}`,
+                    href: newsCollectionUrl
+                        ? `/${newsCollectionUrl}`
+                        : undefined,
                 },
             };
         });

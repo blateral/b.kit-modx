@@ -10,6 +10,7 @@ export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
     anchorId?: string;
     isActive?: boolean;
     newsCollectionUrl?: string;
+    newsOverviewUrl?: string;
     newsHeading?: string;
     newsIntro?: string;
     newsImage?: ModxImageProps;
@@ -35,7 +36,7 @@ export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
 export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     anchorId,
     bgMode,
-    newsCollectionUrl,
+    newsOverviewUrl,
     authorName,
     publicationDate,
     newsImage,
@@ -45,7 +46,6 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     customTag,
     theme,
     tags,
-    config,
 }) => {
     const preppedPubDate = generatePublicationDateObject(publicationDate);
     const mappedImage = newsImage
@@ -53,17 +53,21 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
               ...newsImage,
               small: newsImage?.small || '',
               alt: newsImage?.meta?.altText || '',
+              ratios: {
+                  small: { w: 619, h: 348 },
+              },
           }
         : undefined;
 
-    const tagsArray = tags && tags.length > 0 ? tags?.split(',') : [];
+    const tagsArray =
+        tags && tags.length > 0
+            ? tags?.split(',')?.map((tag) => tag.trim())
+            : [];
     const tagPropsArray = tagsArray.map((tag): TagProps => {
         return {
             name: tag,
             link: {
-                href: `${
-                    config?.endpoint
-                }${newsCollectionUrl}?newsFilter=${encodeURIComponent(tag)}`,
+                href: newsOverviewUrl ? `/${newsOverviewUrl}` : undefined,
             },
         };
     });
