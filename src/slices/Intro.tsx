@@ -115,6 +115,7 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
                           copyright: image.meta?.copyright || '',
                           alt: image.meta?.altText || '',
                           ratios: imgRatios,
+                          coverSpace: !imgRatios,
                       }
                     : undefined
             }
