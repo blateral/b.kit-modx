@@ -52,6 +52,8 @@ import { NewsletterFormSliceType } from 'slices/NewsletterForm';
 import { PointOfInterestOverviewSliceType } from 'slices/POIs/PointOfInterestOverview';
 import { PointOfInterestMapSliceType } from 'slices/POIs/PointOfInterestMap';
 import { RawVideoSliceType } from 'slices/RawVideo';
+import { CookieTypes } from '@blateral/b.kit/lib/utils/cookie-consent/useCookieConsent';
+import { isValidArray } from '@blateral/b.kit';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -353,6 +355,14 @@ export interface NavBarProperties {
     };
 }
 
+export interface ModxLanguageSettings {
+    langs: Array<{
+        label?: string;
+        labelLong?: string;
+        link?: LinkProps;
+    }>;
+}
+
 export interface BreadCrumb {
     link?: LinkProps;
     label?: string;
@@ -373,6 +383,7 @@ export interface ModxSettings extends ModxPage {
         declineLabel?: string;
         icon?: ModxImageProps;
         whitelist?: string[];
+        cookieTypes?: string;
     };
 
     notification?: {
@@ -385,7 +396,12 @@ export interface ModxSettings extends ModxPage {
             newTab?: boolean;
         };
     };
+
+    socialsTitle?: string;
     socials?: SocialMediaItem[];
+
+    /** JSON string of ModxLanguageSettings */
+    languages?: string;
 
     logo?: {
         desktop?: string;
@@ -676,6 +692,48 @@ export const parseModxDateString = (modxDateString?: string) => {
         console.error('Error: Generating date item failed');
 
         return new Date(1970, 1, 1);
+    }
+};
+
+export const parseModxCookieTypes = (
+    modxTypesString?: string
+): CookieTypes | undefined => {
+    try {
+        if (!modxTypesString) {
+            throw new Error('Undefined cookie types settings input');
+        }
+
+        const types: CookieTypes = JSON.parse(modxTypesString);
+        if (!types || typeof types !== 'object') {
+            throw new Error('Cannot parse cookie types settings from MODX');
+        }
+
+        return types;
+    } catch (err) {
+        return undefined;
+    }
+};
+
+export const parseModxLanguageSettings = (
+    modxLanguagesString?: string
+): ModxLanguageSettings | undefined => {
+    try {
+        if (!modxLanguagesString) {
+            throw new Error('Undefined language settings input');
+        }
+
+        const settings: ModxLanguageSettings = JSON.parse(modxLanguagesString);
+        if (
+            !settings ||
+            typeof settings !== 'object' ||
+            !isValidArray(settings.langs, false)
+        ) {
+            throw new Error('Cannot parse language settings from MODX');
+        }
+
+        return settings;
+    } catch (err) {
+        return undefined;
     }
 };
 
