@@ -357,6 +357,7 @@ export interface NavBarProperties {
 
 export interface ModxLanguageSettings {
     langs: Array<{
+        urlParam?: string;
         label?: string;
         labelLong?: string;
         link?: LinkProps;
