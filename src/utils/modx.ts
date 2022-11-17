@@ -54,6 +54,7 @@ import { PointOfInterestMapSliceType } from 'slices/POIs/PointOfInterestMap';
 import { RawVideoSliceType } from 'slices/RawVideo';
 import { CookieTypes } from '@blateral/b.kit/lib/utils/cookie-consent/useCookieConsent';
 import { isValidArray } from '@blateral/b.kit';
+import { NewsletterFormStructure } from '@blateral/b.kit/lib/components/sections/NewsletterForm';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -730,6 +731,27 @@ export const parseModxLanguageSettings = (
             !isValidArray(settings.langs, false)
         ) {
             throw new Error('Cannot parse language settings from MODX');
+        }
+
+        return settings;
+    } catch (err) {
+        return undefined;
+    }
+};
+
+export const parseModxNewsletterFields = (
+    modxFieldsString?: string
+): NewsletterFormStructure | undefined => {
+    try {
+        if (!modxFieldsString) {
+            throw new Error('Undefined newsletter fields settings input');
+        }
+
+        const settings: NewsletterFormStructure = JSON.parse(modxFieldsString);
+        if (!settings || typeof settings !== 'object') {
+            throw new Error(
+                'Cannot parse newsletter fields settings from MODX'
+            );
         }
 
         return settings;

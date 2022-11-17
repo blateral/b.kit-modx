@@ -1,4 +1,4 @@
-import { ModxSlice } from 'utils/modx';
+import { ModxSlice, parseModxNewsletterFields } from 'utils/modx';
 
 import { assignTo, NewsletterForm, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
@@ -17,6 +17,7 @@ export interface NewsletterFormSliceType extends ModxSlice<'NewsletterForm'> {
     bgMode?: BgMode;
     bgColor?: string;
 
+    modxFields?: string;
     fields?: NewsletterFormStructure | undefined;
     action?: string;
     method?: string;
@@ -41,6 +42,7 @@ export const NewsletterFormSlice: React.FC<NewsletterFormSliceType> = ({
     bgMode,
     anchorId,
     bgColor,
+    modxFields,
     fields,
     action,
     method = 'post',
@@ -60,6 +62,8 @@ export const NewsletterFormSlice: React.FC<NewsletterFormSliceType> = ({
         },
         theme
     );
+
+    const modxFieldsSettings = parseModxNewsletterFields(modxFields);
 
     // default field settings
     const defaultFields: NewsletterFormStructure = {
@@ -91,7 +95,7 @@ export const NewsletterFormSlice: React.FC<NewsletterFormSliceType> = ({
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
-            fields={fields || defaultFields}
+            fields={fields || modxFieldsSettings || defaultFields}
             action={action}
             method={method}
             customField={customField}
