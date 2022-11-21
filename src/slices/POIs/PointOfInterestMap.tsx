@@ -166,10 +166,10 @@ export const PointOfInterestMapSlice: React.FC<PointOfInterestMapSliceType> = ({
                     }
 
                     let searchQuery = '';
-                    if (streetAndNumber && city) {
-                        searchQuery = concat([streetAndNumber, city], ', ');
-                    } else if (lat !== undefined && lng !== undefined) {
+                    if (lat !== undefined && lng !== undefined) {
                         searchQuery = concat([lat, lng], ',');
+                    } else if (streetAndNumber && city) {
+                        searchQuery = concat([streetAndNumber, city], ', ');
                     }
 
                     if (searchQuery) {
