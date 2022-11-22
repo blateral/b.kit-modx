@@ -384,6 +384,7 @@ export interface ModxSettings extends ModxPage {
         declineLabel?: string;
         icon?: ModxImageProps;
         whitelist?: string[];
+        typeSelectTitle?: string;
         cookieTypes?: string;
         videoCookieTypeRestrictions?: string[];
     };
