@@ -380,12 +380,12 @@ export interface ModxSettings extends ModxPage {
     cookie: {
         title?: string;
         text?: string;
-        footNote?: string;
         acceptanceLabel?: string;
         declineLabel?: string;
         icon?: ModxImageProps;
         whitelist?: string[];
         cookieTypes?: string;
+        videoCookieTypeRestrictions?: string[];
     };
 
     notification?: {
