@@ -27,10 +27,11 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
         };
     };
     title?: string;
-    titleAs?: string;
+    titleAs?: HeadlineTag;
     superTitle?: string;
     superTitleAs?: string;
     text?: string;
+    textSize?: string;
 
     isCentered?: boolean;
     isStackable?: boolean;
@@ -67,6 +68,7 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
     superTitle,
     superTitleAs,
     text,
+    textSize,
     primary_label,
     primary_link,
     secondary_label,
@@ -131,7 +133,9 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
                     ? (titleAs as HeadlineTag)
                     : HeadlineTagDefault
             }
+            titleSize={titleAs === 'h1' ? 'heading-1' : 'heading-2'}
             text={text}
+            textSize={textSize === 'big' ? 'big' : 'medium'}
             primaryAction={
                 primaryAction && isValidAction(primary_label, primary_link)
                     ? (isInverted: boolean) =>

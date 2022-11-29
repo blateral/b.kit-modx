@@ -73,6 +73,7 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
             bgMode={bgMode}
             title={title}
             titleAs={titleAs}
+            titleSize={titleAs === 'h1' ? 'heading-1' : 'heading-2'}
             halfAside={halfAside}
             superTitle={superTitle}
             superTitleAs={superTitleAs}

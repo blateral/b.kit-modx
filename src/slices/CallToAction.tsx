@@ -35,9 +35,10 @@ export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
     superTitleAs?: string;
 
     title?: string;
-    titleAs?: string;
+    titleAs?: HeadlineTag;
 
     text?: string;
+    textSize?: string;
 
     contact?: ContactData;
     badge?: BadgeData;
@@ -71,6 +72,7 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     superTitleAs,
     badge,
     text,
+    textSize,
     contact,
     primary_label,
     primary_link,
@@ -101,8 +103,10 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
             title={title}
+            titleSize={titleAs === 'h1' ? 'heading-1' : 'heading-2'}
             superTitle={superTitle}
             text={text}
+            textSize={textSize === 'big' ? 'big' : 'medium'}
             contact={
                 contact?.avatar?.src
                     ? {
