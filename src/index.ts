@@ -41,7 +41,6 @@ export * from 'slices/PriceList';
 export * from 'slices/PriceTable';
 export * from 'slices/Quote';
 export * from 'slices/SimpleImage';
-export * from 'slices/SocialNav';
 export * from 'slices/SocialWall';
 export * from 'slices/Table';
 export * from 'slices/Teaser';

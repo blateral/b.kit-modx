@@ -44,7 +44,6 @@ import { ParallaxBackgroundSliceType } from 'slices/ParallaxBackground';
 import { PriceListSliceType } from 'slices/PriceList';
 import { PriceTableSliceType } from 'slices/PriceTable';
 import { SimpleImageSliceType } from 'slices/SimpleImage';
-import { SocialNavSliceType } from 'slices/SocialNav';
 import { TimelineSliceType } from 'slices/Timeline';
 import { NewsAuthorCardSliceType } from 'slices/News/AuthorCard';
 import { NewsFooterSliceType } from 'slices/News/Footer';
@@ -150,7 +149,6 @@ export type PageContent =
     | PriceTableSliceType
     | QuoteSliceType
     | SimpleImageSliceType
-    | SocialNavSliceType
     | SocialWallSliceType
     | TableSliceType
     | TeaserSliceType
