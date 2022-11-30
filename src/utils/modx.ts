@@ -301,6 +301,7 @@ export interface ModxEventData {
             large: { w?: number; h?: number };
         };
     };
+    shortDescription?: string;
     text?: string;
     duration?: string;
     price?: string;
@@ -474,6 +475,7 @@ export interface ModxJobData {
         type: string;
     }>;
     title?: string;
+    shortDescription?: string;
     description?: string;
     actionLabel?: string;
     actionLink?: string;
