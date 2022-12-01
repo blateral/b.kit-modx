@@ -37,7 +37,7 @@ export const NewsListSlice: React.FC<NewsListSliceType> = ({
     items,
     anchorId,
     mode,
-    hasImages,
+    hasImages = true,
     newsOverviewUrl,
     customTag,
     cardAction,

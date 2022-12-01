@@ -20,6 +20,7 @@ export interface NewsFooterSliceType
     newsFooterBackground?: boolean;
     newsOverviewUrl?: string;
     pageAlias?: string;
+    hasImages?: boolean;
     bgColor?: string;
     theme?: ThemeMods;
 
@@ -43,6 +44,7 @@ export interface NewsFooterSliceType
 export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     isInverted,
     pageAlias,
+    hasImages = true,
     newsFooterBackground,
     newsOverviewUrl,
     items,
@@ -57,6 +59,7 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
         newsCollection: newsWithoutSelf,
         cardAction: secondaryAction,
         newsOverviewUrl,
+        hasImages,
     });
 
     // merging cms and component theme settings
@@ -90,11 +93,13 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
 function mapNewsListData({
     newsCollection,
     newsOverviewUrl,
+    hasImages,
     cardAction,
     onTagClick,
 }: {
     newsCollection: ModxNewsTeaser[] | undefined;
     newsOverviewUrl?: string;
+    hasImages?: boolean;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -137,7 +142,7 @@ function mapNewsListData({
             };
         });
         return {
-            image: mappedImage,
+            image: hasImages ? mappedImage : undefined,
             tags: tagPropsArray,
             publishDate: publicationDate,
             title: news?.label || '',
