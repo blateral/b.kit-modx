@@ -1,5 +1,6 @@
 import { assignTo, NewsFooter, ThemeMods } from '@blateral/b.kit';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
+import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsFooter';
 import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
 import { ModxImageProps, ModxNewsTeaser, ModxSlice } from 'utils/modx';
@@ -57,7 +58,6 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
         cardAction: secondaryAction,
         newsOverviewUrl,
     });
-    const filteredNews = removeFirstImagesIfMissingAtLeastOne(newsListMap);
 
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -74,7 +74,7 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     return (
         <NewsFooter
             theme={sliceTheme}
-            news={filteredNews || []}
+            news={newsListMap || []}
             bgMode={
                 isInverted
                     ? 'inverted'
@@ -86,23 +86,6 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
         />
     );
 };
-
-function removeFirstImagesIfMissingAtLeastOne(
-    mappedNews: MappedNewsItem[],
-    countToCheck = 2
-) {
-    const firstTwoItems = mappedNews.slice(0, countToCheck);
-    const enableFirstImages =
-        !!firstTwoItems[0]?.image?.small && !!firstTwoItems[1]?.image?.small;
-
-    if (enableFirstImages) {
-        return mappedNews;
-    } else {
-        return mappedNews.map((news) => {
-            return { ...news, image: undefined };
-        });
-    }
-}
 
 function mapNewsListData({
     newsCollection,
@@ -119,7 +102,7 @@ function mapNewsListData({
         isExternal?: boolean;
     }) => React.ReactNode;
     onTagClick?: (name?: string) => void;
-}) {
+}): NewsItem[] {
     if (!newsCollection) return [];
 
     return newsCollection.map((news) => {
@@ -141,7 +124,9 @@ function mapNewsListData({
         };
 
         const tagsArray =
-            news?.tags && news.tags.length > 0 ? news.tags?.split(',') : [];
+            news?.tags && news.tags.length > 0
+                ? news.tags?.split(',').map((tag) => tag.trim())
+                : [];
 
         const tagPropsArray = tagsArray.map((tag): TagProps => {
             return {
@@ -159,7 +144,7 @@ function mapNewsListData({
             text: news.intro?.text,
             link: { href: news.link, isExternal: false },
 
-            secondaryAction:
+            action:
                 cardAction && news.link
                     ? (isInverted: boolean) =>
                           cardAction({
