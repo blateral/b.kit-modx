@@ -28,6 +28,7 @@ export interface HeaderSliceType extends ModxSlice<'Header', HeaderSliceItem> {
     title?: string;
     titleAs?: HeadlineTag;
     text?: string;
+    forceTextOnImage?: boolean;
     onImageChange?: (
         image?: Omit<ImageProps, 'ratios' | 'coverSpace'> | undefined
     ) => void;
@@ -74,6 +75,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
     title,
     titleAs,
     text,
+    forceTextOnImage,
     customImgOverlay,
     primary_label,
     primary_link,
@@ -124,6 +126,7 @@ export const HeaderSlice: React.FC<HeaderSliceType> = ({
             title={title || ''}
             titleAs={titleAs}
             text={text || ''}
+            textOnImage={forceTextOnImage}
             customImgOverlay={customImgOverlay}
             kenBurnsInterval={kenBurnsSettings?.interval}
             kenBurnsZoom={kenBurnsSettings?.zoom}
