@@ -38,7 +38,7 @@ export const SimpleImageSlice: React.FC<SimpleImageSliceType> = ({
     );
 
     let ratio: { w: number; h: number } | undefined = undefined;
-    if (image?.originals.w && image?.originals.h) {
+    if (image?.originals?.w && image?.originals?.h) {
         ratio = {
             w: +image.originals.w,
             h: +image.originals.h,
