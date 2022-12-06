@@ -29,6 +29,7 @@ type ImageFormats =
     | 'gallery-triple-left'
     | 'gallery-triple-right'
     | 'landscape-wide';
+
 export interface CrossPromotionListSliceType
     extends ModxSlice<'CrossPromotionList', CrossPromotionItems> {
     isActive?: boolean;
@@ -104,7 +105,7 @@ export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = ({
     );
 };
 
-function mapGalleryImageFormat(imageFormat: ImageFormats) {
+const mapGalleryImageFormat = (imageFormat: ImageFormats) => {
     switch (imageFormat) {
         case 'gallery-square':
             return 'square';
@@ -115,9 +116,33 @@ function mapGalleryImageFormat(imageFormat: ImageFormats) {
         default:
             return 'square';
     }
-}
+};
 
-function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
+const mapImageRatio = (
+    format: 'portrait' | 'landscape' | 'square' | 'landscape-wide'
+) => {
+    let ratio = { h: 1, w: 1 };
+    switch (format) {
+        case 'landscape': {
+            ratio = { w: 4, h: 3 };
+            break;
+        }
+        case 'portrait': {
+            ratio = { w: 3, h: 4 };
+            break;
+        }
+        case 'landscape-wide': {
+            ratio = { w: 5, h: 2 };
+            break;
+        }
+        default: {
+            ratio = { w: 1, h: 1 };
+        }
+    }
+    return ratio;
+};
+
+const mapTripleImageLeft = (item: CrossPromotionItems, index: number) => {
     const calcIndex = index + 1;
     if (index === 1 || calcIndex % 4 === 0) {
         const mappedImage = {
@@ -133,6 +158,10 @@ function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                    semilarge: mapImageRatio('portrait'),
+                },
             },
             title: item.title,
             // href: item.link || undefined,
@@ -154,15 +183,18 @@ function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
             large: item.image?.list['landscape']?.large,
             xlarge: item.image?.list['landscape']?.xlarge,
         };
+
         return {
             isMain: false,
             size: 'half',
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                },
             },
             title: item.title,
-            //href: item.link || undefined,
             link: item.link
                 ? {
                       href: item.link,
@@ -174,28 +206,32 @@ function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
             size?: 'full' | 'half' | undefined;
         };
     }
-}
+};
 
 function mapTripleImageRight(item: CrossPromotionItems, index: number) {
     const calcIndex = index + 1;
     if (calcIndex % 3 === 0) {
         const mappedImage = {
-            small: item.image?.list?.landscape?.small || '',
-            medium: item.image?.list?.landscape?.medium,
+            small: item.image?.list['landscape']?.small || '',
+            medium: item.image?.list['landscape']?.medium,
             semilarge: item.image?.list['portrait']?.semilarge,
             large: item.image?.list['portrait']?.large,
             xlarge: item.image?.list['portrait']?.xlarge,
         };
+
         return {
             isMain: true,
             size: 'half',
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                    semilarge: mapImageRatio('portrait'),
+                },
             },
             superTitle: item.superTitle,
             title: item.title,
-            // href: item.link || undefined,
             link: item.link
                 ? {
                       href: item.link,
@@ -220,6 +256,9 @@ function mapTripleImageRight(item: CrossPromotionItems, index: number) {
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                },
             },
             superTitle: item.superTitle,
             title: item.title,
@@ -246,17 +285,22 @@ const mapNonTripleGalleryImage = (
 ) => {
     if (array.length === 1) {
         const mappedImage = {
-            small: item.image?.list?.['landscape-wide']?.small || '',
-            medium: item.image?.list?.['landscape-wide']?.medium,
+            small: item.image?.list?.['landscape']?.small || '',
+            medium: item.image?.list?.['landscape']?.medium,
             large: item.image?.list['landscape-wide']?.large,
             xlarge: item.image?.list['landscape-wide']?.xlarge,
         };
+
         return {
             size: 'full',
             isMain: true,
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                    semilarge: mapImageRatio('landscape-wide'),
+                },
             },
             superTitle: item.superTitle,
             title: item.title,
@@ -281,16 +325,20 @@ const mapNonTripleGalleryImage = (
         large: item.image?.list[mappedImageFormat || 'square']?.large,
         xlarge: item.image?.list[mappedImageFormat || 'square']?.xlarge,
     };
+
     return {
         size: isFull ? 'full' : 'half',
         isMain: isFull,
         image: {
             ...mappedImage,
             alt: item.image?.meta.altText || '',
+            ratios: {
+                small: mapImageRatio('landscape'),
+                semilarge: mapImageRatio(mappedImageFormat),
+            },
         },
         superTitle: item.superTitle,
         title: item.title,
-        // href: item.link || undefined,
         link: item.link
             ? {
                   href: item.link,
