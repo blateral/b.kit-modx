@@ -1,8 +1,10 @@
 import {
+    assignTo,
     concat,
     EventOverview,
     isValidArray,
     ThemeMods,
+    useLibTheme,
 } from '@blateral/b.kit';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
@@ -16,6 +18,7 @@ import {
     parseModxDateString,
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+import { getFilterTagsArray } from 'utils/filterTags';
 
 interface Event {
     alias?: string;
@@ -55,6 +58,7 @@ export interface EventOverviewSliceType extends ModxSlice<'EventOverview'> {
     hasImages?: boolean;
     primary_label?: string;
     collection?: EventCollection;
+    queryParams?: Record<string, any>;
     customTag?: (props: {
         name: string;
         isInverted?: boolean;
@@ -73,12 +77,38 @@ export interface EventOverviewSliceType extends ModxSlice<'EventOverview'> {
 export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
     anchorId,
     bgMode,
+    bgColor,
     hasImages,
     primary_label,
     collection,
     customTag,
     action,
+    queryParams,
+    theme,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                sectionBg: {
+                    medium: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
+    // get new theme (parent theme + sliceTheme) that is also used inside NewsOverview component
+    const { theme: parentTheme } = useLibTheme();
+    const filterName = assignTo(parentTheme, sliceTheme).globals.sections
+        .eventFilterName;
+
+    // get inital data from query params (serverside)
+    const initialTags = getFilterTagsArray(queryParams?.[filterName]);
+    const initialRows = queryParams?.rows
+        ? parseInt(queryParams.rows)
+        : undefined;
+
     const collectionUrl = collection?.alias;
     const events = collection?.events
         ?.filter(removePastFilterFn)
@@ -138,6 +168,12 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
         <EventOverview
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
+            initial={{
+                visibleRows: initialRows,
+                activeTags: isValidArray(initialTags, false)
+                    ? initialTags
+                    : undefined,
+            }}
             tags={collection ? getUniqueTags(collection) : []}
             customTag={customTag}
             events={mapEventItemsToOverviewItems()}

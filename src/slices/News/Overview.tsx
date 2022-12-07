@@ -3,6 +3,7 @@ import {
     isValidArray,
     NewsOverview,
     ThemeMods,
+    useLibTheme,
 } from '@blateral/b.kit';
 import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsOverview';
@@ -14,6 +15,7 @@ import {
     parseModxDateString,
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+import { getFilterTagsArray } from 'utils/filterTags';
 
 export interface NewsOverviewSliceType
     extends ModxSlice<'NewsOverview', ModxNewsTeaser> {
@@ -55,6 +57,7 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
     onTagClick,
     customTag,
     items,
+    queryParams,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -68,10 +71,27 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
         theme
     );
 
+    // get new theme (parent theme + sliceTheme) that is also used inside NewsOverview component
+    const { theme: parentTheme } = useLibTheme();
+    const filterName = assignTo(parentTheme, sliceTheme).globals.sections
+        .newsFilterName;
+
+    // get inital data from query params (serverside)
+    const initialTags = getFilterTagsArray(queryParams?.[filterName]);
+    const initialRows = queryParams?.rows
+        ? parseInt(queryParams.rows)
+        : undefined;
+
     return (
         <NewsOverview
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
+            initial={{
+                visibleRows: initialRows,
+                activeTags: isValidArray(initialTags, false)
+                    ? initialTags
+                    : undefined,
+            }}
             customTag={customTag}
             tags={getUniqueTags(items)}
             onTagClick={onTagClick}
