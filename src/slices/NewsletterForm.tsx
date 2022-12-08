@@ -21,6 +21,7 @@ export interface NewsletterFormSliceType extends ModxSlice<'NewsletterForm'> {
     fields?: NewsletterFormStructure | undefined;
     action?: string;
     method?: string;
+    submitLabel?: string;
 
     /** Function to inject custom field definition */
     customField?: (props: FieldGenerationProps) => React.ReactNode;
@@ -30,6 +31,7 @@ export interface NewsletterFormSliceType extends ModxSlice<'NewsletterForm'> {
 
     /** Function to inject custom submit button */
     submitAction?: (props: {
+        label?: string;
         isInverted?: boolean;
         handleSubmit?: () => Promise<any>;
         isDisabled?: boolean;
@@ -46,6 +48,7 @@ export const NewsletterFormSlice: React.FC<NewsletterFormSliceType> = ({
     fields,
     action,
     method = 'post',
+    submitLabel,
     customField,
     onSubmit,
     submitAction,
@@ -100,7 +103,11 @@ export const NewsletterFormSlice: React.FC<NewsletterFormSliceType> = ({
             method={method}
             customField={customField}
             onSubmit={onSubmit}
-            submitAction={submitAction}
+            submitAction={
+                submitAction && submitLabel
+                    ? (props) => submitAction({ ...props, label: submitLabel })
+                    : undefined
+            }
         />
     );
 };
