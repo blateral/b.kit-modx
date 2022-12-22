@@ -39,6 +39,7 @@ export interface FeatureListSliceType
     bgMode?: BgMode;
     bgColor?: string;
     imageFormat: string;
+    columns?: string;
 
     action?: (props: {
         isInverted?: boolean;
@@ -56,6 +57,7 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
     bgColor,
     imageFormat,
     items,
+    columns,
     action,
     theme,
 }) => {
@@ -83,6 +85,7 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
             bgMode={bgMode}
             isCentered={isCentered}
             theme={sliceTheme}
+            columns={columns ? (+columns === 2 ? 2 : 3) : undefined}
             features={items
                 .filter(filterMissingSmallFormat)
                 .map<FeatureProps>(
