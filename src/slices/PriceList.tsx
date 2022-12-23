@@ -1,23 +1,26 @@
 import React from 'react';
-import { assignTo, PriceList, Theme } from '@blateral/b.kit';
+import { assignTo, PriceList, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from '../utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface PriceListItem {
     text?: string;
-    title?: string;
     price?: string;
+    title?: string;
 }
 
 export interface PriceListSliceType
     extends ModxSlice<'PriceList', PriceListItem> {
     isActive?: boolean;
+    anchorId?: string;
     bgMode?: 'full' | 'inverted';
-    theme?: Theme;
+    theme?: ThemeMods;
     bgColor?: string;
 }
 
 export const PriceListSlice: React.FC<PriceListSliceType> = ({
     bgMode,
+    anchorId,
     items,
     theme,
     bgColor,
@@ -25,11 +28,12 @@ export const PriceListSlice: React.FC<PriceListSliceType> = ({
     const filteredItems = items.filter(filterEmptyItems);
     if (filteredItems.length < 1) return null;
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -37,7 +41,12 @@ export const PriceListSlice: React.FC<PriceListSliceType> = ({
     );
 
     return (
-        <PriceList bgMode={bgMode} items={filteredItems} theme={sliceTheme} />
+        <PriceList
+            bgMode={bgMode}
+            anchorId={normalizeAnchorId(anchorId)}
+            items={filteredItems}
+            theme={sliceTheme}
+        />
     );
 };
 

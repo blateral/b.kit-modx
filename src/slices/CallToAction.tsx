@@ -1,6 +1,6 @@
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
-import { assignTo, CallToAction, Theme } from '@blateral/b.kit';
+import { assignTo, CallToAction, ThemeMods } from '@blateral/b.kit';
 import {
     ModxSlice,
     BgMode,
@@ -8,6 +8,7 @@ import {
     isValidAction,
     ModxImageMetaData,
 } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface ContactData {
     avatar?: {
@@ -24,23 +25,17 @@ interface BadgeData {
 
 export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
     isActive?: boolean;
-    theme?: Theme;
-
+    theme?: ThemeMods;
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
     isMirrored?: boolean;
-    newsForm?: (props: {
-        isInverted?: boolean;
-        placeholder?: string;
-        buttonIcon?: React.ReactNode;
-        backgroundStyle?: 'white' | 'gray';
-    }) => React.ReactNode;
 
     superTitle?: string;
     superTitleAs?: string;
 
     title?: string;
-    titleAs?: string;
+    titleAs?: HeadlineTag;
 
     text?: string;
 
@@ -67,6 +62,7 @@ export interface CallToActionSliceType extends ModxSlice<'CallToAction'> {
 
 export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     theme,
+    anchorId,
     bgMode,
     bgColor,
     title,
@@ -80,7 +76,6 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     primary_link,
     secondary_label,
     secondary_link,
-    newsForm,
     primaryAction,
     secondaryAction,
 }) => {
@@ -88,26 +83,18 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <CallToAction
             theme={sliceTheme}
-            // newsFormMain={
-            //     newsForm
-            //         ? (isInverted) =>
-            //               newsForm({
-            //                   isInverted,
-            //                   placeholder: mainColumn?.newsPlaceholder,
-            //               })
-            //         : undefined
-            // }
-
+            anchorId={normalizeAnchorId(anchorId)}
             superTitleAs={(superTitleAs as HeadlineTag) || 'div'}
             titleAs={(titleAs as HeadlineTag) || 'div'}
             bgMode={
@@ -160,4 +147,14 @@ export const CallToActionSlice: React.FC<CallToActionSliceType> = ({
             }
         />
     );
+};
+
+export const getCallToActionSearchData = (
+    slice: CallToActionSliceType
+): string[] => {
+    const data: string[] = [];
+    if (slice?.title) data.push(slice.title);
+    if (slice?.text) data.push(slice.text);
+    if (slice?.contact?.description) data.push(slice.contact.description);
+    return data;
 };

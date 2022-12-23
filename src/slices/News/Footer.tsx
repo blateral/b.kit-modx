@@ -1,15 +1,37 @@
-import { assignTo, NewsFooter, Theme } from '@blateral/b.kit';
+import { assignTo, NewsFooter, ThemeMods } from '@blateral/b.kit';
+import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
+import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsFooter';
+import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
-import { ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { ModxImageProps, ModxNewsTeaser, ModxSlice } from 'utils/modx';
 
+export interface MappedNewsItem {
+    image?: ModxImageProps;
+    tags: TagProps[];
+    publishDate?: Date;
+    title: string;
+    text?: string;
+    link: LinkProps;
+}
 export interface NewsFooterSliceType
     extends ModxSlice<'NewsFooter', ModxNewsTeaser> {
     isActive?: boolean;
     isInverted?: boolean;
     newsFooterBackground?: boolean;
+    newsOverviewUrl?: string;
     pageAlias?: string;
+    hasImages?: boolean;
     bgColor?: string;
-    theme?: Theme;
+    theme?: ThemeMods;
+
+    customTag?: (props: {
+        key: React.Key;
+        name: string;
+        isInverted?: boolean;
+        isActive?: boolean;
+        link?: LinkProps;
+    }) => React.ReactNode;
+
     // helpers to define component elements outside of slice
     secondaryAction?: (props: {
         isInverted?: boolean;
@@ -17,17 +39,17 @@ export interface NewsFooterSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-
-    onTagClick?: (name?: string) => void;
 }
 
 export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     isInverted,
     pageAlias,
+    hasImages = true,
     newsFooterBackground,
+    newsOverviewUrl,
     items,
+    customTag,
     secondaryAction,
-    onTagClick,
     bgColor,
     theme,
 }) => {
@@ -36,14 +58,16 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     const newsListMap = mapNewsListData({
         newsCollection: newsWithoutSelf,
         cardAction: secondaryAction,
-        onTagClick,
+        newsOverviewUrl,
+        hasImages,
     });
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -61,16 +85,21 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
                     ? 'full'
                     : undefined
             }
-            showMoreText={'mehr anzeigen'}
+            customTag={customTag}
         />
     );
 };
+
 function mapNewsListData({
     newsCollection,
+    newsOverviewUrl,
+    hasImages,
     cardAction,
     onTagClick,
 }: {
     newsCollection: ModxNewsTeaser[] | undefined;
+    newsOverviewUrl?: string;
+    hasImages?: boolean;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -78,7 +107,7 @@ function mapNewsListData({
         isExternal?: boolean;
     }) => React.ReactNode;
     onTagClick?: (name?: string) => void;
-}) {
+}): NewsItem[] {
     if (!newsCollection) return [];
 
     return newsCollection.map((news) => {
@@ -90,21 +119,37 @@ function mapNewsListData({
         } catch {
             publicationDate = undefined;
         }
-
         const mappedImage = {
             ...news.intro?.image_preview,
             small: news.intro?.image_preview?.small || '',
             alt: news.intro?.image_preview?.meta?.altText || '',
+            ratios: {
+                small: { w: 4, h: 3 },
+            },
         };
+
+        const tagsArray =
+            news?.tags && news.tags.length > 0
+                ? news.tags?.split(',').map((tag) => tag.trim())
+                : [];
+
+        const tagPropsArray = tagsArray.map((tag): TagProps => {
+            return {
+                name: tag,
+                link: {
+                    href: newsOverviewUrl ? `/${newsOverviewUrl}` : undefined,
+                },
+            };
+        });
         return {
-            image: mappedImage,
-            tag: news?.tags?.split(',')[0] || '',
+            image: hasImages ? mappedImage : undefined,
+            tags: tagPropsArray,
             publishDate: publicationDate,
             title: news?.label || '',
             text: news.intro?.text,
-            link: { href: 'news/' + news.link, isExternal: false },
+            link: { href: news.link, isExternal: false },
 
-            secondaryAction:
+            action:
                 cardAction && news.link
                     ? (isInverted: boolean) =>
                           cardAction({

@@ -1,7 +1,8 @@
 import { BgMode, ModxImageProps, ModxSlice } from '../utils/modx';
 
-import { assignTo, NumberList, Theme } from '@blateral/b.kit';
+import { assignTo, NumberList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface NumberListItem {
     icon?: Pick<ModxImageProps, 'small' | 'meta'>;
@@ -12,15 +13,17 @@ interface NumberListItem {
 export interface NumberListSliceType
     extends ModxSlice<'NumberList', NumberListItem> {
     isActive?: boolean;
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const NumberListSlice: React.FC<NumberListSliceType> = ({
     bgMode,
     bgColor,
+    anchorId,
     items,
 
     theme,
@@ -29,8 +32,8 @@ export const NumberListSlice: React.FC<NumberListSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -40,6 +43,7 @@ export const NumberListSlice: React.FC<NumberListSliceType> = ({
     return (
         <NumberList
             theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }

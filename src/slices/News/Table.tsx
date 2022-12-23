@@ -1,18 +1,18 @@
-import { assignTo, NewsTable, Theme } from '@blateral/b.kit';
+import { assignTo, NewsTable, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
-import { BgMode, ModxSlice } from 'utils/modx';
+import { ModxSlice } from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
-import { TableProps } from '@blateral/b.kit/lib/components/sections/news/NewsTable';
+import { TableProps } from '@blateral/b.kit/lib/components/blocks/TableBlock';
 
 export interface NewsTableSliceType extends ModxSlice<'NewsTable'> {
     isActive?: boolean;
-    bgMode?: BgMode;
+    bgMode?: 'full' | 'inverted';
     title?: string;
     titleAs?: HeadlineTag;
     sliceRows?: Array<{ cols: string[] }>;
     as_table_header?: boolean;
     bgColor?: string;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const NewsTableSlice: React.FC<NewsTableSliceType> = ({
@@ -23,51 +23,41 @@ export const NewsTableSlice: React.FC<NewsTableSliceType> = ({
     bgColor,
     theme,
 }) => {
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
+    const tableItems = createTableItems(sliceRows, !!as_table_header, title);
+
     return (
-        <NewsTable
-            theme={sliceTheme}
-            bgMode={(bgMode as any) || undefined}
-            tableItems={
-                sliceRows
-                    ? [
-                          createTableItem(
-                              sliceRows,
-                              title || '',
-                              !!as_table_header
-                          ),
-                      ]
-                    : []
-            }
-        />
+        <NewsTable theme={sliceTheme} bgMode={bgMode} tableItems={tableItems} />
     );
 };
 
-function createTableItem(
-    item: Array<{ cols: string[] }>,
-    title: string,
-    withTableHeader: boolean
-): TableProps {
-    const tableRows = item;
-    let firstRowTitle: { cols: string[] } | undefined = undefined;
-
-    if (tableRows && withTableHeader) {
-        firstRowTitle = tableRows[0];
-        tableRows?.splice(0, 1);
+function createTableItems(
+    sliceRows?: Array<{ cols: string[] }>,
+    hasFirstRowTitle?: boolean,
+    tableTitle?: string
+) {
+    const rowData = JSON.parse(JSON.stringify(sliceRows));
+    let rowTitle: { cols: string[] } | undefined = undefined;
+    if (rowData && hasFirstRowTitle) {
+        rowTitle = rowData.shift();
     }
 
-    return {
-        rowTitle: firstRowTitle?.cols,
-        row: tableRows || [],
-        tableTitle: title || '',
-    };
+    return [
+        {
+            tableTitle: tableTitle || '',
+            rowTitle: hasFirstRowTitle ? rowTitle?.cols : undefined,
+            row: rowData || [],
+        },
+    ] as TableProps[];
 }

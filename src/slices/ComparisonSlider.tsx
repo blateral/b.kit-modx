@@ -1,4 +1,4 @@
-import { assignTo, ComparisonSlider, Theme } from '@blateral/b.kit';
+import { assignTo, ComparisonSlider, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import {
@@ -7,11 +7,12 @@ import {
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface ComparisonSliderSliceType
     extends ModxSlice<'ComparisonSlider'> {
     isActive?: boolean;
-
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
     hasAnim?: boolean;
@@ -25,11 +26,12 @@ export interface ComparisonSliderSliceType
     labelColor?: string;
     dragControl?: React.ReactNode;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({
     bgMode,
+    anchorId,
     bgColor,
     hasAnim,
     foregroundImage,
@@ -57,8 +59,8 @@ export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -68,6 +70,7 @@ export const ComparisonSliderSlice: React.FC<ComparisonSliderSliceType> = ({
     return (
         <ComparisonSlider
             theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             initialValue={initalValue}
             foregroundImg={mappedForegroundImage}

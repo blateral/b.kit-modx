@@ -1,7 +1,8 @@
 import { ModxSlice, ModxImageProps } from 'utils/modx';
 
-import { assignTo, SocialWall, Theme } from '@blateral/b.kit';
+import { assignTo, SocialWall, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { normalizeAnchorId } from 'utils/mapping';
 
 type BgMode = 'full' | 'inverted';
 
@@ -13,20 +14,21 @@ interface WallItems {
 export interface SocialWallSliceType
     extends ModxSlice<'SocialWall', WallItems> {
     isActive?: boolean;
-
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
     followUs?: string;
-    hashtag?: string;
+    hashTag?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
     bgMode,
+    anchorId,
     bgColor,
     followUs,
-    hashtag,
+    hashTag,
     items,
 
     theme,
@@ -35,8 +37,8 @@ export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -46,18 +48,16 @@ export const SocialWallSlice: React.FC<SocialWallSliceType> = ({
     return (
         <SocialWall
             theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
-            hashtag={hashtag}
+            hashTag={hashTag}
             followUs={followUs}
             items={items?.map((item) => ({
                 link: {
                     href: item.link,
                     isExternal: true,
                 },
-                image: {
-                    src: item?.image?.small || '',
-                    alt: item?.image?.meta?.altText || '',
-                },
+                image: item.image,
             }))}
         />
     );

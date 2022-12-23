@@ -1,9 +1,4 @@
-import {
-    assignTo,
-    CrossPromotion,
-    PromotionCarousel,
-    Theme,
-} from '@blateral/b.kit';
+import { assignTo, CrossPromotion, ThemeMods } from '@blateral/b.kit';
 
 import { PromotionCardProps } from '@blateral/b.kit/lib/components/blocks/PromotionCard';
 import React from 'react';
@@ -14,12 +9,11 @@ import {
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
-import { ResponsiveObject } from './slick';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface CrossPromotionItems {
     isMain?: boolean;
     image?: {
-        carousel: ModxImagePropsWithFormat;
         list: ModxImagePropsWithFormat;
         meta: ModxImageMetaData;
     };
@@ -34,65 +28,31 @@ type ImageFormats =
     | 'gallery-landscape'
     | 'gallery-triple-left'
     | 'gallery-triple-right'
-    | 'carousel-square'
-    | 'carousel-portrait'
-    | 'carousel-big-portrait'
-    | 'carousel-landscape'
     | 'landscape-wide';
+
 export interface CrossPromotionListSliceType
     extends ModxSlice<'CrossPromotionList', CrossPromotionItems> {
     isActive?: boolean;
-    isCarousel?: boolean;
+    anchorId?: string;
     isMirrored?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
     externalLinkIcon?: React.ReactNode;
     imageFormat: ImageFormats;
-    controlNext?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
-    }) => React.ReactNode;
-    controlPrev?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
-    }) => React.ReactNode;
-    dot?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        index?: number;
-    }) => React.ReactNode;
-    beforeChange?: (props: { currentStep: number; nextStep: number }) => void;
-    afterChange?: (currentStep: number) => void;
-    onInit?: (steps: number) => void;
-    slidesToShow?: number;
-    responsive?: ResponsiveObject[];
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
-export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = (
-    props
-) => {
-    const { isCarousel } = props;
-
-    if (isCarousel) {
-        return createCPromoCarousel(props);
-    } else {
-        return createCPromoList(props);
-    }
-};
-
-const createCPromoList = ({
-    bgMode,
-    bgColor,
-    imageFormat,
-    isMirrored,
-    externalLinkIcon,
+export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = ({
     items,
+    isMirrored,
+    imageFormat,
+    bgColor,
     theme,
-}: CrossPromotionListSliceType) => {
+    anchorId,
+    externalLinkIcon,
+    bgMode,
+}) => {
     const promoItems: Array<CrossPromotionItems> = items;
     const isImagesMirrored =
         isMirrored || imageFormat === 'gallery-triple-right' ? true : false;
@@ -124,8 +84,8 @@ const createCPromoList = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -134,6 +94,7 @@ const createCPromoList = ({
 
     return (
         <CrossPromotion
+            anchorId={normalizeAnchorId(anchorId)}
             externalLinkIcon={externalLinkIcon}
             theme={sliceTheme}
             isMirrored={isImagesMirrored}
@@ -144,86 +105,7 @@ const createCPromoList = ({
     );
 };
 
-const createCPromoCarousel = ({
-    bgMode,
-    bgColor,
-    imageFormat,
-
-    items,
-    controlNext,
-    controlPrev,
-    dot,
-    beforeChange,
-    afterChange,
-    onInit,
-    externalLinkIcon,
-    slidesToShow,
-    responsive,
-    theme,
-}: CrossPromotionListSliceType) => {
-    // merging cms and component theme settings
-    const sliceTheme = assignTo(
-        {
-            colors: {
-                mono: {
-                    light: bgColor || '',
-                },
-            },
-        },
-        theme
-    );
-
-    const mappedImageFormat = mapCarouselImageFormat(imageFormat);
-    return (
-        <PromotionCarousel
-            theme={sliceTheme}
-            bgMode={bgMode}
-            promotions={items.map(({ image, superTitle, title, link }) => {
-                const mappedImage = {
-                    small: image?.carousel?.landscape?.small || '',
-                    medium: image?.carousel[mappedImageFormat || 'square']
-                        ?.medium,
-                    semilarge:
-                        image?.carousel[mappedImageFormat || 'square']
-                            ?.semilarge,
-                    large: image?.carousel[mappedImageFormat || 'square']
-                        ?.large,
-                    xlarge: image?.carousel[mappedImageFormat || 'square']
-                        ?.xlarge,
-                };
-
-                return {
-                    // href: link || undefined,
-                    link: link
-                        ? {
-                              href: link,
-                              isExternal: isExternalLink(link),
-                          }
-                        : undefined,
-                    superTitle: superTitle,
-                    title: title,
-                    image: {
-                        ...mappedImage,
-                        alt: image?.meta.altText || '',
-                        title: title,
-                        href: link || undefined,
-                    },
-                };
-            })}
-            controlNext={controlNext}
-            controlPrev={controlPrev}
-            beforeChange={beforeChange}
-            afterChange={afterChange}
-            onInit={onInit}
-            dot={dot}
-            externalLinkIcon={externalLinkIcon}
-            slidesToShow={slidesToShow}
-            responsive={responsive}
-        />
-    );
-};
-
-function mapGalleryImageFormat(imageFormat: ImageFormats) {
+const mapGalleryImageFormat = (imageFormat: ImageFormats) => {
     switch (imageFormat) {
         case 'gallery-square':
             return 'square';
@@ -234,24 +116,33 @@ function mapGalleryImageFormat(imageFormat: ImageFormats) {
         default:
             return 'square';
     }
-}
+};
 
-function mapCarouselImageFormat(imageFormat: ImageFormats) {
-    switch (imageFormat) {
-        case 'carousel-square':
-            return 'square';
-        case 'carousel-portrait':
-            return 'portrait';
-        case 'carousel-landscape':
-            return 'landscape';
-        case 'carousel-big-portrait':
-            return 'portrait';
-        default:
-            return 'square';
+const mapImageRatio = (
+    format: 'portrait' | 'landscape' | 'square' | 'landscape-wide'
+) => {
+    let ratio = { h: 1, w: 1 };
+    switch (format) {
+        case 'landscape': {
+            ratio = { w: 4, h: 3 };
+            break;
+        }
+        case 'portrait': {
+            ratio = { w: 3, h: 4 };
+            break;
+        }
+        case 'landscape-wide': {
+            ratio = { w: 5, h: 2 };
+            break;
+        }
+        default: {
+            ratio = { w: 1, h: 1 };
+        }
     }
-}
+    return ratio;
+};
 
-function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
+const mapTripleImageLeft = (item: CrossPromotionItems, index: number) => {
     const calcIndex = index + 1;
     if (index === 1 || calcIndex % 4 === 0) {
         const mappedImage = {
@@ -267,8 +158,11 @@ function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                    semilarge: mapImageRatio('portrait'),
+                },
             },
-            superTitle: item.superTitle,
             title: item.title,
             // href: item.link || undefined,
             link: item.link
@@ -289,16 +183,18 @@ function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
             large: item.image?.list['landscape']?.large,
             xlarge: item.image?.list['landscape']?.xlarge,
         };
+
         return {
             isMain: false,
             size: 'half',
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                },
             },
-            superTitle: item.superTitle,
             title: item.title,
-            //href: item.link || undefined,
             link: item.link
                 ? {
                       href: item.link,
@@ -310,28 +206,32 @@ function mapTripleImageLeft(item: CrossPromotionItems, index: number) {
             size?: 'full' | 'half' | undefined;
         };
     }
-}
+};
 
 function mapTripleImageRight(item: CrossPromotionItems, index: number) {
     const calcIndex = index + 1;
     if (calcIndex % 3 === 0) {
         const mappedImage = {
-            small: item.image?.list?.landscape?.small || '',
-            medium: item.image?.list?.landscape?.medium,
+            small: item.image?.list['landscape']?.small || '',
+            medium: item.image?.list['landscape']?.medium,
             semilarge: item.image?.list['portrait']?.semilarge,
             large: item.image?.list['portrait']?.large,
             xlarge: item.image?.list['portrait']?.xlarge,
         };
+
         return {
             isMain: true,
             size: 'half',
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                    semilarge: mapImageRatio('portrait'),
+                },
             },
             superTitle: item.superTitle,
             title: item.title,
-            // href: item.link || undefined,
             link: item.link
                 ? {
                       href: item.link,
@@ -356,6 +256,9 @@ function mapTripleImageRight(item: CrossPromotionItems, index: number) {
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                },
             },
             superTitle: item.superTitle,
             title: item.title,
@@ -382,17 +285,22 @@ const mapNonTripleGalleryImage = (
 ) => {
     if (array.length === 1) {
         const mappedImage = {
-            small: item.image?.list?.['landscape-wide']?.small || '',
-            medium: item.image?.list?.['landscape-wide']?.medium,
+            small: item.image?.list?.['landscape']?.small || '',
+            medium: item.image?.list?.['landscape']?.medium,
             large: item.image?.list['landscape-wide']?.large,
             xlarge: item.image?.list['landscape-wide']?.xlarge,
         };
+
         return {
             size: 'full',
             isMain: true,
             image: {
                 ...mappedImage,
                 alt: item.image?.meta.altText || '',
+                ratios: {
+                    small: mapImageRatio('landscape'),
+                    semilarge: mapImageRatio('landscape-wide'),
+                },
             },
             superTitle: item.superTitle,
             title: item.title,
@@ -417,16 +325,20 @@ const mapNonTripleGalleryImage = (
         large: item.image?.list[mappedImageFormat || 'square']?.large,
         xlarge: item.image?.list[mappedImageFormat || 'square']?.xlarge,
     };
+
     return {
         size: isFull ? 'full' : 'half',
         isMain: isFull,
         image: {
             ...mappedImage,
             alt: item.image?.meta.altText || '',
+            ratios: {
+                small: mapImageRatio('landscape'),
+                semilarge: mapImageRatio(mappedImageFormat),
+            },
         },
         superTitle: item.superTitle,
         title: item.title,
-        // href: item.link || undefined,
         link: item.link
             ? {
                   href: item.link,

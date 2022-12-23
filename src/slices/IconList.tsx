@@ -1,4 +1,4 @@
-import { assignTo, IconList, Theme } from '@blateral/b.kit';
+import { assignTo, IconList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import {
     BgMode,
@@ -7,15 +7,26 @@ import {
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
+import { isSVG, normalizeAnchorId } from 'utils/mapping';
 
 interface IconListImages {
-    image: ModxImageProps;
-    link?: string;
+    image: ModxImageProps & {
+        originals?: {
+            w?: number;
+            h?: number;
+        };
+    };
+    link: {
+        href?: string;
+        isExternal?: boolean;
+    };
 }
 
 export interface IconListSliceType
     extends ModxSlice<'IconList', IconListImages> {
     isActive?: boolean;
+
+    anchorId?: string;
 
     isCentered?: boolean;
     showMoreText?: string;
@@ -40,11 +51,12 @@ export interface IconListSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const IconListSlice: React.FC<IconListSliceType> = ({
     bgMode,
+    anchorId,
     bgColor,
     isCentered,
     enableToggle,
@@ -63,8 +75,8 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -73,6 +85,7 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
 
     return (
         <IconList
+            anchorId={normalizeAnchorId(anchorId)}
             theme={sliceTheme}
             enableToggle={enableToggle}
             isCentered={isCentered}
@@ -84,15 +97,21 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
             showMoreText={showMoreText}
             showLessText={showLessText}
             items={items.map((item) => {
+                const originalSize = item?.image?.originals;
+                const aspectRatio =
+                    originalSize?.w && originalSize?.h
+                        ? {
+                              w: originalSize.w,
+                              h: originalSize.h,
+                          }
+                        : undefined;
+
                 return {
                     src: item?.image?.small || '',
+                    ratio: aspectRatio,
                     alt: item?.image?.meta?.altText || '',
-                    link: item.link
-                        ? {
-                              href: item.link,
-                              isExternal: true,
-                          }
-                        : undefined,
+                    link: item?.link?.href ? item.link : undefined,
+                    showPlaceholder: !isSVG(item?.image?.small),
                 };
             })}
             primaryAction={

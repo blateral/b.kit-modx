@@ -1,8 +1,9 @@
 import React from 'react';
 
-import { assignTo, Gallery, ImageCarousel, Theme } from '@blateral/b.kit';
-import { ResponsiveObject } from 'slices/slick';
+import { assignTo, Gallery, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
+import { ImageAspectRatios } from '@blateral/b.kit/lib/components/blocks/Image';
 
 type ImageFormats =
     | 'small-square'
@@ -29,93 +30,59 @@ interface GalleryItems {
 
 export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
     isActive?: boolean;
-    isCarousel?: boolean;
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
 
-    // helpers to define component elements outside of slice
-    controlNext?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
-    }) => React.ReactNode;
-    controlPrev?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
-    }) => React.ReactNode;
-    dot?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        index?: number;
-    }) => React.ReactNode;
-    beforeChange?: (props: { currentStep: number; nextStep: number }) => void;
-    afterChange?: (currentStep: number) => void;
-    onInit?: (steps: number) => void;
-    slidesToShow?: number;
-    responsive?: ResponsiveObject[];
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const GallerySlice: React.FC<GallerySliceType> = ({
-    isCarousel,
+    anchorId,
     bgMode,
     bgColor,
     items,
-
-    controlNext,
-    controlPrev,
-    dot,
-    beforeChange,
-    afterChange,
-    onInit,
-    slidesToShow,
-    responsive,
     theme,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
 
-    const sharedProps = {
-        images: items?.map((item) => {
-            const theImage: ModxImageProps =
-                item[item?.imageFormat || 'small-square'];
-
-            return {
-                ...theImage,
-                small: theImage?.small || '',
-                alt: theImage?.meta?.altText || '',
-                isFull: item?.imageFormat?.includes('wide-'),
-            };
-        }),
+    const aspectRatios = {
+        square: { small: { w: 1, h: 1 } },
+        landscape: { small: { w: 4, h: 3 } },
+        portrait: { small: { w: 3, h: 4 } },
+        'landscape-wide': { small: { w: 1440, h: 710 } },
     };
 
-    if (isCarousel) {
-        return (
-            <ImageCarousel
-                {...sharedProps}
-                theme={sliceTheme}
-                bgMode={bgMode}
-                controlNext={controlNext}
-                controlPrev={controlPrev}
-                beforeChange={beforeChange}
-                afterChange={afterChange}
-                onInit={onInit}
-                dot={dot}
-                slidesToShow={slidesToShow}
-                responsive={responsive}
-            />
-        );
-    } else {
-        return <Gallery {...sharedProps} theme={sliceTheme} bgMode={bgMode} />;
-    }
+    return (
+        <Gallery
+            theme={sliceTheme}
+            bgMode={bgMode}
+            anchorId={normalizeAnchorId(anchorId)}
+            images={items?.map((item) => {
+                const isFull = item?.imageFormat?.includes('-wide');
+                const format = item?.imageFormat || 'square';
+                const theImage: ModxImageProps =
+                    item[isFull ? format : `small-${format}`];
+                const ratios: ImageAspectRatios = aspectRatios[format];
+
+                return {
+                    ...theImage,
+                    small: theImage?.small || '',
+                    alt: theImage?.meta?.altText || '',
+                    isFull: isFull,
+                    ratios: ratios || undefined,
+                };
+            })}
+        />
+    );
 };

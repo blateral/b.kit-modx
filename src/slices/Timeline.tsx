@@ -1,6 +1,7 @@
 import { ModxSlice } from '../utils/modx';
 import React from 'react';
-import { assignTo, Theme, Timeline } from '@blateral/b.kit';
+import { assignTo, ThemeMods, Timeline } from '@blateral/b.kit';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface TimelineItems {
     label?: string;
@@ -13,15 +14,16 @@ type BgMode = 'full' | 'inverted';
 export interface TimelineSliceType
     extends ModxSlice<'Timeline', TimelineItems> {
     isActive?: boolean;
-
+    anchorId?: string;
     bgMode?: BgMode;
     bgColor?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const TimelineSlice: React.FC<TimelineSliceType> = ({
     items,
+    anchorId,
     bgMode,
     bgColor,
     theme,
@@ -30,13 +32,20 @@ export const TimelineSlice: React.FC<TimelineSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
 
-    return <Timeline bgMode={bgMode} theme={sliceTheme} items={items} />;
+    return (
+        <Timeline
+            bgMode={bgMode}
+            theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
+            items={items}
+        />
+    );
 };

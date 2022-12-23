@@ -1,56 +1,41 @@
 import React from 'react';
-import { assignTo, Theme, Video, VideoCarousel } from '@blateral/b.kit';
-import { ResponsiveObject } from './slick';
-import { isBgModeString, ModxImageProps, ModxSlice } from 'utils/modx';
+import { assignTo, ThemeMods, Video } from '@blateral/b.kit';
+import { ModxImageProps, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface VideoCardItem {
     bgImage: ModxImageProps;
     embedId: string;
 }
+
 export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
     isActive?: boolean;
-    bgMode?: string;
+    bgMode?: 'full' | 'inverted' | 'splitted';
     bgColor?: string;
+    anchorId?: string;
+    playIcon?: React.ReactNode;
 
-    controlNext?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
+    consentText?: string;
+    consentActionLabel?: string;
+    consentAction?: (props: {
+        label: string;
+        handleClick?: () => void;
+        consentProps: Record<string, string>;
     }) => React.ReactNode;
-    controlPrev?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        name?: string;
-    }) => React.ReactNode;
-    dot?: (props: {
-        isInverted?: boolean;
-        isActive?: boolean;
-        index?: number;
-    }) => React.ReactNode;
-    beforeChange?: (props: { currentStep: number; nextStep: number }) => void;
-    afterChange?: (currentStep: number) => void;
-    onInit?: (steps: number) => void;
-    slidesToShow?: number;
-    responsive?: ResponsiveObject[];
-    playIcon?: React.ReactChild;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const VideoSlice: React.FC<VideoSliceType> = ({
     bgMode,
     bgColor,
     items,
-
-    controlNext,
-    controlPrev,
-    dot,
-    beforeChange,
-    afterChange,
-    onInit,
-    slidesToShow,
-    responsive,
+    anchorId,
     playIcon,
+
+    consentText,
+    consentActionLabel,
+    consentAction,
 
     theme,
 }) => {
@@ -58,56 +43,36 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
 
-    // if more than one items are defined create a carousel
-    if (items && items.length > 1) {
-        return (
-            <VideoCarousel
-                theme={sliceTheme}
-                bgMode={isBgModeString(bgMode) ? bgMode : undefined}
-                videos={items.map((item) => {
-                    return {
-                        embedId: item.embedId,
-                        bgImage: item.bgImage,
-                        playIcon: playIcon,
-                    };
-                })}
-                controlNext={controlNext}
-                controlPrev={controlPrev}
-                beforeChange={beforeChange}
-                afterChange={afterChange}
-                onInit={onInit}
-                dot={dot}
-                slidesToShow={slidesToShow}
-                responsive={responsive}
-            />
-        );
-    } else {
-        // get first video item
-        const embedId = items[0] && items[0].embedId;
-        const bgImage = items[0] && items[0].bgImage;
+    const embedId = items?.[0]?.embedId;
+    const bgImage = items?.[0]?.bgImage;
 
-        return (
-            <Video
-                theme={sliceTheme}
-                bgMode={
-                    isBgModeString(bgMode)
-                        ? bgMode === 'full' || bgMode === 'inverted'
-                            ? bgMode
-                            : undefined
-                        : undefined
-                }
-                bgImage={bgImage || {}}
-                embedId={embedId}
-                playIcon={playIcon}
-            />
-        );
-    }
+    return (
+        <Video
+            anchorId={normalizeAnchorId(anchorId)}
+            theme={sliceTheme}
+            bgMode={bgMode}
+            bgImage={bgImage}
+            embedId={embedId}
+            playIcon={playIcon}
+            consentText={consentText}
+            consentAction={
+                consentAction && consentActionLabel
+                    ? ({ consentProps, handleClick }) =>
+                          consentAction({
+                              consentProps,
+                              handleClick,
+                              label: consentActionLabel,
+                          })
+                    : undefined
+            }
+        />
+    );
 };

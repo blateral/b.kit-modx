@@ -1,4 +1,4 @@
-import { assignTo, NewsAuthorCard, Theme } from '@blateral/b.kit';
+import { assignTo, NewsAuthorCard, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
@@ -9,7 +9,7 @@ export interface NewsAuthorCardSliceType extends ModxSlice<'NewsAuthor'> {
     authorImage?: Pick<ModxImageProps, 'small' | 'meta'>;
     authorLabel?: string;
     bgColor?: string;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const NewsAuthorCardSlice: React.FC<NewsAuthorCardSliceType> = ({
@@ -28,11 +28,12 @@ export const NewsAuthorCardSlice: React.FC<NewsAuthorCardSliceType> = ({
             alt: authorImage?.meta?.altText || '',
         } || undefined;
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },

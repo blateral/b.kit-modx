@@ -1,15 +1,12 @@
 // import { FactList } from '@blateral/b.kit';
 import React from 'react';
-import { assignTo, FactList, Theme } from '@blateral/b.kit';
+import { assignTo, FactList, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface FactListEntryItems {
     title?: string;
     text?: string;
-    icon?: {
-        url?: string;
-        meta?: ModxImageMetaData;
-    };
 }
 
 export interface FactListSliceType
@@ -17,6 +14,11 @@ export interface FactListSliceType
     isActive?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
+    anchorId?: string;
+    icon?: {
+        url?: string;
+        meta?: ModxImageMetaData;
+    };
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -29,22 +31,23 @@ export interface FactListSliceType
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const FactListSlice: React.FC<FactListSliceType> = ({
     bgMode,
     bgColor,
+    anchorId,
     items,
-
+    icon,
     theme,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -54,17 +57,22 @@ export const FactListSlice: React.FC<FactListSliceType> = ({
     return (
         <FactList
             theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
+            }
+            icon={
+                icon?.url
+                    ? {
+                          src: icon.url,
+                          alt: icon.meta?.altText || '',
+                      }
+                    : undefined
             }
             facts={items?.map((item) => {
                 return {
                     label: item.title,
                     text: item.text,
-                    icon: {
-                        src: item?.icon?.url || '',
-                        alt: item?.icon?.meta?.altText || '',
-                    },
                 };
             })}
         />

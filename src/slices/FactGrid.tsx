@@ -1,12 +1,15 @@
 // import { FactList } from '@blateral/b.kit';
 import React from 'react';
-import { assignTo, FactGrid, Theme } from '@blateral/b.kit';
+import { assignTo, FactGrid, ThemeMods } from '@blateral/b.kit';
 import {
     BgMode,
+    ModxImageProps,
     // endpoint,
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
+
 import { isSVG } from 'utils/mapping';
 interface FactGridEntryItems {
     title?: string;
@@ -17,18 +20,19 @@ interface FactGridEntryItems {
 export interface FactGridSliceType
     extends ModxSlice<'FactGrid', FactGridEntryItems> {
     isActive?: boolean;
-
+    anchorId?: string;
     isCentered?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
     imageFormat?: 'landscape-wide' | 'landscape';
     columns?: 3 | 4 | 6 | string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const FactGridSlice: React.FC<FactGridSliceType> = ({
     isCentered,
+    anchorId,
     bgMode,
     bgColor,
     imageFormat,
@@ -40,17 +44,23 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
 
+    const aspectRatios = {
+        landscape: { small: { w: 620, h: 465 } },
+        'landscape-wide': { small: { w: 620, h: 310 } },
+    };
+
     return (
         <FactGrid
             theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
             isCentered={isCentered}
             bgMode={bgMode}
             columns={
@@ -59,37 +69,27 @@ export const FactGridSlice: React.FC<FactGridSliceType> = ({
                     : (parseInt(columns || '3') as 3 | 4 | 6)
             }
             facts={items?.map(({ title, text, image }) => {
+                // check if image urls are path to SVG image
                 const isSvgImage =
                     isSVG(image?.landscape?.small) ||
                     isSVG(image?.['landscape-wide']?.xlarge);
 
-                const completeImage = image && {
-                    ...image[imageFormat || 'landscape-wide'],
-                    small: image[imageFormat || 'landscape-wide']?.small || '',
+                const selectedAspect: {
+                    small: { w: number; h: number };
+                } = aspectRatios[imageFormat || 'landscape'];
+
+                const completeImage: ModxImageProps & {
+                    ratios?: {
+                        small: {
+                            w: number;
+                            h: number;
+                        };
+                    };
+                } = image && {
+                    ...image[imageFormat || 'square'],
+                    ratios: !isSvgImage ? selectedAspect : undefined,
                     coverSpace: !isSvgImage,
                 };
-
-                // if (isSvgImage) {
-                //     completeImage = image && {
-                //         small: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.small || ''
-                //         }`,
-                //         medium: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.medium || ''
-                //         }`,
-                //         semilarge: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.semilarge ||
-                //             ''
-                //         }`,
-                //         large: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.large || ''
-                //         }`,
-                //         xlarge: `${endpoint}${
-                //             image[imageFormat || 'landscape-wide']?.xlarge || ''
-                //         }`,
-                //         coverSpace: !isSvgImage,
-                //     };
-                // }
 
                 return {
                     title: title,

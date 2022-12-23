@@ -1,36 +1,47 @@
 import {
     ModxImageProps,
-    ModxMenuItemData,
     ModxSlice,
     SizeSelect,
     isExternalLink,
     isValidAction,
-    endpoint,
 } from 'utils/modx';
 
-import { Header, Theme } from '@blateral/b.kit';
+import { assignTo, Header, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { normalizeAnchorId } from 'utils/mapping';
+import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
+import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import {
+    HeaderFocus,
+    HeaderImage,
+} from '@blateral/b.kit/lib/components/sections/header/Header';
 
-export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
+type BgMode = 'full' | 'inverted';
+
+export type HeaderSliceItem = ModxImageProps & { mobileImage?: string };
+
+export interface HeaderSliceType extends ModxSlice<'Header', HeaderSliceItem> {
     isActive?: boolean;
+    anchorId?: string;
+    bgMode?: BgMode;
     size?: SizeSelect;
-    intro?: {
-        title?: string;
-        text?: string;
-    };
+    title?: string;
+    titleAs?: HeadlineTag;
+    text?: string;
+    forceTextOnImage?: boolean;
+    onImageChange?: (
+        image?: Omit<ImageProps, 'ratios' | 'coverSpace'> | undefined
+    ) => void;
+    customImgOverlay?: string;
     videoUrl?: string;
-    badge?: Omit<ModxImageProps, 'meta'>;
-    badgeOnMobile?: boolean;
-    buttonstyle?: boolean;
+
     primary_label?: string;
     primary_link?: string;
     secondary_label?: string;
     secondary_link?: string;
-    allowNavbarOverflow?: boolean;
-    isNavLarge?: boolean;
-    isInverted?: boolean;
-    navInverted?: boolean;
 
+    bgColor?: string;
+    isCentered?: boolean;
     primaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -43,283 +54,121 @@ export interface HeaderSliceType extends ModxSlice<'Header', ModxImageProps> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    primaryActionPointer?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
-    secondaryActionPointer?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
-    nav_primaryAction?: (props: {
-        isInverted?: boolean;
-        size?: 'desktop' | 'mobile';
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
-    nav_secondaryAction?: (props: {
-        isInverted?: boolean;
-        size?: 'desktop' | 'mobile';
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
 
-    // inject logo icon for into slice
-    injectLogo?: (props: {
-        isInverted?: boolean;
-        size?: 'full' | 'small';
-    }) => React.ReactNode;
-    customBottomGradient?: string;
     kenBurnsSettings?: {
         interval?: number;
         zoom?: number;
         zoomPoint?: [number, number];
     };
-    search?: (isInverted?: boolean) => React.ReactNode;
+    focusPointX?: 'left' | 'center' | 'right';
+    focusPointY?: 'top' | 'center' | 'bottom';
 
-    height?: string;
-
-    theme?: Theme;
-
-    settingsPage?: ModxMenuItemData;
-    pageAlias?: string;
+    theme?: ThemeMods;
 }
 
 export const HeaderSlice: React.FC<HeaderSliceType> = ({
+    anchorId,
     videoUrl,
-    badge,
-    badgeOnMobile,
     size,
-    intro,
-    buttonstyle,
+    bgMode,
+    isCentered,
+    title,
+    titleAs,
+    text,
+    forceTextOnImage,
+    customImgOverlay,
     primary_label,
     primary_link,
     secondary_label,
     secondary_link,
     items,
-    customBottomGradient,
+    onImageChange,
     kenBurnsSettings,
+    focusPointX,
+    focusPointY,
     primaryAction,
     secondaryAction,
-    primaryActionPointer,
-    secondaryActionPointer,
-    height,
     theme,
+    bgColor,
+    config,
 }) => {
     // map header images
-    const headerImageMap = items?.map(toComponentImageFormat) || undefined;
+    const headerImages = items?.map(toComponentImageFormat) || undefined;
+
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                sectionBg: {
+                    medium: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
+    const focusPoint: HeaderFocus = [
+        focusPointX || 'center',
+        focusPointY || 'center',
+    ];
 
     return (
         <Header
-            theme={theme}
+            theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
+            bgMode={bgMode}
             size={size || 'full'}
-            height={height}
-            videoUrl={videoUrl ? `${endpoint}${videoUrl}` : ''}
-            images={headerImageMap}
-            title={intro?.title || ''}
-            intro={intro}
+            isCentered={isCentered}
+            videoUrl={videoUrl ? `${config?.endpoint}${videoUrl}` : ''}
+            images={headerImages}
+            focusPoint={focusPoint}
+            onImageChange={onImageChange}
+            title={title || ''}
+            titleAs={titleAs}
+            text={text || ''}
+            textOnImage={forceTextOnImage}
+            customImgOverlay={customImgOverlay}
             kenBurnsInterval={kenBurnsSettings?.interval}
             kenBurnsZoom={kenBurnsSettings?.zoom}
             kenBurnsZoomPoint={kenBurnsSettings?.zoomPoint}
-            badge={headerBadge(badge?.xlarge, badgeOnMobile)}
-            primaryCta={getPrimaryButtonOrPointer({
-                isCta: !buttonstyle,
-                primary_label: primary_label,
-                primary_link: primary_link,
-                primaryAction,
-                primaryActionPointer,
-            })}
-            secondaryCta={getSecondaryButtonOrPointer({
-                isCta: !buttonstyle,
-                secondary_label: secondary_label,
-                secondary_link: secondary_link,
-                secondaryAction,
-                secondaryActionPointer,
-            })}
-            customBottomGradient={customBottomGradient}
+            primaryAction={
+                primaryAction && isValidAction(primary_label, primary_link)
+                    ? (isInverted: boolean) =>
+                          primaryAction({
+                              isInverted,
+                              label: primary_label,
+                              href: primary_link || '',
+                              isExternal: isExternalLink(primary_link),
+                          })
+                    : undefined
+            }
+            secondaryAction={
+                secondaryAction &&
+                isValidAction(secondary_label, secondary_link)
+                    ? (isInverted: boolean) =>
+                          secondaryAction({
+                              isInverted,
+                              label: secondary_label,
+                              href: secondary_link || '',
+                              isExternal: isExternalLink(secondary_link),
+                          })
+                    : undefined
+            }
         />
     );
 };
 
-function headerBadge(badgeUrl?: string, showOnMobile = true) {
-    return badgeUrl
-        ? {
-              content: (
-                  <img
-                      src={badgeUrl || ''}
-                      //FIXME: Missing meta tags
-                      //   alt={badge?.meta?.altText || ''}
-                      alt="Verzierung für die Kopfzeile"
-                      style={{ height: '100%', width: '100%' }}
-                  />
-              ),
-              showOnMobile: showOnMobile,
-          }
-        : undefined;
-}
-
-const getPrimaryButtonOrPointer = ({
-    isCta,
-    primaryAction,
-    primaryActionPointer,
-    primary_label,
-    primary_link,
-}: {
-    isCta: boolean;
-    primaryAction?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
-    primaryActionPointer?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
-    primary_label?: string;
-    primary_link?: string;
-}) => {
-    if (!primaryAction && !primaryActionPointer) return undefined;
-
-    if (primaryAction && !primaryActionPointer) {
-        return isValidAction(primary_label, primary_link)
-            ? (isInverted: boolean) =>
-                  primaryAction({
-                      isInverted,
-                      label: primary_label,
-                      href: primary_link || '',
-                      isExternal: isExternalLink(primary_link),
-                  })
-            : undefined;
-    }
-    if (!primaryAction && primaryActionPointer) {
-        return isValidAction(primary_label, primary_link)
-            ? (isInverted: boolean) =>
-                  primaryActionPointer({
-                      isInverted,
-                      label: primary_label,
-                      href: primary_link || '',
-                      isExternal: isExternalLink(primary_link),
-                  })
-            : undefined;
-    }
-
-    if (isCta) {
-        return primaryAction && isValidAction(primary_label, primary_link)
-            ? (isInverted: boolean) =>
-                  primaryAction({
-                      isInverted,
-                      label: primary_label,
-                      href: primary_link || '',
-                      isExternal: isExternalLink(primary_link),
-                  })
-            : undefined;
-    }
-
-    if (!isCta) {
-        return primaryActionPointer &&
-            isValidAction(primary_label, primary_link)
-            ? (isInverted: boolean) =>
-                  primaryActionPointer({
-                      isInverted,
-                      label: primary_label,
-                      href: primary_link || '',
-                      isExternal: isExternalLink(primary_link),
-                  })
-            : undefined;
-    }
-
-    return undefined;
-};
-
-const getSecondaryButtonOrPointer = ({
-    isCta,
-    secondaryAction,
-    secondaryActionPointer,
-    secondary_label,
-    secondary_link,
-}: {
-    isCta: boolean;
-    secondaryAction?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
-    secondaryActionPointer?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
-    secondary_label?: string;
-    secondary_link?: string;
-}) => {
-    if (!secondaryAction && !secondaryActionPointer) return undefined;
-
-    if (secondaryAction && !secondaryActionPointer) {
-        return isValidAction(secondary_label, secondary_link)
-            ? (isInverted: boolean) =>
-                  secondaryAction({
-                      isInverted,
-                      label: secondary_label,
-                      href: secondary_link || '',
-                      isExternal: isExternalLink(secondary_link),
-                  })
-            : undefined;
-    }
-    if (!secondaryAction && secondaryActionPointer) {
-        return isValidAction(secondary_label, secondary_link)
-            ? (isInverted: boolean) =>
-                  secondaryActionPointer({
-                      isInverted,
-                      label: secondary_label,
-                      href: secondary_link || '',
-                      isExternal: isExternalLink(secondary_link),
-                  })
-            : undefined;
-    }
-
-    if (isCta) {
-        return secondaryAction && isValidAction(secondary_label, secondary_link)
-            ? (isInverted: boolean) =>
-                  secondaryAction({
-                      isInverted,
-                      label: secondary_label,
-                      href: secondary_link || '',
-                      isExternal: isExternalLink(secondary_link),
-                  })
-            : undefined;
-    }
-
-    if (!isCta) {
-        return secondaryActionPointer &&
-            isValidAction(secondary_label, secondary_link)
-            ? (isInverted: boolean) =>
-                  secondaryActionPointer({
-                      isInverted,
-                      label: secondary_label,
-                      href: secondary_link || '',
-                      isExternal: isExternalLink(secondary_link),
-                  })
-            : undefined;
-    }
-
-    return undefined;
-};
-
-const toComponentImageFormat = (item: ModxImageProps) => {
+const toComponentImageFormat = (item: HeaderSliceItem): HeaderImage => {
     return {
         ...item,
-        small: item?.small || '',
+        small: item.mobileImage || item?.small || '',
         alt: item?.meta?.altText,
     };
+};
+
+export const getHeaderSearchData = (slice: HeaderSliceType): string[] => {
+    const data: string[] = [];
+    if (slice?.title) data.push(slice.title);
+    if (slice?.text) data.push(slice.text);
+    return data;
 };

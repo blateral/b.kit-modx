@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Poster, Theme } from '@blateral/b.kit';
+import { assignTo, Poster, ThemeMods } from '@blateral/b.kit';
 import {
     isExternalLink,
     isHeadlineTag,
@@ -11,8 +11,11 @@ import {
 } from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
+import { normalizeAnchorId } from 'utils/mapping';
+
 export interface PosterSliceType extends ModxSlice<'Poster'> {
     isActive?: boolean;
+    anchorId?: string;
     isInverted?: boolean;
     image?: ModxImageProps;
     hasWrapper?: boolean;
@@ -21,6 +24,7 @@ export interface PosterSliceType extends ModxSlice<'Poster'> {
     title?: string;
     titleAs?: HeadlineTag;
     text?: string;
+    bgColor?: string;
     primary_label?: string;
     secondary_label?: string;
     primary_link?: string;
@@ -38,11 +42,12 @@ export interface PosterSliceType extends ModxSlice<'Poster'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const PosterSlice: React.FC<PosterSliceType> = ({
     image,
+    anchorId,
     superTitle,
     superTitleAs,
     title,
@@ -56,11 +61,25 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
     primaryAction,
     secondaryAction,
     theme,
+    bgColor,
 }) => {
+    // merging cms and component theme settings
+    const sliceTheme = assignTo(
+        {
+            colors: {
+                sectionBg: {
+                    medium: bgColor || '',
+                },
+            },
+        },
+        theme
+    );
+
     return (
         <Poster
-            theme={theme}
-            hasWrapper={hasWrapper}
+            anchorId={normalizeAnchorId(anchorId)}
+            theme={sliceTheme}
+            width={hasWrapper ? 'content' : 'full'}
             image={mapImageToComponentData(image)}
             title={title}
             titleAs={

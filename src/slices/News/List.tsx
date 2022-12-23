@@ -1,66 +1,99 @@
-import { assignTo, NewsList, Theme } from '@blateral/b.kit';
+import { assignTo, NewsList, ThemeMods } from '@blateral/b.kit';
+import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
+import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsList';
+import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
-import { BgMode, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { ModxNewsTeaser, ModxSlice, parseModxDateString } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface NewsListSliceType
     extends ModxSlice<'NewsList', ModxNewsTeaser> {
+    anchorId?: string;
     isActive?: boolean;
-    showMoreText?: string;
-    bgMode?: BgMode;
+    bgMode?: 'full' | 'inverted';
     collectionId?: number;
+    newsOverviewUrl?: string;
     bgColor?: string;
-    theme?: Theme;
+    hasImages?: boolean;
+    mode?: 'short' | 'expanded';
+    theme?: ThemeMods;
+    customTag?: (props: {
+        key: React.Key;
+        name: string;
+        isInverted?: boolean;
+        isActive?: boolean;
+        link?: LinkProps;
+    }) => React.ReactNode;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    onTagClick?: (name: string) => void;
 }
 
 export const NewsListSlice: React.FC<NewsListSliceType> = ({
-    showMoreText,
     bgMode,
     items,
+    anchorId,
+    mode,
+    hasImages = true,
+    newsOverviewUrl,
+    customTag,
     cardAction,
-    onTagClick,
     bgColor,
     theme,
 }) => {
     // get background mode
-    const newsListMap = mapNewsListData({
+    const news = mapNewsListData({
         newsCollection: items,
+        hasImages,
         cardAction,
-        onTagClick,
+        newsCollectionUrl: newsOverviewUrl,
     });
+
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
         theme
     );
+
     return (
         <NewsList
             theme={sliceTheme}
-            showMoreText={showMoreText}
-            bgMode={
-                bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
-            }
-            news={newsListMap}
+            anchorId={normalizeAnchorId(anchorId)}
+            bgMode={bgMode}
+            mode={mode}
+            customTag={customTag}
+            news={news}
         />
     );
 };
+
+const sortFilterFn = (a: ModxNewsTeaser, b: ModxNewsTeaser) => {
+    const dateA = generatePublicationDate(a.publishedOn || '');
+    const dateB = generatePublicationDate(b.publishedOn || '');
+
+    if (dateA && dateB) {
+        return dateB.getTime() - dateA.getTime();
+    } else return 0;
+};
+
 function mapNewsListData({
     newsCollection,
+    hasImages,
     cardAction,
     onTagClick,
+    newsCollectionUrl,
 }: {
     newsCollection: ModxNewsTeaser[] | undefined;
+    hasImages?: boolean;
     cardAction?: (props: {
         isInverted?: boolean;
         label?: string;
@@ -68,10 +101,11 @@ function mapNewsListData({
         isExternal?: boolean;
     }) => React.ReactNode;
     onTagClick?: (name?: string) => void;
-}) {
+    newsCollectionUrl?: string;
+}): NewsItem[] {
     if (!newsCollection) return [];
 
-    return newsCollection.map((news) => {
+    return newsCollection.sort(sortFilterFn).map((news) => {
         let publicationDate = undefined;
         try {
             publicationDate = news.publishedOn
@@ -85,16 +119,34 @@ function mapNewsListData({
             ...news.intro?.image_preview,
             small: news.intro?.image_preview?.small || '',
             alt: news.intro?.image_preview?.meta?.altText || '',
+            ratios: {
+                small: { w: 4, h: 3 },
+            },
         };
+
+        const tagsArray =
+            news?.tags?.split(',')?.map((tag) => tag.trim()) || [];
+
+        const tagPropsArray = tagsArray.map((tag): TagProps => {
+            return {
+                name: tag,
+                link: {
+                    href: newsCollectionUrl
+                        ? `/${newsCollectionUrl}`
+                        : undefined,
+                },
+            };
+        });
+
         return {
-            image: mappedImage,
-            tag: news?.tags?.split(',')[0] || '',
+            image: hasImages ? mappedImage : undefined,
+            tags: tagPropsArray,
             publishDate: publicationDate,
             title: news?.label || '',
-            text: news.intro?.text,
+            text: stripLinks(news.intro?.text),
             link: { href: news.link, isExternal: false },
 
-            secondaryAction:
+            action:
                 cardAction && news.link
                     ? (isInverted: boolean) =>
                           cardAction({
@@ -108,6 +160,11 @@ function mapNewsListData({
         };
     });
 }
+
+const stripLinks = (text?: string) => {
+    return text?.replace(/<a\b[^>]*>/i, '').replace(/<\/a>/i, '');
+};
+
 const generatePublicationDate = (
     publication_date?: string,
     first_publication_date?: string
@@ -115,32 +172,12 @@ const generatePublicationDate = (
     if (!publication_date && !first_publication_date) return undefined;
     try {
         return publication_date
-            ? generatePublicationDateObject(publication_date)
+            ? parseModxDateString(publication_date)
             : first_publication_date
-            ? new Date(first_publication_date)
+            ? parseModxDateString(first_publication_date)
             : undefined;
     } catch {
         console.error('Error whlie generating publication date for news');
         return undefined;
     }
 };
-
-function generatePublicationDateObject(publication_date?: string) {
-    if (!publication_date) return undefined;
-
-    const parts = publication_date?.split(' ').filter(Boolean);
-    try {
-        const dateParts = parts[0].split('-').filter(Boolean);
-
-        const publicationDate = new Date(
-            +dateParts[0],
-            +dateParts[1] - 1,
-            +dateParts[2]
-        );
-
-        return publicationDate;
-    } catch (e) {
-        console.error('Error in NewsIntro date generation. \n', e);
-        return undefined;
-    }
-}

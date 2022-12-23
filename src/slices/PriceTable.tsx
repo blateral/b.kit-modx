@@ -1,6 +1,7 @@
-import { assignTo, PriceTable, Theme } from '@blateral/b.kit';
+import { assignTo, PriceTable, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
 import { ModxSlice } from '../utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 interface PriceTableItem {
     title?: string;
@@ -16,6 +17,7 @@ interface PriceTableItem {
 export interface PriceTableSliceType
     extends ModxSlice<'PriceTable', PriceTableItem> {
     isActive?: boolean;
+    anchorId?: string;
     bgMode?: 'full' | 'inverted';
     bgColor?: string;
     primary_link?: string;
@@ -26,11 +28,12 @@ export interface PriceTableSliceType
         label?: string;
         href?: string;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
     bgMode,
+    anchorId,
     items,
     action,
     theme,
@@ -39,11 +42,12 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
     const filteredItems = items.filter(filterEmptyItems);
     if (filteredItems.length < 1) return null;
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -53,6 +57,7 @@ export const PriceTableSlice: React.FC<PriceTableSliceType> = ({
     return (
         <PriceTable
             bgMode={bgMode}
+            anchorId={normalizeAnchorId(anchorId)}
             items={filteredItems.map((item) => {
                 return {
                     title: item.title,

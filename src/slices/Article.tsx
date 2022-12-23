@@ -1,10 +1,12 @@
-import { Article, assignTo, Theme } from '@blateral/b.kit';
+import { Article, assignTo, ThemeMods } from '@blateral/b.kit';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
+import { normalizeAnchorId } from 'utils/mapping';
 import { BgMode, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 
 export interface ArticleSliceType extends ModxSlice<'Article'> {
     isActive?: boolean;
+    anchorId?: string;
     superTitle?: string;
     superTitleAs?: HeadlineTag;
     title?: string;
@@ -30,10 +32,11 @@ export interface ArticleSliceType extends ModxSlice<'Article'> {
         href?: string;
         isExternal?: boolean;
     }) => React.ReactNode;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const ArticleSlice: React.FC<ArticleSliceType> = ({
+    anchorId,
     superTitle,
     superTitleAs,
     title,
@@ -55,8 +58,8 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -66,9 +69,11 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
     return (
         <Article
             theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             title={title}
             titleAs={titleAs}
+            titleSize={titleAs === 'h1' ? 'heading-1' : 'heading-2'}
             halfAside={halfAside}
             superTitle={superTitle}
             superTitleAs={superTitleAs}
@@ -99,4 +104,12 @@ export const ArticleSlice: React.FC<ArticleSliceType> = ({
             }
         />
     );
+};
+
+export const getArticleSearchData = (slice: ArticleSliceType): string[] => {
+    const data: string[] = [];
+    if (slice?.title) data.push(slice.title);
+    if (slice?.text) data.push(slice.text);
+    if (slice?.asideText) data.push(slice.asideText);
+    return data;
 };

@@ -1,14 +1,16 @@
-import { assignTo, Quote, Theme } from '@blateral/b.kit';
+import { assignTo, Quote, ThemeMods } from '@blateral/b.kit';
 
 import React from 'react';
 import { ModxSlice } from '../utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface QuoteSliceType extends ModxSlice<'Quote'> {
     isActive?: boolean;
+    anchorId?: string;
     active_link?: string;
     bgMode?: 'full' | 'inverted';
     bgColor?: string;
-    theme?: Theme;
+    theme?: ThemeMods;
 
     text?: string;
     source?: string;
@@ -17,6 +19,7 @@ export interface QuoteSliceType extends ModxSlice<'Quote'> {
 
 export const QuoteSlice: React.FC<QuoteSliceType> = ({
     theme,
+    anchorId,
     bgMode,
     bgColor,
     text,
@@ -25,11 +28,12 @@ export const QuoteSlice: React.FC<QuoteSliceType> = ({
 }) => {
     if (!text) return null;
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -39,10 +43,17 @@ export const QuoteSlice: React.FC<QuoteSliceType> = ({
     return (
         <Quote
             theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             text={text}
             source={source}
             citeUrl={citeUrl}
         />
     );
+};
+
+export const getQuoteSearchData = (slice: QuoteSliceType): string[] => {
+    const data: string[] = [];
+    if (slice?.text) data.push(slice.text);
+    return data;
 };

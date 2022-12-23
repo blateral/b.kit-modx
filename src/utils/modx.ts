@@ -1,16 +1,3 @@
-import {
-    NewsAuthorCardSliceType,
-    NewsFooterSliceType,
-    NumberListSliceType,
-    ParallaxBackgroundSliceType,
-    PriceListSliceType,
-    PriceTableSliceType,
-    QuoteSliceType,
-    SimpleImageSliceType,
-    SocialNavSliceType,
-    TimelineSliceType,
-} from 'index';
-
 import { AccordionSliceType } from '../slices/Accordion';
 import { ArticleSliceType } from '../slices/Article';
 import { CallToActionSliceType } from '../slices/CallToAction';
@@ -19,7 +6,6 @@ import { CrossPromotionListSliceType } from '../slices/CrossPromotionList';
 import { FactGridSliceType } from '../slices/FactGrid';
 import { FactListSliceType } from '../slices/FactList';
 import { FeatureListSliceType } from '../slices/FeatureList';
-import { FormSliceType } from '../slices/Form';
 import { GallerySliceType } from '../slices/Gallery';
 import { HeaderSliceType } from 'slices/Header';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
@@ -34,37 +20,67 @@ import { NewsTableSliceType } from '../slices/News/Table';
 import { NewsTextSliceType } from '../slices/News/Text';
 import { NewsVideoSliceType } from '../slices/News/Video';
 import { PosterSliceType } from '../slices/Poster';
-import { QuickNavSliceType } from '../slices/QuickNav';
 import { TableSliceType } from '../slices/Table';
 import { TeaserSliceType } from '../slices/Teaser';
 import { VideoSliceType } from '../slices/Video';
 import { SocialWallSliceType } from 'slices/SocialWall';
 import { DynamicFormSliceType } from 'slices/DynamicForm';
+import { QuoteSliceType } from 'slices/Quote';
+import { AlertListSliceType } from 'slices/AlertList';
+import { NavListSliceType } from 'slices/NavList';
+import { CardListSliceType } from 'slices/CardList';
+import { IndexListSliceType } from 'slices/IndexList';
+import { EventListSliceType } from 'slices/Events/EventList';
+import { EventOverviewSliceType } from 'slices/Events/EventOverview';
+import { LinkProps } from '@blateral/b.kit/lib/components/buttons/Button';
+import { JobListSliceType } from 'slices/Jobs/JobList';
+import {
+    BottomLink,
+    SiteLinkGroup,
+} from '@blateral/b.kit/lib/components/sections/footer/Footer';
+import { NavListAutoSliceType } from 'slices/NavListAuto';
+import { NumberListSliceType } from 'slices/NumberList';
+import { ParallaxBackgroundSliceType } from 'slices/ParallaxBackground';
+import { PriceListSliceType } from 'slices/PriceList';
+import { PriceTableSliceType } from 'slices/PriceTable';
+import { SimpleImageSliceType } from 'slices/SimpleImage';
+import { TimelineSliceType } from 'slices/Timeline';
+import { NewsAuthorCardSliceType } from 'slices/News/AuthorCard';
+import { NewsFooterSliceType } from 'slices/News/Footer';
+import { NewsletterFormSliceType } from 'slices/NewsletterForm';
+import { PointOfInterestOverviewSliceType } from 'slices/POIs/PointOfInterestOverview';
+import { PointOfInterestMapSliceType } from 'slices/POIs/PointOfInterestMap';
+import { RawVideoSliceType } from 'slices/RawVideo';
+import { CookieTypes } from '@blateral/b.kit/lib/utils/cookie-consent/useCookieConsent';
+import { isValidArray } from '@blateral/b.kit';
+import { NewsletterFormStructure } from '@blateral/b.kit/lib/components/sections/NewsletterForm';
 
-if (!process.env.NEXT_PUBLIC_API_ENDPOINT) {
-    console.error(
-        'Missing env: NEXT_PUBLIC_API_ENDPOINT is not defined. Error thrown in bkit-modx -> modx.ts'
-    );
+export interface ModxConnectorConfig {
+    endpoint: string;
 }
-export const endpoint = process.env.NEXT_PUBLIC_API_ENDPOINT || '';
-export const initApi = (alias: string) => {
-    return `${endpoint}${alias}`;
+
+export const initApi = (alias: string, config: ModxConnectorConfig) => {
+    if (!config?.endpoint) throw new Error('No MODX endpoint defined!');
+    const endpoint = new URL(alias, config.endpoint);
+
+    return endpoint.href;
 };
 
-export const getPageData = async (query: string) => {
-    const { pageData, statusCode } = await fetch(initApi(query as string)).then(
-        async (res) => {
-            const pageData = await res.json();
+export const getPageData = async (
+    query: string,
+    config: ModxConnectorConfig
+) => {
+    const { pageData, statusCode } = await fetch(
+        initApi(query as string, config)
+    ).then(async (res) => {
+        const pageData = await res.json();
 
-            return {
-                pageData: pageData,
-                statusCode:
-                    res.redirected && query !== pageData.alias
-                        ? 301
-                        : res.status,
-            };
-        }
-    );
+        return {
+            pageData: pageData,
+            statusCode:
+                res.redirected && query !== pageData.alias ? 301 : res.status,
+        };
+    });
 
     return {
         page: pageData,
@@ -78,10 +94,11 @@ export interface ModxSlice<S, I = any> {
     slice_type: S;
     primary?: Record<string, unknown>;
     items: I[];
+    config: ModxConnectorConfig;
 }
 
-export const getSettingsData = async () => {
-    const settingsData = await fetch(initApi('settings')).then((res) =>
+export const getSettingsData = async (config: ModxConnectorConfig) => {
+    const settingsData = await fetch(initApi('settings', config)).then((res) =>
         res.json()
     );
     return {
@@ -101,20 +118,28 @@ export interface SitemapItem {
 
 export type PageContent =
     | AccordionSliceType
+    | AlertListSliceType
     | ArticleSliceType
     | CallToActionSliceType
+    | CardListSliceType
     | ComparisonSliderSliceType
     | CrossPromotionListSliceType
     | DynamicFormSliceType
+    | NewsletterFormSliceType
+    | EventListSliceType
+    | EventOverviewSliceType
     | FactGridSliceType
     | FactListSliceType
     | FeatureListSliceType
-    | FormSliceType
     | GallerySliceType
     | HeaderSliceType
     | IconListSliceType
+    | IndexListSliceType
     | IntroSliceType
+    | JobListSliceType
     | MapSliceType
+    | NavListSliceType
+    | NavListAutoSliceType
     | NewsListSliceType
     | NewsOverviewSliceType
     | NumberListSliceType
@@ -122,16 +147,16 @@ export type PageContent =
     | PosterSliceType
     | PriceListSliceType
     | PriceTableSliceType
-    | QuickNavSliceType
-    | QuickNavSliceType
+    | QuoteSliceType
     | SimpleImageSliceType
-    | SocialNavSliceType
     | SocialWallSliceType
     | TableSliceType
     | TeaserSliceType
     | TimelineSliceType
+    | PointOfInterestOverviewSliceType
+    | PointOfInterestMapSliceType
     | VideoSliceType
-    | QuoteSliceType;
+    | RawVideoSliceType;
 
 export type NewsPageContent =
     | NewsAuthorCardSliceType
@@ -145,11 +170,9 @@ export type NewsPageContent =
 
 export type ModxDocument = {
     id: string;
-    type: 'page' | 'settings' | 'news_page';
+    type: 'page' | 'event_page' | 'news_page';
     alias: string;
-
-    publishedOn?: string;
-    updatedAt?: string;
+    breadcrumbTrail?: Array<BreadCrumb>;
 
     pagetitle?: string;
     ogImage?: ModxImageProps;
@@ -158,11 +181,6 @@ export type ModxDocument = {
     robots?: string;
     seoContentGroup?: string;
     seoRedirection?: string;
-
-    nav_isinverted?: boolean;
-    nav_withtopoffset?: boolean;
-    nav_menuicon?: string;
-    navbarAllowOverflow?: boolean;
     publication_date?: string;
 
     headScripts?: string;
@@ -175,20 +193,9 @@ export type ModxDocument = {
     menuBreadcrumbs?: { link?: string; label: string }[];
     gTag?: string;
 
-    settings?: ModxSettingsPage;
+    settings?: ModxSettings;
     strucOrganization: StructuredOrganizationData;
 };
-
-export interface ModxPage extends ModxDocument {
-    header: HeaderSliceType;
-    content: Array<PageContent>;
-}
-
-export interface SocialMediaItem {
-    link?: string;
-    icon?: Pick<ModxImageProps, 'small'>;
-    'icon-inverted'?: Pick<ModxImageProps, 'small'>;
-}
 
 export interface StructuredOrganizationData {
     '@context': string;
@@ -215,6 +222,7 @@ export interface StructuredOrganizationData {
     telephone: string;
     email: string;
     sameAs: string[];
+    logo: string;
     address: {
         '@type': 'PostalAddress';
         streetAddress: string;
@@ -223,12 +231,150 @@ export interface StructuredOrganizationData {
         addressCountry: string;
     };
 }
+export interface ModxPage extends ModxDocument {
+    header: HeaderSliceType;
+    content: Array<PageContent>;
+}
 
-export interface ModxSettingsPage extends ModxPage {
-    type: 'settings';
+export interface ModxPoiPage extends ModxPage {
+    poiData?: ModxPoiData;
+}
+
+export interface ModxPoiDataFact {
+    MIGX_id?: string;
+    name?: string;
+}
+
+export interface ModxPoiData {
+    id: number;
+    name?: string;
+    description?: string;
+    shortDescription?: string;
+    image?: ModxImageProps & {
+        ratios: {
+            small: { w?: number; h?: number };
+            medium: { w?: number; h?: number };
+            large: { w?: number; h?: number };
+        };
+    };
+    position?: {
+        street?: string;
+        housenumber?: string;
+        postalCode?: string;
+        city?: string;
+        state?: string;
+        country?: string;
+        latitude?: number;
+        longitude?: number;
+        mail?: string;
+        phone?: string;
+        website?: string;
+    };
+    contact?: {
+        name?: string;
+        jobPosition?: string;
+        street?: string;
+        postalCode?: string;
+        city?: string;
+        phone?: string;
+        mail?: string;
+    };
+    openingHours?: string;
+    prices?: string;
+    facts?: ModxPoiDataFact[];
+}
+
+export interface ModxEventPage extends ModxPage {
+    eventData?: ModxEventData;
+    tags?: string;
+    eventCollectionUrl?: string;
+    eventOverviewUrl?: string;
+}
+
+export interface ModxEventData {
+    title?: string;
+    date?: string;
+    image: ModxImageProps & {
+        ratios: {
+            small: { w?: number; h?: number };
+            medium: { w?: number; h?: number };
+            large: { w?: number; h?: number };
+        };
+    };
+    shortDescription?: string;
+    text?: string;
+    duration?: string;
+    price?: string;
+    priceInfo?: string;
+    address: {
+        locationName?: string;
+        street?: string;
+        city?: string;
+        zipcode?: string;
+        email?: string;
+        phone?: string;
+        website?: string;
+    };
+    booking: {
+        email?: string;
+        phone?: string;
+        info?: string;
+        website?: string;
+    };
+    organizer: {
+        phone?: string;
+        email?: string;
+        website?: string;
+        info?: string;
+    };
+}
+
+export interface SocialMediaItem {
+    link?: string;
+    icon?: Pick<ModxImageProps, 'small'>;
+    'icon-inverted'?: Pick<ModxImageProps, 'small'>;
+}
+
+export interface NavBarProperties {
+    isStickable?: boolean;
+    isCollapsible?: boolean;
+    /** @deprecated */
+    pageFlow?: 'beforeContent' | 'overContent';
+    allowNavbarHeaderOverflow?: boolean;
+    navbarPrimary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
+    navbarSecondary: {
+        label?: string;
+        labelShort?: string;
+        link?: string;
+        newTab?: boolean;
+    };
+}
+
+export interface ModxLanguageSettings {
+    langs: Array<{
+        urlParam?: string;
+        label?: string;
+        labelLong?: string;
+        link?: LinkProps;
+    }>;
+}
+
+export interface BreadCrumb {
+    link?: LinkProps;
+    label?: string;
+    uid?: string;
+    isCurrent?: boolean;
+}
+export interface ModxSettings extends ModxPage {
     menu: ModxMenuItemData;
-    navTopBar: ModxNavBarData;
+    navBar: NavBarProperties;
     flyoutMenu: ModxFlyoutMenu;
+    siteName: string;
 
     cookie: {
         title?: string;
@@ -236,6 +382,10 @@ export interface ModxSettingsPage extends ModxPage {
         acceptanceLabel?: string;
         declineLabel?: string;
         icon?: ModxImageProps;
+        whitelist?: string[];
+        typeSelectTitle?: string;
+        cookieTypes?: string;
+        videoCookieTypeRestrictions?: string[];
     };
 
     notification?: {
@@ -248,7 +398,12 @@ export interface ModxSettingsPage extends ModxPage {
             newTab?: boolean;
         };
     };
+
+    socialsTitle?: string;
     socials?: SocialMediaItem[];
+
+    /** JSON string of ModxLanguageSettings */
+    languages?: string;
 
     logo?: {
         desktop?: string;
@@ -277,8 +432,8 @@ export interface ModxSettingsPage extends ModxPage {
     };
 
     footer?: {
-        address?: string;
-        isInverted?: boolean;
+        note?: string;
+        bgMode?: 'full' | 'inverted';
     };
 
     headerPrimary: {
@@ -293,12 +448,48 @@ export interface ModxSettingsPage extends ModxPage {
     };
 }
 
+export interface ModxJobPage extends ModxDocument {
+    jobCollectionUrl?: string;
+    jobOverviewUrl?: string;
+    jobData?: ModxJobData;
+    publishedOn?: string;
+}
+
+export interface ModxJobLocation {
+    id?: number;
+    title?: string;
+    description?: string;
+    addressLocality?: string;
+    streetAddress?: string;
+    addressRegion?: string;
+    postalCode?: string;
+    addressCountry?: string;
+}
+
+export interface ModxJobData {
+    locations?: Array<ModxJobLocation>;
+    totalLocations?: number;
+    allLocationsLabel?: string;
+    timeModels?: Array<{
+        name: string;
+        type: string;
+    }>;
+    title?: string;
+    shortDescription?: string;
+    description?: string;
+    actionLabel?: string;
+    actionLink?: string;
+}
+
 export interface ModxNewsPage extends ModxDocument {
     newsCollectionUrl?: string;
+    newsOverviewUrl?: string;
     tags?: string;
+    name?: string;
     newsImage?: ModxImageProps;
     newsImagePreview?: ModxImageProps;
 
+    newsItems?: Array<ModxNewsTeaser>;
     newsHeading?: string;
     newsIntro?: string;
     news_footer_inverted?: boolean;
@@ -352,6 +543,12 @@ export interface ModxNewsTeaser {
             medium?: string;
             large?: string;
             xlarge?: string;
+            ratios: {
+                small: {
+                    w: number;
+                    h: number;
+                };
+            };
             meta?: ModxImageMetaData;
         };
         title?: string;
@@ -374,26 +571,6 @@ export type ModxFlyoutMenu = {
     isMirrored?: boolean;
 };
 
-export type ModxNavBarData = {
-    navbarInverted?: boolean;
-    navbarOffset?: boolean;
-    hideTopBarUnderMenu?: boolean;
-
-    buttonStyle?: string;
-    navbarPrimary: {
-        label?: string;
-        labelShort?: string;
-        link?: string;
-        newTab?: boolean;
-    };
-    navbarSecondary: {
-        label?: string;
-        labelShort?: string;
-        link?: string;
-        newTab?: boolean;
-    };
-};
-
 export type ModxNavItem = {
     id: string;
     alias?: string;
@@ -405,17 +582,30 @@ export type ModxNavItem = {
     items: Array<ModxNavItem>;
 };
 
-export type ModxMenuItemData = {
-    menuPrimary: Array<ModxNavItem>;
-    footerMenuPrimary: Array<Omit<ModxNavItem, 'items'>>;
-    menuSecondary: Array<{
-        id: string;
-        link: string;
-        label: string;
-        active?: boolean;
-    }>;
+// NEW
+export type ModxNavGroup = {
+    id: string;
+    alias?: string;
+    link?: {
+        href: string;
+    };
+    label?: string;
+    isFeatured?: boolean;
+    isCurrent?: boolean;
+    subItems: Array<ModxNavGroup>;
+    icon?: string;
+};
 
-    footerBottomLinks: Array<Omit<ModxNavItem, 'items'>>;
+export type ModxMenuItemData = {
+    type?: 'flyout' | 'large';
+    primaryMenu: Array<ModxNavGroup>;
+    secondaryMenu: Array<ModxNavGroup>;
+
+    navBarTopMenu: Array<ModxNavGroup>;
+
+    footerMenus: Array<SiteLinkGroup>;
+    bottomLinksLeft: Array<BottomLink>;
+    bottomLinksRight: Array<BottomLink>;
 
     menuCompanyTitle: string;
     menuCompany: Array<{
@@ -432,6 +622,7 @@ export interface ModxImageProps {
     semilarge?: string;
     large?: string;
     xlarge?: string;
+
     meta?: ModxImageMetaData;
 }
 
@@ -471,6 +662,103 @@ export const mapImageToComponentData = (
         small: image?.small || '',
         alt: image?.meta?.altText || '',
     };
+};
+
+export const parseModxDateString = (modxDateString?: string) => {
+    if (!modxDateString) return undefined;
+
+    // "2022-04-21 14:15:00"
+    try {
+        const dateParts = modxDateString.split(' ');
+
+        const dateSnippets = dateParts[0].split('-');
+
+        let timeSnippets: string[] = [];
+        if (dateParts.length > 1) {
+            timeSnippets = dateParts[1].split(':');
+        }
+        const hasTimeSnippets = timeSnippets.length > 0;
+
+        const year = +dateSnippets[0];
+        const month = +dateSnippets[1] - 1 < 0 ? 0 : +dateSnippets[1] - 1;
+        const day = +dateSnippets[2];
+
+        return new Date(
+            year,
+            month,
+            day,
+            hasTimeSnippets ? +timeSnippets[0] : undefined,
+            hasTimeSnippets ? +timeSnippets[1] : undefined,
+            hasTimeSnippets ? +timeSnippets[2] : undefined
+        );
+    } catch (e) {
+        console.error('Error: Generating date item failed');
+
+        return new Date(1970, 1, 1);
+    }
+};
+
+export const parseModxCookieTypes = (
+    modxTypesString?: string
+): CookieTypes | undefined => {
+    try {
+        if (!modxTypesString) {
+            throw new Error('Undefined cookie types settings input');
+        }
+
+        const types: CookieTypes = JSON.parse(modxTypesString);
+        if (!types || typeof types !== 'object') {
+            throw new Error('Cannot parse cookie types settings from MODX');
+        }
+
+        return types;
+    } catch (err) {
+        return undefined;
+    }
+};
+
+export const parseModxLanguageSettings = (
+    modxLanguagesString?: string
+): ModxLanguageSettings | undefined => {
+    try {
+        if (!modxLanguagesString) {
+            throw new Error('Undefined language settings input');
+        }
+
+        const settings: ModxLanguageSettings = JSON.parse(modxLanguagesString);
+        if (
+            !settings ||
+            typeof settings !== 'object' ||
+            !isValidArray(settings.langs, false)
+        ) {
+            throw new Error('Cannot parse language settings from MODX');
+        }
+
+        return settings;
+    } catch (err) {
+        return undefined;
+    }
+};
+
+export const parseModxNewsletterFields = (
+    modxFieldsString?: string
+): NewsletterFormStructure | undefined => {
+    try {
+        if (!modxFieldsString) {
+            throw new Error('Undefined newsletter fields settings input');
+        }
+
+        const settings: NewsletterFormStructure = JSON.parse(modxFieldsString);
+        if (!settings || typeof settings !== 'object') {
+            throw new Error(
+                'Cannot parse newsletter fields settings from MODX'
+            );
+        }
+
+        return settings;
+    } catch (err) {
+        return undefined;
+    }
 };
 
 export type SizeSelect = 'full' | 'small' | undefined;
@@ -513,25 +801,28 @@ export function isNumeric(str?: string) {
     return /^\d+$/.test(str);
 }
 
-export const injectNewsData = async (
-    slice: NewsOverviewSliceType | NewsListSliceType
-) => {
-    if (!slice.collectionId || slice.collectionId === -1) return slice;
-
-    const sliceWithRice = await getPageData(`?id=${slice.collectionId}`);
-
-    slice.items = sliceWithRice?.page?.newsArticles || [];
-
-    return slice;
-};
-
-export const getNewsCollectors = (slice: PageContent) =>
-    slice.slice_type === 'NewsOverview' || slice.slice_type === 'NewsList';
-
 export const isModxPage = (pageToCheck: any): pageToCheck is ModxPage => {
     return pageToCheck?.type === 'page';
 };
 
-export const isNewsPage = (pageToCheck: any): pageToCheck is ModxNewsPage => {
+export const isModxNewsPage = (
+    pageToCheck: any
+): pageToCheck is ModxNewsPage => {
     return pageToCheck?.type === 'news_page';
+};
+
+export const isModxEventPage = (
+    pageToCheck: any
+): pageToCheck is ModxEventPage => {
+    return pageToCheck?.type === 'event_page';
+};
+
+export const isModxJobPage = (
+    pageToCheck: any
+): pageToCheck is ModxEventPage => {
+    return pageToCheck?.type === 'job_page';
+};
+
+export const isModxPoiPage = (pageToCheck: any): pageToCheck is ModxPoiPage => {
+    return pageToCheck?.type === 'poi_page';
 };

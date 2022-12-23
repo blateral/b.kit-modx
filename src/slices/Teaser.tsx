@@ -1,20 +1,27 @@
-import { assignTo, Teaser, TeaserWide, Theme } from '@blateral/b.kit';
+import { assignTo, Teaser, TeaserWide, ThemeMods } from '@blateral/b.kit';
 import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
 import {
-    isBgModeString,
     isExternalLink,
     isValidAction,
     ModxImageProps,
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
 
+export interface TeaserVideo {
+    urls?: Array<string>;
+    aspectRatios?: {
+        small?: number;
+    };
+}
 export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     isActive?: boolean;
-    theme?: Theme;
+    anchorId?: string;
+    theme?: ThemeMods;
     isMirrored?: boolean;
-    bgMode?: string;
+    bgMode?: 'full' | 'inverted' | 'splitted' | 'inverted-splitted';
     bgColor?: string;
     isWide?: boolean;
     format?: string;
@@ -23,9 +30,9 @@ export interface TeaserSliceType extends ModxSlice<'Teaser'> {
     superTitle?: string;
     superTitleAs?: HeadlineTag;
     text?: string;
-    image?: ModxImagePropsWithFormat;
+    image?: ModxImagePropsWithFormat & { ratios: { w: number; h: number } };
+    video?: TeaserVideo;
     description?: string;
-
     primary_link?: string;
     secondary_link?: string;
     primary_label?: string;
@@ -50,13 +57,14 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     bgMode,
     bgColor,
     format,
-
+    anchorId,
     title,
     titleAs,
     superTitleAs,
     superTitle,
     text,
     image,
+    video,
     description,
 
     primary_link,
@@ -68,14 +76,50 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     secondaryAction,
     theme,
 }) => {
-    const theImage: ModxImageProps = image && image[format || 'square'];
+    const aspectRatios = {
+        square: { small: { w: 1, h: 1 } },
+        landscape: { small: { w: 4, h: 3 } },
+        portrait: { small: { w: 3, h: 4 } },
+        'landscape-wide': { small: { w: 4, h: 3 }, semilarge: { w: 1, h: 1 } },
+    };
+
+    const selectedAspect: {
+        small: { w: number; h: number };
+        semilarge: { w: number; h: number };
+    } = aspectRatios[format || 'square'];
+
+    const theImage: ModxImageProps & {
+        ratios?: {
+            small: {
+                w: number;
+                h: number;
+            };
+        };
+    } = image && {
+        ...image[format || 'square'],
+        ratios: selectedAspect,
+    };
+
+    const theVideo = {
+        urls: video?.urls || [],
+        aspectRatios: {
+            small: selectedAspect.small.w / selectedAspect.small.h,
+            semilarge:
+                format === 'landscape-wide'
+                    ? selectedAspect.semilarge.w / selectedAspect.semilarge.h
+                    : undefined,
+        },
+    };
+
     const sharedProps = {
+        anchorId: normalizeAnchorId(anchorId),
         isMirrored,
         title,
         titleAs,
         superTitle,
         superTitleAs,
         text: text,
+        description: description,
 
         primaryAction:
             primaryAction && isValidAction(primary_label, primary_link)
@@ -103,8 +147,8 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -116,15 +160,21 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
             <TeaserWide
                 {...sharedProps}
                 theme={sliceTheme}
-                bgMode={isBgModeString(bgMode) ? bgMode : undefined}
+                bgMode={bgMode as 'full' | 'inverted' | undefined}
                 image={
                     theImage?.small
                         ? {
                               ...theImage,
                               small: theImage?.small || '',
-                              alt: image?.meta?.altText || '',
-                              description: description,
+                              alt: theImage?.meta?.altText || description || '',
+                              copyright: theImage?.meta?.copyright || '',
+                              ratios: theImage.ratios,
                           }
+                        : undefined
+                }
+                video={
+                    Array.isArray(theVideo.urls) && theVideo.urls.length > 0
+                        ? theVideo
                         : undefined
                 }
                 primaryAction={
@@ -159,11 +209,16 @@ export const TeaserSlice: React.FC<TeaserSliceType> = ({
                 theme={sliceTheme}
                 image={{
                     ...theImage,
-                    small: theImage.small || '',
-                    alt: image?.meta?.altText || '',
-                    description: description,
+                    small: theImage?.small || '',
+                    alt: image?.meta?.altText || description || '',
+                    copyright: image?.meta?.copyright || '',
                 }}
-                bgMode={isBgModeString(bgMode) ? bgMode : undefined}
+                video={
+                    Array.isArray(theVideo.urls) && theVideo.urls.length > 0
+                        ? theVideo
+                        : undefined
+                }
+                bgMode={bgMode}
                 primaryAction={
                     primaryAction && isValidAction(primary_label, primary_link)
                         ? (isInverted: boolean) =>

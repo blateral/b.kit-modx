@@ -1,10 +1,16 @@
 import React from 'react';
 
-import { assignTo, NewsIntro, Theme } from '@blateral/b.kit';
+import { assignTo, NewsIntro, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
+import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
+import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
+import { normalizeAnchorId } from 'utils/mapping';
 
 export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
+    anchorId?: string;
     isActive?: boolean;
+    newsCollectionUrl?: string;
+    newsOverviewUrl?: string;
     newsHeading?: string;
     newsIntro?: string;
     newsImage?: ModxImageProps;
@@ -16,19 +22,28 @@ export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
     primary_label?: string;
     secondary_label?: string;
     tags?: string;
-
+    customTag?: (props: {
+        key: React.Key;
+        name: string;
+        isInverted?: boolean;
+        isActive?: boolean;
+        link?: LinkProps;
+    }) => React.ReactNode;
     bgColor?: string;
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
+    anchorId,
     bgMode,
+    newsOverviewUrl,
     authorName,
     publicationDate,
     newsImage,
     newsIntro,
     newsHeading,
     bgColor,
+    customTag,
     theme,
     tags,
 }) => {
@@ -38,16 +53,31 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
               ...newsImage,
               small: newsImage?.small || '',
               alt: newsImage?.meta?.altText || '',
+              ratios: {
+                  small: { w: 619, h: 348 },
+              },
           }
         : undefined;
 
-    const tagsArray = tags && tags.length > 0 ? tags?.split(',') : [];
+    const tagsArray =
+        tags && tags.length > 0
+            ? tags?.split(',')?.map((tag) => tag.trim())
+            : [];
+    const tagPropsArray = tagsArray.map((tag): TagProps => {
+        return {
+            name: tag,
+            link: {
+                href: newsOverviewUrl ? `/${newsOverviewUrl}` : undefined,
+            },
+        };
+    });
 
+    // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -57,16 +87,15 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
     return (
         <NewsIntro
             theme={sliceTheme}
+            anchorId={normalizeAnchorId(anchorId)}
             title={newsHeading}
             text={newsIntro}
             image={mappedImage}
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
-            tags={tagsArray && tagsArray.length > 0 ? [tagsArray[0]] : []}
-            onTagClick={(tag) => {
-                window.location.href = `?selected=${encodeURI(tag)}`;
-            }}
+            tags={tagPropsArray}
+            customTag={customTag}
             meta={{
                 author: authorName || '',
                 date: preppedPubDate,
@@ -74,6 +103,7 @@ export const NewsIntroSlice: React.FC<NewsIntroSliceType> = ({
         />
     );
 };
+
 function generatePublicationDateObject(publicationDate?: string) {
     if (!publicationDate) return undefined;
 
@@ -93,3 +123,11 @@ function generatePublicationDateObject(publicationDate?: string) {
         return undefined;
     }
 }
+
+export const getNewsIntroSearchData = (slice: NewsIntroSliceType) => {
+    const data: string[] = [];
+    if (slice?.newsHeading) data.push(slice.newsHeading);
+    if (slice?.authorName) data.push(slice.authorName);
+    if (slice?.newsIntro) data.push(slice.newsIntro);
+    return data;
+};

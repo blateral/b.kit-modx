@@ -1,13 +1,14 @@
 import React from 'react';
-import { assignTo, Table, Theme } from '@blateral/b.kit';
+import { assignTo, Table, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
-import { TableProps } from '@blateral/b.kit/lib/components/sections/Table';
+import { normalizeAnchorId } from 'utils/mapping';
+import { TableProps } from '@blateral/b.kit/lib/components/blocks/TableBlock';
 
 export interface TableSliceType extends ModxSlice<'Table'> {
     isActive?: boolean;
-    bgMode?: string;
+    bgMode?: 'full' | 'inverted';
     bgColor?: string;
-
+    anchorId?: string;
     tableTitle?: string;
     sliceRows?: Array<{ cols: string[] }>;
     hasFirstRowTitle?: boolean;
@@ -17,12 +18,13 @@ export interface TableSliceType extends ModxSlice<'Table'> {
     primary_link?: string;
     secondary_link?: string;
 
-    theme?: Theme;
+    theme?: ThemeMods;
 }
 
 export const TableSlice: React.FC<TableSliceType> = ({
     bgMode,
     bgColor,
+    anchorId,
     theme,
     tableTitle,
     sliceRows,
@@ -33,8 +35,8 @@ export const TableSlice: React.FC<TableSliceType> = ({
     const sliceTheme = assignTo(
         {
             colors: {
-                mono: {
-                    light: bgColor || '',
+                sectionBg: {
+                    medium: bgColor || '',
                 },
             },
         },
@@ -51,9 +53,8 @@ export const TableSlice: React.FC<TableSliceType> = ({
     return (
         <Table
             theme={sliceTheme}
-            bgMode={
-                bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
-            }
+            anchorId={normalizeAnchorId(anchorId)}
+            bgMode={bgMode}
             tableItems={tableItems}
         />
     );
