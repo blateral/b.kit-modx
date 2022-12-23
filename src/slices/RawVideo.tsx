@@ -16,6 +16,9 @@ export interface RawVideoSliceType
     anchorId?: string;
     playIcon?: React.ReactNode;
 
+    autoplay?: boolean;
+    loop?: boolean;
+
     theme?: ThemeMods;
 }
 
@@ -25,6 +28,9 @@ export const RawVideoSlice: React.FC<RawVideoSliceType> = ({
     anchorId,
     playIcon,
     items,
+
+    autoplay,
+    loop,
 
     theme,
     config,
@@ -54,6 +60,8 @@ export const RawVideoSlice: React.FC<RawVideoSliceType> = ({
             bgMode={bgMode}
             videoUrls={videoUrl ? [videoUrl] : []}
             placeholderImg={placeholderImg}
+            autoplay={autoplay}
+            loop={loop}
             playIcon={playIcon}
         />
     );
