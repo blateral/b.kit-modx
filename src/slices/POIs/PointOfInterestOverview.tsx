@@ -40,10 +40,17 @@ interface PointOfInterest {
         country?: string;
         latitude?: number;
         longitude?: number;
+
+        /** @deprecated */
         mail?: string;
+        /** @deprecated */
         phone?: string;
+        /** @deprecated */
         website?: string;
     };
+    mail?: string;
+    phone?: string;
+    website?: string;
     facts: POIMigxFact[];
 }
 
@@ -169,37 +176,40 @@ export const PointOfInterestOverviewSlice: React.FC<
                     });
                 }
 
-                if (poi.position?.phone) {
+                const phone = poi.phone || poi.position?.phone;
+                if (phone) {
                     infos.push({
                         icon: (isInverted) =>
                             phoneIcon ? phoneIcon(isInverted) : <Icons.Phone />,
                         text: printAnchorTag({
-                            href: poi?.position?.phone,
-                            label: poi?.position?.phone,
+                            href: phone,
+                            label: phone,
                             type: 'phone',
                         }),
                     });
                 }
 
-                if (poi.position?.mail) {
+                const mail = poi.mail || poi.position?.mail;
+                if (mail) {
                     infos.push({
                         icon: (isInverted) =>
                             mailIcon ? mailIcon(isInverted) : <Icons.Mail />,
                         text: printAnchorTag({
-                            href: poi?.position?.mail,
-                            label: poi?.position?.mail,
+                            href: mail,
+                            label: mail,
                             type: 'mail',
                         }),
                     });
                 }
 
-                if (poi.position?.website) {
+                const website = poi.website || poi.position?.website;
+                if (website) {
                     infos.push({
                         icon: (isInverted) =>
                             webIcon ? webIcon(isInverted) : <Icons.Computer />,
                         text: printAnchorTag({
-                            href: poi?.position?.website,
-                            label: poi?.position?.website,
+                            href: website,
+                            label: website,
                             isExternal: true,
                         }),
                     });
