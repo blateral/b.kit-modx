@@ -266,10 +266,16 @@ export interface ModxPoiData {
         country?: string;
         latitude?: number;
         longitude?: number;
+        /** @deprecated */
         mail?: string;
+        /** @deprecated */
         phone?: string;
+        /** @deprecated */
         website?: string;
     };
+    mail?: string;
+    phone?: string;
+    website?: string;
     contact?: {
         name?: string;
         jobPosition?: string;
