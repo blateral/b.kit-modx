@@ -52,8 +52,8 @@ import { PointOfInterestOverviewSliceType } from 'slices/POIs/PointOfInterestOve
 import { PointOfInterestMapSliceType } from 'slices/POIs/PointOfInterestMap';
 import { RawVideoSliceType } from 'slices/RawVideo';
 import { CookieTypes } from '@blateral/b.kit/lib/utils/cookie-consent/useCookieConsent';
-import { isValidArray } from '@blateral/b.kit';
 import { NewsletterFormStructure } from '@blateral/b.kit/lib/components/sections/NewsletterForm';
+import { Language } from '@blateral/b.kit/lib/components/blocks/LanguageSwitcher';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -361,15 +361,6 @@ export interface NavBarProperties {
     };
 }
 
-export interface ModxLanguageSettings {
-    langs: Array<{
-        urlParam?: string;
-        label?: string;
-        labelLong?: string;
-        link?: LinkProps;
-    }>;
-}
-
 export interface BreadCrumb {
     link?: LinkProps;
     label?: string;
@@ -408,8 +399,13 @@ export interface ModxSettings extends ModxPage {
     socialsTitle?: string;
     socials?: SocialMediaItem[];
 
-    /** JSON string of ModxLanguageSettings */
-    languages?: string;
+    langs: {
+        [key: string]: {
+            isCurrent: true;
+            alias: string;
+            label?: string;
+        };
+    };
 
     logo?: {
         desktop?: string;
@@ -723,27 +719,22 @@ export const parseModxCookieTypes = (
     }
 };
 
-export const parseModxLanguageSettings = (
-    modxLanguagesString?: string
-): ModxLanguageSettings | undefined => {
-    try {
-        if (!modxLanguagesString) {
-            throw new Error('Undefined language settings input');
-        }
+export const parseModxLangs = (
+    settings: ModxSettings,
+    useLabels = false
+): Language[] => {
+    if (!settings || !settings.langs) return [];
 
-        const settings: ModxLanguageSettings = JSON.parse(modxLanguagesString);
-        if (
-            !settings ||
-            typeof settings !== 'object' ||
-            !isValidArray(settings.langs, false)
-        ) {
-            throw new Error('Cannot parse language settings from MODX');
-        }
-
-        return settings;
-    } catch (err) {
-        return undefined;
-    }
+    const keys = Object.keys(settings.langs);
+    return keys.map((key) => ({
+        isActive: settings.langs[key].isCurrent,
+        label: useLabels
+            ? settings.langs[key].label || key.toUpperCase()
+            : key.toUpperCase(),
+        link: {
+            href: settings.langs[key].alias,
+        },
+    })) as Language[];
 };
 
 export const parseModxNewsletterFields = (
