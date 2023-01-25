@@ -38,7 +38,6 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
         theme
     );
 
-
     return (
         <Footer
             bgMode={settings?.footer?.bgMode}
@@ -52,9 +51,7 @@ export const FooterSlice: React.FC<FooterSliceType> = ({
             footNote={settings?.footer?.note || ''}
             bottomLinksLeft={settings?.menu.bottomLinksLeft}
             bottomLinksRight={settings?.menu.bottomLinksRight}
-            languages={languages?.filter(
-                (language) => language?.label && language?.link?.href
-            )}
+            languages={languages?.filter((language) => language?.label)}
         />
     );
 };
