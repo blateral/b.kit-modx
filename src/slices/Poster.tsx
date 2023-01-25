@@ -29,6 +29,9 @@ export interface PosterSliceType extends ModxSlice<'Poster'> {
     secondary_label?: string;
     primary_link?: string;
     secondary_link?: string;
+    vCentered?: boolean;
+    hCentered?: boolean;
+
     // helpers to define component elements outside of slice
     primaryAction?: (props: {
         isInverted?: boolean;
@@ -58,6 +61,8 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
     primary_link,
     secondary_link,
     hasWrapper,
+    vCentered,
+    hCentered,
     primaryAction,
     secondaryAction,
     theme,
@@ -117,6 +122,8 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
                           })
                     : undefined
             }
+            verticallyCentered={vCentered}
+            horizontallyCentered={hCentered}
         />
     );
 };
