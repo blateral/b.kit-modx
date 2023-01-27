@@ -7,6 +7,7 @@ import { StructuredEmploymentType } from '@blateral/b.kit/lib/utils/structuredDa
 import { JobLocation } from '@blateral/b.kit/lib/components/blocks/JobCard';
 
 interface JobListItems {
+    id: number;
     jobTitle?: string;
     jobTimeModels?: Array<{
         name: string;
@@ -25,6 +26,9 @@ export interface JobListSliceType extends ModxSlice<'JobList', JobListItems> {
     bgColor?: string;
     anchorId?: string;
 
+    hasFilter?: boolean;
+    filterPlaceholder?: string;
+
     totalJobLocations?: number;
     allJobLocationsLabel?: string;
 
@@ -39,6 +43,8 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
     bgMode,
     bgColor,
     anchorId,
+    hasFilter,
+    filterPlaceholder,
     totalJobLocations,
     allJobLocationsLabel,
     items,
@@ -67,8 +73,11 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
             bgMode={bgMode}
             jobs={items
                 .filter((job) => job.jobTitle)
-                .map<JobItem>((job) => {
+                .map<JobItem>((job, i) => {
+                    const id = job.id !== undefined ? job.id : i;
+
                     return {
+                        id: id.toString(),
                         jobTitle: job.jobTitle || '',
                         locations: job.jobLocations?.map<JobLocation>(
                             (loc) => ({
@@ -89,6 +98,8 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
                         link: job.link || undefined,
                     };
                 })}
+            hasFilter={hasFilter}
+            filterPlaceholder={filterPlaceholder}
             totalJobLocations={totalJobLocations}
             allJobLocationsLabel={allJobLocationsLabel}
         />
