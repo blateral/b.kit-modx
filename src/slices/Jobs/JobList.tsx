@@ -33,8 +33,15 @@ export interface JobListSliceType extends ModxSlice<'JobList', JobListItems> {
     allJobLocationsLabel?: string;
 
     modelIcon?: () => React.ReactNode;
+
     /** Injection function for job location icon */
     locationIcon?: () => React.ReactNode;
+
+    /** Injection function for filter submit icon */
+    filterSubmitIcon?: (isInverted?: boolean) => React.ReactNode;
+
+    /** Injection function for filter reset icon */
+    filterClearIcon?: (isInverted?: boolean) => React.ReactNode;
 
     theme?: ThemeMods;
 }
@@ -50,6 +57,8 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
     items,
     modelIcon,
     locationIcon,
+    filterSubmitIcon,
+    filterClearIcon,
     theme,
 }) => {
     // merging cms and component theme settings
@@ -102,6 +111,8 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
             filterPlaceholder={filterPlaceholder}
             totalJobLocations={totalJobLocations}
             allJobLocationsLabel={allJobLocationsLabel}
+            filterSubmitIcon={filterSubmitIcon}
+            filterClearIcon={filterClearIcon}
         />
     );
 };
