@@ -88,6 +88,12 @@ export interface PointOfInterestOverviewSliceType
     mailIcon?: (isInverted?: boolean) => React.ReactNode;
     webIcon?: (isInverted?: boolean) => React.ReactNode;
 
+    /** Injection function for filter submit icon */
+    filterSubmitIcon?: (isInverted?: boolean) => React.ReactNode;
+
+    /** Injection function for filter reset icon */
+    filterClearIcon?: (isInverted?: boolean) => React.ReactNode;
+
     theme?: ThemeMods;
 }
 
@@ -109,6 +115,8 @@ export const PointOfInterestOverviewSlice: React.FC<
     phoneIcon,
     mailIcon,
     webIcon,
+    filterSubmitIcon,
+    filterClearIcon,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -236,6 +244,8 @@ export const PointOfInterestOverviewSlice: React.FC<
                     infos: infos,
                 };
             })}
+            filterSubmitIcon={filterSubmitIcon}
+            filterClearIcon={filterClearIcon}
         />
     );
 };
