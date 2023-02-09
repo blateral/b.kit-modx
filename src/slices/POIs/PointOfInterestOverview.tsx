@@ -6,6 +6,7 @@ import {
     Icons,
     concat,
     printAnchorTag,
+    useLibTheme,
 } from '@blateral/b.kit';
 import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
@@ -94,6 +95,7 @@ export interface PointOfInterestOverviewSliceType
     /** Injection function for filter reset icon */
     filterClearIcon?: (isInverted?: boolean) => React.ReactNode;
 
+    queryParams?: Record<string, any>;
     theme?: ThemeMods;
 }
 
@@ -117,6 +119,7 @@ export const PointOfInterestOverviewSlice: React.FC<
     webIcon,
     filterSubmitIcon,
     filterClearIcon,
+    queryParams,
 }) => {
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -129,6 +132,15 @@ export const PointOfInterestOverviewSlice: React.FC<
         },
         theme
     );
+
+    // get new theme (parent theme + sliceTheme) that is also used inside NewsOverview component
+    const { theme: parentTheme } = useLibTheme();
+    const filterName = assignTo(parentTheme, sliceTheme).globals.sections
+        .poiFilterName;
+
+    const initalFilterQuery = queryParams?.[filterName]
+        ? decodeURIComponent(queryParams?.[filterName])
+        : '';
 
     return (
         <PointOfInterestOverview
@@ -244,6 +256,7 @@ export const PointOfInterestOverviewSlice: React.FC<
                     infos: infos,
                 };
             })}
+            initialFilterQuery={initalFilterQuery}
             filterSubmitIcon={filterSubmitIcon}
             filterClearIcon={filterClearIcon}
         />

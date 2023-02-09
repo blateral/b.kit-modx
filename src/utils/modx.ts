@@ -450,7 +450,7 @@ export interface ModxSettings extends ModxPage {
     };
 }
 
-export interface ModxJobPage extends ModxDocument {
+export interface ModxJobPage extends ModxPage {
     jobCollectionUrl?: string;
     jobOverviewUrl?: string;
     jobData?: ModxJobData;

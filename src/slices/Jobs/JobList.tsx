@@ -1,5 +1,5 @@
 import React from 'react';
-import { assignTo, JobList, ThemeMods } from '@blateral/b.kit';
+import { assignTo, JobList, ThemeMods, useLibTheme } from '@blateral/b.kit';
 import { ModxJobLocation, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { JobItem } from '@blateral/b.kit/lib/components/sections/jobs/JobList';
@@ -43,6 +43,7 @@ export interface JobListSliceType extends ModxSlice<'JobList', JobListItems> {
     /** Injection function for filter reset icon */
     filterClearIcon?: (isInverted?: boolean) => React.ReactNode;
 
+    queryParams?: Record<string, any>;
     theme?: ThemeMods;
 }
 
@@ -59,6 +60,7 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
     locationIcon,
     filterSubmitIcon,
     filterClearIcon,
+    queryParams,
     theme,
 }) => {
     // merging cms and component theme settings
@@ -72,6 +74,15 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
         },
         theme
     );
+
+    // get new theme (parent theme + sliceTheme) that is also used inside NewsOverview component
+    const { theme: parentTheme } = useLibTheme();
+    const filterName = assignTo(parentTheme, sliceTheme).globals.sections
+        .jobFilterName;
+
+    const initalFilterQuery = queryParams?.[filterName]
+        ? decodeURIComponent(queryParams?.[filterName])
+        : '';
 
     return (
         <JobList
@@ -108,6 +119,7 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
                     };
                 })}
             hasFilter={hasFilter}
+            initialFilterQuery={initalFilterQuery}
             filterPlaceholder={filterPlaceholder}
             totalJobLocations={totalJobLocations}
             allJobLocationsLabel={allJobLocationsLabel}
