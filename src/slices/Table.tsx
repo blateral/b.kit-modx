@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { Table } from '@blateral/b.kit/sections';
 import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { TableProps } from '@blateral/b.kit/types/components/blocks/TableBlock';
+
+const Table = lazy(() => import('imports/Table'));
 
 export interface TableSliceType extends ModxSlice<'Table'> {
     isActive?: boolean;

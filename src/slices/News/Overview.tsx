@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods, useLibTheme } from '@blateral/b.kit';
 import { isValidArray } from '@blateral/b.kit/hooks';
-import { NewsOverview } from '@blateral/b.kit/sections';
 import {
     BgMode,
     ModxNewsTeaser,
@@ -12,6 +11,8 @@ import { normalizeAnchorId } from 'utils/mapping';
 import { getFilterTagsArray } from 'utils/filterTags';
 import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
 import { NewsItem } from '@blateral/b.kit/types/components/sections/news/NewsOverview';
+
+const NewsOverview = lazy(() => import('imports/News/Overview'));
 
 export interface NewsOverviewSliceType
     extends ModxSlice<'NewsOverview', ModxNewsTeaser> {

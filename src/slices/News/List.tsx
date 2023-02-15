@@ -1,11 +1,12 @@
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { NewsList } from '@blateral/b.kit/sections';
-import React from 'react';
 import { ModxNewsTeaser, ModxSlice, parseModxDateString } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { LinkProps } from '@blateral/b.kit/types/components/typography/Link';
 import { NewsItem } from '@blateral/b.kit/types/components/sections/news/NewsList';
 import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
+
+const NewsList = lazy(() => import('imports/News/List'));
 
 export interface NewsListSliceType
     extends ModxSlice<'NewsList', ModxNewsTeaser> {

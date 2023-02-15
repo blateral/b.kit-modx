@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { CallToAction } from '@blateral/b.kit/sections';
 import {
     ModxSlice,
     BgMode,
@@ -10,6 +9,8 @@ import {
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
+
+const CallToAction = lazy(() => import('imports/CallToAction'));
 
 interface ContactData {
     avatar?: {

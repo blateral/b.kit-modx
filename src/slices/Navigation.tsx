@@ -1,5 +1,5 @@
+import React, { lazy } from 'react';
 import { ThemeMods } from '@blateral/b.kit';
-import { Navigation } from '@blateral/b.kit/navigation';
 import {
     MenuTypeProps,
     NavItem,
@@ -9,8 +9,9 @@ import {
     NavBarStates,
     NavMenuStates,
 } from '@blateral/b.kit/types/components/sections/navigation/Navigation';
-import React from 'react';
 import { ModxNavGroup, ModxSlice, PageContent } from 'utils/modx';
+
+const Navigation = lazy(() => import('imports/Navigation'));
 
 export interface NavigationSliceType extends ModxSlice<'Navigation'> {
     pageContent: PageContent[];

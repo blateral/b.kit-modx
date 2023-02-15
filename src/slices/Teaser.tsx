@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { Teaser, TeaserWide } from '@blateral/b.kit/sections';
 import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 import {
     isExternalLink,
@@ -10,6 +9,9 @@ import {
     ModxSlice,
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Teaser = lazy(() => import('imports/Teaser'));
+const TeaserWide = lazy(() => import('imports/TeaserWide'));
 
 export interface TeaserVideo {
     urls?: Array<string>;

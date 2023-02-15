@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { IndexList } from '@blateral/b.kit/sections';
 import { LinkProps } from '@blateral/b.kit/types/components/buttons/Button';
 import { normalizeAnchorId } from 'utils/mapping';
 import { ModxSlice } from 'utils/modx';
+
+const IndexList = lazy(() => import('imports/IndexList'));
 
 export interface IndexListItem {
     label?: string;

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { Article } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
 import { BgMode, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
+
+const Article = lazy(() => import('imports/Article'));
 
 export interface ArticleSliceType extends ModxSlice<'Article'> {
     isActive?: boolean;

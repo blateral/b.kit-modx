@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { ModxSlice } from 'utils/modx';
-
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { NavList } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const NavList = lazy(() => import('imports/NavList'));
 
 type BgMode = 'full' | 'inverted';
 

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { SimpleImage } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
 import { ModxImageProps, ModxSlice } from 'utils/modx';
+
+const SimpleImage = lazy(() => import('imports/SimpleImage'));
+
 export interface SimpleImageSliceType extends ModxSlice<'SimpleImage'> {
     isActive?: boolean;
     anchorId?: string;

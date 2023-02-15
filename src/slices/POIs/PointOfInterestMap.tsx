@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { ThemeMods } from '@blateral/b.kit';
-import Icons from '@blateral/b.kit/icons';
+import * as Icons from '@blateral/b.kit/icons';
 import { concat, printAnchorTag } from '@blateral/b.kit/hooks';
-import { PointOfInterestMap } from '@blateral/b.kit/sections';
 import { isValidAction, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { getGoogleMapsURL } from 'utils/googleMaps';
 import { LocationIcon } from '@blateral/b.kit/types/components/sections/pois/PointOfInterestMap';
 import { Info } from '@blateral/b.kit/types/components/blocks/InfoList';
+
+const PointOfInterestMap = lazy(
+    () => import('imports/POIs/PointOfInterestMap')
+);
 
 interface POICollection {
     alias?: string;

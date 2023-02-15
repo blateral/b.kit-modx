@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { AlertList } from '@blateral/b.kit/sections';
 import { isValidArray } from '@blateral/b.kit/hooks';
 import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const AlertList = lazy(() => import('imports/AlertList'));
 
 type BgMode = 'full' | 'inverted';
 

@@ -1,7 +1,5 @@
-import React from 'react';
-
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { Poster } from '@blateral/b.kit/sections';
 import {
     isExternalLink,
     isHeadlineTag,
@@ -13,6 +11,8 @@ import {
 import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Poster = lazy(() => import('imports/Poster'));
 
 export interface PosterSliceType extends ModxSlice<'Poster'> {
     isActive?: boolean;

@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { ComparisonSlider } from '@blateral/b.kit/sections';
 import {
     BgMode,
     ModxImageMetaData,
@@ -9,6 +8,8 @@ import {
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
+
+const ComparisonSlider = lazy(() => import('imports/ComparisonSlider'));
 
 export interface ComparisonSliderSliceType
     extends ModxSlice<'ComparisonSlider'> {

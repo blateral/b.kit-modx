@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { BgMode, ModxImageProps, ModxSlice } from '../utils/modx';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { NumberList } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const NumberList = lazy(() => import('imports/NumberList'));
 
 interface NumberListItem {
     icon?: Pick<ModxImageProps, 'small' | 'meta'>;

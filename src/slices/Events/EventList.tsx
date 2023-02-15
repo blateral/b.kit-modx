@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
 import { concat } from '@blateral/b.kit/hooks';
-import { EventList } from '@blateral/b.kit/sections';
 import {
     isExternalLink,
     isValidAction,
@@ -12,6 +11,8 @@ import { normalizeAnchorId } from 'utils/mapping';
 import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
 import { LinkProps } from '@blateral/b.kit/types/components/typography/Link';
 import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
+
+const EventList = lazy(() => import('imports/Events/EventList'));
 
 interface EventCollection {
     alias?: string;

@@ -1,5 +1,4 @@
-import React from 'react';
-import { ParallaxBackground } from '@blateral/b.kit/sections';
+import React, { lazy } from 'react';
 import {
     ModxConnectorConfig,
     ModxImagePropsWithFormat,
@@ -7,6 +6,8 @@ import {
 } from 'utils/modx';
 import { isSVG } from 'utils/mapping';
 import { ParallaxWidth } from '@blateral/b.kit/types/components/sections/ParallaxBackground';
+
+const ParallaxBackground = lazy(() => import('imports/ParallaxBackground'));
 
 export interface ParallaxBackgroundSliceType
     extends ModxSlice<'ParallaxBackground'> {

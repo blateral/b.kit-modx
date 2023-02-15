@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { Quote } from '@blateral/b.kit/sections';
 import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Quote = lazy(() => import('imports/Quote'));
 
 export interface QuoteSliceType extends ModxSlice<'Quote'> {
     isActive?: boolean;

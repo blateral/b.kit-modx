@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { lazy } from 'react';
 
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { Map } from '@blateral/b.kit/sections';
 import { isHeadlineTag, ModxSlice } from 'utils/modx';
 import { MapLocation } from '@blateral/b.kit/types/components/sections/Map';
 import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 import { normalizeAnchorId } from 'utils/mapping';
-import Icons from '@blateral/b.kit/icons';
+import * as Icons from '@blateral/b.kit/icons';
+
+const Map = lazy(() => import('imports/Map'));
 
 interface MapLocationItems {
     marker?: string;

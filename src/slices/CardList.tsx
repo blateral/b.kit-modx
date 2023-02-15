@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { CardList } from '@blateral/b.kit/sections';
 import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
 import { CardProps } from '@blateral/b.kit/types/components/sections/CardList';
+
+const CardList = lazy(() => import('imports/CardList'));
 
 interface CardListItems {
     title?: string;

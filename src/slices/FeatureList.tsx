@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { FeatureList } from '@blateral/b.kit/sections';
 import {
     BgMode,
     isExternalLink,
@@ -12,6 +11,8 @@ import { isSVG } from 'utils/mapping';
 import { normalizeAnchorId } from 'utils/mapping';
 import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
 import { FeatureProps } from '@blateral/b.kit/types/components/blocks/Feature';
+
+const FeatureList = lazy(() => import('imports/FeatureList'));
 
 interface FeatureItemType {
     title?: string;

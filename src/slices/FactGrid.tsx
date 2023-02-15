@@ -1,7 +1,5 @@
-// import { FactList } from '@blateral/b.kit';
-import React from 'react';
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { FactGrid } from '@blateral/b.kit/sections';
 import {
     BgMode,
     ModxImageProps,
@@ -12,6 +10,9 @@ import {
 import { normalizeAnchorId } from 'utils/mapping';
 
 import { isSVG } from 'utils/mapping';
+
+const FactGrid = lazy(() => import('imports/FactGrid'));
+
 interface FactGridEntryItems {
     title?: string;
     text?: string;

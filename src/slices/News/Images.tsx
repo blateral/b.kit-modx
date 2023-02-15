@@ -1,7 +1,8 @@
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { NewsImages } from '@blateral/b.kit/sections';
-import React from 'react';
 import { ModxImageProps, ModxSlice } from 'utils/modx';
+
+const NewsImages = lazy(() => import('imports/News/Images'));
 
 export interface NewsImagesSliceType extends ModxSlice<'NewsImages'> {
     isActive?: boolean;

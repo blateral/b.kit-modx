@@ -1,5 +1,5 @@
+import React, { useMemo, lazy } from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { DynamicForm } from '@blateral/b.kit/sections';
 import { isValidArray } from '@blateral/b.kit/hooks';
 import {
     FieldGenerationProps,
@@ -8,7 +8,6 @@ import {
     Select,
     SubmitResponse,
 } from '@blateral/b.kit/types/components/sections/form/DynamicForm';
-import React, { useMemo } from 'react';
 import {
     Field as BkitField,
     Area as BkitArea,
@@ -21,6 +20,8 @@ import {
 import { ModxSlice } from '../utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { LocationData } from '@blateral/b.kit/types/components/fields/LocationField';
+
+const DynamicForm = lazy(() => import('imports/DynamicForm'));
 
 type FormFieldTypes =
     | 'Field'

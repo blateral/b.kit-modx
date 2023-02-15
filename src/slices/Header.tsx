@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import {
     ModxImageProps,
     ModxSlice,
@@ -7,7 +7,6 @@ import {
     isValidAction,
 } from 'utils/modx';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { Header } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
 import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
 import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
@@ -15,6 +14,8 @@ import {
     HeaderFocus,
     HeaderImage,
 } from '@blateral/b.kit/types/components/sections/header/Header';
+
+const Header = lazy(() => import('imports/Header'));
 
 type BgMode = 'full' | 'inverted';
 

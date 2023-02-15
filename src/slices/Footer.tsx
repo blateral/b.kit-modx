@@ -1,12 +1,12 @@
+import React, { lazy } from 'react';
 import { ModxSettings } from 'utils/modx';
-
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { Footer } from '@blateral/b.kit/sections';
-import React from 'react';
 
 import { FooterState } from '@blateral/b.kit/types/components/sections/footer/Footer';
 import { Language } from '@blateral/b.kit/types/components/blocks/LanguageSwitcher';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Footer = lazy(() => import('imports/Footer'));
 
 export interface FooterSliceType {
     settings?: ModxSettings;

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { ModxSlice } from 'utils/modx';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { Timeline } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Timeline = lazy(() => import('imports/Timeline'));
 
 interface TimelineItems {
     label?: string;

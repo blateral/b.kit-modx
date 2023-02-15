@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { lazy } from 'react';
 
 import { assignTo, ThemeMods } from '@blateral/b.kit';
-import { NewsIntro } from '@blateral/b.kit/sections';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
 import { LinkProps } from '@blateral/b.kit/types/components/typography/Link';
+
+const NewsIntro = lazy(() => import('imports/News/Intro'));
 
 export interface NewsIntroSliceType extends ModxSlice<'NewsIntro'> {
     anchorId?: string;

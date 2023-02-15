@@ -1,11 +1,10 @@
+import React, { lazy } from 'react';
 import { assignTo, ThemeMods, useLibTheme } from '@blateral/b.kit';
 import { concat, isValidArray } from '@blateral/b.kit/hooks';
-import { EventOverview } from '@blateral/b.kit/sections';
 import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
 import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
 import { EventItem } from '@blateral/b.kit/types/components/sections/events/EventOverview';
 import { LinkProps } from '@blateral/b.kit/types/components/typography/Link';
-import React from 'react';
 import {
     isExternalLink,
     isValidAction,
@@ -14,6 +13,8 @@ import {
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { getFilterTagsArray } from 'utils/filterTags';
+
+const EventOverview = lazy(() => import('imports/Events/EventOverview'));
 
 interface Event {
     alias?: string;
