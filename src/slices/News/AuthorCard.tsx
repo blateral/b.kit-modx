@@ -1,5 +1,6 @@
-import { assignTo, NewsAuthorCard, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { NewsAuthorCard } from '@blateral/b.kit/sections';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 
 export interface NewsAuthorCardSliceType extends ModxSlice<'NewsAuthor'> {

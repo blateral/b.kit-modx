@@ -1,5 +1,6 @@
 import React from 'react';
-import { assignTo, NewsVideo, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { NewsVideo } from '@blateral/b.kit/sections';
 import { mapImageToComponentData, ModxImageProps, ModxSlice } from 'utils/modx';
 
 export interface NewsVideoSliceType extends ModxSlice<'NewsVideo'> {

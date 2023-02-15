@@ -1,13 +1,14 @@
-import { Navigation, ThemeMods } from '@blateral/b.kit';
+import { ThemeMods } from '@blateral/b.kit';
+import { Navigation } from '@blateral/b.kit/navigation';
 import {
     MenuTypeProps,
     NavItem,
-} from '@blateral/b.kit/lib/components/sections/navigation/menu/Menu';
+} from '@blateral/b.kit/types/components/sections/navigation/menu/Menu';
 
 import {
     NavBarStates,
     NavMenuStates,
-} from '@blateral/b.kit/lib/components/sections/navigation/Navigation';
+} from '@blateral/b.kit/types/components/sections/navigation/Navigation';
 import React from 'react';
 import { ModxNavGroup, ModxSlice, PageContent } from 'utils/modx';
 

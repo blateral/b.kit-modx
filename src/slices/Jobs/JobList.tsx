@@ -1,10 +1,11 @@
 import React from 'react';
-import { assignTo, JobList, ThemeMods, useLibTheme } from '@blateral/b.kit';
+import { assignTo, ThemeMods, useLibTheme } from '@blateral/b.kit';
+import { JobList } from '@blateral/b.kit/sections';
 import { ModxJobLocation, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
-import { JobItem } from '@blateral/b.kit/lib/components/sections/jobs/JobList';
-import { StructuredEmploymentType } from '@blateral/b.kit/lib/utils/structuredData';
-import { JobLocation } from '@blateral/b.kit/lib/components/blocks/JobCard';
+import { JobItem } from '@blateral/b.kit/types/components/sections/jobs/JobList';
+import { JobLocation } from '@blateral/b.kit/types/components/blocks/JobCard';
+import { StructuredEmploymentType } from '@blateral/b.kit/types/utils/structuredData';
 
 interface JobListItems {
     id: number;

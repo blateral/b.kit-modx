@@ -1,5 +1,6 @@
 import React from 'react';
-import { assignTo, PriceList, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { PriceList } from '@blateral/b.kit/sections';
 import { ModxSlice } from '../utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 

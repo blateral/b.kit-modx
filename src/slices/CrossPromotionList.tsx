@@ -1,7 +1,6 @@
-import { assignTo, CrossPromotion, ThemeMods } from '@blateral/b.kit';
-
-import { PromotionCardProps } from '@blateral/b.kit/lib/components/blocks/PromotionCard';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { CrossPromotion } from '@blateral/b.kit/sections';
 import {
     BgMode,
     isExternalLink,
@@ -10,6 +9,7 @@ import {
     ModxSlice,
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+import { PromotionCardProps } from '@blateral/b.kit/types/components/blocks/PromotionCard';
 
 interface CrossPromotionItems {
     isMain?: boolean;

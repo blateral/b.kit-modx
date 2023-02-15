@@ -1,12 +1,12 @@
 import React from 'react';
-import { ParallaxBackground } from '@blateral/b.kit';
+import { ParallaxBackground } from '@blateral/b.kit/sections';
 import {
     ModxConnectorConfig,
     ModxImagePropsWithFormat,
     ModxSlice,
 } from 'utils/modx';
 import { isSVG } from 'utils/mapping';
-import { ParallaxWidth } from '@blateral/b.kit/lib/components/sections/ParallaxBackground';
+import { ParallaxWidth } from '@blateral/b.kit/types/components/sections/ParallaxBackground';
 
 export interface ParallaxBackgroundSliceType
     extends ModxSlice<'ParallaxBackground'> {

@@ -1,5 +1,6 @@
-import { assignTo, IconList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { IconList } from '@blateral/b.kit/sections';
 import {
     BgMode,
     isExternalLink,

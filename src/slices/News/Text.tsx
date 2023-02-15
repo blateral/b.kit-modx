@@ -1,5 +1,6 @@
-import { assignTo, NewsText, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { NewsText } from '@blateral/b.kit/sections';
 import { ModxSlice } from 'utils/modx';
 
 export interface NewsTextSliceType extends ModxSlice<'NewsText'> {

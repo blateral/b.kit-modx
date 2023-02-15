@@ -1,16 +1,13 @@
-import {
-    assignTo,
-    DynamicForm,
-    isValidArray,
-    ThemeMods,
-} from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { DynamicForm } from '@blateral/b.kit/sections';
+import { isValidArray } from '@blateral/b.kit/hooks';
 import {
     FieldGenerationProps,
     FormStructure,
     FormValues,
     Select,
     SubmitResponse,
-} from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
+} from '@blateral/b.kit/types/components/sections/form/DynamicForm';
 import React, { useMemo } from 'react';
 import {
     Field as BkitField,
@@ -20,10 +17,10 @@ import {
     FieldGroup as BkitFieldGroup,
     FileUpload as BkitFileUpload,
     Location as BkitLocation,
-} from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
+} from '@blateral/b.kit/types/components/sections/form/DynamicForm';
 import { ModxSlice } from '../utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
-import { LocationData } from '@blateral/b.kit/lib/components/fields/LocationField';
+import { LocationData } from '@blateral/b.kit/types/components/fields/LocationField';
 
 type FormFieldTypes =
     | 'Field'

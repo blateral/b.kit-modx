@@ -1,8 +1,9 @@
-import { Article, assignTo, ThemeMods } from '@blateral/b.kit';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Article } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
 import { BgMode, isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 
 export interface ArticleSliceType extends ModxSlice<'Article'> {
     isActive?: boolean;

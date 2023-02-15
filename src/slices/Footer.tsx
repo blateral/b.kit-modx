@@ -1,10 +1,11 @@
 import { ModxSettings } from 'utils/modx';
 
-import { assignTo, Footer, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Footer } from '@blateral/b.kit/sections';
 import React from 'react';
 
-import { FooterState } from '@blateral/b.kit/lib/components/sections/footer/Footer';
-import { Language } from '@blateral/b.kit/lib/components/blocks/LanguageSwitcher';
+import { FooterState } from '@blateral/b.kit/types/components/sections/footer/Footer';
+import { Language } from '@blateral/b.kit/types/components/blocks/LanguageSwitcher';
 import { normalizeAnchorId } from 'utils/mapping';
 
 export interface FooterSliceType {

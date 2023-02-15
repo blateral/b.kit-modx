@@ -1,5 +1,6 @@
 import React from 'react';
-import { assignTo, ThemeMods, Video } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Video } from '@blateral/b.kit/sections';
 import { ModxImageProps, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 

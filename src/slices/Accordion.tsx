@@ -1,5 +1,7 @@
-import { Accordion, assignTo, isValidArray, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Accordion } from '@blateral/b.kit/sections';
+import { isValidArray } from '@blateral/b.kit/hooks';
 import { BgMode, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 

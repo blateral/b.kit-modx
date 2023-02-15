@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { assignTo, Poster, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Poster } from '@blateral/b.kit/sections';
 import {
     isExternalLink,
     isHeadlineTag,
@@ -9,7 +10,7 @@ import {
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
 import { normalizeAnchorId } from 'utils/mapping';
 

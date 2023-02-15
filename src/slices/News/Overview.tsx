@@ -1,13 +1,7 @@
-import {
-    assignTo,
-    isValidArray,
-    NewsOverview,
-    ThemeMods,
-    useLibTheme,
-} from '@blateral/b.kit';
-import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
-import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsOverview';
 import React from 'react';
+import { assignTo, ThemeMods, useLibTheme } from '@blateral/b.kit';
+import { isValidArray } from '@blateral/b.kit/hooks';
+import { NewsOverview } from '@blateral/b.kit/sections';
 import {
     BgMode,
     ModxNewsTeaser,
@@ -16,6 +10,8 @@ import {
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { getFilterTagsArray } from 'utils/filterTags';
+import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
+import { NewsItem } from '@blateral/b.kit/types/components/sections/news/NewsOverview';
 
 export interface NewsOverviewSliceType
     extends ModxSlice<'NewsOverview', ModxNewsTeaser> {

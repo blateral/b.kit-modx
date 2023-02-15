@@ -1,4 +1,5 @@
-import { assignTo, NewsImages, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { NewsImages } from '@blateral/b.kit/sections';
 import React from 'react';
 import { ModxImageProps, ModxSlice } from 'utils/modx';
 

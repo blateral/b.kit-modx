@@ -1,6 +1,7 @@
-import { ModxSlice } from '../utils/modx';
 import React from 'react';
-import { assignTo, ThemeMods, Timeline } from '@blateral/b.kit';
+import { ModxSlice } from 'utils/modx';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Timeline } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
 
 interface TimelineItems {

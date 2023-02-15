@@ -1,7 +1,7 @@
-import { ModxSlice, ModxImageProps } from 'utils/modx';
-
-import { assignTo, SocialWall, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { ModxSlice, ModxImageProps } from 'utils/modx';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { SocialWall } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
 
 type BgMode = 'full' | 'inverted';

@@ -1,8 +1,7 @@
-import { assignTo, concat, EventList, ThemeMods } from '@blateral/b.kit';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
-import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
-import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { concat } from '@blateral/b.kit/hooks';
+import { EventList } from '@blateral/b.kit/sections';
 import {
     isExternalLink,
     isValidAction,
@@ -10,6 +9,9 @@ import {
     parseModxDateString,
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
+import { LinkProps } from '@blateral/b.kit/types/components/typography/Link';
+import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
 
 interface EventCollection {
     alias?: string;

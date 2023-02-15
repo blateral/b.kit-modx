@@ -1,6 +1,6 @@
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
-import { assignTo, CallToAction, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { CallToAction } from '@blateral/b.kit/sections';
 import {
     ModxSlice,
     BgMode,
@@ -9,6 +9,7 @@ import {
     ModxImageMetaData,
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 
 interface ContactData {
     avatar?: {

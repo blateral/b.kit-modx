@@ -1,6 +1,7 @@
-import { assignTo, Teaser, TeaserWide, ThemeMods } from '@blateral/b.kit';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Teaser, TeaserWide } from '@blateral/b.kit/sections';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 import {
     isExternalLink,
     isValidAction,

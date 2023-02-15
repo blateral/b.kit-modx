@@ -1,7 +1,8 @@
+import React from 'react';
 import { ModxSlice } from 'utils/modx';
 
-import { assignTo, NavList, ThemeMods } from '@blateral/b.kit';
-import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { NavList } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
 
 type BgMode = 'full' | 'inverted';

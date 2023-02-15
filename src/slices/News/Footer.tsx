@@ -1,9 +1,10 @@
-import { assignTo, NewsFooter, ThemeMods } from '@blateral/b.kit';
-import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
-import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsFooter';
-import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { NewsFooter } from '@blateral/b.kit/sections';
 import { ModxImageProps, ModxNewsTeaser, ModxSlice } from 'utils/modx';
+import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
+import { LinkProps } from '@blateral/b.kit/types/components/typography/Link';
+import { NewsItem } from '@blateral/b.kit/types/components/sections/news/NewsFooter';
 
 export interface MappedNewsItem {
     image?: ModxImageProps;

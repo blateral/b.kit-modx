@@ -1,15 +1,10 @@
-import {
-    assignTo,
-    concat,
-    EventOverview,
-    isValidArray,
-    ThemeMods,
-    useLibTheme,
-} from '@blateral/b.kit';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
-import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
-import { EventItem } from '@blateral/b.kit/lib/components/sections/events/EventOverview';
-import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
+import { assignTo, ThemeMods, useLibTheme } from '@blateral/b.kit';
+import { concat, isValidArray } from '@blateral/b.kit/hooks';
+import { EventOverview } from '@blateral/b.kit/sections';
+import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
+import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
+import { EventItem } from '@blateral/b.kit/types/components/sections/events/EventOverview';
+import { LinkProps } from '@blateral/b.kit/types/components/typography/Link';
 import React from 'react';
 import {
     isExternalLink,

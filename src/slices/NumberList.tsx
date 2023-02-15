@@ -1,7 +1,7 @@
-import { BgMode, ModxImageProps, ModxSlice } from '../utils/modx';
-
-import { assignTo, NumberList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { BgMode, ModxImageProps, ModxSlice } from '../utils/modx';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { NumberList } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
 
 interface NumberListItem {

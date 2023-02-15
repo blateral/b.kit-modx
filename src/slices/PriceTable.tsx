@@ -1,6 +1,7 @@
-import { assignTo, PriceTable, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
-import { ModxSlice } from '../utils/modx';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { PriceTable } from '@blateral/b.kit/sections';
+import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 
 interface PriceTableItem {

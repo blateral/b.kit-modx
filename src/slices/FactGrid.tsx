@@ -1,6 +1,7 @@
 // import { FactList } from '@blateral/b.kit';
 import React from 'react';
-import { assignTo, FactGrid, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { FactGrid } from '@blateral/b.kit/sections';
 import {
     BgMode,
     ModxImageProps,

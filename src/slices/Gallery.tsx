@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { assignTo, Gallery, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Gallery } from '@blateral/b.kit/sections';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
-import { ImageAspectRatios } from '@blateral/b.kit/lib/components/blocks/Image';
+import { ImageAspectRatios } from '@blateral/b.kit/types/components/blocks/Image';
 
 type ImageFormats =
     | 'small-square'

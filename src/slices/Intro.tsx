@@ -1,3 +1,4 @@
+import React from 'react';
 import {
     ModxSlice,
     isExternalLink,
@@ -5,13 +6,12 @@ import {
     isValidAction,
     ModxImageProps,
 } from 'utils/modx';
-
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
-import { assignTo, Intro, ThemeMods } from '@blateral/b.kit';
-import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Intro } from '@blateral/b.kit/sections';
 import { normalizeAnchorId } from 'utils/mapping';
-import { ImageAspectRatios } from '@blateral/b.kit/lib/components/blocks/Image';
+import { ImageAspectRatios } from '@blateral/b.kit/types/components/blocks/Image';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
 
