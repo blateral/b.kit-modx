@@ -1,1 +1,1 @@
-export { EventOverview as default } from '@blateral/b.kit/sections';
+export { EventOverview as default } from '@blateral/b.kit/sections/events';

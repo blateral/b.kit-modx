@@ -1,1 +1,1 @@
-export { DynamicForm as default } from '@blateral/b.kit/sections';
+export { DynamicForm as default } from '@blateral/b.kit/sections/forms';

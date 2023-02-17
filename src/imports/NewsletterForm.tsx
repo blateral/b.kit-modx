@@ -1,1 +1,1 @@
-export { NewsletterForm as default } from '@blateral/b.kit/sections';
+export { NewsletterForm as default } from '@blateral/b.kit/sections/forms';
