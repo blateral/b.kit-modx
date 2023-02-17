@@ -1,1 +1,1 @@
-export { NewsAuthorCard as default } from '@blateral/b.kit/sections';
+export { NewsAuthorCard as default } from '@blateral/b.kit/sections/news';

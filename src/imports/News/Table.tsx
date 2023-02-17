@@ -1,1 +1,1 @@
-export { NewsTable as default } from '@blateral/b.kit/sections';
+export { NewsTable as default } from '@blateral/b.kit/sections/news';
