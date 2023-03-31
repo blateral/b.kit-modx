@@ -25,6 +25,7 @@ const DynamicForm = lazy(() => import('imports/DynamicForm'));
 
 type FormFieldTypes =
     | 'Field'
+    | 'ReplyToMailField'
     | 'Area'
     | 'Select'
     | 'RecipientSelect'
@@ -46,6 +47,16 @@ export interface ModxField extends FormField {
     placeholder?: string;
     info?: string;
     errorMsg?: string;
+}
+
+export interface ModxReplyToMailField extends FormField {
+    type: 'ReplyToMailField';
+    inputType?: 'email';
+    initialValue?: string;
+    placeholder?: string;
+    info?: string;
+    errorMsg?: string;
+    isRequired: true;
 }
 
 export interface ModxArea extends FormField {
@@ -163,6 +174,7 @@ export interface LocationTrackingProps {
 
 export interface FieldSettings {
     field?: Pick<BkitField, 'validate'>;
+    replyToMailField?: Pick<BkitField, 'validate'>;
     area?: Pick<BkitArea, 'validate'>;
     select?: Pick<BkitSelect, 'validate' | 'indicator'>;
     datepicker?: Pick<BkitDatepicker, 'validate' | 'customIcon'> & {
@@ -267,6 +279,12 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
                     values
                 );
 
+                // get reply to mail
+                const replyToMail = getReplyToMailField(items, values);
+                if (replyToMail) {
+                    values.replyToMail = replyToMail;
+                }
+
                 if (isValidArray(recipientTargetMails, false)) {
                     const targetMails = recipientTargetMails?.filter(
                         (v, i, a) => a.indexOf(v) === i
@@ -284,6 +302,20 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
             definitions={definitions as any}
         />
     );
+};
+
+const getReplyToMailField = (items: FormField[], values: FormValues) => {
+    let replyToMail = '';
+    const field = items.find(
+        (field) => field.type === 'ReplyToMailField'
+    ) as ModxReplyToMailField;
+
+    // get current value
+    if (field?.label) {
+        replyToMail = values[field?.label].toString();
+    }
+
+    return replyToMail;
 };
 
 const getTargetMailsFromField = (
@@ -349,6 +381,30 @@ const itemsToFormFields = ({
 }) => {
     if (!formFields) return {};
 
+    // make sure all form settings have valid labels (keys for the DynamicForm component)
+    formFields = formFields.reduce<FormField[]>((acc, current) => {
+        try {
+            if (
+                current.label === 'targetEmails' ||
+                current.label === 'recipientId' ||
+                current.label === 'subjectLine' ||
+                current.label === 'successPageUrl' ||
+                current.label === 'replyToMail'
+            ) {
+                throw new Error('Cannot use reserved form field labels!');
+            }
+
+            if (!acc.find((field) => field.label === current.label)) {
+                return [...acc, current];
+            } else {
+                throw new Error(`Dublicate form field label: ${current.label}`);
+            }
+        } catch (err) {
+            console.warn(err);
+            return acc;
+        }
+    }, []);
+
     return formFields.reduce(
         generateFormFieldMap({
             fieldSettings,
@@ -362,6 +418,11 @@ const generateFormFieldMap =
     (accumulator: Record<string, any>, formfield: FormField) => {
         if (isField(formfield)) {
             const field = createField(formfield, fieldSettings);
+            return { ...accumulator, ...field };
+        }
+
+        if (isReplyToEmailField(formfield)) {
+            const field = createReplyToMailField(formfield, fieldSettings);
             return { ...accumulator, ...field };
         }
 
@@ -424,6 +485,29 @@ const createField = (
         isRequired: formfield.isRequired,
         info: formfield.info,
         validate: settings?.field?.validate,
+        initialValue: formfield.initialValue,
+        inputType: formfield.inputType,
+        errorMsg: formfield.errorMsg,
+    };
+
+    formFieldData[formfield.label] = formFieldValues;
+
+    return formFieldData;
+};
+
+const createReplyToMailField = (
+    formfield: ModxReplyToMailField,
+    settings?: FieldSettings
+): Record<string, BkitField> | undefined => {
+    if (!formfield.label) return undefined;
+    const formFieldData = {};
+
+    const formFieldValues: BkitField = {
+        type: 'Field',
+        placeholder: formfield.placeholder,
+        isRequired: true,
+        info: formfield.info,
+        validate: settings?.replyToMailField?.validate,
         initialValue: formfield.initialValue,
         inputType: formfield.inputType,
         errorMsg: formfield.errorMsg,
@@ -715,6 +799,12 @@ const createLocation = ({
 
 const isField = (formfield: FormField): formfield is ModxField => {
     return formfield.type === 'Field';
+};
+
+const isReplyToEmailField = (
+    formfield: FormField
+): formfield is ModxReplyToMailField => {
+    return formfield.type === 'ReplyToMailField';
 };
 
 const isArea = (formfield: FormField): formfield is ModxArea => {
