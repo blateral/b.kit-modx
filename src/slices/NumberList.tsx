@@ -2,18 +2,21 @@ import { BgMode, ModxImageProps, ModxSlice } from '../utils/modx';
 
 import { assignTo, NumberList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
-import { normalizeAnchorId } from 'utils/mapping';
+import { isSVG, normalizeAnchorId } from 'utils/mapping';
+import { NumberListCardProps } from '@blateral/b.kit/lib/components/sections/NumberList';
 
 interface NumberListItem {
-    icon?: Pick<ModxImageProps, 'small' | 'meta'>;
+    image?: Pick<ModxImageProps, 'small' | 'meta'>;
     listNumber?: string;
     label?: string;
+    text?: string;
 }
 
 export interface NumberListSliceType
     extends ModxSlice<'NumberList', NumberListItem> {
     isActive?: boolean;
     anchorId?: string;
+    isCentered?: boolean;
     bgMode?: BgMode;
     bgColor?: string;
 
@@ -23,6 +26,7 @@ export interface NumberListSliceType
 export const NumberListSlice: React.FC<NumberListSliceType> = ({
     bgMode,
     bgColor,
+    isCentered,
     anchorId,
     items,
 
@@ -47,14 +51,24 @@ export const NumberListSlice: React.FC<NumberListSliceType> = ({
             bgMode={
                 bgMode === 'full' || bgMode === 'inverted' ? bgMode : undefined
             }
-            items={items?.map((item) => {
+            isCentered={isCentered}
+            items={items?.map<NumberListCardProps>((item) => {
+                // check if image urls are path to SVG image
+                const isSvgImage = isSVG(item.image?.small);
+
                 return {
-                    number: item.listNumber || '',
+                    digit: item.listNumber || '',
                     label: item.label || '',
-                    icon: {
-                        src: item?.icon?.small ? `${item.icon.small}` : '',
-                        alt: item?.icon?.meta?.altText || '',
-                    },
+                    text: item.text || '',
+                    image: item.image?.small
+                        ? {
+                              ...item.image,
+                              ratios: !isSvgImage
+                                  ? { small: { w: 440, h: 242 } }
+                                  : undefined,
+                              coverSpace: !isSvgImage,
+                          }
+                        : undefined,
                 };
             })}
         />
