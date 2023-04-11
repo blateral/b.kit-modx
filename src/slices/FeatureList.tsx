@@ -13,7 +13,15 @@ import { normalizeAnchorId } from 'utils/mapping';
 import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
 import { FeatureProps } from '@blateral/b.kit/lib/components/blocks/Feature';
 
-interface FeatureItemType {
+export interface FeatureListSliceActionProps {
+    isInverted?: boolean;
+    label?: string;
+    href?: string;
+    isExternal?: boolean;
+    isTextCentered?: boolean;
+}
+
+export interface FeatureItemType {
     title?: string;
     text?: string;
     link?: string;
@@ -41,12 +49,7 @@ export interface FeatureListSliceType
     imageFormat: string;
     columns?: string;
 
-    action?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
+    action?: (props: FeatureListSliceActionProps) => React.ReactNode;
     theme?: ThemeMods;
 }
 
@@ -144,9 +147,10 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
                             action:
                                 action &&
                                 isValidAction(actionLabelText, actionHref)
-                                    ? (isInverted: boolean) =>
+                                    ? ({ isInverted, isTextCentered }) =>
                                           action({
                                               isInverted,
+                                              isTextCentered,
                                               label: actionLabelText,
                                               href: actionHref || '',
                                               isExternal:

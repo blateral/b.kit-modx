@@ -13,6 +13,14 @@ import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
 import { normalizeAnchorId } from 'utils/mapping';
 
+export interface PosterSliceActionProps {
+    isInverted?: boolean;
+    label?: string;
+    href?: string;
+    isExternal?: boolean;
+    isTextCentered?: boolean;
+}
+
 export interface PosterSliceType extends ModxSlice<'Poster'> {
     isActive?: boolean;
     anchorId?: string;
@@ -33,18 +41,8 @@ export interface PosterSliceType extends ModxSlice<'Poster'> {
     hCentered?: boolean;
 
     // helpers to define component elements outside of slice
-    primaryAction?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
-    secondaryAction?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
+    primaryAction?: (props: PosterSliceActionProps) => React.ReactNode;
+    secondaryAction?: (props: PosterSliceActionProps) => React.ReactNode;
     theme?: ThemeMods;
 }
 
@@ -101,9 +99,10 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
             text={text}
             primaryAction={
                 primaryAction && isValidAction(primary_label, primary_link)
-                    ? (isInverted) =>
+                    ? ({ isInverted, isTextCentered }) =>
                           primaryAction({
                               isInverted,
+                              isTextCentered,
                               label: primary_label,
                               href: primary_link || '',
                               isExternal: isExternalLink(primary_link),
@@ -113,9 +112,10 @@ export const PosterSlice: React.FC<PosterSliceType> = ({
             secondaryAction={
                 secondaryAction &&
                 isValidAction(secondary_label, secondary_link)
-                    ? (isInverted) =>
+                    ? ({ isInverted, isTextCentered }) =>
                           secondaryAction({
                               isInverted,
+                              isTextCentered,
                               label: secondary_label,
                               href: secondary_link || '',
                               isExternal: isExternalLink(secondary_link),
