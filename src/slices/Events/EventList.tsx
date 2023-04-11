@@ -10,6 +10,7 @@ import {
     parseModxDateString,
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+import { EventItem } from '@blateral/b.kit/lib/components/sections/events/EventList';
 
 interface EventCollection {
     alias?: string;
@@ -21,7 +22,9 @@ interface Event {
     tags?: string;
     title?: string;
     date?: string;
+    /** @deprecated */
     image?: ImageProps;
+    images?: ImageProps[];
     duration?: string;
     price?: string;
     priceInfo?: string;
@@ -97,7 +100,7 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             customTag={customTag}
-            events={events?.slice(0, 3).map((item) => {
+            events={events?.slice(0, 3).map<EventItem>((item) => {
                 const tagsArray =
                     item.tags?.split(',')?.map((tag) => tag.trim()) || [];
 
@@ -117,6 +120,14 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
                     ' | '
                 );
 
+                const images: ImageProps[] = [];
+                if (item.images) {
+                    images.push(...item.images);
+                } else if (item.image) {
+                    // fallback
+                    images.push(item.image);
+                }
+
                 return {
                     link: {
                         href: item.alias || '',
@@ -125,7 +136,7 @@ export const EventListSlice: React.FC<EventListSliceType> = ({
                     address: address,
                     duration: +(item.duration || 0) * 60,
                     tags: tagPropsArray,
-                    image: item.image && hasImages ? item.image : undefined,
+                    images: hasImages ? images : undefined,
                     date: parseModxDateString(item.date),
                     action:
                         action && isValidAction(primary_label, item.alias)

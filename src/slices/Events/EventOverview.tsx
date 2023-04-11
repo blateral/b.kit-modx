@@ -25,7 +25,9 @@ interface Event {
     tags?: string;
     title?: string;
     date?: string;
+    /** @deprecated */
     image?: ImageProps;
+    images?: ImageProps[];
     intro?: string;
     duration?: string;
     price?: string;
@@ -133,6 +135,14 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
                 ' | '
             );
 
+            const images: ImageProps[] = [];
+            if (item.images) {
+                images.push(...item.images);
+            } else if (item.image) {
+                // fallback
+                images.push(item.image);
+            }
+
             return {
                 link: {
                     href: item.alias || '',
@@ -141,11 +151,11 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
                 address: address,
                 duration: +(item.duration || 0) * 60,
                 tags: tagPropsArray,
-                image: item.image && hasImages ? item.image : undefined,
+                images: hasImages ? images : undefined,
                 date: parseModxDateString(item.date),
                 action:
                     action && isValidAction(primary_label, item.alias)
-                        ? ({ isInverted }: { isInverted: any }) =>
+                        ? ({ isInverted }) =>
                               action({
                                   isInverted,
                                   label: primary_label,

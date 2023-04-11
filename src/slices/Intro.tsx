@@ -15,6 +15,14 @@ import { ImageAspectRatios } from '@blateral/b.kit/lib/components/blocks/Image';
 
 type BgMode = 'full' | 'splitted' | 'inverted';
 
+export interface IntroSliceActionProps {
+    isInverted?: boolean;
+    label?: string;
+    href?: string;
+    isExternal?: boolean;
+    isTextCentered?: boolean;
+}
+
 export interface IntroSliceType extends ModxSlice<'Intro'> {
     isActive?: boolean;
     anchorId?: string;
@@ -41,17 +49,13 @@ export interface IntroSliceType extends ModxSlice<'Intro'> {
     primary_label?: string;
     secondary_label?: string;
 
-    primaryAction?: (props: {
-        isInverted?: boolean;
-        label?: string;
-        href?: string;
-        isExternal?: boolean;
-    }) => React.ReactNode;
+    primaryAction?: (props: IntroSliceActionProps) => React.ReactNode;
     secondaryAction?: (props: {
         isInverted?: boolean;
         label?: string;
         href?: string;
         isExternal?: boolean;
+        isTextCentered?: boolean;
     }) => React.ReactNode;
     theme?: ThemeMods;
 }
@@ -138,9 +142,10 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
             text={text}
             primaryAction={
                 primaryAction && isValidAction(primary_label, primary_link)
-                    ? (isInverted: boolean) =>
+                    ? ({ isInverted, isTextCentered }) =>
                           primaryAction({
                               isInverted,
+                              isTextCentered,
                               label: primary_label,
                               href: primary_link || '',
                               isExternal: isExternalLink(primary_link),
@@ -150,9 +155,10 @@ export const IntroSlice: React.FC<IntroSliceType> = ({
             secondaryAction={
                 secondaryAction &&
                 isValidAction(secondary_label, secondary_link)
-                    ? (isInverted: boolean) =>
+                    ? ({ isInverted, isTextCentered }) =>
                           secondaryAction({
                               isInverted,
+                              isTextCentered,
                               label: secondary_label,
                               href: secondary_link || '',
                               isExternal: isExternalLink(secondary_link),

@@ -300,13 +300,7 @@ export interface ModxEventPage extends ModxPage {
 export interface ModxEventData {
     title?: string;
     date?: string;
-    image: ModxImageProps & {
-        ratios: {
-            small: { w?: number; h?: number };
-            medium: { w?: number; h?: number };
-            large: { w?: number; h?: number };
-        };
-    };
+    images?: ModxImageProps[];
     shortDescription?: string;
     text?: string;
     duration?: string;
