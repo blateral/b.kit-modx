@@ -300,6 +300,8 @@ export interface ModxEventPage extends ModxPage {
 export interface ModxEventData {
     title?: string;
     date?: string;
+    /** @deprecated */
+    image?: ModxImageProps;
     images?: ModxImageProps[];
     shortDescription?: string;
     text?: string;
