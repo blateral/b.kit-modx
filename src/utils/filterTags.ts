@@ -1,4 +1,4 @@
-import { isValidArray } from '@blateral/b.kit';
+import { isValidArray } from '@blateral/b.kit/lib/hooks';
 
 export const getFilterTagsArray = (filter?: string) => {
     let tags: string[] = [];

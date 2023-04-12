@@ -1,6 +1,8 @@
-import { assignTo, NewsAuthorCard, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
+
+const NewsAuthorCard = React.lazy(() => import('imports/News/_AuthorCard'));
 
 export interface NewsAuthorCardSliceType extends ModxSlice<'NewsAuthor'> {
     isActive?: boolean;

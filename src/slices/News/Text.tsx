@@ -1,6 +1,8 @@
-import { assignTo, NewsText, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
+
+const NewsText = React.lazy(() => import('imports/News/_Text'));
 
 export interface NewsTextSliceType extends ModxSlice<'NewsText'> {
     isActive?: boolean;

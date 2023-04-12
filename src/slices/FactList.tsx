@@ -1,8 +1,9 @@
-// import { FactList } from '@blateral/b.kit';
 import React from 'react';
-import { assignTo, FactList, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const FactList = React.lazy(() => import('imports/_FactList'));
 
 interface FactListEntryItems {
     title?: string;

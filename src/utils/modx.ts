@@ -8,7 +8,7 @@ import { FactListSliceType } from '../slices/FactList';
 import { FeatureListSliceType } from '../slices/FeatureList';
 import { GallerySliceType } from '../slices/Gallery';
 import { HeaderSliceType } from 'slices/Header';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 import { IconListSliceType } from '../slices/IconList';
 import { IntroSliceType } from '../slices/Intro';
 import { MapSliceType } from '../slices/Map';
@@ -32,12 +32,12 @@ import { CardListSliceType } from 'slices/CardList';
 import { IndexListSliceType } from 'slices/IndexList';
 import { EventListSliceType } from 'slices/Events/EventList';
 import { EventOverviewSliceType } from 'slices/Events/EventOverview';
-import { LinkProps } from '@blateral/b.kit/lib/components/buttons/Button';
+import { LinkProps } from '@blateral/b.kit/types/components/buttons/Button';
 import { JobListSliceType } from 'slices/Jobs/JobList';
 import {
     BottomLink,
     SiteLinkGroup,
-} from '@blateral/b.kit/lib/components/sections/footer/Footer';
+} from '@blateral/b.kit/types/components/sections/footer/Footer';
 import { NavListAutoSliceType } from 'slices/NavListAuto';
 import { NumberListSliceType } from 'slices/NumberList';
 import { ParallaxBackgroundSliceType } from 'slices/ParallaxBackground';
@@ -51,9 +51,9 @@ import { NewsletterFormSliceType } from 'slices/NewsletterForm';
 import { PointOfInterestOverviewSliceType } from 'slices/POIs/PointOfInterestOverview';
 import { PointOfInterestMapSliceType } from 'slices/POIs/PointOfInterestMap';
 import { RawVideoSliceType } from 'slices/RawVideo';
-import { CookieTypes } from '@blateral/b.kit/lib/utils/cookie-consent/useCookieConsent';
-import { NewsletterFormStructure } from '@blateral/b.kit/lib/components/sections/NewsletterForm';
-import { Language } from '@blateral/b.kit/lib/components/blocks/LanguageSwitcher';
+import { CookieTypes } from '@blateral/b.kit/types/utils/cookie-consent/useCookieConsent';
+import { NewsletterFormStructure } from '@blateral/b.kit/types/components/sections/NewsletterForm';
+import { Language } from '@blateral/b.kit/types/components/blocks/LanguageSwitcher';
 
 export interface ModxConnectorConfig {
     endpoint: string;

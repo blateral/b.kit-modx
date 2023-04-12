@@ -1,6 +1,7 @@
-import { assignTo, Teaser, TeaserWide, ThemeMods } from '@blateral/b.kit';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
+
 import {
     isExternalLink,
     isValidAction,
@@ -9,6 +10,9 @@ import {
     ModxSlice,
 } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Teaser = React.lazy(() => import('imports/_Teaser'));
+const TeaserWide = React.lazy(() => import('imports/_TeaserWide'));
 
 export interface TeaserVideo {
     urls?: Array<string>;

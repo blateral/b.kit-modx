@@ -1,6 +1,7 @@
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
 
-import { assignTo, Poster, ThemeMods } from '@blateral/b.kit';
 import {
     isExternalLink,
     isHeadlineTag,
@@ -9,9 +10,10 @@ import {
     ModxImageProps,
     ModxSlice,
 } from 'utils/modx';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Poster = React.lazy(() => import('imports/_Poster'));
 
 export interface PosterSliceActionProps {
     isInverted?: boolean;

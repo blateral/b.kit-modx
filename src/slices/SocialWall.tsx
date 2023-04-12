@@ -1,8 +1,10 @@
-import { ModxSlice, ModxImageProps } from 'utils/modx';
-
-import { assignTo, SocialWall, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+
+import { ModxSlice, ModxImageProps } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const SocialWall = React.lazy(() => import('imports/_SocialWall'));
 
 type BgMode = 'full' | 'inverted';
 

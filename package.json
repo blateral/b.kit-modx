@@ -1,12 +1,15 @@
 {
     "name": "@blateral/b.kit-modx",
-    "version": "2.4.1",
+    "version": "2.5.0-beta.1.0",
     "description": "",
-    "main": "lib/index.js",
-    "module": "lib/index.es.js",
-    "types": "lib/index.d.ts",
+    "main": "cjs/index.js",
+    "module": "esm/index.js",
+    "types": "types/index.d.ts",
+    "sideEffects": false,
     "files": [
-        "lib"
+        "cjs/*",
+        "esm/*",
+        "types/*"
     ],
     "scripts": {
         "build": "rollup -c",
@@ -33,7 +36,9 @@
     },
     "homepage": "https://github.com/blateral/b.kit-modx#readme",
     "devDependencies": {
-        "@blateral/b.kit": "2.4.0",
+        "@babel/core": "^7.20.12",
+        "@blateral/b.kit": "2.5.0",
+        "@rollup/plugin-babel": "5.3.1",
         "@rollup/plugin-commonjs": "22.0.0",
         "@rollup/plugin-node-resolve": "^13.2.1",
         "@types/react": "^18.0.8",
@@ -58,7 +63,7 @@
         "typescript": "^4.6.3"
     },
     "peerDependencies": {
-        "@blateral/b.kit": "2.4.0",
+        "@blateral/b.kit": "2.5.0",
         "react": "^18.1.0",
         "react-dom": "^18.1.0",
         "styled-components": "^5.3.5"

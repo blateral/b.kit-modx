@@ -1,7 +1,11 @@
-import { Accordion, assignTo, isValidArray, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { isValidArray } from '@blateral/b.kit/lib/hooks';
+
 import { BgMode, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Accordion = React.lazy(() => import('imports/_Accordion'));
 
 interface AccordionItem {
     label: string;
