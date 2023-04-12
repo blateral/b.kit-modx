@@ -1,4 +1,4 @@
-import { isValidArray } from '@blateral/b.kit';
+import { isValidArray } from '@blateral/b.kit/lib/hooks';
 import { AccordionSliceType, getAccordionSearchData } from 'slices/Accordion';
 import { AlertListSliceType, getAlertListSearchData } from 'slices/AlertList';
 import { ArticleSliceType, getArticleSearchData } from 'slices/Article';

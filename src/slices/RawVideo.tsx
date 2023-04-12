@@ -1,7 +1,10 @@
 import React from 'react';
-import { assignTo, ThemeMods, RawVideo } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+
 import { ModxSlice, ModxImageProps } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const RawVideo = React.lazy(() => import('imports/_RawVideo'));
 
 export interface RawVideoCardItem {
     videos: string[];

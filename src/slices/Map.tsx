@@ -1,11 +1,14 @@
 import React from 'react';
 
-import { assignTo, Map, ThemeMods } from '@blateral/b.kit/lib';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { Icons } from '@blateral/b.kit/lib/icons';
+import { MapLocation } from '@blateral/b.kit/types/components/sections/Map';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
+
 import { isHeadlineTag, ModxSlice } from 'utils/modx';
-import { MapLocation } from '@blateral/b.kit/lib/components/sections/Map';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { normalizeAnchorId } from 'utils/mapping';
-import { Icons } from '@blateral/b.kit';
+
+const Map = React.lazy(() => import('imports/_Map'));
 
 interface MapLocationItems {
     marker?: string;

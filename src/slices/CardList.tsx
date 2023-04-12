@@ -1,9 +1,12 @@
-import { assignTo, CardList, ThemeMods } from '@blateral/b.kit';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
-import { CardProps } from '@blateral/b.kit/lib/components/sections/CardList';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
+import { CardProps } from '@blateral/b.kit/types/components/sections/CardList';
+
 import { BgMode, ModxImageMetaData, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const CardList = React.lazy(() => import('imports/_CardList'));
 
 interface CardListItems {
     title?: string;
@@ -38,7 +41,7 @@ export const CardListSlice: React.FC<CardListSliceType> = ({
     bgColor,
     anchorId,
     items,
-    decorator,
+    // decorator,
     customIcon,
     theme,
     maxThreeCols,

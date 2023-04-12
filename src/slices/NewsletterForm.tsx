@@ -1,13 +1,15 @@
-import { ModxSlice, parseModxNewsletterFields } from 'utils/modx';
-
-import { assignTo, NewsletterForm, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
-import { normalizeAnchorId } from 'utils/mapping';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
 import {
     FieldGenerationProps,
     NewsletterFormStructure,
     FormData,
-} from '@blateral/b.kit/lib/components/sections/NewsletterForm';
+} from '@blateral/b.kit/types/components/sections/NewsletterForm';
+
+import { ModxSlice, parseModxNewsletterFields } from 'utils/modx';
+import { normalizeAnchorId } from 'utils/mapping';
+
+const NewsletterForm = React.lazy(() => import('imports/_NewsletterForm'));
 
 type BgMode = 'full' | 'inverted';
 

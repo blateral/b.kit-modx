@@ -1,7 +1,10 @@
-import { ModxSlice } from '../utils/modx';
 import React from 'react';
-import { assignTo, ThemeMods, Timeline } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+
+import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Timeline = React.lazy(() => import('imports/_Timeline'));
 
 interface TimelineItems {
     label?: string;

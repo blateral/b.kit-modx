@@ -1,7 +1,10 @@
 import React from 'react';
-import { assignTo, ThemeMods, Video } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+
 import { ModxImageProps, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const Video = React.lazy(() => import('imports/_Video'));
 
 export interface VideoCardItem {
     bgImage: ModxImageProps;

@@ -1,6 +1,6 @@
 /* eslint-disable react/react-in-jsx-scope */
 import React from 'react';
-import { SocialItem } from '@blateral/b.kit/lib/components/blocks/SocialList';
+import { SocialItem } from '@blateral/b.kit/types/components/blocks/SocialList';
 import { SocialMediaItem } from './modx';
 
 export const isSVG = (url?: string) => {

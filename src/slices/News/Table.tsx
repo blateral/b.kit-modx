@@ -1,8 +1,10 @@
-import { assignTo, NewsTable, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
 import { ModxSlice } from 'utils/modx';
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
-import { TableProps } from '@blateral/b.kit/lib/components/blocks/TableBlock';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
+import { TableProps } from '@blateral/b.kit/types/components/blocks/TableBlock';
+
+const NewsTable = React.lazy(() => import('imports/News/_Table'));
 
 export interface NewsTableSliceType extends ModxSlice<'NewsTable'> {
     isActive?: boolean;

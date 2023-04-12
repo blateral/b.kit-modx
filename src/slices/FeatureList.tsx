@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { assignTo, FeatureList, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { ImageProps } from '@blateral/b.kit/types/components/blocks/Image';
+import { FeatureProps } from '@blateral/b.kit/types/components/blocks/Feature';
+
 import {
     BgMode,
     isExternalLink,
@@ -10,8 +13,8 @@ import {
 } from 'utils/modx';
 import { isSVG } from 'utils/mapping';
 import { normalizeAnchorId } from 'utils/mapping';
-import { ImageProps } from '@blateral/b.kit/lib/components/blocks/Image';
-import { FeatureProps } from '@blateral/b.kit/lib/components/blocks/Feature';
+
+const FeatureList = React.lazy(() => import('imports/_FeatureList'));
 
 export interface FeatureListSliceActionProps {
     isInverted?: boolean;
