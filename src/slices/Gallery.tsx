@@ -1,9 +1,11 @@
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { ImageAspectRatios } from '@blateral/b.kit/types/components/blocks/Image';
 
-import { assignTo, Gallery, ThemeMods } from '@blateral/b.kit';
 import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
-import { ImageAspectRatios } from '@blateral/b.kit/lib/components/blocks/Image';
+
+const Gallery = React.lazy(() => import('imports/_Gallery'));
 
 type ImageFormats =
     | 'small-square'

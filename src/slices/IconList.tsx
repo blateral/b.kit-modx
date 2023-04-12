@@ -1,5 +1,6 @@
-import { assignTo, IconList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+
 import {
     BgMode,
     isExternalLink,
@@ -8,6 +9,8 @@ import {
     ModxSlice,
 } from 'utils/modx';
 import { isSVG, normalizeAnchorId } from 'utils/mapping';
+
+const IconList = React.lazy(() => import('imports/_IconList'));
 
 interface IconListImages {
     image: ModxImageProps & {

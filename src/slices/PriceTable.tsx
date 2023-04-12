@@ -1,7 +1,10 @@
-import { assignTo, PriceTable, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
-import { ModxSlice } from '../utils/modx';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+
+import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const PriceTable = React.lazy(() => import('imports/_PriceTable'));
 
 interface PriceTableItem {
     title?: string;

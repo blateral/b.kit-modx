@@ -1,17 +1,13 @@
-import {
-    assignTo,
-    DynamicForm,
-    isValidArray,
-    ThemeMods,
-} from '@blateral/b.kit';
+import React, { useMemo } from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { isValidArray } from '@blateral/b.kit/lib/hooks';
 import {
     FieldGenerationProps,
     FormStructure,
     FormValues,
     Select,
     SubmitResponse,
-} from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
-import React, { useMemo } from 'react';
+} from '@blateral/b.kit/types/components/sections/form/DynamicForm';
 import {
     Field as BkitField,
     Area as BkitArea,
@@ -20,10 +16,13 @@ import {
     FieldGroup as BkitFieldGroup,
     FileUpload as BkitFileUpload,
     Location as BkitLocation,
-} from '@blateral/b.kit/lib/components/sections/form/DynamicForm';
-import { ModxSlice } from '../utils/modx';
+} from '@blateral/b.kit/types/components/sections/form/DynamicForm';
+import { LocationData } from '@blateral/b.kit/types/components/fields/LocationField';
+
+import { ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
-import { LocationData } from '@blateral/b.kit/lib/components/fields/LocationField';
+
+const DynamicForm = React.lazy(() => import('imports/_DynamicForm'));
 
 type FormFieldTypes =
     | 'Field'

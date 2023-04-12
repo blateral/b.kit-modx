@@ -1,3 +1,8 @@
+import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { HeadlineTag } from '@blateral/b.kit/types/components/typography/Heading';
+import { ImageAspectRatios } from '@blateral/b.kit/types/components/blocks/Image';
+
 import {
     ModxSlice,
     isExternalLink,
@@ -5,13 +10,10 @@ import {
     isValidAction,
     ModxImageProps,
 } from 'utils/modx';
-
-import { HeadlineTag } from '@blateral/b.kit/lib/components/typography/Heading';
 import { HeadlineTagDefault } from 'utils/stringLexicon';
-import { assignTo, Intro, ThemeMods } from '@blateral/b.kit';
-import React from 'react';
 import { normalizeAnchorId } from 'utils/mapping';
-import { ImageAspectRatios } from '@blateral/b.kit/lib/components/blocks/Image';
+
+const Intro = React.lazy(() => import('imports/_Intro'));
 
 type BgMode = 'full' | 'splitted' | 'inverted';
 

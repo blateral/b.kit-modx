@@ -1,10 +1,13 @@
 import React from 'react';
-import { assignTo, JobList, ThemeMods, useLibTheme } from '@blateral/b.kit';
+import { assignTo, ThemeMods, useLibTheme } from '@blateral/b.kit';
 import { ModxJobLocation, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
-import { JobItem } from '@blateral/b.kit/lib/components/sections/jobs/JobList';
-import { StructuredEmploymentType } from '@blateral/b.kit/lib/utils/structuredData';
-import { JobLocation } from '@blateral/b.kit/lib/components/blocks/JobCard';
+
+import { JobItem } from '@blateral/b.kit/types/components/sections/jobs/JobList';
+import { StructuredEmploymentType } from '@blateral/b.kit/types/utils/structuredData';
+import { JobLocation } from '@blateral/b.kit/types/components/blocks/JobCard';
+
+const JobList = React.lazy(() => import('imports/Jobs/_JobList'));
 
 interface JobListItems {
     id: number;

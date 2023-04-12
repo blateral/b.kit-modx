@@ -1,7 +1,10 @@
 import React from 'react';
-import { assignTo, PriceList, ThemeMods } from '@blateral/b.kit';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+
 import { ModxSlice } from '../utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const PriceList = React.lazy(() => import('imports/_PriceList'));
 
 interface PriceListItem {
     text?: string;

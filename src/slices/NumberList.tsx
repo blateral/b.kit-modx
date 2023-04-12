@@ -1,9 +1,11 @@
-import { BgMode, ModxImageProps, ModxSlice } from '../utils/modx';
-
-import { assignTo, NumberList, ThemeMods } from '@blateral/b.kit';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { NumberListCardProps } from '@blateral/b.kit/types/components/sections/NumberList';
+
+import { BgMode, ModxImageProps, ModxSlice } from '../utils/modx';
 import { isSVG, normalizeAnchorId } from 'utils/mapping';
-import { NumberListCardProps } from '@blateral/b.kit/lib/components/sections/NumberList';
+
+const NumberList = React.lazy(() => import('imports/_NumberList'));
 
 interface NumberListItem {
     image?: Pick<ModxImageProps, 'small' | 'meta'>;

@@ -1,10 +1,12 @@
-import { assignTo, NewsList, ThemeMods } from '@blateral/b.kit';
-import { TagProps } from '@blateral/b.kit/lib/components/blocks/Tag';
-import { NewsItem } from '@blateral/b.kit/lib/components/sections/news/NewsList';
-import { LinkProps } from '@blateral/b.kit/lib/components/typography/Link';
 import React from 'react';
+import { assignTo, ThemeMods } from '@blateral/b.kit';
+import { TagProps } from '@blateral/b.kit/types/components/blocks/Tag';
+import { NewsItem } from '@blateral/b.kit/types/components/sections/news/NewsList';
+import { LinkProps } from '@blateral/b.kit/types/components/typography/Link';
 import { ModxNewsTeaser, ModxSlice, parseModxDateString } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
+
+const NewsList = React.lazy(() => import('imports/News/_List'));
 
 export interface NewsListSliceType
     extends ModxSlice<'NewsList', ModxNewsTeaser> {
