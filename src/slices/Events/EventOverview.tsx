@@ -129,7 +129,7 @@ export const EventOverviewSlice: React.FC<EventOverviewSliceType> = ({
 
             const address = concat(
                 [item.address?.locationName, item.address?.adress],
-                ' | '
+                ', '
             );
 
             const images: ImageProps[] = [];
