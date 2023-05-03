@@ -21,7 +21,7 @@
         "deploy-beta": "yarn tc && yarn build && yarn publish --tag beta",
         "check-yalc": "if yalc --version; then yalc check; else echo Skipping yalc check; fi",
         "lookup": "yarn --check-files",
-        "publish-yalc": "rm -rf lib && yalc update && yarn build && yalc publish",
+        "push-yalc": "yarn build && yalc push --sig",
         "prepare": "npx husky install && npx yalc --version"
     },
     "repository": {
