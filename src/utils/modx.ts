@@ -316,6 +316,8 @@ export interface ModxEventData {
         email?: string;
         phone?: string;
         website?: string;
+        /** @deprecated */
+        adress?: string;
     };
     booking: {
         email?: string;
