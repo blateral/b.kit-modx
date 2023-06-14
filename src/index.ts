@@ -47,6 +47,7 @@ export * from 'slices/Teaser';
 export * from 'slices/Timeline';
 export * from 'slices/Video';
 export * from 'slices/RawVideo';
+export * from 'slices/HtmlCode';
 export * from 'slices/POIs/PointOfInterestOverview';
 export * from 'slices/POIs/PointOfInterestMap';
 export * from 'utils/modx';
