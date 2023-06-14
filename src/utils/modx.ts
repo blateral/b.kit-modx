@@ -54,6 +54,7 @@ import { RawVideoSliceType } from 'slices/RawVideo';
 import { CookieTypes } from '@blateral/b.kit/types/utils/cookie-consent/useCookieConsent';
 import { NewsletterFormStructure } from '@blateral/b.kit/types/components/sections/NewsletterForm';
 import { Language } from '@blateral/b.kit/types/components/blocks/LanguageSwitcher';
+import { HtmlCodeSliceType } from 'slices/HtmlCode';
 
 export interface ModxConnectorConfig {
     endpoint: string;
@@ -155,6 +156,7 @@ export type PageContent =
     | TimelineSliceType
     | PointOfInterestOverviewSliceType
     | PointOfInterestMapSliceType
+    | HtmlCodeSliceType
     | VideoSliceType
     | RawVideoSliceType;
 
