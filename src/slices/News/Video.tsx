@@ -17,6 +17,11 @@ export interface NewsVideoSliceType extends ModxSlice<'NewsVideo'> {
         handleClick?: () => void;
         consentProps: Record<string, string>;
     }) => React.ReactNode;
+    /**
+     * Custom handler for play button click
+     * @returns true if video should be played
+     */
+    onPlayClick?: () => boolean;
 
     bgColor?: string;
     theme?: ThemeMods;
@@ -29,6 +34,7 @@ export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
     consentText,
     consentActionLabel,
     consentAction,
+    onPlayClick,
     bgColor,
     theme,
 }) => {
@@ -61,6 +67,7 @@ export const NewsVideoSlice: React.FC<NewsVideoSliceType> = ({
                           })
                     : undefined
             }
+            onPlayClick={onPlayClick}
         />
     );
 };
