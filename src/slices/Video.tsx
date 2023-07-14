@@ -29,7 +29,7 @@ export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
      * Custom handler for play button click
      * @returns true if video should be played
      */
-    onPlayClick?: () => boolean;
+    onPlayClick?: () => Promise<boolean>;
 
     theme?: ThemeMods;
 }
