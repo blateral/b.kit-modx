@@ -22,6 +22,11 @@ export interface VideoSliceType extends ModxSlice<'Video', VideoCardItem> {
         handleClick?: () => void;
         consentProps: Record<string, string>;
     }) => React.ReactNode;
+    /**
+     * Custom handler for play button click
+     * @returns true if video should be played
+     */
+    onPlayClick?: () => Promise<boolean>;
 
     theme?: ThemeMods;
 }
@@ -36,6 +41,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
     consentText,
     consentActionLabel,
     consentAction,
+    onPlayClick,
 
     theme,
 }) => {
@@ -73,6 +79,7 @@ export const VideoSlice: React.FC<VideoSliceType> = ({
                           })
                     : undefined
             }
+            onPlayClick={onPlayClick}
         />
     );
 };
