@@ -302,10 +302,10 @@
     "@babel/helper-validator-identifier" "^7.19.1"
     to-fast-properties "^2.0.0"
 
-"@blateral/b.kit@2.7.3":
-  version "2.7.3"
-  resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.7.3.tgz#63d28b3f6bd24c46a13b38bb2c71b4eebb37eb1f"
-  integrity sha512-TOQs+jRW9FSPUnezzjLl3teDz+T3VPaAKgZjKZaW5OqL9HyXi2acXGCf3SrxYXbUPCK0aGKbiFxHiDvN56peaA==
+"@blateral/b.kit@2.7.4":
+  version "2.7.4"
+  resolved "https://registry.yarnpkg.com/@blateral/b.kit/-/b.kit-2.7.4.tgz#fea41765150f87b382c19b2dd60712203339dfb4"
+  integrity sha512-v2qJoDSJIdeVX0ROWzk5O9yji/xxWveaf949lGpJDzJKj5ZMqIN8/b7dAxsGfZOw2Fqcb9etqBgg9+YYfPR6NQ==
 
 "@emotion/is-prop-valid@^1.1.0":
   version "1.1.2"
