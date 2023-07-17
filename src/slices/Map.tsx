@@ -123,6 +123,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
     );
 
     const isInverted = bgMode === 'inverted';
+    const locations = items || [];
 
     return (
         <Map
@@ -130,7 +131,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={isInverted ? 'inverted' : 'full'}
             isMirrored={isMirrored}
-            initialLocation={items?.length > 0 ? `location-0` : undefined}
+            initialLocation={locations.length > 0 ? `location-0` : undefined}
             center={center}
             zoom={zoom}
             flyToZoom={flyToZoom || 12}
@@ -139,7 +140,7 @@ export const MapSlice: React.FC<MapSliceType> = ({
             }
             allMarkersOnInit={allMarkersOnInit}
             fitBoundsPadding={fitBoundsPadding || [30, 30]}
-            locations={items?.map<MapLocation>((location, i) => {
+            locations={locations?.map<MapLocation>((location, i) => {
                 const posLat = location.latitude ? +location.latitude : 0;
                 const posLng = location.longitude ? +location.longitude : 0;
 

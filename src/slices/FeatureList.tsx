@@ -93,7 +93,7 @@ export const FeatureListSlice: React.FC<FeatureListSliceType> = ({
             theme={sliceTheme}
             columns={columns ? (+columns === 2 ? 2 : 3) : undefined}
             features={items
-                .filter(filterMissingSmallFormat)
+                ?.filter(filterMissingSmallFormat)
                 .map<FeatureProps>(
                     ({
                         title,

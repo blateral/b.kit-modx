@@ -28,7 +28,7 @@ export const PriceListSlice: React.FC<PriceListSliceType> = ({
     theme,
     bgColor,
 }) => {
-    const filteredItems = items.filter(filterEmptyItems);
+    const filteredItems = items?.filter(filterEmptyItems) || [];
     if (filteredItems.length < 1) return null;
 
     // merging cms and component theme settings

@@ -55,7 +55,10 @@ export const NewsFooterSlice: React.FC<NewsFooterSliceType> = ({
     bgColor,
     theme,
 }) => {
-    const newsWithoutSelf = filterSelfFromNewsCollection(items, pageAlias);
+    const newsWithoutSelf = filterSelfFromNewsCollection(
+        items || [],
+        pageAlias
+    );
 
     const newsListMap = mapNewsListData({
         newsCollection: newsWithoutSelf,

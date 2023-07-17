@@ -63,7 +63,7 @@ export const NavListSlice: React.FC<NavListSliceType> = ({
             bgMode={bgMode}
             customTitleIcon={customTitleIcon}
             items={items
-                .filter((navitem) => navitem.title && navitem.link?.href)
+                ?.filter((navitem) => navitem.title && navitem.link?.href)
                 .map((navitem) => {
                     return {
                         title: navitem.title,

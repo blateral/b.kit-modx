@@ -64,7 +64,7 @@ export const CardListSlice: React.FC<CardListSliceType> = ({
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode as 'full' | 'inverted' | undefined}
             maxThreeCols={maxThreeCols}
-            items={items.map(
+            items={items?.map(
                 (item): Omit<CardProps, 'decorator' | 'isInverted'> => {
                     return {
                         ...item,

@@ -79,6 +79,8 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
         ? parseInt(queryParams.rows)
         : undefined;
 
+    const news = items || [];
+
     return (
         <NewsOverview
             theme={sliceTheme}
@@ -90,11 +92,11 @@ export const NewsOverviewSlice: React.FC<NewsOverviewSliceType> = ({
                     : undefined,
             }}
             customTag={customTag}
-            tags={getUniqueTags(items)}
+            tags={getUniqueTags(news)}
             onTagClick={onTagClick}
             news={
                 mapNewsListData({
-                    newsCollection: items,
+                    newsCollection: news,
                     cardAction,
                     hasImages,
                     newsCollectionUrl,

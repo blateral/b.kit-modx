@@ -49,7 +49,7 @@ export const IndexListSlice: React.FC<IndexListSliceType> = ({
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             theme={sliceTheme}
-            items={items.filter(isValidIndexItem)}
+            items={items?.filter(isValidIndexItem)}
             customIcon={customIcon}
         />
     );

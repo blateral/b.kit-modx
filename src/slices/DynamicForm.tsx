@@ -247,6 +247,8 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     submitAction,
     items,
 }) => {
+    const fields = useMemo(() => items || [], [items]);
+
     // merging cms and component theme settings
     const sliceTheme = assignTo(
         {
@@ -262,10 +264,10 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
     const formFields: FormStructure = useMemo(
         () =>
             itemsToFormFields({
-                formFields: items,
+                formFields: fields,
                 fieldSettings: settings,
             }),
-        [items, settings]
+        [fields, settings]
     );
 
     return (
@@ -275,13 +277,13 @@ export const DynamicFormSlice: React.FC<DynamicFormSliceType> = ({
             onSubmit={async (values) => {
                 // adding target mails from recipient field
                 const recipientTargetMails = getTargetMailsFromField(
-                    items,
+                    fields,
                     formFields,
                     values
                 );
 
                 // get reply to mail
-                const replyToMail = getReplyToMailField(items, values);
+                const replyToMail = getReplyToMailField(fields, values);
                 if (replyToMail) {
                     values.replyToMail = replyToMail;
                 }

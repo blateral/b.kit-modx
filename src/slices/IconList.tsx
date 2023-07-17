@@ -99,7 +99,7 @@ export const IconListSlice: React.FC<IconListSliceType> = ({
             }
             showMoreText={showMoreText}
             showLessText={showLessText}
-            items={items.map((item) => {
+            items={items?.map((item) => {
                 const originalSize = item?.image?.originals;
                 const aspectRatio =
                     originalSize?.w && originalSize?.h

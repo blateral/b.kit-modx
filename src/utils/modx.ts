@@ -94,7 +94,7 @@ export type BgMode = 'full' | 'splitted' | 'inverted' | undefined;
 export interface ModxSlice<S, I = any> {
     slice_type: S;
     primary?: Record<string, unknown>;
-    items: I[];
+    items?: I[];
     config: ModxConnectorConfig;
 }
 
