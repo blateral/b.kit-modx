@@ -54,7 +54,7 @@ export const AlertListSlice: React.FC<AlertListSliceType> = ({
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
             items={items
-                .filter((alert) => alert.label && alert.link?.href)
+                ?.filter((alert) => alert.label && alert.link?.href)
                 .map((alert) => {
                     const dateParts = alert.date?.split('.') || [];
 

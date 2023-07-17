@@ -95,7 +95,7 @@ export const JobListSlice: React.FC<JobListSliceType> = ({
             modelIcon={modelIcon}
             bgMode={bgMode}
             jobs={items
-                .filter((job) => job.jobTitle)
+                ?.filter((job) => job.jobTitle)
                 .map<JobItem>((job, i) => {
                     const id = job.id !== undefined ? job.id : i;
 

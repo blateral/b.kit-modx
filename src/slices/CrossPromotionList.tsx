@@ -55,7 +55,7 @@ export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = ({
     externalLinkIcon,
     bgMode,
 }) => {
-    const promoItems: Array<CrossPromotionItems> = items;
+    const promoItems: Array<CrossPromotionItems> = items || [];
     const isImagesMirrored =
         isMirrored || imageFormat === 'gallery-triple-right' ? true : false;
 
@@ -74,7 +74,7 @@ export const CrossPromotionListSlice: React.FC<CrossPromotionListSliceType> = ({
         mainItems = allImages.filter((item) => item.isMain);
         asideItems = allImages.filter((item) => !item.isMain);
     } else {
-        const allImages = items.map((image, index, array) =>
+        const allImages = promoItems.map((image, index, array) =>
             mapNonTripleGalleryImage(image, index, array, imageFormat, isFull)
         );
 
