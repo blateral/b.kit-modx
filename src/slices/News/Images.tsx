@@ -1,6 +1,7 @@
 import React from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
 import { ModxImageProps, ModxSlice } from 'utils/modx';
+import { isValidArray } from '@blateral/b.kit/lib/hooks';
 
 const NewsImages = React.lazy(() => import('imports/News/_Images'));
 
@@ -21,7 +22,7 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
     bgColor,
     theme,
 }) => {
-    const images = full?.small ? [full] : half[0]?.small ? half : [];
+    const images = full?.small ? [full] : half?.[0]?.small ? half : [];
 
     // merging cms and component theme settings
     const sliceTheme = assignTo(
@@ -34,6 +35,10 @@ export const NewsImagesSlice: React.FC<NewsImagesSliceType> = ({
         },
         theme
     );
+
+    if (!isValidArray(images, false)) {
+        return null;
+    }
 
     return (
         <NewsImages

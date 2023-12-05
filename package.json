@@ -1,6 +1,6 @@
 {
     "name": "@blateral/b.kit-modx",
-    "version": "2.6.3",
+    "version": "2.6.4",
     "description": "",
     "main": "cjs/index.js",
     "module": "esm/index.js",
