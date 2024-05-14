@@ -98,16 +98,32 @@ const filterNoLabel = (item: ModxNavGroup) => {
     return !!item.label;
 };
 
+const isValidURL = (link: string) => {
+    try {
+        new URL(link);
+        return true;
+    } catch (err) {
+        return false;
+    }
+};
+
 const mapToValidNavGroup = (
     item: ModxNavGroup,
     customNavItemIcon?: (props: { icon?: string }) => React.ReactNode
 ): NavItem => {
+    const hasValidUrl = isValidURL(item.link?.href || '');
+
     return {
         ...item,
         uid: item.id || '',
         link: item.link?.href
             ? {
-                  href: item.link.href === '/' ? '/' : '/' + item.link.href,
+                  isExternal: hasValidUrl,
+                  href: hasValidUrl
+                      ? item.link.href
+                      : item.link.href === '/'
+                      ? '/'
+                      : '/' + item.link.href,
               }
             : undefined,
         label: item.label || '',
