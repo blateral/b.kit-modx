@@ -1,5 +1,5 @@
 import React from 'react';
-import { ThemeMods } from '@blateral/b.kit';
+import { ThemeMods, useLibTheme } from '@blateral/b.kit';
 import { Icons } from '@blateral/b.kit/lib/icons';
 import { concat, printAnchorTag } from '@blateral/b.kit/lib/hooks';
 
@@ -8,6 +8,11 @@ import { normalizeAnchorId } from 'utils/mapping';
 import { getGoogleMapsURL } from 'utils/googleMaps';
 import { Info } from '@blateral/b.kit/types/components/blocks/InfoList';
 import { LocationIcon } from '@blateral/b.kit/types/components/sections/Map';
+import {
+    MapPOI,
+    PoiMapFilters,
+} from '@blateral/b.kit/types/components/sections/pois/PointOfInterestMap';
+import { FilterState } from '@blateral/b.kit/types/components/blocks/FilterBar';
 
 const PointOfInterestMap = React.lazy(
     () => import('imports/POIs/_PointOfInterestMap')
@@ -52,6 +57,7 @@ interface PointOfInterest {
     phone?: string;
     website?: string;
     facts: POIMigxFact[];
+    btnSubpage?: string;
 }
 
 export interface PointOfInterestMapSliceType extends ModxSlice<'POIMap'> {
@@ -92,6 +98,18 @@ export interface PointOfInterestMapSliceType extends ModxSlice<'POIMap'> {
     customCardClose?: React.ReactNode;
     customLocationRequest?: React.ReactNode;
 
+    enableFiltering?: boolean;
+
+    /** POI filter settings */
+    poiFilters?: PoiMapFilters;
+    customPoiFilters?: (props: {
+        pois: MapPOI[];
+        filters: FilterState;
+        setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
+        settings?: PoiMapFilters;
+    }) => React.ReactNode;
+
+    queryParams?: Record<string, any>;
     theme?: ThemeMods;
 }
 
@@ -115,6 +133,10 @@ export const PointOfInterestMapSlice: React.FC<PointOfInterestMapSliceType> = ({
     maxZoom,
     customCardClose,
     customLocationRequest,
+    enableFiltering,
+    poiFilters,
+    customPoiFilters,
+    queryParams,
     theme,
     customFact,
     action,
@@ -124,6 +146,19 @@ export const PointOfInterestMapSlice: React.FC<PointOfInterestMapSliceType> = ({
     mailIcon,
     webIcon,
 }) => {
+    const { globals } = useLibTheme();
+
+    const filterName = globals.sections.poiFilterName;
+    const factsFilterName = globals.sections.poiFactFilterName;
+
+    const initalFilterQuery = queryParams?.[filterName]
+        ? decodeURIComponent(queryParams?.[filterName])
+        : '';
+
+    const initalFactsFilterQuery = queryParams?.[factsFilterName]
+        ? decodeURIComponent(queryParams?.[factsFilterName])?.split(',')
+        : [];
+
     return (
         <PointOfInterestMap
             theme={theme}
@@ -230,9 +265,14 @@ export const PointOfInterestMapSlice: React.FC<PointOfInterestMapSliceType> = ({
                         });
                     }
 
+                    const hasDetailPageLink =
+                        poi.btnSubpage === 'TRUE' &&
+                        action &&
+                        isValidAction(primary_label, poi.alias);
+
                     return {
                         id: id.toString(),
-                        name: poi.name,
+                        name: poi.name || '',
                         description: poi.shortDescription,
                         position: [lat || 0, lng || 0],
                         facts: poi.facts
@@ -240,14 +280,13 @@ export const PointOfInterestMapSlice: React.FC<PointOfInterestMapSliceType> = ({
                             ?.map((fact) => fact.name!),
 
                         icon: markerSettings,
-                        action:
-                            action && isValidAction(primary_label, poi.alias)
-                                ? action({
-                                      label: primary_label,
-                                      href: poi.alias,
-                                      isExternal: true,
-                                  })
-                                : undefined,
+                        action: hasDetailPageLink
+                            ? action({
+                                  label: primary_label,
+                                  href: poi.alias,
+                                  isExternal: true,
+                              })
+                            : undefined,
                         infos: infos,
                     };
                 })}
@@ -255,6 +294,20 @@ export const PointOfInterestMapSlice: React.FC<PointOfInterestMapSliceType> = ({
             currentPosMarker={currentPosMarker}
             customCardClose={customCardClose}
             customLocationRequest={customLocationRequest}
+            poiFilters={
+                enableFiltering
+                    ? {
+                          textFilter: {},
+                          categoryFilter: {},
+                          ...(poiFilters || {}),
+                      }
+                    : undefined
+            }
+            initialPoiFilters={{
+                textFilter: initalFilterQuery,
+                categoryFilter: initalFactsFilterQuery,
+            }}
+            customPoiFilters={customPoiFilters}
         />
     );
 };
