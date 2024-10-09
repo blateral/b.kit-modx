@@ -7,6 +7,11 @@ import { isExternalLink, isValidAction, ModxSlice } from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 import { getGoogleMapsURL } from 'utils/googleMaps';
 import { Info } from '@blateral/b.kit/types/components/blocks/InfoList';
+import { FilterState } from '@blateral/b.kit/types/components/blocks/FilterBar';
+import {
+    PointOfInterestOverviewItem,
+    PoiOverviewFilters,
+} from '@blateral/b.kit/types/components/sections/pois/PointOfInterestOverview';
 
 const PointOfInterestOverview = React.lazy(
     () => import('imports/POIs/_PointOfInterestOverview')
@@ -52,6 +57,7 @@ interface PointOfInterest {
     phone?: string;
     website?: string;
     facts: POIMigxFact[];
+    btnSubpage?: string;
 }
 
 const poiSortFn = (a: PointOfInterest, b: PointOfInterest) => {
@@ -65,8 +71,6 @@ export interface PointOfInterestOverviewSliceType
     isActive?: boolean;
     anchorId?: string;
     bgMode?: 'full' | 'inverted';
-    enableFiltering?: boolean;
-    filterPlaceholder?: string;
     bgColor?: string;
     primary_label?: string;
     collection?: POICollection;
@@ -88,11 +92,19 @@ export interface PointOfInterestOverviewSliceType
     mailIcon?: (isInverted?: boolean) => React.ReactNode;
     webIcon?: (isInverted?: boolean) => React.ReactNode;
 
-    /** Injection function for filter submit icon */
-    filterSubmitIcon?: (isInverted?: boolean) => React.ReactNode;
+    enableFiltering?: boolean;
 
-    /** Injection function for filter reset icon */
-    filterClearIcon?: (isInverted?: boolean) => React.ReactNode;
+    /** @deprecated */
+    filterPlaceholder?: string;
+
+    /** POI filter settings */
+    poiFilters?: PoiOverviewFilters;
+    customPoiFilters?: (props: {
+        pois: PointOfInterestOverviewItem[];
+        filters: FilterState;
+        setFilters: React.Dispatch<React.SetStateAction<FilterState>>;
+        settings?: PoiOverviewFilters;
+    }) => React.ReactNode;
 
     queryParams?: Record<string, any>;
     theme?: ThemeMods;
@@ -103,10 +115,8 @@ export const PointOfInterestOverviewSlice: React.FC<
 > = ({
     bgMode,
     anchorId,
-    enableFiltering,
     primary_label,
     collection,
-    filterPlaceholder,
     bgColor,
     theme,
     customFact,
@@ -116,8 +126,10 @@ export const PointOfInterestOverviewSlice: React.FC<
     phoneIcon,
     mailIcon,
     webIcon,
-    filterSubmitIcon,
-    filterClearIcon,
+    enableFiltering,
+    filterPlaceholder,
+    poiFilters,
+    customPoiFilters,
     queryParams,
 }) => {
     // merging cms and component theme settings
@@ -136,18 +148,28 @@ export const PointOfInterestOverviewSlice: React.FC<
     const { theme: parentTheme } = useLibTheme();
     const filterName = assignTo(parentTheme, sliceTheme).globals.sections
         .poiFilterName;
+    const factsFilterName = assignTo(parentTheme, sliceTheme).globals.sections
+        .poiFactFilterName;
 
     const initalFilterQuery = queryParams?.[filterName]
         ? decodeURIComponent(queryParams?.[filterName])
         : '';
+
+    const initalFactsFilterQuery = queryParams?.[factsFilterName]
+        ? decodeURIComponent(queryParams?.[factsFilterName])?.split(',')
+        : [];
+
+    if (enableFiltering && filterPlaceholder) {
+        console.warn(
+            'filterPlaceholder is deprecated. Please use poiFilters.textFilter.placeholder instead.'
+        );
+    }
 
     return (
         <PointOfInterestOverview
             theme={sliceTheme}
             anchorId={normalizeAnchorId(anchorId)}
             bgMode={bgMode}
-            enableFiltering={enableFiltering}
-            filterPlaceholder={filterPlaceholder}
             pois={collection?.pois?.sort(poiSortFn).map((poi, i) => {
                 const infos: Info[] = [];
                 const id = poi.id !== undefined ? poi.id : i;
@@ -234,6 +256,11 @@ export const PointOfInterestOverviewSlice: React.FC<
                     });
                 }
 
+                const hasDetailPageLink =
+                    poi.btnSubpage === 'TRUE' &&
+                    action &&
+                    isValidAction(primary_label, poi.alias);
+
                 return {
                     id: id.toString(),
                     name: poi.name || '',
@@ -242,22 +269,34 @@ export const PointOfInterestOverviewSlice: React.FC<
                         ?.filter((fact) => fact.name)
                         ?.map((fact) => fact.name!),
                     customFact: customFact,
-                    action:
-                        action && isValidAction(primary_label, poi.alias)
-                            ? (isInverted) =>
-                                  action({
-                                      isInverted,
-                                      label: primary_label,
-                                      href: poi.alias,
-                                      isExternal: isExternalLink(poi.alias),
-                                  })
-                            : undefined,
+                    action: hasDetailPageLink
+                        ? (isInverted) =>
+                              action({
+                                  isInverted,
+                                  label: primary_label,
+                                  href: poi.alias,
+                                  isExternal: isExternalLink(poi.alias),
+                              })
+                        : undefined,
                     infos: infos,
                 };
             })}
-            initialFilterQuery={initalFilterQuery}
-            filterSubmitIcon={filterSubmitIcon}
-            filterClearIcon={filterClearIcon}
+            poiFilters={
+                enableFiltering
+                    ? {
+                          textFilter: {
+                              placeholder: filterPlaceholder,
+                          },
+                          categoryFilter: {},
+                          ...(poiFilters || {}),
+                      }
+                    : undefined
+            }
+            initialPoiFilters={{
+                textFilter: initalFilterQuery,
+                categoryFilter: initalFactsFilterQuery,
+            }}
+            customPoiFilters={customPoiFilters}
         />
     );
 };
