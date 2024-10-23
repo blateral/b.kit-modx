@@ -2,7 +2,12 @@ import React from 'react';
 import { assignTo, ThemeMods } from '@blateral/b.kit';
 import { ImageAspectRatios } from '@blateral/b.kit/types/components/blocks/Image';
 
-import { BgMode, ModxImageProps, ModxSlice } from 'utils/modx';
+import {
+    BgMode,
+    ModxImageMetaData,
+    ModxImageProps,
+    ModxSlice,
+} from 'utils/modx';
 import { normalizeAnchorId } from 'utils/mapping';
 
 const Gallery = React.lazy(() => import('imports/_Gallery'));
@@ -28,6 +33,7 @@ interface ModxGalleryImageProps {
 interface GalleryItems {
     image: ModxGalleryImageProps;
     imageFormat: ImageFormats;
+    meta?: ModxImageMetaData;
 }
 
 export interface GallerySliceType extends ModxSlice<'Gallery', GalleryItems> {
@@ -80,7 +86,8 @@ export const GallerySlice: React.FC<GallerySliceType> = ({
                 return {
                     ...theImage,
                     small: theImage?.small || '',
-                    alt: theImage?.meta?.altText || '',
+                    alt: item?.meta?.altText || '',
+                    copyright: item?.meta?.copyright || '',
                     isFull: isFull,
                     ratios: ratios || undefined,
                 };
